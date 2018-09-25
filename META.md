@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Welcome to the New TypeScript Handbook! Compltely rewritten in late 2018, this guide is a fresh take on TypeScript's original handbook that uses a new structure and workflow. We've also rearranged the content and flow to better represent how users should think about TypeScript.
+Welcome to the New TypeScript Handbook! Completely rewritten in late 2018, this guide is a fresh take on TypeScript's original handbook that uses a new structure and workflow. We've also rearranged the content and flow to better represent how users should think about TypeScript.
 
 The New Handbook starts with a customized introduction depending on the reader's background.
 The purpose of these introductions is to "set the table" by highlighting how TypeScript is similar or different to the reader's existing mental models.
@@ -17,7 +17,7 @@ A reader who completes the walkthrough should be able to:
  * Read and understand commonly-used TypeScript syntax and patterns
  * Explain the effects of common compiler options
  * Correctly predict type system behavior in most cases
- * Write a .d.ts declaration for a simple function, object, or class
+ * Write a `.d.ts` declaration for a simple function, object, or class
 
 ## Reference Articles
 
