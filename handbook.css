@@ -1,0 +1,57 @@
+pre.typescript-code {
+    display: block;
+    position: relative;
+    max-width: 80em;
+    width: max-content;
+    padding: 0.8em;
+    padding-left: 1.6em;
+    padding-right: 4em;
+    background: #F5F5F5;
+    border: solid #777 1px;
+}
+
+span.comment {
+    color: #070;
+}
+
+span.keyword {
+    color: #00A;
+}
+
+span.parameterName, span.identifier {
+    color: #77C;
+}
+
+span.stringLiteral {
+    color: #833;
+}
+
+span.error {
+    display: inline-block;
+    height: 1.1em;
+    border-bottom: red 2px;
+    border-bottom-style: dotted;
+}
+
+span.className {
+    color: #790;
+}
+
+a.playground-link {
+    font-family: "wf_segoe-ui_normal", Verdana, Geneva, Tahoma, sans-serif;
+    position: absolute;
+    font-size: 12px;
+    bottom: 0px;
+    right: 0px;
+    padding: 6px;
+    background-color: #33B;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border: solid white 1px;
+    border-bottom: 0px;
+    border-right: 0px;
+}
+a.playground-link, a.playground-link:visited {
+    color: #FFF;
+    text-decoration: none;
+}

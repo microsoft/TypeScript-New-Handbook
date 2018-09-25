@@ -1,0 +1,25 @@
+{
+  "name": "tntshb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RyanCavanaugh/TNTSHB.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RyanCavanaugh/TNTSHB/issues"
+  },
+  "homepage": "https://github.com/RyanCavanaugh/TNTSHB#readme",
+  "devDependencies": {
+    "@types/node": "^10.11.0",
+    "@types/showdown": "^1.7.5",
+    "showdown": "^1.8.6",
+    "typescript": "^3.0.3"
+  }
+}
