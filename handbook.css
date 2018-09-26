@@ -8,6 +8,9 @@ pre.typescript-code {
     padding-right: 4em;
     background: #F5F5F5;
     border: solid #777 1px;
+    font-family: Menlo, Monaco, "Courier New", monospace;
+    font-size: 90%;
+    line-height: 1.25;
 }
 
 span.comment {
@@ -27,8 +30,6 @@ span.stringLiteral {
 }
 
 span.error {
-    display: inline-block;
-    height: 1.1em;
     border-bottom: red 2px;
     border-bottom-style: dotted;
 }
@@ -44,7 +45,7 @@ a.playground-link {
     bottom: 0px;
     right: 0px;
     padding: 6px;
-    background-color: #33B;
+    background-color: #0074c1;
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
     border: solid white 1px;

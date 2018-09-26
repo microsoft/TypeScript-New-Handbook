@@ -108,14 +108,14 @@ function getCompilerExtension() {
     return ext;
 }
 
-function render(content: string) {
+export function render(content: string) {
     const conv = new showdown.Converter();
     conv.addExtension(getCompilerExtension(), "ts");
     // conv.useExtension("ts");
     return conv.makeHtml(content);
 }
 
-function makePage(content: string) {
+export function makePage(content: string) {
     return `<!DOCTYPE html>
     <html>
     <head>
@@ -123,28 +123,47 @@ function makePage(content: string) {
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>Handbook Page</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" type="text/css" media="screen" href="../handbook.css" />
+        <link rel="stylesheet" type="text/css" media="screen" href="handbook.css" />
     </head>
     <body>${content}</body>
     </html>`;
 }
 
+const home = path.join(__dirname, "..");
+function processFile(fileName: string) {
+    fs.readFile(fileName, { encoding: "utf-8" }, (err, data) => {
+        if (err) throw err;
+
+        const fileOnly = path.basename(fileName);
+        const output = makePage(render(data));
+        fs.writeFile(path.join(__dirname, "../bin", fileOnly.replace(".md", ".html")), output, err => { if (err) throw err; });
+    });
+}
+
 function run() {
-    fs.readdir(path.join(__dirname, ".."), (err, files) => {
+    fs.readdir(home, (err, files) => {
         if (err) throw err;
         for (const file of files) {
             if (file.indexOf(".md") > 0) {
-                fs.readFile(file, { encoding: "utf-8" }, (err, data) => {
-                    if (err) throw err;
-
-                    const fileOnly = path.basename(file);
-                    const output = makePage(render(data));
-                    fs.writeFile(path.join(__dirname, "../bin", fileOnly.replace(".md", ".html")), output, err => { if (err) throw err; });
-                });
+                processFile(file);
             }
         }
         console.log(files.join(","));
     });
 }
 
+function watch() {
+    fs.watch(home, {}, (event, fileName) => {
+        if (fileName.endsWith(".md")) {
+            console.log(`Update ${fileName}`);
+            processFile(fileName);
+        }
+    });
+}
+
+/*
 run();
+if (process.argv.some(s => s === "-w")) {
+    watch();
+}
+*/
