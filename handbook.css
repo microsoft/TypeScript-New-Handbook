@@ -1,3 +1,7 @@
+body, div.handbook {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
 pre.typescript-code {
     display: block;
     position: relative;
@@ -32,6 +36,7 @@ span.stringLiteral {
 span.error {
     border-bottom: red 2px;
     border-bottom-style: dotted;
+    cursor: help;
 }
 
 span.className {
@@ -52,7 +57,13 @@ a.playground-link {
     border-bottom: 0px;
     border-right: 0px;
 }
+
 a.playground-link, a.playground-link:visited {
     color: #FFF;
     text-decoration: none;
 }
+
+h1 {
+    font-size: 170%;
+}
+

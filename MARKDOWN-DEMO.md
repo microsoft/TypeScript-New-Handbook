@@ -1,3 +1,4 @@
+# Code Samples
 
 ```ts
 // This is a TypeScript code block
@@ -15,6 +16,9 @@ class MyClass {
     }
 }
 ```
+
+> This is a quote that
+> has multiple lines
 
 We should also have [Chapter Links]
 
