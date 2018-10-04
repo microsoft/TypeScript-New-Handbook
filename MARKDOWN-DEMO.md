@@ -4,7 +4,7 @@
 // This is a TypeScript code block
 // It renders as code
 function fn(s: string) {
-    const y = `Neat ${s.toLower()}`;
+    const y = `Neat ${s.toLowerCase()}`;
     return y;
 }
 const m = fn("hello, world");
@@ -25,6 +25,10 @@ We should also have [Chapter Links]
 # Heading
 
 ## Heading two
+
+### Heading three
+
+
 
 *Do* use italics
 

@@ -18,7 +18,6 @@ We *don't* want to waste time documenting JavaScript features - our documentatio
 ### Key Concepts!
 
 
-
 ### Reading Level & Vocabulary
 
 *Most* readers of this documentation will not be native English speakers. Keep the use of fancy words to a minumum; prefer short sentences and active-voice phrasing:
