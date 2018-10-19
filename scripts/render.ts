@@ -111,7 +111,6 @@ function getCompilerExtension() {
 export function render(content: string) {
     const conv = new showdown.Converter();
     conv.addExtension(getCompilerExtension(), "ts");
-    // conv.useExtension("ts");
     return conv.makeHtml(content);
 }
 
@@ -160,10 +159,3 @@ function watch() {
         }
     });
 }
-
-/*
-run();
-if (process.argv.some(s => s === "-w")) {
-    watch();
-}
-*/
