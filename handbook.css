@@ -1,8 +1,22 @@
-body, div.handbook {
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+body article {
+    /*font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;*/
+    font-family: 'Segoe UI Semilight', Tahoma, Geneva, Verdana, sans-serif;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 70%;
 }
 
-pre.typescript-code {
+article :not(pre) code {
+    color: #a31515;
+    font-family: Consolas, Menlo, Monaco, Deja Vu Sans Mono, "Courier New", monospace;
+}
+
+article h1, article h2, article h3, article h4, article h5, article h6 {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+}
+
+/* Temporary */
+pre code {
     display: block;
     position: relative;
     max-width: 80em;
@@ -17,12 +31,29 @@ pre.typescript-code {
     line-height: 1.25;
 }
 
+pre.typescript-code {
+    display: block;
+    position: relative;
+    max-width: 80em;
+    width: max-content;
+    padding: 0.8em;
+    padding-left: 1.6em;
+    padding-right: 4em;
+    background: #F5F5F5;
+    border: solid #777 1px;
+    font-family: Consolas, Menlo, Monaco, Deja Vu Sans Mono, "Courier New", monospace;
+    font-size: 90%;
+    line-height: 1.25;
+}
+
 span.comment {
-    color: #070;
+    color: #148A14;
+    font-style: italic;
 }
 
 span.keyword {
     color: #00A;
+    font-weight: bold;
 }
 
 span.parameterName, span.identifier {
@@ -30,13 +61,24 @@ span.parameterName, span.identifier {
 }
 
 span.stringLiteral {
-    color: #833;
+    color: #a31515;
+}
+
+span.className, span.interfaceName, span.typeParameterName, span.typeAliasName, {
+    color: #267F99;
 }
 
 span.error {
     border-bottom: red 2px;
-    border-bottom-style: dotted;
-    cursor: help;
+    border-bottom-style: dotted
+    /*
+    text-decoration-line: underline;
+    text-decoration-style: wavy;
+    text-decoration-color: red;
+
+    /* Currently experimental:
+    text-decoration-skip: none;
+    cursor: help;*/
 }
 
 span.className {
