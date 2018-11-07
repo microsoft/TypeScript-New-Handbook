@@ -3,7 +3,7 @@ body article {
     font-family: 'Segoe UI Semilight', Tahoma, Geneva, Verdana, sans-serif;
     margin-left: auto;
     margin-right: auto;
-    max-width: 70%;
+    max-width: 65%;
 }
 
 article :not(pre) code {
@@ -62,6 +62,10 @@ span.parameterName, span.identifier {
 
 span.stringLiteral {
     color: #a31515;
+}
+
+span.numericLiteral {
+    color: #09885A;
 }
 
 span.className, span.interfaceName, span.typeParameterName, span.typeAliasName, {
