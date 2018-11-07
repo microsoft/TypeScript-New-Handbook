@@ -157,23 +157,24 @@ else if (value === "c") {
 }
 ```
 
-# Writing correct code faster and more productively
+# TypeScript tooling
 
 <!-- TODO: this section's title sucks -->
 
 So TypeScript can catch bugs when we make mistakes in our code.
-That's great, but TypeScript can prevent us from making those mistakes in the first place!
+That's great, but TypeScript can *also* prevent us from making those mistakes in the first place.
 
-You see, once your type-checker has the information to validate things like whether we're accessing the right properties on variables, it can also start *suggesting* which properties you might want to use.
-After all, it knows exactly which properties a variable has.
+You see, the type-checker has information to check things like whether we're accessing the right properties on variables and other properties.
+But once it has that information, it can also start *suggesting* which properties you might want to use.
+
 That means TypeScript can be leveraged for editing code too, and so the core type-checker can provide error messages and code completion as you type across editors.
 That's part of what people often refer to when they talk about tooling in TypeScript.
 
 <!-- TODO: insert GIF of completions here -->
 
 TypeScript takes tooling seriously, and that goes beyond completions and errors as you type.
-TypeScript delivers quick fixes to address visible errors, refactorings to easily re-organize code, and useful navigation features for jumping to definitions of a variable, or finding all references to a given variable.
-All of this is fully cross-platform, so it's likely that [your favorite editor has TypeScript support available](https://github.com/Microsoft/TypeScript/wiki/TypeScript-Editor-Support).
+An editor that supports TypeScript can deliver "quick fixes" to automatically fix errors, refactorings to easily re-organize code, and useful navigation features for jumping to definitions of a variable, or finding all references to a given variable.
+All of this is built on top of the type-checker and fully cross-platform, so it's likely that [your favorite editor has TypeScript support available](https://github.com/Microsoft/TypeScript/wiki/TypeScript-Editor-Support).
 
 <!-- TODO: validate that link -->
 
