@@ -247,13 +247,13 @@ Expected 2 arguments, but got 1.
 ```
 
 TypeScript is telling us we forgot to pass an argument to the `greet` function, and rightfully so.
-We haven't even written anything that's not standard JavaScript yet, and yet we're still able to find problems with our code.
+So far we've only written standard JavaScript, and yet type-checking was still able to find problems with our code.
 Thanks TypeScript!
 
 ## Errors don't block output
 
-One thing you might not have noticed from the last example was that our `hello.js` file changed.
-If we open that file up then we'll see that the contents look basically the same as our input file again.
+One thing you might not have noticed from the last example was that our `hello.js` file changed again.
+If we open that file up then we'll see that the contents still basically look the same as our input file.
 That might be a bit surprising given the fact that `tsc` reported an error about our code, but this based on one of TypeScript's core values: much of the time, *you* will know better than TypeScript.
 
 To reiterate from earlier, type-checking code limits the sorts of programs you can run, and so there's a tradeoff on what sorts of things a type-checker finds acceptable.
