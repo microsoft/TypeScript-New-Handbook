@@ -44,6 +44,7 @@ pre.typescript-code {
     font-family: Consolas, Menlo, Monaco, Deja Vu Sans Mono, "Courier New", monospace;
     font-size: 90%;
     line-height: 1.25;
+    min-width: 30em;
 }
 
 span.comment {
@@ -111,5 +112,12 @@ a.playground-link, a.playground-link:visited {
 
 h1 {
     font-size: 170%;
+}
+
+blockquote {
+    margin: 1em;
+    padding: 0.02em 1em 0.02em 1em;
+    background: #FFFFD7;
+    border-left: solid #EEB 4px;
 }
 
