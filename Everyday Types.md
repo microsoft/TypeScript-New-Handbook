@@ -36,8 +36,7 @@ obj = "hello";
 const n: number = obj;
 ```
 
-<!-- Why use any? -->
-
+The `any` type is useful when you don't want to write out a long type just to convince TypeScript that a particular line of code is okay.
 
 ## Inference
 
@@ -93,7 +92,82 @@ Even though the parameter `n` didn't have a type annotation, TypeScript used the
 
 This process is called *contextual typing* because the *context* that the function occurred in informed what type it should have. Later, we'll see more examples of how the context that a value occurs can modify its type.
 
-## Function Types
+## Object Types
+
+The most common sort of type you'll encounter is an *object type*.
+This refers to any JavaScript value with properties, which is almost all of them!
+The syntax for an object type is a list of properties inside `{ }`.
+
+For example, here's a function that takes a point-like object:
+```ts
+// The parameter's type annotation is an object type
+function printCoord(pt: { x: number, y: number }) {
+  console.log("The coordinate's x value is " + pt.x);
+  console.log("The coordinate's x value is " + pt.y);
+}
+printCoord({ x: 3, y: 7 });
+```
+Here, we annotated the parameter with a type with two properties - `x` and `y` - which are both of type `number`.
+You can use `,` or `;` to separate the properties, and the last separator is optional either way.
+
+This example used an object type *anonymously*, that is, without giving it a name.
+This can be convenient, but more often, you'll want to give these types names so that you can refer to them in multiple places.
+
+## Naming Object Types
+
+There are two ways to give a name to an object type, and they're very similar.
+
+### Type Aliases
+
+A *type alias* is exactly that - an *alias* for any *type*.
+The syntax for a type alias is:
+```ts
+type Point = {
+  x: number;
+  y: number;
+};
+
+// Exactly the same as the earlier example
+function printCoord(pt: Point) {
+  console.log("The coordinate's x value is " + pt.x);
+  console.log("The coordinate's x value is " + pt.y);
+}
+```
+
+You can actually use a type alias to give a name to any type at all, not just an object type.
+We'll see many examples of this later.
+
+Note that aliases are *only* aliases - you cannot use type aliases to create "different" versions of the same type.
+When you use the alias, it's exactly as if you had written the aliased type.
+
+### Interfaces
+
+An *interface declaration* is another way to make an object type:
+```ts
+// Using commas instead of semicolons for variety, but either would work
+interface Point {
+  x: number,
+  y: number
+}
+```
+
+### Differences
+
+Type aliases and interfaces are very similar, and in many cases you can choose between them freely.
+Here are the most relevant differences between the two that you should be aware of.
+You'll learn more about these concepts in later chapters, so don't worry if you don't understand all of these right away.
+
+ * Classes can implement interfaces, but not type aliases
+ * Interfaces may be `extend`ed, but not type aliases
+ * Type aliases may not participate in declaration merging, but interfaces can
+ * Interfaces may only be used to declare object types
+ * Interface names will *always* appear in their original form in error messages, and *only* when they are used by name
+ * Type alias names *may* appear in error messages, including where they are an exact match for an anonymous type
+
+For the most part, you can choose based on personal preference, and TypeScript will tell you if it needs something to be the other kind of name.
+
+## Optional Properties
+
 
 
 
