@@ -51,78 +51,94 @@ The `any` type is useful when you don't want to write out a long type just to co
 
 ## Type Annotations on Variables
 
-
-
-## Inference
-
-Wherever possible, TypeScript tries to automatically *infer* the types in your code.
-
-For example, the type of a variable is *inferred* based on the type of its initializer:
+When you declare a variable using `const`, `var`, or `let`, you can optionally add a type annotation to explicitly specify the type of the variable:
 ```ts
-// myName: string
-let myName = "Alice";
-```
-This means that in most places, you don't need to write type annotations.
-
-This inference process happens automatically, but you can be more explicit if you'd like:
-```ts
-// Equivalent to the prior example
 let myName: string = "Alice";
+//        ↑↑↑↑↑↑↑↑
+```
+
+> TypeScript doesn't use "types on the left" -style declarations like `int x = 0;`
+> Type annotations will always go *after* the thing being typed.
+
+In most cases, though, this isn't needed.
+Wherever possible, TypeScript tries to automatically *infer* the types in your code.
+For example, the type of a variable is inferred based on the type of its initializer:
+```ts
+// No type annotation needed -- myName inferred as type string
+let myName = "Alice";
 ```
 
 For the most part you don't need to explicitly learn the rules of inference.
 If you're starting out, try using fewer type annotations than you think - you might be surprised how few you actually need for TypeScript to actually fully understand what's going on.
 
-## Function Declarations
+## Functions
 
 Functions are the primary means of passing data around in JavaScript.
 TypeScript allows you to specify the types of both the input and output values of functions.
 
+### Parameter Type Annotations
+
+When you declare a function, you can add type annotations after each parameter to declare what kinds of parameters the function accepts.
 Parameter type annotations go after the parameter name:
 ```ts
 // Parameter type annotation
 function greet(name: string) {
+//                 ↑↑↑↑↑↑↑↑
     console.log("Hello, " + name.toUpperCase() + "!!");
 }
 ```
+When a parameter has a type annotation, calls to that function will be validated:
+```ts
+declare function greet(name: string): void;
+~~~
+// Would be a runtime error if executed!
+greet(42);
+```
 
-Return type annotations go after the parameter list:
+### Return Type Annotations
+
+You can also add a return type annotation to a function.
+Return type annotations go between the parameter list and the function body:
 ```ts
 function getFavoriteNumber(): number {
+//                          ↑↑↑↑↑↑↑↑
     return 26;
 }
 ```
-If there isn't a return type annotation, the return type of a function will be inferred from the function's `return` statements (in other words, the annotation in the above sample doesn't change anything). Whether or not you include a return type annotation is usually personal preference.
+Much like variable type annotations, you usually don't need a return type annotation because TypeScript will infer the function's return type based on its `return` statements.
+The type annotation in the above example doesn't change anything.
+Some people prefer to always specify a return type for clarity - it's up to you.
 
-## Function Expressions
+### Function Expressions
 
 Function expressions are a little bit different from function declarations.
 When a function expression appears in a place where TypeScript can determine how it's going to be called, the parameters of that function are automatically given types.
 
-Here's a concrete example:
+Here's an example:
 ```ts
+// No type annotations here, but TypeScript can spot the bug
 const names = ["Alice", "Bob", "Eve"];
 names.forEach(function (n) {
     console.log(n.toUppercase());
 });
 ```
-Even though the parameter `n` didn't have a type annotation, TypeScript used the type of the `forEach` function to determine the type it should have.
+Even though the parameter `n` didn't have a type annotation, TypeScript used the types of the `forEach` function, along with the inferred type of the array, to determine the type `n` will have.
 
 This process is called *contextual typing* because the *context* that the function occurred in informed what type it should have.
-Later, we'll see more examples of how the context that a value occurs can modify its type.
+Similar to the inference rules, you don't need to explicitly learn how this happens, but understanding that it *does* happen can help you notice when type annotations aren't needed.
+Later, we'll see more examples of how the context that a value occurs can affect its type.
 
 ## Object Types
 
-The most common sort of type you'll encounter is an *object type*.
+Apart from primitives, the most common sort of type you'll encounter is an *object type*.
 This refers to any JavaScript value with properties, which is almost all of them!
-The syntax for an object type is a list of properties inside `{ }`.
+To define an object type, we simply list its properties and their types.
 
 For example, here's a function that takes a point-like object:
 ```ts
 // The parameter's type annotation is an object type
 function printCoord(pt: { x: number, y: number }) {
-  //                    ________________________
-
+  //                    ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
   console.log("The coordinate's x value is " + pt.x);
   console.log("The coordinate's y value is " + pt.y);
 }
@@ -130,6 +146,9 @@ printCoord({ x: 3, y: 7 });
 ```
 Here, we annotated the parameter with a type with two properties - `x` and `y` - which are both of type `number`.
 You can use `,` or `;` to separate the properties, and the last separator is optional either way.
+
+The type part of each property is also optional.
+If you don't specify a type, it will be assumed to be `any`.
 
 This example used an object type *anonymously*, that is, without giving it a name.
 This can be convenient, but more often, you'll want to give these types names so that you can refer to them in multiple places.
@@ -144,8 +163,8 @@ A *type alias* is exactly that - an *alias* for any *type*.
 The syntax for a type alias is:
 ```ts
 type Point = {
-  x: number;
-  y: number;
+  x: number,
+  y: number
 };
 
 // Exactly the same as the earlier example
@@ -175,12 +194,12 @@ An *interface declaration* is another way to make an object type:
 ```ts
 // Using commas instead of semicolons for variety, but either would work
 interface Point {
-  x: number,
-  y: number
+  x: number;
+  y: number;
 }
 ```
 
-### Differences
+### Differences between Type Aliases and Interfaces
 
 Type aliases and interfaces are very similar, and in many cases you can choose between them freely.
 Here are the most relevant differences between the two that you should be aware of.
@@ -195,8 +214,97 @@ You'll learn more about these concepts in later chapters, so don't worry if you 
 
 For the most part, you can choose based on personal preference, and TypeScript will tell you if it needs something to be the other kind of name.
 
-## Optional Properties
+## Union Types
 
+TypeScript's type system allows you to build new types out of existing ones using a large variety of operators.
+Now that we know how to write a few types, it's time to start *combining* them in interesting ways.
+
+### Defining a Union Type
+
+The first way to combine types you might see is a *union* type.
+A union type is type formed from a list of other types, representing a value that is *any one* of those types.
+We refer to each of these types as the union's *members*.
+
+Let's write a union type and give it an alias:
+```ts
+type ID = number | string;
+```
+This creates a new type name, `ID`, that means "*a value that is either a number or a string*".
+
+We can then use this type to describe a function that accepts multiple kinds of input:
+```ts
+type ID = number | string;
+~~~
+function printId(id: ID) {
+  console.log("Your ID is: " + id);
+}
+// OK
+printId(101);
+// OK
+printId("202");
+// Error
+printId([1, 2]);
+```
+
+### Working with Union Types
+
+It's easy to *provide* a value matching a union type - simply provide a type matching one of the union's members.
+If you *have* a value of a union type, how do you work with it?
+
+TypeScript will only allow you to do things with the union if that thing is valid for *every* member of the union.
+For example, if you have the union `string | number`, you can't use methods that are only available on `string`:
+```ts
+function printId(id: number | string) {
+  console.log(id.toUpperCase());
+}
+```
+
+The solution is to *narrow* the union with code, the same as you would in JavaScript without type annotations.
+*Narrowing* occurs when TypeScript can deduce a more specific type based on the structure of the code.
+
+For example, TypeScript knows that only a `string` value will have a `typeof` value `"string"`:
+```ts
+function printId(id: number | string) {
+  if (typeof id === "string") {
+    // In this branch, id is of type 'string'
+    console.log(id.toUpperCase());
+  } else {
+    // Here, id is of type 'number'
+    console.log(id);
+  }
+}
+```
+
+Another example is to use a function like `Array#isArray`:
+```ts
+function welcomePeople(namesOrName: string[] | string) {
+  if (Array.isArray(namesOrName)) {
+    // Here: names is string[]
+    console.log("Hello, " + namesOrName.join(" and "));
+  } else {
+    // Here: names is string
+    console.log("Welcome lone traveler " + namesOrName);
+  }
+}
+```
+Notice that in the `else` branch, we don't need to do anything special - if the value wasn't a `string[]`, then it must have been a `string`.
+
+Sometimes you'll have a union where all the members have something in common.
+For example, both arrays and strings have a `slice` method.
+If every member in a union has a property in common, you can use that property without narrowing:
+```ts
+// Return type is inferred as number[] | string
+function getFirstThree(x: number[] | string) {
+  return x.slice(0, 3);
+}
+```
+
+> It might be confusing that a *union* of types appears to have the *intersection* of those types' properties.
+> This is not an accident - the name *union* comes from type theory:
+> The *union* `number | string` is composed by taking the union *of the values* from each type.
+> Notice that given two sets with corresponding collections of facts about each set, only the *intersection* of those collections of facts applies to the *union* of the sets themselves.
+
+## Type Assertions
 
 
 
@@ -215,11 +323,14 @@ For the most part, you can choose based on personal preference, and TypeScript w
   * Object Types
     * Anonymous object types
     * Type aliases and Interfaces
-    * Optional properties
   * Union Types
     * Simple concept: "This or that"
     * Unions of primitives
     * Introduce concept of type narrowing and demonstrate it with typeof
+  * Type assertions
+    * Sometimes you know more than the checker
+    * `e as T` vs `<T>e`
+    * Not all assertions are valid
   * Literal Types
     * String literals
     * Numeric literals
@@ -231,10 +342,6 @@ For the most part, you can choose based on personal preference, and TypeScript w
     * Undefined in optional parameters and properties
     * Demonstrate basic narrowing to check for them
     * Postfix unary `!`
-  * Type assertions
-    * Sometimes you know more than the checker
-    * `e as T` vs `<T>e`
-    * Not all assertions are valid
   * Where do types come from?
     * Built-in (lib.d.ts)
     * Inference
