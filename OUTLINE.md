@@ -102,7 +102,6 @@
   * Object Types
     * Anonymous object types
     * Type aliases and Interfaces
-    * Optional properties
   * Union Types
     * Simple concept: "This or that"
     * Unions of primitives
@@ -164,6 +163,7 @@
     * void, object, unknown, never
 
  * Chapter 5: More on Object Types
+  * Optional properties
   * interfaces and type aliases
     * Differences; pros/cons
   * Generic object types

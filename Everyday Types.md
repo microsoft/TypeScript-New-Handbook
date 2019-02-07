@@ -1,27 +1,38 @@
 <!-- Extremely WIP, do not review -->
 
-# Basic Types
+# Everyday Types
 
 In this chapter, we'll cover some of the most common types of values you'll find in JavaScript code, and explain the corresponding ways to describe those types in TypeScript.
-This isn't an exhaustive list, and future chapters will describe more ways to name other types.
+This isn't an exhaustive list, and future chapters will describe more ways to name and use other types.
 
-## Primitives
+Types can also appear in many more *places* than just type annotations.
+As we learn about the types themselves, we'll also learn about the places where we can refer to these types to form new constructs.
 
-Each primitive type in JavaScript has a corresponding type in TypeScript. As you might expect, these are the same names you'd see if you used the JavaScript `typeof` operator on a value of those types:
+## Common Built-in Types
+
+We'll start by reviewing the most basic and common types you encounter when writing JavaScript or TypeScript code.
+These will later form the core "building blocks" of more complex types.
+
+### `string`, `number`, and `boolean`
+
+JavaScript has three main [primitive](https://developer.mozilla.org/en-US/docs/Glossary/Primitive) kinds of values: `string`, `number`, and `boolean`.
+Each has a corresponding type in TypeScript.
+As you might expect, these are the same names you'd see if you used the JavaScript `typeof` operator on a value of those types:
 
  * `string` represents string values like `"Hello, world"`
  * `number` is for numbers like `42`. JavaScript does not have a special runtime value for integers, so there's no equivalent to `int` or `float` - everything is simply `number`
- * `boolean` is for `true` and `false`
+ * `boolean` is for the two values `true` and `false`
 
 > The type names `String`, `Number`, and `Boolean` are legal, but refer to some special built-in types that shouldn't appear in your code. *Always* use `string`, `number`, or `boolean`.
 
-## Arrays
+### Arrays
 
-To specify the type of an array like `[1, 2, 3]`, you can use the syntax `number[]`; this syntax works for any type (`string[]` is an array of strings, and so on). This is equivalent to writing `Array<number>` - `Array` is a built-in generic type, and we'll learn more about generics later.
+To specify the type of an array like `[1, 2, 3]`, you can use the syntax `number[]`; this syntax works for any type (`string[]` is an array of strings, and so on).
+This is equivalent to writing `Array<number>` (`Array` is a generic type, and we'll learn more about generics later).
 
-Note that `[number]` is a different thing; see the later chapter on *tuple types*.
+> Note that `[number]` is a different thing; see the later chapter on *tuple types*.
 
-## `any`
+### `any`
 
 TypeScript also has a special type, `any`, that you can use whenever you don't want a particular value to cause typechecking errors.
 
@@ -37,6 +48,10 @@ const n: number = obj;
 ```
 
 The `any` type is useful when you don't want to write out a long type just to convince TypeScript that a particular line of code is okay.
+
+## Type Annotations on Variables
+
+
 
 ## Inference
 
