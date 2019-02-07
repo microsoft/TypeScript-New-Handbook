@@ -10,7 +10,7 @@ As we learn about the types themselves, we'll also learn about the places where 
 
 ## Common Built-in Types
 
-We'll start by reviewing the most basic and common types you encounter when writing JavaScript or TypeScript code.
+We'll start by reviewing the most basic and common types you might encounter when writing JavaScript or TypeScript code.
 These will later form the core "building blocks" of more complex types.
 
 ### `string`, `number`, and `boolean`
@@ -27,10 +27,11 @@ As you might expect, these are the same names you'd see if you used the JavaScri
 
 ### Arrays
 
-To specify the type of an array like `[1, 2, 3]`, you can use the syntax `number[]`; this syntax works for any type (`string[]` is an array of strings, and so on).
-This is equivalent to writing `Array<number>` (`Array` is a generic type, and we'll learn more about generics later).
+To specify the type of an array like `[1, 2, 3]`, you can use the syntax `number[]`; this syntax works for any type (e.g. `string[]` is an array of strings, and so on).
+You may also see this written as `Array<number>`, which means the same thing.
+We'll learn more about the syntax `T<U>` when we cover *generics*.
 
-> Note that `[number]` is a different thing; see the later chapter on *tuple types*.
+> Note that `[number]` is a different thing; refer to the section on *tuple types*.
 
 ### `any`
 
@@ -57,19 +58,19 @@ let myName: string = "Alice";
 //        ↑↑↑↑↑↑↑↑
 ```
 
-> TypeScript doesn't use "types on the left" -style declarations like `int x = 0;`
+> TypeScript doesn't use "types on the left"-style declarations like `int x = 0;`
 > Type annotations will always go *after* the thing being typed.
 
 In most cases, though, this isn't needed.
 Wherever possible, TypeScript tries to automatically *infer* the types in your code.
 For example, the type of a variable is inferred based on the type of its initializer:
 ```ts
-// No type annotation needed -- myName inferred as type string
+// No type annotation needed -- 'myName' inferred as type 'string'
 let myName = "Alice";
 ```
 
 For the most part you don't need to explicitly learn the rules of inference.
-If you're starting out, try using fewer type annotations than you think - you might be surprised how few you actually need for TypeScript to actually fully understand what's going on.
+If you're starting out, try using fewer type annotations than you think - you might be surprised how few you need for TypeScript to fully understand what's going on.
 
 ## Functions
 
@@ -80,6 +81,7 @@ TypeScript allows you to specify the types of both the input and output values o
 
 When you declare a function, you can add type annotations after each parameter to declare what kinds of parameters the function accepts.
 Parameter type annotations go after the parameter name:
+
 ```ts
 // Parameter type annotation
 function greet(name: string) {
@@ -87,27 +89,31 @@ function greet(name: string) {
     console.log("Hello, " + name.toUpperCase() + "!!");
 }
 ```
+
 When a parameter has a type annotation, calls to that function will be validated:
+
 ```ts
 declare function greet(name: string): void;
-~~~
+//cut
 // Would be a runtime error if executed!
 greet(42);
 ```
 
 ### Return Type Annotations
 
-You can also add a return type annotation to a function.
-Return type annotations go between the parameter list and the function body:
+You can also add return type annotations.
+Return type annotations appear after the parameter list:
+
 ```ts
 function getFavoriteNumber(): number {
 //                          ↑↑↑↑↑↑↑↑
     return 26;
 }
 ```
+
 Much like variable type annotations, you usually don't need a return type annotation because TypeScript will infer the function's return type based on its `return` statements.
 The type annotation in the above example doesn't change anything.
-Some people prefer to always specify a return type for clarity - it's up to you.
+Some codebases will explicitly specify a return type for documentation purposes, to prevent accidental changes, or just for personal preference. 
 
 ### Function Expressions
 
@@ -115,18 +121,20 @@ Function expressions are a little bit different from function declarations.
 When a function expression appears in a place where TypeScript can determine how it's going to be called, the parameters of that function are automatically given types.
 
 Here's an example:
+
 ```ts
 // No type annotations here, but TypeScript can spot the bug
 const names = ["Alice", "Bob", "Eve"];
-names.forEach(function (n) {
-    console.log(n.toUppercase());
+names.forEach(function (s) {
+    console.log(s.toUppercase());
 });
 ```
-Even though the parameter `n` didn't have a type annotation, TypeScript used the types of the `forEach` function, along with the inferred type of the array, to determine the type `n` will have.
+
+Even though the parameter `s` didn't have a type annotation, TypeScript used the types of the `forEach` function, along with the inferred type of the array, to determine the type `s` will have.
 
 This process is called *contextual typing* because the *context* that the function occurred in informed what type it should have.
 Similar to the inference rules, you don't need to explicitly learn how this happens, but understanding that it *does* happen can help you notice when type annotations aren't needed.
-Later, we'll see more examples of how the context that a value occurs can affect its type.
+Later, we'll see more examples of how the context that a value occurs in can affect its type.
 
 ## Object Types
 
@@ -135,6 +143,7 @@ This refers to any JavaScript value with properties, which is almost all of them
 To define an object type, we simply list its properties and their types.
 
 For example, here's a function that takes a point-like object:
+
 ```ts
 // The parameter's type annotation is an object type
 function printCoord(pt: { x: number, y: number }) {
@@ -144,13 +153,14 @@ function printCoord(pt: { x: number, y: number }) {
 }
 printCoord({ x: 3, y: 7 });
 ```
+
 Here, we annotated the parameter with a type with two properties - `x` and `y` - which are both of type `number`.
 You can use `,` or `;` to separate the properties, and the last separator is optional either way.
 
 The type part of each property is also optional.
 If you don't specify a type, it will be assumed to be `any`.
 
-This example used an object type *anonymously*, that is, without giving it a name.
+This example used an object type *anonymously* - that is, without giving it a name.
 This can be convenient, but more often, you'll want to give these types names so that you can refer to them in multiple places.
 
 ## Naming Object Types with Type Aliases or Interfaces
@@ -161,6 +171,7 @@ There are two ways to give a name to an object type, and they're very similar.
 
 A *type alias* is exactly that - an *alias* for any *type*.
 The syntax for a type alias is:
+
 ```ts
 type Point = {
   x: number,
@@ -177,9 +188,10 @@ function printCoord(pt: Point) {
 You can actually use a type alias to give a name to any type at all, not just an object type.
 We'll see many examples of this later.
 
-Note that aliases are *only* aliases - you cannot use type aliases to create "different" versions of the same type.
+Note that aliases are *only* aliases - you cannot use type aliases to create different/distinct "versions" of the same type.
 When you use the alias, it's exactly as if you had written the aliased type.
 In other words, this code might *look* illegal, but is OK according to TypeScript because both types are aliases for the same type:
+
 ```ts
 type Age = number;
 type Weight = number;
@@ -234,7 +246,7 @@ This creates a new type name, `ID`, that means "*a value that is either a number
 We can then use this type to describe a function that accepts multiple kinds of input:
 ```ts
 type ID = number | string;
-~~~
+//cut
 function printId(id: ID) {
   console.log("Your ID is: " + id);
 }
