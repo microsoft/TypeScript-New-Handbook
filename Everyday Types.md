@@ -168,9 +168,27 @@ If you don't specify a type, it will be assumed to be `any`.
 
 Object types can also specify that some or all of their properties are *optional*.
 To do this, add a `?` after the property name:
+
 ```ts
 function printName(obj: { first: string, last?: string}) {
+  // ...
+}
+// Both OK
+printName({ first: "Bob" });
+printName({ first: "Alice", last: "Alisson" });
+```
 
+In JavaScript, if you access a property that doesn't exist, you'll get the value `undefined` rather than a runtime error.
+Because of this, when you *read* from an optional property, you'll have to check for `undefined` before using it.
+
+```ts
+function printName(obj: { first: string, last?: string}) {
+  // Error - might crash if 'obj.last' wasn't provided!
+  console.log(obj.last.toUpperCase());
+  if (obj.last !== undefined) {
+    // OK
+    console.log(obj.last.toUpperCase());
+  }
 }
 ```
 
@@ -256,7 +274,6 @@ function getFirstThree(x: number[] | string) {
 > The *union* `number | string` is composed by taking the union *of the values* from each type.
 > Notice that given two sets with corresponding facts about each set, only the *intersection* of those facts applies to the *union* of the sets themselves.
 > For example, if we had a room of tall people wearing hats, and another room of Spanish speakers wearings hats, after combining those rooms, the only thing we know about *every* person is that they must be wearing a hat.
-
 
 ## Type Aliases
 
@@ -454,12 +471,44 @@ The second change means "I know for other reasons that `req.method` has the valu
 
 JavaScript has two primitive values, `null` and `undefined`, both of which are used to signal absent or uninitialized values.
 
-TypeScript has two corresponding *types* by the same names.
+TypeScript has two corresponding *types* by the same names. How these types behave depends on whether you have the `strictNullChecks` option on.
 
+### `strictNullChecks` off
 
+With `strictNullChecks` *off*, values that might be `null` or `undefined` can still be accessed normally, and the values `null` and `undefined` can be assigned to a property of any type.
+This is similar to how languages without null checks (e.g. C#, Java) behave.
+The lack of checking for these values tends to be a major source of bugs; we always recommend people turn `strictNullChecks` on if it's practical to do so in their codebase.
 
+### `strictNullChecks` on
 
+With `strictNullChecks` *on*, when a value is `null` or `undefined`, you will need to test for those values before using methods or properties on that value.
+Just like checking for `undefined` before using an optional property, we can use *narrowing* to check for values that might be `null`:
 
+```ts
+function doSomething(x: string | null) {
+  if (x === null) {
+    // do nothing
+  } else [
+    console.log("Hello, " + x.toUpperCase());
+  ]
+}
+```
+
+TypeScript also has a special syntax for removing `null` and `undefined` from a type without doing any explicit checking.
+Writing `!` after any expression is effectively a type assertion that the value isn't `null` or `undefined`:
+
+```ts
+function liveDangerously(x?: number | null) {
+  // No error
+  console.log(x!.toFixed());
+}
+```
+
+Just like other type assertions, this doesn't change the runtime behavior of your code, so it's important to only use `!` when you know that the value *can't* be `null` or `undefined`.
+
+## Getting Types
+
+TODO: Move to its own chapter?
 
 # Outline
 
