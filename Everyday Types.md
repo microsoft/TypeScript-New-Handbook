@@ -8,12 +8,10 @@ This isn't an exhaustive list, and future chapters will describe more ways to na
 Types can also appear in many more *places* than just type annotations.
 As we learn about the types themselves, we'll also learn about the places where we can refer to these types to form new constructs.
 
-## Common Built-in Types
-
 We'll start by reviewing the most basic and common types you might encounter when writing JavaScript or TypeScript code.
 These will later form the core "building blocks" of more complex types.
 
-### `string`, `number`, and `boolean`
+## Primitives `string`, `number`, and `boolean`
 
 JavaScript has three main [primitive](https://developer.mozilla.org/en-US/docs/Glossary/Primitive) kinds of values: `string`, `number`, and `boolean`.
 Each has a corresponding type in TypeScript.
@@ -25,7 +23,7 @@ As you might expect, these are the same names you'd see if you used the JavaScri
 
 > The type names `String`, `Number`, and `Boolean` are legal, but refer to some special built-in types that shouldn't appear in your code. *Always* use `string`, `number`, or `boolean`.
 
-### Arrays
+## Arrays
 
 To specify the type of an array like `[1, 2, 3]`, you can use the syntax `number[]`; this syntax works for any type (e.g. `string[]` is an array of strings, and so on).
 You may also see this written as `Array<number>`, which means the same thing.
@@ -33,7 +31,7 @@ We'll learn more about the syntax `T<U>` when we cover *generics*.
 
 > Note that `[number]` is a different thing; refer to the section on *tuple types*.
 
-### `any`
+## `any`
 
 TypeScript also has a special type, `any`, that you can use whenever you don't want a particular value to cause typechecking errors.
 
@@ -49,6 +47,12 @@ const n: number = obj;
 ```
 
 The `any` type is useful when you don't want to write out a long type just to convince TypeScript that a particular line of code is okay.
+
+### `noImplicitAny`
+
+When a type isn't specified and can't be inferred from context, TypeScript will typically default to `any`.
+Because `any` values don't benefit from type-checking, it's desirable to avoid these situations.
+The compiler flag `noImplicitAny` will cause any *implicit* `any` to be flagged as an error.
 
 ## Type Annotations on Variables
 
@@ -160,16 +164,106 @@ You can use `,` or `;` to separate the properties, and the last separator is opt
 The type part of each property is also optional.
 If you don't specify a type, it will be assumed to be `any`.
 
-This example used an object type *anonymously* - that is, without giving it a name.
-This can be convenient, but more often, you'll want to give these types names so that you can refer to them in multiple places.
+### Optional Properties
 
-## Naming Object Types with Type Aliases or Interfaces
+Object types can also specify that some or all of their properties are *optional*.
+To do this, add a `?` after the property name:
+```ts
+function printName(obj: { first: string, last?: string}) {
 
-There are two ways to give a name to an object type, and they're very similar.
+}
+```
 
-### Type Aliases
+## Union Types
 
-A *type alias* is exactly that - an *alias* for any *type*.
+TypeScript's type system allows you to build new types out of existing ones using a large variety of operators.
+Now that we know how to write a few types, it's time to start *combining* them in interesting ways.
+
+### Defining a Union Type
+
+The first way to combine types you might see is a *union* type.
+A union type is type formed from two or more other types, representing values that may be *any one* of those types.
+We refer to each of these types as the union's *members*.
+
+Let's write a function that can operate on strings or numbers:
+```ts
+function printId(id: number | string) {
+  console.log("Your ID is: " + id);
+}
+// OK
+printId(101);
+// OK
+printId("202");
+// Error
+printId([1, 2]);
+```
+
+### Working with Union Types
+
+It's easy to *provide* a value matching a union type - simply provide a type matching any of the union's members.
+If you *have* a value of a union type, how do you work with it?
+
+TypeScript will only allow you to do things with the union if that thing is valid for *every* member of the union.
+For example, if you have the union `string | number`, you can't use methods that are only available on `string`:
+```ts
+function printId(id: number | string) {
+  console.log(id.toUpperCase());
+}
+```
+
+The solution is to *narrow* the union with code, the same as you would in JavaScript without type annotations.
+*Narrowing* occurs when TypeScript can deduce a more specific type for a value based on the structure of the code.
+
+For example, TypeScript knows that only a `string` value will have a `typeof` value `"string"`:
+```ts
+function printId(id: number | string) {
+  if (typeof id === "string") {
+    // In this branch, id is of type 'string'
+    console.log(id.toUpperCase());
+  } else {
+    // Here, id is of type 'number'
+    console.log(id);
+  }
+}
+```
+
+Another example is to use a function like `Array.isArray`:
+```ts
+function welcomePeople(x: string[] | string) {
+  if (Array.isArray(x)) {
+    // Here: 'x' is 'string[]'
+    console.log("Hello, " + x.join(" and "));
+  } else {
+    // Here: 'x' is 'string'
+    console.log("Welcome lone traveler " + x);
+  }
+}
+```
+Notice that in the `else` branch, we don't need to do anything special - if `x` wasn't a `string[]`, then it must have been a `string`.
+
+Sometimes you'll have a union where all the members have something in common.
+For example, both arrays and strings have a `slice` method.
+If every member in a union has a property in common, you can use that property without narrowing:
+```ts
+// Return type is inferred as number[] | string
+function getFirstThree(x: number[] | string) {
+  return x.slice(0, 3);
+}
+```
+
+> It might be confusing that a *union* of types appears to have the *intersection* of those types' properties.
+> This is not an accident - the name *union* comes from type theory.
+> The *union* `number | string` is composed by taking the union *of the values* from each type.
+> Notice that given two sets with corresponding facts about each set, only the *intersection* of those facts applies to the *union* of the sets themselves.
+> For example, if we had a room of tall people wearing hats, and another room of Spanish speakers wearings hats, after combining those rooms, the only thing we know about *every* person is that they must be wearing a hat.
+
+
+## Type Aliases
+
+We've been using object types and union types by writing them directly in type annotations.
+This is convenient, but it's common to want to use the same type more than once and refer to it by a single name.
+
+A *type alias* is exactly that - a *name* for any *type*.
 The syntax for a type alias is:
 
 ```ts
@@ -186,7 +280,11 @@ function printCoord(pt: Point) {
 ```
 
 You can actually use a type alias to give a name to any type at all, not just an object type.
-We'll see many examples of this later.
+For example, a type alias can name a union type:
+
+```ts
+type ID = number | string;
+```
 
 Note that aliases are *only* aliases - you cannot use type aliases to create different/distinct "versions" of the same type.
 When you use the alias, it's exactly as if you had written the aliased type.
@@ -200,123 +298,166 @@ const myAge: Age = 73;
 const myWeight: Weight = myAge; // *not* an error
 ```
 
-### Interfaces
+## Interfaces
 
-An *interface declaration* is another way to make an object type:
+An *interface declaration* is another way to name an object type:
 ```ts
-// Using commas instead of semicolons for variety, but either would work
 interface Point {
   x: number;
   y: number;
 }
 ```
 
-### Differences between Type Aliases and Interfaces
+### Differences Between Type Aliases and Interfaces
 
 Type aliases and interfaces are very similar, and in many cases you can choose between them freely.
 Here are the most relevant differences between the two that you should be aware of.
 You'll learn more about these concepts in later chapters, so don't worry if you don't understand all of these right away.
 
- * Classes can implement interfaces, but not type aliases
- * Interfaces may be `extend`ed, but not type aliases
- * Type aliases may not participate in declaration merging, but interfaces can
- * Interfaces may only be used to declare object types
- * Interface names will *always* appear in their original form in error messages, and *only* when they are used by name
- * Type alias names *may* appear in error messages, including where they are an exact match for an anonymous type
+* Interfaces may be `extend`ed, but not type aliases. We'll discuss this later, but it means that interfaces can provide more guarantees when creating new types out of other types.
+* Type aliases may not participate in declaration merging, but interfaces can.
+* Interfaces may only be used to declare object types.
+* Interface names will *always* appear in their original form in error messages, but *only* when they are used by name.
+* Type alias names *may* appear in error messages, sometimes in place of the equivalent anonymous type (which may or may not be desirable).
 
-For the most part, you can choose based on personal preference, and TypeScript will tell you if it needs something to be the other kind of name.
-
-## Union Types
-
-TypeScript's type system allows you to build new types out of existing ones using a large variety of operators.
-Now that we know how to write a few types, it's time to start *combining* them in interesting ways.
-
-### Defining a Union Type
-
-The first way to combine types you might see is a *union* type.
-A union type is type formed from a list of other types, representing a value that is *any one* of those types.
-We refer to each of these types as the union's *members*.
-
-Let's write a union type and give it an alias:
-```ts
-type ID = number | string;
-```
-This creates a new type name, `ID`, that means "*a value that is either a number or a string*".
-
-We can then use this type to describe a function that accepts multiple kinds of input:
-```ts
-type ID = number | string;
-//cut
-function printId(id: ID) {
-  console.log("Your ID is: " + id);
-}
-// OK
-printId(101);
-// OK
-printId("202");
-// Error
-printId([1, 2]);
-```
-
-### Working with Union Types
-
-It's easy to *provide* a value matching a union type - simply provide a type matching one of the union's members.
-If you *have* a value of a union type, how do you work with it?
-
-TypeScript will only allow you to do things with the union if that thing is valid for *every* member of the union.
-For example, if you have the union `string | number`, you can't use methods that are only available on `string`:
-```ts
-function printId(id: number | string) {
-  console.log(id.toUpperCase());
-}
-```
-
-The solution is to *narrow* the union with code, the same as you would in JavaScript without type annotations.
-*Narrowing* occurs when TypeScript can deduce a more specific type based on the structure of the code.
-
-For example, TypeScript knows that only a `string` value will have a `typeof` value `"string"`:
-```ts
-function printId(id: number | string) {
-  if (typeof id === "string") {
-    // In this branch, id is of type 'string'
-    console.log(id.toUpperCase());
-  } else {
-    // Here, id is of type 'number'
-    console.log(id);
-  }
-}
-```
-
-Another example is to use a function like `Array#isArray`:
-```ts
-function welcomePeople(namesOrName: string[] | string) {
-  if (Array.isArray(namesOrName)) {
-    // Here: names is string[]
-    console.log("Hello, " + namesOrName.join(" and "));
-  } else {
-    // Here: names is string
-    console.log("Welcome lone traveler " + namesOrName);
-  }
-}
-```
-Notice that in the `else` branch, we don't need to do anything special - if the value wasn't a `string[]`, then it must have been a `string`.
-
-Sometimes you'll have a union where all the members have something in common.
-For example, both arrays and strings have a `slice` method.
-If every member in a union has a property in common, you can use that property without narrowing:
-```ts
-// Return type is inferred as number[] | string
-function getFirstThree(x: number[] | string) {
-  return x.slice(0, 3);
-}
-```
-
-> It might be confusing that a *union* of types appears to have the *intersection* of those types' properties.
-> This is not an accident - the name *union* comes from type theory:
-> The *union* `number | string` is composed by taking the union *of the values* from each type.
-> Notice that given two sets with corresponding collections of facts about each set, only the *intersection* of those collections of facts applies to the *union* of the sets themselves.
+For the most part, you can choose based on personal preference, and TypeScript will tell you if it needs something to be the other kind of declaration.
 
 ## Type Assertions
+
+Sometimes you will have information about the type of a value that TypeScript can't know about.
+
+For example, if you're using `document.getElementById`, TypeScript only knows that this will return *some* kind of `HTMLElement`, but you might know that your page will always have an `HTMLCanvasElement` with a given ID.
+
+In this situation, you can use a *type assertion* to specify a more specific type:
+
+```ts
+const myCanvas = document.getElementById("main_canvas") as HTMLCanvasElement;
+```
+
+Like a type annotation, type assertions are removed by the compiler and won't affect the runtime behavior of your code.
+
+You can also use the angle-bracket syntax (except if the code is in a `.tsx` file), which is equivalent:
+
+```ts
+const myCanvas = <HTMLCanvasElement>document.getElementById("main_canvas");
+```
+
+> Reminder: Because they are removed at compile-time, there is no runtime checking associated with a type assertion.
+> There won't be an exception or `null` generated if the type assertion is wrong.
+
+TypeScript only allows type assertions which convert to a *more specific* or *less specific* version of a type.
+This rule prevents "impossible" coercions like:
+
+```ts
+const x = "hello" as number;
+```
+
+Sometimes this rule can be too conservative and will disallow more complex coercions that might be valid.
+If this happens, you can use two assertions, first to `any` (or `unknown`, which we'll introduce later), then to the desired type:
+```ts
+const a = expr as any as T;
+```
+
+## Literal Types
+
+In addition to the general types `string` and `number`, we can refer to *specific* strings and numbers in type positions.
+
+By themselves, literal types aren't very valuable:
+
+```ts
+let x: "hello" = "hello";
+// OK
+x = "hello";
+// OK
+x = "hello";
+// ...
+x = "howdy";
+```
+
+It's not much use to have a variable that can only have one value!
+
+But by *combining* literals into unions, you can express a much more useful thing - for example, functions that only accept a certain set of known values:
+
+```ts
+function printText(s: string, alignment: "left" | "right" | "center") {
+  // ...
+}
+printText("Hello, world", "left");
+printText("G'day, mate", "centre");
+```
+
+Numeric literal types work the same way:
+
+```ts
+function compare(a: string, b: string): -1 | 0 | 1 {
+  return a === b ? 0 : a > b ? 1 : -1;
+}
+```
+
+Of course, you can combine these with non-literal types:
+
+```ts
+interface Options {
+  width: number;
+}
+function configure(x: Options | "auto") {
+  // ...
+}
+configure({ width: 100 });
+configure("auto");
+configure("otto");
+```
+
+There's one more kind of literal type: boolean literals.
+There are only two boolean literal types, and as you might guess, they are the types `true` and `false`.
+The type `boolean` itself is actually just an alias for the union `true | false`.
+
+### Literal Inference
+
+When you initialize a variable with an object, TypeScript assumes that the properties of that object might change values later.
+For example, if you wrote code like this:
+```ts
+declare const someCondition: boolean;
+//cut
+const obj = { counter: 0 };
+if (someCondition) {
+  obj.counter = 1;
+}
+```
+TypeScript doesn't assume the assignment of `1` to a field that previously had `0` to be an error.
+Another way of saying this is that `obj.counter` must have the type `number`, not `0`, because types are used to determine both *reading* and *writing* behavior.
+
+The same applies to strings:
+
+```ts
+declare function handleRequest(url: string, method: "GET" | "POST"): void;
+//cut
+const req = { url: "https://example.com", method: "GET" };
+handleRequest(req.url, req.method);
+```
+
+Because it'd be legal to assign a string like `"GUESS"` TO `req.method`, TypeScript considers this code to have an error.
+You can change this inference by adding a type assertion in either location:
+
+```ts
+declare function handleRequest(url: string, method: "GET" | "POST"): void;
+//cut
+const req = { url: "https://example.com", method: "GET" as "GET" };
+/* or */
+handleRequest(req.url, req.method as "GET");
+```
+
+The first change means "I intend for `req.method` to always have the *literal type* `"GET"`", preventing the possible assignment of `"GUESS"` to that field.
+The second change means "I know for other reasons that `req.method` has the value `"GET"`".
+
+## `null` and `undefined`
+
+JavaScript has two primitive values, `null` and `undefined`, both of which are used to signal absent or uninitialized values.
+
+TypeScript has two corresponding *types* by the same names.
+
+
+
 
 
 
@@ -348,7 +489,6 @@ function getFirstThree(x: number[] | string) {
     * Numeric literals
     * Boolean's just an alias for `true` | `false`
     * Combine these with unions for e.g. `"GET" | "POST"`
-    * Why do I have to sometimes write `"foo" as "foo"`
   * null and undefined
     * --strictNullChecks: turn it on
     * Undefined in optional parameters and properties
