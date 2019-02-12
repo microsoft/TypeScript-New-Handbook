@@ -28,7 +28,7 @@
   "dependencies": {
     "express": "^4.16.3",
     "npm": "^6.4.1",
-    "staticy": "0.0.5",
+    "staticy": "^0.2.0",
     "ws": "^6.0.0"
   }
 }
