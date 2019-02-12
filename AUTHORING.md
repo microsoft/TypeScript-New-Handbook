@@ -1,5 +1,9 @@
 # Authoring Guide
 
+## Testing
+
+
+
 ## Walkthrough
 
 The walkthrough is a series of pages which describe TypeScript, organized by concepts.
@@ -54,3 +58,4 @@ Use third-person narrative:
 
  > * ✅ The `--strictNullChecks` option removes `null` and `undefined` from the domain of all types.
  > * ❌ If you use the `--strictNullChecks` option, we won't put `null` and `undefined` into the domain of all types.
+
