@@ -29,6 +29,16 @@ pre code {
     font-family: Menlo, Monaco, "Courier New", monospace;
     font-size: 90%;
     line-height: 1.25;
+    white-space: nowrap;
+}
+
+p code {
+    white-space: nowrap;
+}
+
+pre.typescript-code, span.error {
+    font-family: Consolas, Menlo, Monaco, Deja Vu Sans Mono, "Courier New", monospace;
+    font-size: 90%;
 }
 
 pre.typescript-code {
@@ -41,8 +51,6 @@ pre.typescript-code {
     padding-right: 4em;
     background: #F5F5F5;
     border: solid #777 1px;
-    font-family: Consolas, Menlo, Monaco, Deja Vu Sans Mono, "Courier New", monospace;
-    font-size: 90%;
     line-height: 1.25;
     min-width: 30em;
 }
@@ -54,7 +62,6 @@ span.comment {
 
 span.keyword {
     color: #00A;
-    font-weight: bold;
 }
 
 span.parameterName, span.identifier {
@@ -74,16 +81,21 @@ span.className, span.interfaceName, span.typeParameterName, span.typeAliasName, 
 }
 
 span.error {
-    border-bottom: red 2px;
-    border-bottom-style: dotted
-    /*
-    text-decoration-line: underline;
-    text-decoration-style: wavy;
-    text-decoration-color: red;
+    position: relative;
+}
 
-    /* Currently experimental:
-    text-decoration-skip: none;
-    cursor: help;*/
+span.error-message {
+    cursor: help;
+    background: #FF000010;
+    border-radius: 0.3em;
+    border-bottom: #F44 3px;
+    border-bottom-style: dotted;
+    position: absolute;
+    display: inline-block;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -5px;
 }
 
 span.className {
@@ -117,7 +129,12 @@ h1 {
 blockquote {
     margin: 1em;
     padding: 0.02em 1em 0.02em 1em;
-    background: #FFFFD7;
+    background: #FFFFF0;
     border-left: solid #EEB 4px;
 }
 
+div.tippy-tooltip {
+    white-space: pre;
+    font-family: "Courier New";
+    
+}

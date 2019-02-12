@@ -27,6 +27,12 @@ export function makePage(content: string) {
     <article>
     ${content}
     </article>
+
+    <script src="https://unpkg.com/popper.js@1/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/tippy.js@4"></script>
+    <script>
+        tippy.setDefaults({preventOverflow: { enabled: false } });
+    </script>
     </body>
     </html>`;
 }

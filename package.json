@@ -18,17 +18,17 @@
   },
   "homepage": "https://github.com/RyanCavanaugh/TNTSHB#readme",
   "devDependencies": {
-    "@types/express": "^4.16.0",
-    "@types/node": "^10.11.0",
-    "@types/showdown": "^1.7.5",
+    "@types/express": "^4.16.1",
+    "@types/node": "^10.12.25",
+    "@types/showdown": "^1.9.2",
     "@types/ws": "^6.0.1",
-    "showdown": "^1.8.6",
-    "typescript": "^3.0.3"
+    "showdown": "^1.9.0",
+    "typescript": "^3.3.3"
   },
   "dependencies": {
-    "express": "^4.16.3",
-    "npm": "^6.4.1",
-    "staticy": "^0.2.0",
-    "ws": "^6.0.0"
+    "express": "^4.16.4",
+    "npm": "^6.7.0",
+    "staticy": "^0.2.1",
+    "ws": "^6.1.3"
   }
 }

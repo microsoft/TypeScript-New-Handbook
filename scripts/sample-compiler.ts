@@ -7,6 +7,10 @@ function cleanMarkdownEscaped(code: string) {
     return code;
 }
 
+function escapeHtml(text: string) {
+    return text.replace(/</g, "&lt;");
+}
+
 function createLanguageServiceHost(ref: SampleRef): ts.LanguageServiceHost {
     const options: ts.CompilerOptions = {
         allowJs: true,
@@ -82,7 +86,7 @@ export function getCompilerExtension() {
                     const startingDiags = errs.filter(diag => (diag.file && diag.file.fileName) === sampleFileRef.fileName && (diag.start === i));
                     for (const start of startingDiags) {
                         const messageText = typeof start.messageText === "string" ? start.messageText : start.messageText.messageText;
-                        parts.push(`<span class="error" title="${messageText.replace(/"/g, "&gt;")}">`);
+                        parts.push(`<span class="error"><span class="error-message" data-tippy="${messageText.replace(/"/g, "&quot;")}"></span>`);
                     }
 
                     if (i === semanticSpans[0]) {
@@ -107,7 +111,7 @@ export function getCompilerExtension() {
                     }
                 }
                 const url = `https://www.typescriptlang.org/play/#src=${encodeURIComponent(code)}`;
-                parts.push(`<a class="playground-link" href="${url}">Try in Playground</a>`)
+                parts.push(`<a class="playground-link" href="${url}">Try</a>`)
                 parts.push("</pre>");
 
                 return "%FCODERENDER" + (matches.push(parts.join("")) - 1) + "%";
