@@ -315,7 +315,7 @@ const myAge: Age = 73;
 const myWeight: Weight = myAge; // *not* an error
 ```
 
-## Interfaces
+## Interfaces {#interfaces}
 
 An *interface declaration* is another way to name an object type:
 ```ts
@@ -325,7 +325,7 @@ interface Point {
 }
 ```
 
-### Differences Between Type Aliases and Interfaces
+### Differences Between Type Aliases and Interfaces {#interface-vs-alias}
 
 Type aliases and interfaces are very similar, and in many cases you can choose between them freely.
 Here are the most relevant differences between the two that you should be aware of.

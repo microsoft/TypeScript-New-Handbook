@@ -3,13 +3,24 @@ import fs = require("fs");
 import path = require("path");
 import { getCompilerExtension } from "./sample-compiler";
 
-const sampleCompiler = getCompilerExtension(); 
+const sampleCompiler = getCompilerExtension();
+
+showdown.extension("header-link", function () {
+    return [{
+        type: 'html',
+        regex: /(<h([1-3]) id="([^"]+?)">)(.*<\/h\2>)/g,
+        replace: `$1<a href="#$3">$4</a>`
+    }];
+})
 
 export function render(content: string) {
     const conv = new showdown.Converter({
-        ghCodeBlocks: true,
+        customizedHeaderId: true,
+        ghCompatibleHeaderId: true,
+        ghCodeBlocks: true
     });
     conv.addExtension(sampleCompiler, "ts");
+    conv.useExtension("header-link");
     return conv.makeHtml(content);
 }
 

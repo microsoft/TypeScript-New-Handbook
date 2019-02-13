@@ -36,7 +36,7 @@ p code {
     white-space: nowrap;
 }
 
-pre.typescript-code, span.error {
+pre.typescript-code {
     font-family: Consolas, Menlo, Monaco, Deja Vu Sans Mono, "Courier New", monospace;
     font-size: 90%;
 }
@@ -120,6 +120,18 @@ a.playground-link {
 a.playground-link, a.playground-link:visited {
     color: #FFF;
     text-decoration: none;
+}
+
+h1 a, h2 a, h3 a {
+    text-decoration: none;
+    color: #000;
+    position: relative;
+}
+
+h1 a:hover::before, h2 a:hover::before, h3 a:hover::before {
+    content: "#";
+    position: absolute;
+    left: -0.7em;
 }
 
 h1 {
