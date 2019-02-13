@@ -110,8 +110,21 @@ export function getCompilerExtension() {
                         parts.push(code.substr(i, 1));
                     }
                 }
+
+                if (errs.length > 0) {
+                    parts.push(`<hr class="error-divider">`);
+                    for (const err of errs) {
+                        const messageText = typeof err.messageText === "string" ? err.messageText : err.messageText.messageText;
+                        const errorLines = messageText.split(/\r?\n/g);
+                        const errorSpans = errorLines.map(e => `<div class="error-line">${escapeHtml(e)}</div>`);
+                        parts.push(`<div class="listed-error">${errorSpans.join("")}</div>`);
+                    }
+                }
+
+
                 const url = `https://www.typescriptlang.org/play/#src=${encodeURIComponent(code)}`;
                 parts.push(`<a class="playground-link" href="${url}">Try</a>`)
+
                 parts.push("</pre>");
 
                 return "%FCODERENDER" + (matches.push(parts.join("")) - 1) + "%";

@@ -87,8 +87,8 @@ span.error {
 span.error-message {
     cursor: help;
     background: #FF000010;
-    border-radius: 0.3em;
-    border-bottom: #F44 3px;
+    border-radius: 0.4em;
+    border-bottom: #F44 2px;
     border-bottom-style: dotted;
     position: absolute;
     display: inline-block;
@@ -126,6 +126,23 @@ h1 {
     font-size: 170%;
 }
 
+hr.error-divider {
+    margin-left: -1em;
+    margin-right: -3em;
+    margin-top: 0.75em;
+    margin-bottom: 0.75em;
+}
+
+div.listed-error {
+    max-width: 40em;
+    word-wrap: normal;
+    overflow-wrap: normal;
+}
+
+div.error-line {
+    word-wrap: normal;
+}
+
 blockquote {
     margin: 1em;
     padding: 0.02em 1em 0.02em 1em;
@@ -133,8 +150,3 @@ blockquote {
     border-left: solid #EEB 4px;
 }
 
-div.tippy-tooltip {
-    white-space: pre;
-    font-family: "Courier New";
-    
-}
