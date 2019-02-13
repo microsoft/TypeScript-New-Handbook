@@ -141,6 +141,7 @@ div.listed-error {
 
 div.error-line {
     word-wrap: normal;
+    white-space: normal;
 }
 
 blockquote {

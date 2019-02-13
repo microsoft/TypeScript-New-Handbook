@@ -488,9 +488,9 @@ Just like checking for `undefined` before using an optional property, we can use
 function doSomething(x: string | null) {
   if (x === null) {
     // do nothing
-  } else [
+  } else {
     console.log("Hello, " + x.toUpperCase());
-  ]
+  }
 }
 ```
 
