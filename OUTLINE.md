@@ -144,6 +144,7 @@
 
  * Chapter 4: More on Functions
   * Function type expressions
+  * Call/construct signatures
   * Generics
     * "Passing a value through"
       * Stress that a type parameter should always appear in 2 places
@@ -172,7 +173,6 @@
     * Always manifest the type parameter
   * readonly modifier
   * Tuples
-  * Call/construct signatures
   * Index signatures
     * numeric
     * string

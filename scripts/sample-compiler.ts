@@ -11,6 +11,14 @@ function escapeHtml(text: string) {
     return text.replace(/</g, "&lt;");
 }
 
+function strrep(text: string, count: number) {
+    let s = "";
+    for (let i = 0; i < count; i++) {
+        s += text;
+    }
+    return s;
+}
+
 function createLanguageServiceHost(ref: SampleRef): ts.LanguageServiceHost {
     const options: ts.CompilerOptions = {
         allowJs: true,
@@ -77,7 +85,19 @@ export function getCompilerExtension() {
 
                 const parts: string[] = [`<pre class="typescript-code">`];
 
-                for(let i = 0; i < code.length; i++) {
+                const start = code.indexOf("//cut") < 0 ? 0 : code.indexOf("//cut") + 5;
+                while (semanticSpans[0] < start) {
+                    semanticSpans.shift();
+                    semanticSpans.shift();
+                    semanticSpans.shift();
+                }
+                while (syntaxSpans[0] < start) {
+                    syntaxSpans.shift();
+                    syntaxSpans.shift();
+                    syntaxSpans.shift();
+                }
+                
+                for(let i = start; i < code.length; i++) {
                     const endingDiags = errs.filter(diag => (diag.file && diag.file.fileName) === sampleFileRef.fileName && (diag.start! + diag.length! === i));
                     for (const end of endingDiags) {
                         parts.push(`</span>`);
@@ -86,7 +106,7 @@ export function getCompilerExtension() {
                     const startingDiags = errs.filter(diag => (diag.file && diag.file.fileName) === sampleFileRef.fileName && (diag.start === i));
                     for (const start of startingDiags) {
                         const messageText = typeof start.messageText === "string" ? start.messageText : start.messageText.messageText;
-                        parts.push(`<span class="error"><span class="error-message" data-tippy="${messageText.replace(/"/g, "&quot;")}"></span>`);
+                        parts.push(`<span class="error"><span class="error-highlight"></span>`);
                     }
 
                     if (i === semanticSpans[0]) {
@@ -114,13 +134,21 @@ export function getCompilerExtension() {
                 if (errs.length > 0) {
                     parts.push(`<hr class="error-divider">`);
                     for (const err of errs) {
-                        const messageText = typeof err.messageText === "string" ? err.messageText : err.messageText.messageText;
-                        const errorLines = messageText.split(/\r?\n/g);
-                        const errorSpans = errorLines.map(e => `<div class="error-line">${escapeHtml(e)}</div>`);
-                        parts.push(`<div class="listed-error">${errorSpans.join("")}</div>`);
+                        let errHead = err.messageText;
+                        let depth = 0;
+                        parts.push(`<div class="listed-error">`);
+                        while (true) {
+                            const messageText = typeof errHead === "string" ? errHead : errHead.messageText;
+                            parts.push(`<div class="error-line">${strrep(`<div class="indent"></div>`, depth)}${escapeHtml(messageText)}</div>`);
+                            if (typeof errHead === "string" || errHead.next === undefined) {
+                                break;
+                            }
+                            errHead = errHead.next;
+                            depth++;
+                        }
+                        parts.push(`</div>`);
                     }
                 }
-
 
                 const url = `https://www.typescriptlang.org/play/#src=${encodeURIComponent(code)}`;
                 parts.push(`<a class="playground-link" href="${url}">Try</a>`)

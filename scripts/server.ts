@@ -3,5 +3,6 @@ import path = require('path');
 import render  = require('./render');
 import site = require('./site');
 
-site.create().runDevServer();
+process.stdin.on("keypress", () => process.exit(0));
 
+site.create().runDevServer();
