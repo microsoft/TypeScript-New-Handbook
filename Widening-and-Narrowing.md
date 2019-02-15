@@ -44,12 +44,16 @@ widening is described fully
 and
 [its followup](https://github.com/Microsoft/TypeScript/pull/11126).
 
-### When does literal widening happen?
+### Fresh literal types and mutable locations
 
 There are two key points to understand about literal widening.
 
 1. Literal widening only happens to literal types that originate from
-expressions. These are called *fresh* literal types.
+expressions, not types. These are called *fresh* literal types.
+
+For example, the literal `1` has the fresh literal type `1`. But a `1`
+in a type annotation is not a fresh literal type.
+
 2. Literal widening happens whenever a fresh literal type reaches a
 *mutable* location.
 
@@ -81,17 +85,17 @@ const one = 1;
 let n = one; // 'n' has type: number
 ```
 
-The first two steps are the same as the first example. The third step
+The first two steps are the same as the first, `const` example.
 
 1. `1` is an expression, so it has the fresh literal type `1`.
 2. `1: 1` is assigned to `const one`, so `one: 1`.
 3. `one: 1` is assigned to `n`, a mutable location, so `n: number`.
 
-The fresh literal type `1` makes its way
-*through* the assignment to `one` down to the assignment to `wat`,
-and since it's still fresh widens to `number`. But this is the way a
-real program is supposed to work. The program defines constants at the
-top, then uses those constants as the initial values for variables:
+The fresh literal type `1` makes its way *through* the assignment to
+`one` down to the assignment to `n`, and, since it's still fresh,
+widens to `number`. This is confusing, but it is the way a real
+program is supposed to work. A program defines constants at the top,
+then uses those constants as the initial values for variables:
 
 ```ts
 const start = 1001;
@@ -106,22 +110,33 @@ for (let i = start; i < max; i = i + 1) {
 The type of `i` must be number; if it were `1001` then it could only
 over have the value `1001` and the statement `i = i + 1` would be illegal.
 
-Other mutable locations are members of array literals and object literals.
-TODO: As CONST
+Other mutable locations are elements of array literals and object
+literals:
 
 ```ts
 const nums = [1, 2, 3]; // 'nums' has type: number[]
 nums[0] = 101; // because Javascript arrays are always mutable
-
-const doom = { e: 1, m: 1 }
-doom.e = 2 // Mutable objects! We're doomed!
-
-// Dooomed!
-// Doomed!
-// -gasp- Dooooooooooooooooooooooooooooooooo-
 ```
 
-### What literal types widen?
+`nums` has type `number[]` because `1`, `2`, and `3` individually have
+the matching literal types `1`, `2`, and `3`, but each array element
+widens the fresh literal type to `number`.
+
+In addition, mutable locations become non-mutable locations if
+they are in a const context, which is produced by an `as const` type
+assertion on the containing expression.
+
+```
+const doom = { e: 1, m: 1 } // 'doom' has type: { e: number, m: number }
+doom.e = 2
+
+const doom2 = { e: 1, m: 1 } as const // 'doom2' has type: { e: 1, m: 1 }
+doom2.e = 2 // error, '2' is not assignable to '1'
+```
+
+### Literal type widening relationships.
+
+Literal types widen to their respective supertype. Specifically:
 
 * Number literal types like `1` widen to `number`.
 * String literal types like `'hi'` widen to `string`.
@@ -149,7 +164,7 @@ while (ch = nextChar()) {
 
 ## Narrowing
 
-Narrowing is essentially the removal of types from a union. It's
+Narrowing is the removal of types from a union. It's
 happening all the time as you write code, especially if you use
 `--strictNullChecks`. To understand narrowing, you first need to
 understand the difference between "declared type" and "computed type".
