@@ -164,10 +164,10 @@ while (ch = nextChar()) {
 
 ## Narrowing
 
-Narrowing is the removal of types from a union. It's
-happening all the time as you write code, especially if you use
-`--strictNullChecks`. To understand narrowing, you first need to
-understand the difference between "declared type" and "computed type".
+Narrowing is the removal of types from a union. Control flow starts
+from the *declared type* of a variable and maintains a *computed type*
+that narrows as control flow encounters predicates and other uses that
+prove facts about the type.
 
 The declared type of a variable is the one it's declared with. For
 `let x: number | undefined`, that's `number | undefined`. The computed
@@ -188,10 +188,11 @@ function process(origin: Thing, extra?: Thing | undefined): void {
 `extra`'s declared type is `Thing | undefined`, since it's an optional
 parameter. However, its computed type varies based on context. On the
 first line, in `preprocess(origin, extra)`, its computed type is still
-`Thing | undefined`. However, inside the `if (extra)` block, `extra`'s
-computed type is now just `Thing` because it can't possibly be
-`undefined` due to the `if (extra)` check. Narrowing has removed
-`undefined` from its type.
+`Thing | undefined`. However, when control flow encounters the
+`if (extra)` check, it knows that `extra`'s computed type is just
+`Thing` inside the block. The check proves that `undefined` can't be
+part of the type since `undefined` is falsy.
+`Thing | undefined` has *narrowed* to `Thing`.
 
 Similarly, the declared type of `extra.name` is `'one' | 'two'`, but
 inside the true branch of `if (extra.name === 'one')`, its computed
@@ -220,7 +221,7 @@ the check allows it to be either string or number.
 
 ## Instanceof Narrowing
 
-Instanceof narrowing looks similar to normal narrowing, and
+`instanceof` narrowing looks similar to normal narrowing, and
 behaves similarly, but its rules are somewhat different. It only
 applies to certain `instanceof` checks and type predicates.
 
@@ -253,12 +254,14 @@ function f(x: C) {
 }
 ```
 
-Unlike narrowing, `instanceof` narrowing doesn't remove any types to
-get `x`'s computed type. It just notices that `D` is a subclass of `C`
-and changes the computed type to `D` inside the `if (x instanceof D)`
-block. In the `else` block `x` is still `C`.
+Unlike normal narrowing, `instanceof` narrowing doesn't remove any
+types to get `x`'s computed type. Instead, it and changes the computed
+type to `D` inside the `if (x instanceof D)` block when `D` appears to
+be a subclass of `C`. Also unlike normal narrowing, in the `else`
+block, `x` is still `C`.
 
-If you mess up the class relationship, the compiler does its best
+`instanceof` narrowing doesn't produce errors; if the checked class is
+not a subclass of the declared type, the compiler does its best
 to make sense of things:
 
 ```ts
@@ -275,14 +278,15 @@ function f(x: C) {
 
 The compiler thinks that something of type `C` can't also be
 `instanceof E`, but just in case, it sets the computed type of `x` to
-`C & E`, so that you can use the properties of `E` in the block
-&mdash; just be aware that the block will probably never execute!
+`C & E`, so that all the properties of `E` are at least available.
+This can be confusing to Typescript authors, since it's reasonable to
+expect an error for code that the compiler believes can never execute.
 
 ### Type predicates
 
 Type predicates follow the same rules as `instanceof` when narrowing,
 and are just as subject to misuse. So this example is equivalent to
-the previous wonky one:
+the previous incorrect one:
 
 ```ts
 function isE(e: any): e is E {
@@ -293,26 +297,26 @@ function f(x: C) {
     // x is C & E here
   }
   else {
-    // nope, still just C
+    // x is still just C here
   }
 }
 ```
 
 ## Apparent Type
 
-In some situations you need to get the properties on a variable, even
-when it technically doesn't have properties. One example is primitives:
+An *apparent type* of a type always has properties, even when the
+original type does not. One example is primitives:
 
 ```ts
 let n = 12
 let s = n.toFixed()
 ```
 
-`12` doesn't technically have properties; `Number` does. In order to
-map `number` to `Number`, we define `Number` as the *apparent type* of
-`number`. Whenever the compiler needs to get properties of some type,
-it asks for the apparent type of that type first. This applies to
-other non-object types like type parameters:
+The type `number` is a primitive in Typescript and has no properties;
+`Number` does. Apparent types provide the mapping from `number` to
+`Number`. Whenever the compiler needs to get properties of some type,
+it asks for the apparent type of that type first.
+The other types that have interesting apparent types are type parameters:
 
 ```ts
 interface Node {
@@ -330,3 +334,15 @@ function setParent<T extends Node>(node: T, parent: Node): T {
 constraint is `Node`, so when the compiler checks `node.parent`, it
 gets the apparent type of `T`, which is `Node`. Then it sees that
 `Node` has a `parent` property.
+
+The following types have interesting apparent types:
+
+* `number` and number literals &rarr; `Number`
+* `string` and string literals &rarr; `String`
+* `boolean` and `true` and `false` &rarr; `Boolean`
+* `symbol` and unique symbol &rarr; `Symbol`
+* `bigint` &rarr; `Bigint`
+* `object` &rarr; `{}`
+* type parameters &rarr; the base constraint of the type parameter
+* `keyof` types &rarr; `string | number | symbol`
+
