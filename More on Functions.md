@@ -102,6 +102,111 @@ interface CallOrConstruct {
 
 ## Generic Functions
 
+It's common to write a function where the types of the input relate to the type of the output, or where the types of two inputs are related in some way.
+Let's consider for a moment a function that returns the first element of an array:
+
+```ts
+function firstElement(arr: any[]) {
+  return arr[0];
+}
+```
+
+This function does its job, but unfortunately has the return type `any`.
+It'd be better if the function returned the type of the array element.
+
+In TypeScript, *generics* are used when we want to describe a correspondence between two values.
+We do this by declaring a *type parameter* in the function signature:
+
+```ts
+function firstElement<T>(arr: T[]): T {
+  return arr[0];
+}
+```
+
+### Inference
+
+By adding a type parameter `T` to this function and using it in two places, we've created a link between the input of the function (the array) and the output (the return value).
+Now when we call it, a more specific type comes out:
+
+```ts
+declare function firstElement<T>(arr: T[]): T;
+//cut
+// s is of type 'string'
+const s = firstElement(["a", "b", "c"]);
+```
+
+Note that we didn't have to specify `T` in this sample.
+The type was *inferred* - chosen automatically - by TypeScript.
+
+We can use multiple type parameters as well.
+For example, a standalone version of `map` would look like this:
+
+```ts
+function map<E, O>(arr: E[], func: (arg: E) => O): O[] {
+  return arr.map(func);
+}
+
+// n is of type 'number'
+// parsed is of type 'string[]'
+const parsed = map(["1", "2", "3"], n => parseInt(n));
+```
+
+Note that in this example, TypeScript could infer both the type of the `E` type parameter (from the given `string` array), as well as the type `O` based on the return value of the function expression.
+
+### Constraints
+
+We've written some generic functions that can work on *any* kind of value.
+Sometimes we want to relate two values, but can only operate on a certain subset of values.
+In this case, we can use a *constraint* to limit the kinds of types that a type parameter can accept.
+
+Let's write a function that returns the longer of two values.
+To do this, we need a `length` property that's a number.
+We *constrain* the type parameter to that type by writing an `extends` clause:
+```ts
+function longest<T extends { length: number }>(a: T, b: T) {
+  if (a.length >= b.length) {
+    return a;
+  } else {
+    return b;
+  }
+}
+
+// longerArray is of type 'number[]'
+const longerArray = longest([1, 2], [1, 2, 3]);
+// longerString is of type 'string'
+const longerString = longest("alice", "bob");
+// Error!
+const notOK = longest(10, 100);
+```
+
+There are a interesting few things to note in this example.
+We allowed TypeScript to *infer* the return type of `longest`.
+Return type inference also works on generic functions.
+
+Because we constrained `T` to `{ length: number }`, we were allowed to access the `.length` property of the `a` and `b` parameters.
+Without the type constraint, we wouldn't be able to access those properties because the values might have been some other type without a length property.
+
+The types of `longerArray` and `longerString` were inferred based on the arguments.
+Remember, generics are all about relating two or more values with the same type!
+
+Finally, just as we'd like, the call to `longest(10, 100)` is rejected because the `number` type doesn't have a `.length` property.
+
+### Working with Constrained Values
+
+Here's a common error when working with generic constraints:
+
+```ts
+function minimumLength<T extends { length: number }>(obj: T, minimum: number): T {
+  if (obj.length >= minimum) {
+    return obj;
+  } else {
+    return { length: minimum };
+  }
+}
+```
+
+It might look like this function is OK - `T` is constrained to `{ length: number }`, and the function either returns `T` or a value matching that constraint.
+The problem is that the function promises to 
 
 
 
