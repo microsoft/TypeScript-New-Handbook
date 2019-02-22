@@ -23,6 +23,7 @@ function createLanguageServiceHost(ref: SampleRef): ts.LanguageServiceHost {
     const options: ts.CompilerOptions = {
         allowJs: true,
         skipLibCheck: true,
+        strict: true
     };
     const servicesHost: ts.LanguageServiceHost = {
         getScriptFileNames: () => [ref.fileName!],
@@ -62,7 +63,10 @@ export function getCompilerExtension() {
     const caseSensitiveFilenames = lsHost.useCaseSensitiveFileNames && lsHost.useCaseSensitiveFileNames();
     const docRegistry = ts.createDocumentRegistry(caseSensitiveFilenames, lsHost.getCurrentDirectory());
     const ls = ts.createLanguageService(lsHost, docRegistry);
-    const compilerOptions = lsHost.getCompilationSettings();
+    // const compilerOptions = lsHost.getCompilationSettings();
+    const compilerOptions: ts.CompilerOptions = {
+        strict: true
+    };
     const ext: showdown.ShowdownExtension[] = [
         {
             type: "lang",
