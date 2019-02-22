@@ -11,7 +11,50 @@ showdown.extension("header-link", function () {
         regex: /(<h([1-3]) id="([^"]+?)">)(.*<\/h\2>)/g,
         replace: `$1<a href="#$3">$4</a>`
     }];
-})
+});
+
+showdown.extension("toc", function () {
+    const converter = new showdown.Converter();
+    return [{
+        type: "lang",
+        regex: /__toc__/g,
+        replace(_1: any, _2: any, body: string) {
+            const rgx = /^(##+) ([\w\s`]*)( \{(.*)\})?$/gm;
+            let match: RegExpExecArray | null;
+            const lines = [`<div class="toc"><span class="toc-title">Table of Contents</span>`];
+            let depth = 1;
+            while (match = rgx.exec(body)) {
+                let newDepth = match[1].length;
+                while (depth < newDepth) {
+                    lines.push("<ul>");
+                    depth++;
+                }
+                while (depth > newDepth) {
+                    lines.push("</ul>");
+                    depth--;
+                }
+                let anchorName = textToAnchorName(match[2]);
+                if (match[4] !== undefined) {
+                    anchorName = match[4];
+                }
+                let converted = converter.makeHtml(match[2]);
+                // remove leading/trailing p
+                converted = converted.substr("<p>".length, converted.length - "<p></p>".length);
+                lines.push(`<li><a href="#${anchorName}">${converted}</a></li>`);
+            }
+            while (depth > 0) {
+                lines.push("</ul>");
+                depth--;
+            }
+            lines.push("</div>")
+            return lines.join("");
+        }
+    }]
+});
+
+function textToAnchorName(text: string) {
+    return text.toLowerCase().replace(/ /g, "-").replace(/`/g, "");
+}
 
 export function render(content: string) {
     const conv = new showdown.Converter({
@@ -21,6 +64,7 @@ export function render(content: string) {
     });
     conv.addExtension(sampleCompiler, "ts");
     conv.useExtension("header-link");
+    conv.useExtension("toc");
     return conv.makeHtml(content);
 }
 

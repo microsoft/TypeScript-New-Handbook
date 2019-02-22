@@ -1,18 +1,10 @@
- * Chapter 4: More on Functions
-  * Function type expressions
-  * Call/construct signatures
-  * Generics
-    * "Passing a value through"
-      * Stress that a type parameter should always appear in 2 places
-    * Generic constraints
-    * Using `T` in the body
-
-
 # More on Functions
 
 In JavaScript, functions are values that can be passed around.
 Just like other values, TypeScript has many ways to describe these kinds of values.
 Let's learn about how to write types that describe functions.
+
+__toc__
 
 ## Function Type Expressions
 
@@ -519,7 +511,7 @@ Callers can invoke this with either sort of value, and as an added bonus, we don
 There are some additional types you'll want to recognize that appear often when working with function types.
 Like all types, you can use them everywhere, but these are especially relevant in the context of functions.
 
-#### `void`
+### `void`
 
 `void` represents the return value of functions which don't return a value.
 It's the inferred type any time a function doesn't have any `return` statements, or doesn't return any explicit value from those return statements:
@@ -537,7 +529,7 @@ See the reference page [[Why void is a special type]] for a longer discussion ab
 
 > `void` is not the same as `undefined`.
 
-#### `object`
+### `object`
 
 The special type `object` refers to any value that isn't a primitive (`string`, `number`, `boolean`, `symbol`, `null`, or `undefined`).
 This is different from the *empty object type* `{ }`, and also different from the global type `Object`.
@@ -548,13 +540,13 @@ You can read the reference page about [[The global types]] for information on wh
 Note that in JavaScript, function values are objects: They have properties, have `Object.prototype` in their prototype chain, are `instanceof Object`, you can call `Object.keys` on them, and so on.
 For this reason, function types are considered to be `object`s in TypeScript.
 
-#### `unknown`
+### `unknown`
 
 
 
-#### `never`
+### `never`
 
-#### `Function`
+### `Function`
 
 
   * Overloads

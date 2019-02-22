@@ -1,22 +1,13 @@
 import fs = require("fs");
 import ts = require("typescript");
+import utils = require("./utils");
+
+const { strrep, escapeHtml } = utils;
 
 function cleanMarkdownEscaped(code: string) {
     code = code.replace(/¨D/g, "$");
     code = code.replace(/¨T/g, "~");
     return code;
-}
-
-function escapeHtml(text: string) {
-    return text.replace(/</g, "&lt;");
-}
-
-function strrep(text: string, count: number) {
-    let s = "";
-    for (let i = 0; i < count; i++) {
-        s += text;
-    }
-    return s;
 }
 
 function createLanguageServiceHost(ref: SampleRef): ts.LanguageServiceHost {
