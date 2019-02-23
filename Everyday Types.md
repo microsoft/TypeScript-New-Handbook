@@ -11,6 +11,8 @@ As we learn about the types themselves, we'll also learn about the places where 
 We'll start by reviewing the most basic and common types you might encounter when writing JavaScript or TypeScript code.
 These will later form the core "building blocks" of more complex types.
 
+__toc__
+
 ## Primitives `string`, `number`, and `boolean`
 
 JavaScript has three main [primitive](https://developer.mozilla.org/en-US/docs/Glossary/Primitive) kinds of values: `string`, `number`, and `boolean`.

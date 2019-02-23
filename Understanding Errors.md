@@ -44,5 +44,3 @@ Its logic for issuing an error follows from its logic for determining if the ass
 3. Because `b`'s `m` property (`string[]`) is not assignable to `a`'s `m` property (`number[]`). Why?
 4. Because one array's element type (`string`) is not assignable to the other (`number`)
 
-
-
