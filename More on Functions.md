@@ -24,7 +24,7 @@ greeter(printToConsole);
 The syntax `(a: string) => void` means "a function with one parameter, named `a`, of type string, that doesn't have a return value".
 Just like with function declarations, if a parameter type isn't specified, it's implicitly `any`.
 
-> Note that the parameter name is **required**. The function type `(string) => void` means "a function with a parameter named `string` of type `a`".
+> Note that the parameter name is **required**. The function type `(string) => void` means "a function with a parameter named `string` of type `a`"!
 
 Of course, we can use a type alias to name a function type:
 
@@ -504,8 +504,6 @@ Callers can invoke this with either sort of value, and as an added bonus, we don
 
 > Always prefer parameters with union types instead of overloads when possible
 
-
-
 ## Other Types to Know About
 
 There are some additional types you'll want to recognize that appear often when working with function types.
@@ -542,21 +540,103 @@ For this reason, function types are considered to be `object`s in TypeScript.
 
 ### `unknown`
 
+The `unknown` type represents *any* value.
+This is similar to the `any` type, but is safer because it's not legal to do anything with an `unknown` value:
 
+```ts
+function f1(a: any) {
+  a.b(); // OK
+}
+function f2(a: unknown) {
+  a.b();
+}
+```
+
+This is useful when describing function types because you can describe functions that accept any value without having `any` values in your function body.
+
+Conversely, you can describe a function that returns a value of unknown type:
+
+```ts
+declare const someRandomString: string;
+//cut
+function safeParse(s: string): unknown {
+  return JSON.parse(s);
+}
+
+// Need to be careful with 'obj'!
+const obj = safeParse(someRandomString);
+```
 
 ### `never`
 
-### `Function`
+Some functions *never* return a value:
+
+```ts
+function fail(msg: string): never {
+  throw new Error(msg);
+}
+```
+
+The `never` type represents values which are *never* observed.
+In a return type, this means that the function throws an exception or terminates execution of the program.
+
+`never` also appears when TypeScript determines there's nothing left in a union.
+
+```ts
+function fn(x: string | number) {
+  if (typeof x === "string") {
+    // do something
+  } else if (typeof x === "number") {
+    // do something else
+  } else {
+    x; // has type 'never'!
+  }
+}
+```
+
+### `Function` {#the-global-function-type}
+
+The global type `Function` describes properties like `bind`, `call`, `apply`, and others present on all function values in JavaScript.
+It also has the special property that values of type `Function` can always be called; these calls return `any`:
+
+```ts
+function doSomething(f: Function) {
+  f(1, 2, 3);
+}
+```
+
+This is an *untyped function call* and is generally best avoided because of the unsafe `any` return type.
+
+If need to accept an arbitrary function but don't intend to call it, the type `() => void` is generally safer.
+
+## Rest Parameters and Arguments
+
+**Background reading**: [Rest Parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters) and [Spread Syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax)
+
+In addition to using optional parameters or overloads to make functions that can accept a variety of fixed argument counts, we can also define functions that take an *unbounded* number of arguments using *rest parameters*.
+
+A rest parameter appears after all other parameters, and uses the `...` syntax:
+
+```ts
+function multiply(n: number, ...m: number[]) {
+  return m.map(x => n * x);
+}
+// 'a' gets value [10, 20, 30, 40]
+const a = multiply(10, [1, 2, 3, 4]);
+```
+
+In TypeScript, the type annotation on these parameters is implicitly `any[]` instead of `any`, and any type annotation given must be of the form `Array<T> `or `T[]`, or a tuple type (which we'll learn about later).
+
+Conversely, we can *provide* a variable number of arguments from an array using the spread syntax.
+
+## Parameter Destructuring
+
+**Background reading**: [Destructuring Assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)
+
+You can use parameter destructuring to conveniently unpack an object provided as an argument into one or more local variables in the function body.
+In TypeScript, the type annotation 
 
 
-  * Overloads
-    * How to write them
-    * The implementation signature is not visible
-    * When not to write them
-      * Union types
-      * Generics
-      * Optional parameters
-      * etc
   * Rest and destructuring parameters
     * Where do type annotations go?
   * Assignability of functions
