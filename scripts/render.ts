@@ -19,7 +19,7 @@ showdown.extension("toc", function () {
         type: "lang",
         regex: /__toc__/g,
         replace(_1: any, _2: any, body: string) {
-            const rgx = /^(##+) ([\w\s\-`]*)( \{#(.*)\})?$/gm;
+            const rgx = /^(##+) ([\w\s\-\/\@`]*)( \{#(.*)\})?$/gm;
             let match: RegExpExecArray | null;
             const lines = [`<div class="toc"><span class="toc-title">Table of Contents</span>`];
             let depth = 1;
@@ -49,7 +49,7 @@ showdown.extension("toc", function () {
             lines.push("</div>")
             return lines.join("");
         }
-    }]
+    }];
 });
 
 function textToAnchorName(text: string) {

@@ -5,13 +5,17 @@ However, almost all JavaScript today includes many libraries to accomplish commo
 Having types for the parts of your application that *aren't* your code will greatly improve your TypeScript experience.
 Where do these types come from?
 
+__toc__
+
 ## `.d.ts` files
 
 TypeScript has two main kinds of files.
 `.ts` files are *implementation* files that contain types and executable code.
-`.d.ts` files are *declaration* files that contain *only* type information.
+These are the files that produce `.js` outputs, and are where you'd normally write your code.
 
-We'll learn more about how to write our own definition files later.
+`.d.ts` files are *declaration* files that contain *only* type information.
+These files don't produce `.js` outputs; they are only used for typechecking.
+We'll learn more about how to write our own declaration files later.
 
 ## Built-in Type Definitions
 
@@ -65,13 +69,13 @@ For example, if you installed the `react` npm package, you can install its corre
 
 TypeScript automatically finds type definitions under `node_modules/@types`, so there's no other step needed to get these types available in your program.
 
-## Your Own Definitions
+### Your Own Definitions
 
-Test
+In the uncommon event that a library didn't bundle its own types and didn't have a definition on DefinitelyTyped, you can write a declaration file yourself.
+See the appendix [[Writing Declaration Files]] for a guide.
 
-
-    * Built-in (lib.d.ts)
-    * Inference
-    * Your own types
-    * Packaged types
-    * DefinitelyTyped
+If you want to silence warnings about a particular module without writing a declaration file, you can also quick declare the module as type `any` by putting an empty declaration for it in a `.d.ts` file in your project.
+For example, if you wanted to use a module named `some-untyped-module` without having definitions for it, you would write:
+```ts
+declare module "some-untyped-module";
+```
