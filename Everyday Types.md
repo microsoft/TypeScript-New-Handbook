@@ -11,6 +11,8 @@ As we learn about the types themselves, we'll also learn about the places where 
 We'll start by reviewing the most basic and common types you might encounter when writing JavaScript or TypeScript code.
 These will later form the core "building blocks" of more complex types.
 
+__toc__
+
 ## Primitives `string`, `number`, and `boolean`
 
 JavaScript has three main [primitive](https://developer.mozilla.org/en-US/docs/Glossary/Primitive) kinds of values: `string`, `number`, and `boolean`.
@@ -51,7 +53,7 @@ The `any` type is useful when you don't want to write out a long type just to co
 ### `noImplicitAny`
 
 When a type isn't specified and can't be inferred from context, TypeScript will typically default to `any`.
-Because `any` values don't benefit from type-checking, it's desirable to avoid these situations.
+Because `any` values don't benefit from type-checking, it's usually desirable to avoid these situations.
 The compiler flag `noImplicitAny` will cause any *implicit* `any` to be flagged as an error.
 
 ## Type Annotations on Variables
@@ -59,7 +61,7 @@ The compiler flag `noImplicitAny` will cause any *implicit* `any` to be flagged 
 When you declare a variable using `const`, `var`, or `let`, you can optionally add a type annotation to explicitly specify the type of the variable:
 ```ts
 let myName: string = "Alice";
-//        ↑↑↑↑↑↑↑↑
+          ^^^^^^^^ Type annotation
 ```
 
 > TypeScript doesn't use "types on the left"-style declarations like `int x = 0;`
@@ -89,7 +91,7 @@ Parameter type annotations go after the parameter name:
 ```ts
 // Parameter type annotation
 function greet(name: string) {
-//                 ↑↑↑↑↑↑↑↑
+                   ^^^^^^^^
     console.log("Hello, " + name.toUpperCase() + "!!");
 }
 ```
@@ -110,7 +112,7 @@ Return type annotations appear after the parameter list:
 
 ```ts
 function getFavoriteNumber(): number {
-//                          ↑↑↑↑↑↑↑↑
+                            ^^^^^^^^
     return 26;
 }
 ```
@@ -151,7 +153,7 @@ For example, here's a function that takes a point-like object:
 ```ts
 // The parameter's type annotation is an object type
 function printCoord(pt: { x: number, y: number }) {
-  //                    ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+                        ^^^^^^^^^^^^^^^^^^^^^^^^
   console.log("The coordinate's x value is " + pt.x);
   console.log("The coordinate's y value is " + pt.y);
 }
@@ -312,7 +314,8 @@ type Age = number;
 type Weight = number;
 
 const myAge: Age = 73;
-const myWeight: Weight = myAge; // *not* an error
+// *not* an error
+const myWeight: Weight = myAge;
 ```
 
 ## Interfaces {#interfaces}
@@ -372,6 +375,9 @@ const x = "hello" as number;
 Sometimes this rule can be too conservative and will disallow more complex coercions that might be valid.
 If this happens, you can use two assertions, first to `any` (or `unknown`, which we'll introduce later), then to the desired type:
 ```ts
+declare const expr: any;
+type T = any;
+//cut
 const a = expr as any as T;
 ```
 

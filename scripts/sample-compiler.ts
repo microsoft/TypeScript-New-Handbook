@@ -1,5 +1,8 @@
 import fs = require("fs");
 import ts = require("typescript");
+import utils = require("./utils");
+
+const { strrep, escapeHtml } = utils;
 
 function cleanMarkdownEscaped(code: string) {
     code = code.replace(/¨D/g, "$");
@@ -7,22 +10,11 @@ function cleanMarkdownEscaped(code: string) {
     return code;
 }
 
-function escapeHtml(text: string) {
-    return text.replace(/</g, "&lt;");
-}
-
-function strrep(text: string, count: number) {
-    let s = "";
-    for (let i = 0; i < count; i++) {
-        s += text;
-    }
-    return s;
-}
-
 function createLanguageServiceHost(ref: SampleRef): ts.LanguageServiceHost {
     const options: ts.CompilerOptions = {
         allowJs: true,
         skipLibCheck: true,
+        strict: true
     };
     const servicesHost: ts.LanguageServiceHost = {
         getScriptFileNames: () => [ref.fileName!],
@@ -53,6 +45,63 @@ interface SampleRef {
     content: string
 }
 
+type HighlightPosition = { position: number, length: number, description: string };
+function filterHighlightLines(arr: string[]): { codeLines: string[], highlights: HighlightPosition[] } {
+    const codeLines: string[] = [];
+    const highlights: HighlightPosition[] = [];
+    let nextContentOffset = 0;
+    let contentOffset = 0;
+    for (let i = 0; i < arr.length; i++) {
+        const line = arr[i];
+        const match = /^\s*\^+( .+)?$/.exec(line);
+        if (match === null) {
+            codeLines.push(line);
+            contentOffset = nextContentOffset;
+            nextContentOffset += line.length + 1;
+        } else {
+            const start = line.indexOf("^");
+            const length = line.lastIndexOf("^") - start + 1;
+            const position = contentOffset + start;
+            const description = match[1] ? match[1].trim() : "";
+            highlights.push({ position, length, description });
+        }
+    }
+    return { codeLines, highlights };
+}
+
+type Tagging = {
+    position: number;
+    length: number;
+    start: string;
+    end: string;
+};
+
+function filterOut<T>(arr: T[], predicate: (el: T) => boolean) {
+    const result: T[] = [];
+    for (let i = 0; i < arr.length; i++) {
+        if (predicate(arr[i])) {
+            result.push(arr.splice(i, 1)[0]);
+            i--;
+        }
+    }
+    return result;
+}
+
+function serverSpansToTaggings(arr: number[]) {
+    arr = arr.slice();
+    const taggings: Tagging[] = [];
+    while(arr.length > 0) {
+        const [position, length, kind] = arr.splice(0, 3);
+        taggings.push({
+            position,
+            length,
+            start: `<span class="${ts.ClassificationType[kind]}">`,
+            end: `</span>`
+        });
+    }
+    return taggings;
+}
+
 export function getCompilerExtension() {
     const matches: string[] = [];
     let self = false;
@@ -62,13 +111,20 @@ export function getCompilerExtension() {
     const caseSensitiveFilenames = lsHost.useCaseSensitiveFileNames && lsHost.useCaseSensitiveFileNames();
     const docRegistry = ts.createDocumentRegistry(caseSensitiveFilenames, lsHost.getCurrentDirectory());
     const ls = ts.createLanguageService(lsHost, docRegistry);
-    const compilerOptions = lsHost.getCompilationSettings();
+    // const compilerOptions = lsHost.getCompilationSettings();
+    const compilerOptions: ts.CompilerOptions = {
+        strict: true
+    };
     const ext: showdown.ShowdownExtension[] = [
         {
             type: "lang",
             regex: /```(jsx?|tsx?)\r?\n([\s\S]*?)\r?\n```/g,
             replace: function (_: string, extension: string, code: string) {
                 code = cleanMarkdownEscaped(code);
+
+                // Remove ^^^^^^ lines from example and store
+                const { codeLines, highlights } = filterHighlightLines(code.split(/\r\n?|\n/g));
+                code = codeLines.join("\n");
 
                 sampleFileRef.fileName = "input." + extension;
                 sampleFileRef.content = code;
@@ -86,48 +142,45 @@ export function getCompilerExtension() {
                 const parts: string[] = [`<pre class="typescript-code">`];
 
                 const start = code.indexOf("//cut") < 0 ? 0 : code.indexOf("//cut") + 5;
-                while (semanticSpans[0] < start) {
-                    semanticSpans.shift();
-                    semanticSpans.shift();
-                    semanticSpans.shift();
+                const taggings: Tagging[] = [];
+                const pendingEndTags: Tagging[] = [];
+
+                for (const err of errs.filter(d => d.file && d.file.fileName === sampleFileRef.fileName)) {
+                    taggings.push({
+                        position: err.start!,
+                        length: err.length!,
+                        start: `<span class="error"><span class="error-highlight"></span>`,
+                        end: `</span>`
+                    });
                 }
-                while (syntaxSpans[0] < start) {
-                    syntaxSpans.shift();
-                    syntaxSpans.shift();
-                    syntaxSpans.shift();
+
+                taggings.push(...serverSpansToTaggings(semanticSpans));
+                taggings.push(...serverSpansToTaggings(syntaxSpans));
+
+                for (const highlight of highlights) {
+                    taggings.push({
+                        position: highlight.position,
+                        length: highlight.length,
+                        start: `<span class="highlight"><span class="highlight-content"></span><span class="highlight-description">${highlight.description}</span>`,
+                        end: `</span>`
+                    });
                 }
-                
-                for(let i = start; i < code.length; i++) {
-                    const endingDiags = errs.filter(diag => (diag.file && diag.file.fileName) === sampleFileRef.fileName && (diag.start! + diag.length! === i));
-                    for (const end of endingDiags) {
-                        parts.push(`</span>`);
+
+                for (let i = start; i < code.length; i++) {
+                    const startTags = filterOut(taggings, tag => tag.position === i);
+                    // Sort largest-to-smallest so nesting works correctly
+                    startTags.sort((a, b) => b.length - a.length);
+                    for (const start of startTags) {
+                        parts.push(start.start);
+                        pendingEndTags.push(start);
                     }
 
-                    const startingDiags = errs.filter(diag => (diag.file && diag.file.fileName) === sampleFileRef.fileName && (diag.start === i));
-                    for (const start of startingDiags) {
-                        const messageText = typeof start.messageText === "string" ? start.messageText : start.messageText.messageText;
-                        parts.push(`<span class="error"><span class="error-highlight"></span>`);
-                    }
+                    parts.push(code[i]);
 
-                    if (i === semanticSpans[0]) {
-                        if (i === syntaxSpans[0]) {
-                            // Better hope these overlap the right way lol
-                            if (semanticSpans[1] !== syntaxSpans[1]) {
-                                throw new Error(
-                                    "Semantic and syntactic spans don't overlap. " +
-                                    " Either make this script resilient to that or disable semantic classification."
-                                );
-                            }
-                            syntaxSpans.shift();
-                            syntaxSpans.shift();
-                            syntaxSpans.shift();
-                        }
-                        i = highlightAndBumpCounter(semanticSpans, parts, code, i);
-                    } else if (i === syntaxSpans[0]) {
-                        i = highlightAndBumpCounter(syntaxSpans, parts, code, i);
-                    }
-                    else {
-                        parts.push(code.substr(i, 1));
+                    const endTags = filterOut(pendingEndTags, tag => tag.position + tag.length - 1 === i);
+                    endTags.reverse();
+                    for (const end of endTags) {
+                        parts.push(end.end);
                     }
                 }
 
@@ -151,7 +204,9 @@ export function getCompilerExtension() {
                 }
 
                 const url = `https://www.typescriptlang.org/play/#src=${encodeURIComponent(code)}`;
-                parts.push(`<a class="playground-link" href="${url}">Try</a>`)
+                if (codeLines.length >= 4 + codeLines.indexOf("//cut")) {
+                    parts.push(`<a class="playground-link" href="${url}">Try</a>`)
+                }
 
                 parts.push("</pre>");
 
