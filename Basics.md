@@ -322,6 +322,10 @@ function greet(person: string, date: Date) {
 greet("Maddison", new Date());
 ```
 
+# Optional types and type inference
+
+<!-- TODO talk about this and 'any' -->
+
 ## Stripping types out
 
 Let's take a look at what happens when we compile with `tsc`:
@@ -376,7 +380,40 @@ greet("Maddison", new Date());
 
 <!-- TODO: is this side note needed? -->
 
-> **Side note:**
-> For some historical context, when TypeScript first came out, part of its vision was to provide the future features of JavaScript when they weren't supported in any runtime.
+> **For some historical context**, when TypeScript first came out, part of its vision was to provide the future features of JavaScript when they weren't supported in any runtime.
 > Given the fact that TypeScript needed a tool to strip types away, it made a lot of sense for the compiler to downlevel code as well.
 > While today there are other compilers that provide the same functionality and also strip out types (such as Babel), TypeScript is also incredibly efficient at this task, still produces approachable JavaScript output, and has very accurate source-mapping support so you can debug the code that you wrote.
+
+# Strictness
+
+Users come to TypeScript looking for different things in a type-checker.
+Some people are looking for a more loose opt-in experience which can help validate only some parts of our program and give us decent tooling.
+This is actually the default experience with TypeScript.
+Types are optional, inference takes the most loose options, and there's no checking for potentially `null`/`undefined` values.
+Much like how `tsc` emits in the face of errors, these defaults are put in place to get out of your way.
+If you're starting out with TypeScript or migrating existing JavaScript, that mght be desirable.
+
+A lot of users prefer to have TypeScript validate as much as it can off the bat, and that's why the language provides strictness settings as well.
+These strictness settings turn static type-checking from a switch (either your code is checked or not) into something closer to a dial.
+The farther you turn this dial up, the more TypeScript will check for you.
+This can require a little extra work, but generally speaking it pays for itself in the long run, and enables more thorough checks and more accurate tooling.
+
+TypeScript has several type-checking strictness flags that can be turned on or off, and all of our examples will be written with all of them enabled unless otherwise stated.
+The `--strict` flag toggles them all on simultaneously, but we can opt out of them individually.
+The two biggest ones you should know about are `noImplicitAny` and `strictNullChecks`.
+
+## `noImplicitAny`
+
+Recall that in some places, TypeScript doesn't try to infer any types for us and instead falls back to the most lenient type: `any`.
+This isn't the worst thing that can happen - after all, falling back to `any` is just the JavaScript experience anyway.
+
+However, using `any` often defeats the purpose of using TypeScript in the first place.
+The more typed your program is, the more validation and tooling you'll get, meaning you'll run into fewer bugs as you code.
+Turning on the `noImplicitAny` flag will issue an error on any variables whose type is implicitly inferred as `any`.
+
+## `strictNullChecks`
+
+By default, values like `null` and `undefined` are assignable to any other type.
+This can make writing some code easier, but forgetting to handle `null` and `undefined` is the cause of countless bugs in the world - not even just JavaScript!
+
+The `strictNullChecks` flag makes handling `null` and `undefined` more explicit, and *spares* us from worrying about whether we *forgot* to handle `null` and `undefined`.

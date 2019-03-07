@@ -53,7 +53,7 @@ The `any` type is useful when you don't want to write out a long type just to co
 ### `noImplicitAny`
 
 When a type isn't specified and can't be inferred from context, TypeScript will typically default to `any`.
-Because `any` values don't benefit from type-checking, it's desirable to avoid these situations.
+Because `any` values don't benefit from type-checking, it's usually desirable to avoid these situations.
 The compiler flag `noImplicitAny` will cause any *implicit* `any` to be flagged as an error.
 
 ## Type Annotations on Variables
