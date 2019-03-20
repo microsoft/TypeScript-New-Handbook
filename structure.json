@@ -1,5 +1,9 @@
 {
     "chapters": [
-        "Basics"
+        "Basics",
+        "Acquiring Types",
+        "Everyday Types",
+        "Understanding Errors",
+        "More on Functions"
     ]
 }
