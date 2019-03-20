@@ -1,7 +1,7 @@
 # More on Functions
 
-In JavaScript, functions are values that can be passed around.
-Just like other values, TypeScript has many ways to describe these kinds of values.
+Functions are the basic building block of any application, whether they're local functions, imported from another module, or methods on a class.
+They're also values, and just like other values, TypeScript has many ways to describe how functions can be called.
 Let's learn about how to write types that describe functions.
 
 __toc__
@@ -613,6 +613,8 @@ If need to accept an arbitrary function but don't intend to call it, the type `(
 
 **Background reading**: [Rest Parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters) and [Spread Syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax)
 
+### Rest Parameters
+
 In addition to using optional parameters or overloads to make functions that can accept a variety of fixed argument counts, we can also define functions that take an *unbounded* number of arguments using *rest parameters*.
 
 A rest parameter appears after all other parameters, and uses the `...` syntax:
@@ -622,23 +624,73 @@ function multiply(n: number, ...m: number[]) {
   return m.map(x => n * x);
 }
 // 'a' gets value [10, 20, 30, 40]
-const a = multiply(10, [1, 2, 3, 4]);
+const a = multiply(10, 1, 2, 3, 4);
 ```
 
 In TypeScript, the type annotation on these parameters is implicitly `any[]` instead of `any`, and any type annotation given must be of the form `Array<T> `or `T[]`, or a tuple type (which we'll learn about later).
 
+### Rest Arguments
+
 Conversely, we can *provide* a variable number of arguments from an array using the spread syntax.
+For example, the `push` method of arrays takes any number of arguments:
+
+```ts
+const arr1 = [1, 2, 3];
+const arr2 = [4, 5, 6];
+arr1.push(...arr2);
+```
+
+Note that in general, TypeScript does not assume that arrays are immutable.
+This can lead to some surprising behavior:
+
+```ts
+// Inferred type is number[] -- "an array with zero or more numbers",
+// not specfically two numbers
+const args = [8, 5];
+const angle = Math.atan2(...args);
+```
+
+The best fix for this situation depends a bit on your code, but in general a `const` context is the most straightforward solution:
+```ts
+// Inferred as 2-length tuple
+const args = [8, 5] as const;
+// OK
+const angle = Math.atan2(...args);
+```
+
+<!-- TODO link to downlevel iteration -->
 
 ## Parameter Destructuring
 
 **Background reading**: [Destructuring Assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)
 
-You can use parameter destructuring to conveniently unpack an object provided as an argument into one or more local variables in the function body.
-In TypeScript, the type annotation 
+You can use parameter destructuring to conveniently unpack objects provided as an argument into one or more local variables in the function body.
+In JavaScript, it looks like this:
 
+```js
+function sum({ a, b, c }) {
+  console.log(a + b + c);
+}
+sum({ a: 10, b: 3, c: 9 });
+```
 
-  * Rest and destructuring parameters
-    * Where do type annotations go?
-  * Assignability of functions
-  * Other types to know about
-    * void, object, unknown, never, Function
+The type annotation for the object goes after the destructuring syntax:
+
+```ts
+function sum({ a, b, c }: { a: number, b: number, c: number }) {
+  console.log(a + b + c);
+}
+```
+
+This can look a bit verbose, but you can use a named type here as well:
+
+```ts
+// Same as prior example
+type ABC = { a: number, b: number, c: number };
+function sum({ a, b, c }: ABC) {
+  console.log(a + b + c);
+}
+```
+
+## Assignability of Functions
+

@@ -17,7 +17,7 @@ showdown.extension("toc", function () {
     const converter = new showdown.Converter();
     return [{
         type: "lang",
-        regex: /__toc__/g,
+        regex: /^__toc__$/gm,
         replace(_1: any, _2: any, body: string) {
             const rgx = /^(##+) ([\w\s\-\/\@`]*)( \{#(.*)\})?$/gm;
             let match: RegExpExecArray | null;

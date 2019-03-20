@@ -2,7 +2,39 @@
 
 ## Testing
 
+To work on the Handbook:
+```
+ > npm run start
+```
+This will start a live development server at [http://localhost:8087](http://localhost:8087).
+These pages will reload automatically on edits to page contents or CSS.
 
+## Special Syntax
+
+#### Table of Contents: `__toc__`
+
+Write `__toc__` on a line by itself to insert the Table of Contents for a page
+
+#### Code Highlights: `^^^^^`
+
+You can use carets to highlight a specific part of a code sample:
+<pre>
+function foo() {
+         ^^^ Some text
+}
+</pre>
+
+This will render as:
+```ts
+function foo() {
+         ^^^ Some text
+}
+```
+
+#### `//cut` comments
+
+Sometimes a code sample should be able to refer to declarations that you don't want to display in a sample.
+Any code above a line containing only `//cut` will not be displayed, but the code will be highlighted and errored as if it were there.
 
 ## Walkthrough
 
