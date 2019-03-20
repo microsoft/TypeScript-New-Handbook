@@ -56,17 +56,17 @@ function filterHighlightLines(arr: string[]): { codeLines: string[], highlights:
     for (let i = 0; i < arr.length; i++) {
         const line = arr[i];
         const highlightMatch = /^\s*\^+( .+)?$/.exec(line);
-        const queryMatch = /^\s*\?$/.exec(line);
-        if (highlightMatch !== null) {
+        const queryMatch = /^\s*\^\?$/.exec(line);
+        if (queryMatch !== null) {
+            const start = line.indexOf("^");
+            const position = contentOffset + start;
+            queries.push({ kind: "query", offset: start, position });
+        } else if (highlightMatch !== null) {
             const start = line.indexOf("^");
             const length = line.lastIndexOf("^") - start + 1;
             const position = contentOffset + start;
             const description = highlightMatch[1] ? highlightMatch[1].trim() : "";
             highlights.push({ kind: "highlight", position, length, description });
-        } else if (queryMatch !== null) {
-            const start = line.indexOf("?");
-            const position = contentOffset + start;
-            queries.push({ kind: "query", offset: start, position });
         } else {
             codeLines.push(line);
             contentOffset = nextContentOffset;
@@ -211,10 +211,10 @@ export function getCompilerExtension() {
                             if (displayParts !== undefined) {
                                 displayText = displayParts.map(d => d.text).join("");
                             } else {
-                                displayText  = "no display parts here";
+                                displayText = "no display parts here";
                             }
                         } else {
-                            displayText  = "no quick info here";
+                            displayText = "no quick info here";
                         }
                         parts.push(`<span class="quickinfo-result"><span class="quickinfo-arrow">▲</span>${displayText}</span>`);
                         parts.push(code[i] || "");

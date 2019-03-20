@@ -5,6 +5,7 @@ Although the simplest form of this is generics, we actually have a wide variety 
 It's also possible to express types in terms of *values* that we already have.
 
 By combining various type operators, we can express complex operations and values in a succinct, maintainable way.
+In this chapter we'll cover ways to express a type in terms of an existing type or value.
 
 __toc__
 
@@ -22,7 +23,7 @@ TypeScript adds a `typeof` operator you can use in a *type* context to refer to 
 ```ts
 let s = "hello";
 let n: typeof s;
-    ?
+    ^?
 ```
 
 This isn't very useful for basic types, but combined with other type operators, you can use `typeof` to conveniently express many patterns.
@@ -52,7 +53,7 @@ function f() {
     return { x: 10, y: 3 };
 }
 type P = ReturnType<typeof f>;
-     ?
+     ^?
 ```
 
 ### Limitations
@@ -76,7 +77,7 @@ The `keyof` operator takes a type and produces a string or numeric literal union
 ```ts
 type Point = { x: number, y: number };
 type P = keyof Point;
-     ?
+     ^?
 ```
 
 If the type has a `string` or `number` index signature, `keyof` will return those types instead:
@@ -84,14 +85,45 @@ If the type has a `string` or `number` index signature, `keyof` will return thos
 ```ts
 type Arrayish = { [n: number]: unknown };
 type A = keyof Arrayish;
-     ?
+     ^?
 
 type Mapish = { [k: string]: boolean };
 type M = keyof Mapish;
-     ?
+     ^?
 ```
 Note that in this example, `M` is `string | number` -- this is because JavaScript object keys are always coerced to a string, so `obj[0]` is always the same as `obj["0"]`.
 
+`keyof` types become especially useful when combined with mapped types, which we'll learn more about later.
+
+## Indexed Access Types
+
+We can use `typeof` to reference the type of a property of a value.
+What if we want to reference the type of a property of a type instead?
+
+We can use an *indexed access type* to look up a specific property on another type:
+
+```ts
+type Person = { age: number, name: string, alive: boolean };
+type A = Person["age"];
+     ^?
+```
+
+The indexing type is itself a type, so we can use unions, `keyof`, or other types entirely:
+```ts
+type Person = { age: number, name: string, alive: boolean };
+//cut
+type I1 = Person["age" | "name"];
+     ^?
+
+type I2 = Person[keyof Person];
+     ^?
+
+type AliveOrName = "alive" | "name";
+type I3 = Person[AliveOrName];
+     ^?
+```
+
+Note that 
 
    * typeof (in type positions)
    * keyof
