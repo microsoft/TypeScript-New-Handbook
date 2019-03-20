@@ -45,28 +45,35 @@ interface SampleRef {
     content: string
 }
 
-type HighlightPosition = { position: number, length: number, description: string };
-function filterHighlightLines(arr: string[]): { codeLines: string[], highlights: HighlightPosition[] } {
+type QueryPosition = { kind: "query", position: number, offset: number };
+type HighlightPosition = { kind: "highlight", position: number, length: number, description: string };
+function filterHighlightLines(arr: string[]): { codeLines: string[], highlights: HighlightPosition[], queries: QueryPosition[] } {
     const codeLines: string[] = [];
     const highlights: HighlightPosition[] = [];
+    const queries: QueryPosition[] = [];
     let nextContentOffset = 0;
     let contentOffset = 0;
     for (let i = 0; i < arr.length; i++) {
         const line = arr[i];
-        const match = /^\s*\^+( .+)?$/.exec(line);
-        if (match === null) {
-            codeLines.push(line);
-            contentOffset = nextContentOffset;
-            nextContentOffset += line.length + 1;
-        } else {
+        const highlightMatch = /^\s*\^+( .+)?$/.exec(line);
+        const queryMatch = /^\s*\?$/.exec(line);
+        if (highlightMatch !== null) {
             const start = line.indexOf("^");
             const length = line.lastIndexOf("^") - start + 1;
             const position = contentOffset + start;
-            const description = match[1] ? match[1].trim() : "";
-            highlights.push({ position, length, description });
+            const description = highlightMatch[1] ? highlightMatch[1].trim() : "";
+            highlights.push({ kind: "highlight", position, length, description });
+        } else if (queryMatch !== null) {
+            const start = line.indexOf("?");
+            const position = contentOffset + start;
+            queries.push({ kind: "query", offset: start, position });
+        } else {
+            codeLines.push(line);
+            contentOffset = nextContentOffset;
+            nextContentOffset += line.length + 1;
         }
     }
-    return { codeLines, highlights };
+    return { codeLines, highlights, queries };
 }
 
 type Tagging = {
@@ -90,7 +97,7 @@ function filterOut<T>(arr: T[], predicate: (el: T) => boolean) {
 function serverSpansToTaggings(arr: number[]) {
     arr = arr.slice();
     const taggings: Tagging[] = [];
-    while(arr.length > 0) {
+    while (arr.length > 0) {
         const [position, length, kind] = arr.splice(0, 3);
         taggings.push({
             position,
@@ -123,7 +130,7 @@ export function getCompilerExtension() {
                 code = cleanMarkdownEscaped(code);
 
                 // Remove ^^^^^^ lines from example and store
-                const { codeLines, highlights } = filterHighlightLines(code.split(/\r\n?|\n/g));
+                const { codeLines, highlights, queries } = filterHighlightLines(code.split(/\r\n?|\n/g));
                 code = codeLines.join("\n");
 
                 sampleFileRef.fileName = "input." + extension;
@@ -166,7 +173,9 @@ export function getCompilerExtension() {
                     });
                 }
 
-                for (let i = start; i < code.length; i++) {
+                let pendingQuery: QueryPosition | undefined = undefined;
+                let pendingQuickInfo: ts.QuickInfo | undefined = undefined;
+                for (let i = start; i <= code.length; i++) {
                     const startTags = filterOut(taggings, tag => tag.position === i);
                     // Sort largest-to-smallest so nesting works correctly
                     startTags.sort((a, b) => b.length - a.length);
@@ -175,12 +184,41 @@ export function getCompilerExtension() {
                         pendingEndTags.push(start);
                     }
 
-                    parts.push(code[i]);
+                    // If there's a query here, store its type and stash the result for the next newline or EOF
+                    if (pendingQuery === undefined) {
+                        pendingQuery = queries.filter(q => q.position === i)[0];
+                        if (pendingQuery !== undefined) {
+                            pendingQuickInfo = ls.getQuickInfoAtPosition(sampleFileRef.fileName, i);
+                        }
+                    }
+
+                    parts.push(code[i] || "");
 
                     const endTags = filterOut(pendingEndTags, tag => tag.position + tag.length - 1 === i);
                     endTags.reverse();
                     for (const end of endTags) {
                         parts.push(end.end);
+                    }
+
+                    if ((i === code.length || code[i] === "\n") && pendingQuery !== undefined) {
+                        if (code[i] === undefined) {
+                            parts.push("\n");
+                        }
+                        parts.push(strrep(" ", pendingQuery.offset));
+                        let displayText: string;
+                        if (pendingQuickInfo !== undefined) {
+                            const displayParts = pendingQuickInfo.displayParts;
+                            if (displayParts !== undefined) {
+                                displayText = displayParts.map(d => d.text).join("");
+                            } else {
+                                displayText  = "no display parts here";
+                            }
+                        } else {
+                            displayText  = "no quick info here";
+                        }
+                        parts.push(`<span class="quickinfo-result"><span class="quickinfo-arrow">▲</span>${displayText}</span>`);
+                        parts.push(code[i] || "");
+                        pendingQuery = undefined;
                     }
                 }
 
