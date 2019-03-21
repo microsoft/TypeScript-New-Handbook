@@ -20,7 +20,7 @@ export const Outline: st.ServerFile = {
                 const lines: string[] = [];
                 lines.push("<ol>");
                 for (const ch of chapters) {
-                    const url = `/chapters/${fileNameToUrlName(ch)}`;
+                    const url = `../chapters/${fileNameToUrlName(ch)}`;
                     lines.push(`<li><a href="${url}">${ch}</a><ul>`);
                     const chFileName = path.join(root, "chapters", ch) + ".md";
                     const content = await fs.readFile(chFileName, { encoding: "utf-8"});
