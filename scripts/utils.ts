@@ -9,3 +9,7 @@ export function strrep(text: string, count: number) {
     }
     return s;
 }
+
+export function textToAnchorName(text: string) {
+    return text.toLowerCase().replace(/ /g, "-").replace(/`/g, "");
+}

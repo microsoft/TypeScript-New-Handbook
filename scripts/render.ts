@@ -2,6 +2,8 @@ import showdown = require("showdown");
 import fs = require("fs");
 import path = require("path");
 import { getCompilerExtension } from "./sample-compiler";
+import { textToAnchorName } from "./utils";
+import { getHeaders } from "./header-parser";
 
 const sampleCompiler = getCompilerExtension();
 
@@ -14,17 +16,16 @@ showdown.extension("header-link", function () {
 });
 
 showdown.extension("toc", function () {
-    const converter = new showdown.Converter();
     return [{
         type: "lang",
         regex: /^__toc__$/gm,
         replace(_1: any, _2: any, body: string) {
-            const rgx = /^(##+) ([\w\s\-\/\@`]*)( \{#(.*)\})?$/gm;
-            let match: RegExpExecArray | null;
             const lines = [`<div class="toc"><span class="toc-title">Table of Contents</span>`];
+
+            const headers = getHeaders(body);
             let depth = 1;
-            while (match = rgx.exec(body)) {
-                let newDepth = match[1].length;
+            for (const header of headers) {
+                let newDepth = header.depth;
                 while (depth < newDepth) {
                     lines.push("<ul>");
                     depth++;
@@ -33,14 +34,8 @@ showdown.extension("toc", function () {
                     lines.push("</ul>");
                     depth--;
                 }
-                let anchorName = textToAnchorName(match[2]);
-                if (match[4] !== undefined) {
-                    anchorName = match[4];
-                }
-                let converted = converter.makeHtml(match[2]);
-                // remove leading/trailing p
-                converted = converted.substr("<p>".length, converted.length - "<p></p>".length);
-                lines.push(`<li><a href="#${anchorName}">${converted}</a></li>`);
+                lines.push(`<li><a href="#${header.anchor}">${header.title}</a></li>`);
+
             }
             while (depth > 0) {
                 lines.push("</ul>");
@@ -51,10 +46,6 @@ showdown.extension("toc", function () {
         }
     }];
 });
-
-function textToAnchorName(text: string) {
-    return text.toLowerCase().replace(/ /g, "-").replace(/`/g, "");
-}
 
 export function render(content: string) {
     const conv = new showdown.Converter({

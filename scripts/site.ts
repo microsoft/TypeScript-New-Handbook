@@ -3,6 +3,7 @@ import path = require('path');
 import fs = require('fs-extra');
 
 import render = require('./render');
+import { Outline } from './master-outline-generator';
 
 const renderMarkdownPage: staticy.TextTransform = {
     changeFileName: fn => fn.replace(/\.md$/, ".html").replace(/ /g, "-").toLowerCase(),
@@ -22,6 +23,14 @@ export function create() {
     site.addDirectory("chapters/*.md", { textTransformer: renderMarkdownPage });
     site.addDirectory("reference/*.md", { textTransformer: renderMarkdownPage });
     site.addDirectory("meta/*.md", { textTransformer: renderMarkdownPage });
+
+    site.addFileProvider({
+        async getServerFiles() {
+            return [
+                Outline
+            ];
+        }
+    })
 
     return site;
 
