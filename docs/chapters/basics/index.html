@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Handbook Page</title>
+        <title>Static type-checking</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" media="screen" href="../../css/handbook.css" />
     </head>
@@ -131,13 +131,13 @@ All of this is built on top of the type-checker and fully cross-platform, so it'
 <!-- TODO: validate that link -->
 <h1 id="tsc-the-typescript-compiler"><a href="#tsc-the-typescript-compiler"><code>tsc</code>, the TypeScript compiler</h1></a>
 <p>Alright, alright, let's cut to the chase.
-We've been talking about type-checking, but we haven't yet our type-<em>checker</em>.
+We've been talking about type-checking, but we haven't yet used our type-<em>checker</em>.
 Let's get acquainted with our new friend <code>tsc</code>, the TypeScript compiler.
 First we'll need to grab it via npm.</p>
 <pre><code class="sh language-sh">npm install -g typescript
 </code></pre>
 <blockquote>
-  <p><strong>Side note:</strong> Firstly, if you're on a Unix system like Mac or Linux, you might need a <code>sudo</code> at the fron there. But secondly, if you're already pretty experienced with JavaScript and the npm ecosystem, you might be taken aback a bit here.
+  <p><strong>Side note:</strong> Firstly, if you're on a Unix system like Mac or Linux, you might need a <code>sudo</code> at the front there. But secondly, if you're already pretty experienced with JavaScript and the npm ecosystem, you might be taken aback a bit here.
   You're probably not the only one if you just had a reaction like  "<strong>*gasp*</strong> a global npm install!?" or "<strong>*groan*</strong> how am I going to fit this into my build system with Webpack/gulp/etc.?"
   The good news is, no, you don't have to install TypeScript globally.
   And don't worry, there are many different integrations for TypeScript with existing build tools.
@@ -151,17 +151,17 @@ First we'll need to grab it via npm.</p>
 And now let's type-check it by running the command <code>tsc</code> which was installed for us by the <code>typescript</code> package.</p>
 <pre><code class="sh language-sh">tsc hello.ts
 </code></pre>
-<p>Tada!
-Wait, tada <em>what</em> exactly?
+<p>Tada!</p>
+<p>Wait, "tada" <em>what</em> exactly?
 We ran <code>tsc</code> and nothing happened!
-Well, there were no type errors, so we didn't get any <em>console</em> output.</p>
+Well, there were no type errors, so we didn't get any output in our console since there was nothing to report.</p>
 <p>But check again - we got some <em>file</em> output instead.
 If we look in our current directory, we'll see a <code>hello.js</code> file next to <code>hello.ts</code>.
 That's the output from our <code>hello.ts</code> file after <code>tsc</code> <em>compiles</em> or <em>transforms</em> it into a JavaScript file.
-And if we check the contents, we'll what TypeScript spits out after it processes a <code>.ts</code> file:</p>
+And if we check the contents, we'll see what TypeScript spits out after it processes a <code>.ts</code> file:</p>
 <p><pre class="typescript-code"><span class="comment">// Greets the world.</span>
 <span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="stringLiteral">"Hello world!"</span><span class="punctuation">)</span><span class="punctuation">;</span></pre></p>
-<p>In this case, there was very little for TypeScript to transform, so it looks identical to what we wrote!
+<p>In this case, there was very little for TypeScript to transform, so it looks identical to what we wrote.
 The compiler tries to emit clean readable code that looks like something a person would write.
 While that's not always so easy, TypeScript indents consistently, is mindful of when our code spans across different lines of code, and tries to keep comments around.</p>
 <p>What about if we <em>did</em> introduce a type-checking error?
