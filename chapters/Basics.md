@@ -213,21 +213,22 @@ tsc hello.ts
 ```
 
 Tada!
-Wait, tada *what* exactly?
+
+Wait, "tada" *what* exactly?
 We ran `tsc` and nothing happened!
-Well, there were no type errors, so we didn't get any *console* output.
+Well, there were no type errors, so we didn't get any output in our console since there was nothing to report.
 
 But check again - we got some *file* output instead.
 If we look in our current directory, we'll see a `hello.js` file next to `hello.ts`.
 That's the output from our `hello.ts` file after `tsc` *compiles* or *transforms* it into a JavaScript file.
-And if we check the contents, we'll what TypeScript spits out after it processes a `.ts` file:
+And if we check the contents, we'll see what TypeScript spits out after it processes a `.ts` file:
 
 ```js
 // Greets the world.
 console.log("Hello world!");
 ```
 
-In this case, there was very little for TypeScript to transform, so it looks identical to what we wrote!
+In this case, there was very little for TypeScript to transform, so it looks identical to what we wrote.
 The compiler tries to emit clean readable code that looks like something a person would write.
 While that's not always so easy, TypeScript indents consistently, is mindful of when our code spans across different lines of code, and tries to keep comments around.
 
