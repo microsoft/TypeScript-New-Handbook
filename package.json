@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc -b scripts",
     "start": "tsc -b scripts && node scripts/server.js",
+    "publish": "tsc -b scripts && node scripts/publish.js",
     "debug": "tsc -b scripts && node --inspect scripts/server.js"
   },
   "repository": {
@@ -29,6 +30,7 @@
   "dependencies": {
     "express": "^4.16.4",
     "npm": "^6.9.0",
+    "rimraf": "^2.6.3",
     "staticy": "^0.2.1",
     "ws": "^6.2.0"
   }
