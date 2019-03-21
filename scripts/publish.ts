@@ -13,15 +13,26 @@ async function go() {
     await fs.mkdirp(prod);
 
     console.log(`Clearing staging area ${staging}`);
-    await fs.rmdir(staging);
+    await fs.remove(staging);
     console.log(`Writing to staging ${staging}`);
-    await instance.publish(staging);
-    console.log(`Succeeded, deleting ${prod}`);
-    await fs.rmdir(prod);
-    console.log(`${staging} -> ${prod}`);
-    await fs.rename(staging, prod);
+    const { errors, warnings } = await instance.publish(staging);
+
+    if (errors.length + warnings.length === 0) {
+        console.log(`Succeeded, deleting ${prod}`);
+        await fs.remove(prod);
+        console.log(`${staging} -> ${prod}`);
+        await fs.rename(staging, prod);
+    } else {
+        for (const w of warnings) {
+            console.warn(`${w.serverPath}: ${w.message}`);
+        }
+        for (const e of errors) {
+            console.error(`${e.serverPath}: ${e.message}`);
+        }
+    }
 }
 
 go().then(() => {
     console.log("Done!");
+    process.exit(0);
 });
