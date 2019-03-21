@@ -183,7 +183,7 @@ All of this is built on top of the type-checker and fully cross-platform, so it'
 # `tsc`, the TypeScript compiler
 
 Alright, alright, let's cut to the chase.
-We've been talking about type-checking, but we haven't yet our type-*checker*.
+We've been talking about type-checking, but we haven't yet used our type-*checker*.
 Let's get acquainted with our new friend `tsc`, the TypeScript compiler.
 First we'll need to grab it via npm.
 
@@ -191,7 +191,7 @@ First we'll need to grab it via npm.
 npm install -g typescript
 ```
 
-> **Side note:** Firstly, if you're on a Unix system like Mac or Linux, you might need a `sudo` at the fron there. But secondly, if you're already pretty experienced with JavaScript and the npm ecosystem, you might be taken aback a bit here.
+> **Side note:** Firstly, if you're on a Unix system like Mac or Linux, you might need a `sudo` at the front there. But secondly, if you're already pretty experienced with JavaScript and the npm ecosystem, you might be taken aback a bit here.
 > You're probably not the only one if you just had a reaction like  "**\*gasp\*** a global npm install!?" or "**\*groan\*** how am I going to fit this into my build system with Webpack/gulp/etc.?"
 > The good news is, no, you don't have to install TypeScript globally.
 > And don't worry, there are many different integrations for TypeScript with existing build tools.
