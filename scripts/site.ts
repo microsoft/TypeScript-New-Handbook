@@ -29,6 +29,7 @@ export function create() {
     site.addDirectory("css/*.css");
     site.addDirectory("chapters/*.md", { textTransformer: renderMarkdownPage });
     site.addDirectory("reference/*.md", { textTransformer: renderMarkdownPage });
+    site.addDirectory("intros/*.md", { textTransformer: renderMarkdownPage });
     site.addDirectory("meta/*.md", { textTransformer: renderMarkdownPage });
 
     site.addFileProvider({
