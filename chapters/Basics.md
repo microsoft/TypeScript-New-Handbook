@@ -183,7 +183,7 @@ All of this is built on top of the type-checker and fully cross-platform, so it'
 # `tsc`, the TypeScript compiler
 
 Alright, alright, let's cut to the chase.
-We've been talking about type-checking, but we haven't yet our type-*checker*.
+We've been talking about type-checking, but we haven't yet used our type-*checker*.
 Let's get acquainted with our new friend `tsc`, the TypeScript compiler.
 First we'll need to grab it via npm.
 
@@ -191,7 +191,7 @@ First we'll need to grab it via npm.
 npm install -g typescript
 ```
 
-> **Side note:** Firstly, if you're on a Unix system like Mac or Linux, you might need a `sudo` at the fron there. But secondly, if you're already pretty experienced with JavaScript and the npm ecosystem, you might be taken aback a bit here.
+> **Side note:** Firstly, if you're on a Unix system like Mac or Linux, you might need a `sudo` at the front there. But secondly, if you're already pretty experienced with JavaScript and the npm ecosystem, you might be taken aback a bit here.
 > You're probably not the only one if you just had a reaction like  "**\*gasp\*** a global npm install!?" or "**\*groan\*** how am I going to fit this into my build system with Webpack/gulp/etc.?"
 > The good news is, no, you don't have to install TypeScript globally.
 > And don't worry, there are many different integrations for TypeScript with existing build tools.
@@ -213,21 +213,22 @@ tsc hello.ts
 ```
 
 Tada!
-Wait, tada *what* exactly?
+
+Wait, "tada" *what* exactly?
 We ran `tsc` and nothing happened!
-Well, there were no type errors, so we didn't get any *console* output.
+Well, there were no type errors, so we didn't get any output in our console since there was nothing to report.
 
 But check again - we got some *file* output instead.
 If we look in our current directory, we'll see a `hello.js` file next to `hello.ts`.
 That's the output from our `hello.ts` file after `tsc` *compiles* or *transforms* it into a JavaScript file.
-And if we check the contents, we'll what TypeScript spits out after it processes a `.ts` file:
+And if we check the contents, we'll see what TypeScript spits out after it processes a `.ts` file:
 
 ```js
 // Greets the world.
 console.log("Hello world!");
 ```
 
-In this case, there was very little for TypeScript to transform, so it looks identical to what we wrote!
+In this case, there was very little for TypeScript to transform, so it looks identical to what we wrote.
 The compiler tries to emit clean readable code that looks like something a person would write.
 While that's not always so easy, TypeScript indents consistently, is mindful of when our code spans across different lines of code, and tries to keep comments around.
 
