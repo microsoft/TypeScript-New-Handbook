@@ -109,6 +109,7 @@ type A = Person["age"];
 ```
 
 The indexing type is itself a type, so we can use unions, `keyof`, or other types entirely:
+
 ```ts
 type Person = { age: number, name: string, alive: boolean };
 //cut
@@ -123,10 +124,11 @@ type I3 = Person[AliveOrName];
      ^?
 ```
 
-Note that 
+You may even see an error if you try to index a property that doesn't exist:
 
-   * typeof (in type positions)
-   * keyof
-     * Talk about what it does with index signatures
-   * Indexed access types
-   * `import`
+
+```ts
+type Person = { age: number, name: string, alive: boolean };
+//cut
+type I1 = Person["alve"];
+```
