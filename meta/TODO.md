@@ -8,3 +8,4 @@
  * Allow changing compiler settings in samples
  * Turn on a linter
  * Enable `[section links]`
+ * Disable text selection from tooltips

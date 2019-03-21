@@ -1,47 +1,16 @@
 # Narrowing
 
-<!--
-
-Imagine we have a function called `screamStrings`.
-
-```ts
-function screamStrings(input: strin
-tring[]) {
-    throw new Error("Not implemented yet!";)
-}
-
-screamStrings("Hi everybody!");
-
-screamStrings([
-    "hello",
-    "world",
-]);
-```
-
-The idea of this function is that
-
-* if `screamStrings` is given a string, it will capitalize each letter and print that out.
-* if `screamStrings` is given an array of strings, then capitalize each letter in each of those strings and print them out
-
--->
-
 Imagine we have a function called `padLeft`.
 
 ```ts
 function padLeft(padding: number | string, input: string): string {
     throw new Error("Not implemented yet!");
 }
-
-// Both should return the string
-//   "    Hi everybody!"
-//
-padLeft("    ", "Hi everybody!");
-padLeft(4, "Hi everybody!");
 ```
 
 If `padding` is a `number`, it will treat that as the number of spaces we want to prepend to `input`.
 If `padding` is a `string`, it should just prepend `padding` to `input`.
-Let's try to start implementing the logic for when `padLeft` is passed a `number` for `padding`.
+Let's try to implement the logic for when `padLeft` is passed a `number` for `padding`.
 
 ```ts
 function padLeft(padding: number | string, input: string) {
@@ -50,9 +19,8 @@ function padLeft(padding: number | string, input: string) {
 ```
 
 Uh-oh, we're getting an error on `padding + 1`.
-TypeScript is warning us that adding a `number` to a `numbe
-tring` might not give us what we want, and it's right.
-We're not handling the case for when `padding` is a `string`, so let's do exactly that.
+TypeScript is warning us that adding a `number` to a `number | string` might not give us what we want, and it's right.
+In other words, we haven't explicitly checked if `padding` is a `number` first, nor are we handling the case where it's a `string`, so let's do exactly that.
 
 ```ts
 function padLeft(padding: number | string, input: string) {
@@ -72,9 +40,21 @@ Much like how TypeScript analyzes runtime values using static types, it overlays
 
 Within our `if` check, TypeScript sees `typeof padding === "number"` and understands that as a special form of code called a *type guard*.
 TypeScript follows possible paths of execution that our programs can take to analyze the most specific possible type of a value at a given position.
-It looks at these special checks (type guards) and assignments, and this process of refining types to more specific types than declared is called *narrowing*.
+It looks at these special checks (called *type guards*) and assignments, and the process of refining types to more specific types than declared is called *narrowing*.
+In many editors we can observe these types as they change, and we'll even do so in our examples.
 
-TypeScript supports a couple of different types of type guards, and narrows accordingly.
+```ts
+function padLeft(padding: number | string, input: string) {
+    if (typeof padding === "number") {
+        return new Array(padding + 1).join(" ") + input;
+                         ^?
+    }
+    return padding + input;
+           ^?
+}
+```
+
+There are a couple of different constructs TypeScript understands for narrowing.
 
 ## `typeof` type guards
 
@@ -228,13 +208,17 @@ For example:
 ```ts
 function foo(x: string | number, y: string | boolean) {
     if (x === y) {
-        // We can call any 'string' method on 'x' or 'y'.
+        // We can now call any 'string' method on 'x' or 'y'.
         x.toUpperCase();
+        ^?
         y.toLowerCase();
+        ^?
     }
     else {
-        // 'x' is still 'string | number' here.
-        // 'y' is still 'string | boolean' here.
+        console.log(x);
+                    ^?
+        console.log(y);
+                    ^?
     }
 }
 ```
@@ -251,11 +235,13 @@ function printAll(strs: string | string[] | null) {
     if (strs !== null) {
         if (typeof strs === "object") {
             for (const s of strs) {
-                console.log(s)
+                            ^?
+                console.log(s);
             }
         }
         else if (typeof strs === "string") {
-            console.log(strs)
+            console.log(strs);
+                        ^?
         }
     }
 }
@@ -271,8 +257,11 @@ interface Container {
 }
 
 function multiplyValue(container: Container, factor: number) {
+    // Remove both 'null' and 'undefined' from the type.
     if (container.value != null) {
-        // Remove both 'null' and 'undefined' from the type.
+        console.log(container.value);
+                              ^?
+
         // Now we can safely multiply 'container.value'.
         container.value *= factor;
     }
@@ -289,45 +278,50 @@ As you might have guessed, `instanceof` is also a type guard, and TypeScript nar
 ```ts
 function logValue(x: Date | string) {
     if (x instanceof Date) {
-        // 'x' is a 'Date' in this branch.
         console.log(x.toUTCString());
+                    ^?
     }
     else {
-        // 'x' is a 'string' in this branch.
         console.log(x.toUpperCase());
+                    ^?
     }
 }
 ```
 
 ## Assignments
 
-As we briefly mentioned, when we assign to variables TypeScript looks at the right side of the assignment and narrows the left side appropriately.
+As we mentioned earlier, when we assign to any variable, TypeScript looks at the right side of the assignment and narrows the left side appropriately.
 
 ```ts
 let x = Math.random() < 0.5 ? 10 : "hello world!";
-// 'x' has the type 'string | number' here.
-
+    ^?
 x = 1;
-// 'x' now has the type 'number'.
 
+console.log(x);
+            ^?
 x = "goodbye!";
-// 'x' now has the type 'string'.
+
+console.log(x);
+            ^?
 ```
 
 Notice that each of these assignments is valid.
 Even though the observed type of `x` changed to `number` after our first assignment, we were still able to assign a `string` to `x`.
-This is because the type `x` started - called the *declared type* - is `string | number`, and assignability is always checked against the declared type.
+This is because the *declared type* of `x` - the type that `x` started with - is `string | number`, and assignability is always checked against the declared type.
 
-If we'd assigned a `boolean` to `x`, we'd have seen an error.
+If we'd assigned a `boolean` to `x`, we'd have seen an error since that wasn't part of the declared type.
 
 ```ts
 let x = Math.random() < 0.5 ? 10 : "hello world!";
-// 'x' has the type 'string | number' here.
-
+    ^?
 x = 1;
-// 'x' now has the type 'number'.
 
-x = true; // error!
+console.log(x);
+            ^?
+x = true;
+
+console.log(x);
+            ^?
 ```
 
 ## Control flow analysis
@@ -356,27 +350,24 @@ When a variable is analyzed, control flow can split off and re-merge over and ov
 function foo() {
     let x: string | number | boolean;
 
-    // Error in 'strictNullChecks'
-    // 'x' is currently uninitialized
-    x.toString();
-    
     x = Math.random() < 0.5;
-    // 'x' will now be read as a 'boolean'.
-
-    const someBool: boolean = x;
+    
+    console.log(x);
+                ^?
 
     if (Math.random() < 0.5) {
         x = "hello";
-        // 'x' will now be read as a 'string'
+        console.log(x);
+                    ^?
     }
     else {
         x = 100;
-        // 'x' will now be read as a 'number'
+        console.log(x);
+                    ^?
     }
 
-    // 'x' is read as a 'string | number',
-    // so 'foo' is inferred to return 'string | number'
     return x;
+           ^?
 }
 ```
 
@@ -541,6 +532,7 @@ type Shape = Circle | Square;
 function getArea(shape: Shape) {
     if (shape.kind === "circle") {
         return Math.PI * shape.radius ** 2;
+                         ^?
     }
 }
 ```
@@ -573,8 +565,10 @@ function getArea(shape: Shape) {
     switch (shape.kind) {
         case "circle":
             return Math.PI * shape.radius ** 2;
+                             ^?
         case "square":
             return shape.sideLength ** 2;
+                   ^?
     }
 }
 ```
@@ -591,8 +585,6 @@ Discriminated unions are useful for more than just talking about circles and squ
 They're good for representing any sort of messaging scheme in JavaScript, like when sending messages over the network (client/server communication), or encoding mutations in a state management framework.
 
 # The `never` type
-
-Up until now, we've been able to narrow types 
 
 ```ts
 interface Circle {
@@ -618,8 +610,11 @@ function getArea(shape: Shape) {
 }
 ```
 
+<!-- TODO -->
+
 # Exhaustiveness checking
 
+<!-- TODO -->
 
 <!--
 As another example, consider a `setVisible` function, that takes an `HTMLElement` and either takes a `boolean` to set whether or not the element is visible on the page, or a `number` to adjust the element's opacity (i.e. how non-transparent it is).
