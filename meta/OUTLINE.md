@@ -163,7 +163,7 @@
   * Other types to know about
     * void, object, unknown, never
 
- * Chapter 5: More on Object Types
+ * Chapter 5: More on Object Types (Daniel)
   * Optional properties
   * interfaces and type aliases
     * Differences; pros/cons
@@ -177,14 +177,14 @@
     * numeric
     * string
 
- * Chapter 6: Types from Extraction
+ * Chapter 6: Types from Extraction (Ryan)
    * typeof (in type positions)
    * keyof
      * Talk about what it does with index signatures
    * Indexed access types
    * `import`
 
- * Chapter 7: Types from Transformation
+ * Chapter 7: Types from Transformation (Daniel)
   * Introduction
   * Conditional types
   * Mapped types
@@ -192,7 +192,7 @@
   * Intersection types
     * Talk about nominal/tagging
 
- * Chapter 8: Classes
+ * Chapter 8: Classes (Ryan)
   * Basics
     * Hey it's just ES6
     * Methods and properties
@@ -212,7 +212,7 @@
     * The `this` type
     * `this`-related flags
 
- * Chapter 9: Modules
+ * Chapter 9: Modules (Ryan)
   * Overview of Choices
     * ES6 (read MDN)
     * CommonJS
