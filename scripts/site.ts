@@ -4,9 +4,10 @@ import fs = require('fs-extra');
 
 import render = require('./render');
 import { Outline } from './master-outline-generator';
+import { fileNameToUrlName } from './utils';
 
 const renderMarkdownPage: staticy.TextTransform = {
-    changeFileName: fn => fn.replace(/\.md$/, ".html").replace(/ /g, "-").toLowerCase(),
+    changeFileName: fn => `${fileNameToUrlName(fn.replace(/\.md$/, ""))}/index.html`,
     transform(context) {
         return {
             content: render.makePage(render.render(context.content))

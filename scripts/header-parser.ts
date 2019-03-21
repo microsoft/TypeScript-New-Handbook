@@ -11,15 +11,13 @@ const converter = new showdown.Converter();
 
 export function getHeaders(body: string): Header[] {
     const headers: Header[] = [];
-    // ## or higher level header,
+    // # header,
     // followed by some title,
     // with an optional {#anchor} tagging at the end
-    const rgx = /^(##+) ([\w\s\-\/\@`]*?)( \{#(.*)\})?$/gm;
+    const rgx = /^(#+) ([\w\s\-\/\@`]*?)( \{#(.*)\})?$/gm;
 
     let match: RegExpExecArray | null;
     while (match = rgx.exec(body)) {
-        debugger;
-        let newDepth = match[1].length;
         const depth = match[1].length;
         const rawTitle = match[2];
         const convertedTitle = converter.makeHtml(rawTitle);
@@ -27,7 +25,7 @@ export function getHeaders(body: string): Header[] {
 
         let anchor: string;
         if (match[4] === undefined) {
-            anchor = textToAnchorName(title);
+            anchor = textToAnchorName(rawTitle);
         } else {
             anchor = match[4];
         }

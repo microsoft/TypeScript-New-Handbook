@@ -1,6 +1,6 @@
 # Types from Extraction
 
-Unlike traditional OOP type systems, TypeScript's type system is very powerful because it allows expressing types *in terms of other types*.
+TypeScript's type system is very powerful because it allows expressing types *in terms of other types*.
 Although the simplest form of this is generics, we actually have a wide variety of *type operators* available to us.
 It's also possible to express types in terms of *values* that we already have.
 
@@ -130,4 +130,18 @@ You may even see an error if you try to index a property that doesn't exist:
 type Person = { age: number, name: string, alive: boolean };
 //cut
 type I1 = Person["alve"];
+```
+
+Another example of indexing with an arbitrary type is using `number` to get the type of an array's elements.
+We can combine this with `typeof` to conveniently capture the element type of an array literal:
+
+```ts
+const MyArray = [
+    { name: "Alice", age: 15 },
+    { name: "Bob", age: 23 },
+    { name: "Eve", age: 38 }
+];
+
+type T = (typeof MyArray)[number];
+     ^?
 ```

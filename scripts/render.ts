@@ -4,6 +4,7 @@ import path = require("path");
 import { getCompilerExtension } from "./sample-compiler";
 import { textToAnchorName } from "./utils";
 import { getHeaders } from "./header-parser";
+import { renderTree } from "./toc";
 
 const sampleCompiler = getCompilerExtension();
 
@@ -23,25 +24,7 @@ showdown.extension("toc", function () {
             const lines = [`<div class="toc"><span class="toc-title">Table of Contents</span>`];
 
             const headers = getHeaders(body);
-            let depth = 1;
-            for (const header of headers) {
-                let newDepth = header.depth;
-                while (depth < newDepth) {
-                    lines.push("<ul>");
-                    depth++;
-                }
-                while (depth > newDepth) {
-                    lines.push("</ul>");
-                    depth--;
-                }
-                lines.push(`<li><a href="#${header.anchor}">${header.title}</a></li>`);
-
-            }
-            while (depth > 0) {
-                lines.push("</ul>");
-                depth--;
-            }
-            lines.push("</div>")
+            lines.push(renderTree(headers, 2));
             return lines.join("");
         }
     }];
@@ -59,15 +42,25 @@ export function render(content: string) {
     return conv.makeHtml(content);
 }
 
-export function makePage(content: string) {
+export type PageSettings = {
+    title: string;
+};
+
+export function makePage(content: string, settings?: Partial<PageSettings>) {
+    const st: PageSettings = {
+        ...{
+            title: "Handbook Page"
+        },
+        ...settings};
+
     return `<!DOCTYPE html>
     <html>
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Handbook Page</title>
+        <title>${st.title}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" type="text/css" media="screen" href="../css/handbook.css" />
+        <link rel="stylesheet" type="text/css" media="screen" href="/css/handbook.css" />
     </head>
     <body>
     <article>

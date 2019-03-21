@@ -2,6 +2,9 @@ import path = require('path');
 import st = require('staticy');
 import fs = require('fs-extra');
 import { getHeaders } from './header-parser';
+import { renderTree } from './toc';
+import { fileNameToUrlName } from './utils';
+import { makePage } from './render';
 
 const root = path.join(__dirname, "..");
 
@@ -16,31 +19,16 @@ export const Outline: st.ServerFile = {
 
                 const lines: string[] = [];
                 lines.push("<ol>");
-                let depth = 1;
                 for (const ch of chapters) {
-                    lines.push(`<li>${ch}<ul>`);
+                    const url = `/chapters/${fileNameToUrlName(ch)}`;
+                    lines.push(`<li><a href="${url}">${ch}</a><ul>`);
                     const chFileName = path.join(root, "chapters", ch) + ".md";
                     const content = await fs.readFile(chFileName, { encoding: "utf-8"});
                     const headers = getHeaders(content);
-                    for (const header of headers) {
-                        while (depth < header.depth) {
-                            lines.push("<ul>");
-                            depth++;
-                        }
-                        while (depth > header.depth) {
-                            lines.push("</ul>");
-                            depth--;
-                        }        
-                        lines.push(`<li>${header.title}</li>`);
-                    }
-                    while (depth > 1) {
-                        lines.push("</ul>");
-                        depth--;
-                    }
-                    lines.push(`</li></ul>`);
+                    lines.push(renderTree(headers, 2, url));
                 }
                 lines.push("</ol>");
-                return lines.join("\r\n");
+                return makePage(lines.join(""));
             }
         };
     }

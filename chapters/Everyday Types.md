@@ -294,7 +294,7 @@ type Point = {
 // Exactly the same as the earlier example
 function printCoord(pt: Point) {
   console.log("The coordinate's x value is " + pt.x);
-  console.log("The coordinate's x value is " + pt.y);
+  console.log("The coordinate's y value is " + pt.y);
 }
 ```
 
@@ -513,47 +513,3 @@ function liveDangerously(x?: number | null) {
 ```
 
 Just like other type assertions, this doesn't change the runtime behavior of your code, so it's important to only use `!` when you know that the value *can't* be `null` or `undefined`.
-
-## Getting Types
-
-TODO: Move to its own chapter?
-
-# Outline
-
- * Chapter 2: Everyday Types
-  * Built-in Types
-    * string, number, boolean, any, and array
-    * Show inference and rules
-      * Examples of allowed and disallowed operations
-    * Type annotations on variable declarations
-  * Functions
-    * Parameter type annotations
-    * Return type annotations and inference
-    * Inference in function expressions
-  * Object Types
-    * Anonymous object types
-    * Type aliases and Interfaces
-  * Union Types
-    * Simple concept: "This or that"
-    * Unions of primitives
-    * Introduce concept of type narrowing and demonstrate it with typeof
-  * Type assertions
-    * Sometimes you know more than the checker
-    * `e as T` vs `<T>e`
-    * Not all assertions are valid
-  * Literal Types
-    * String literals
-    * Numeric literals
-    * Boolean's just an alias for `true` | `false`
-    * Combine these with unions for e.g. `"GET" | "POST"`
-  * null and undefined
-    * --strictNullChecks: turn it on
-    * Undefined in optional parameters and properties
-    * Demonstrate basic narrowing to check for them
-    * Postfix unary `!`
-  * Where do types come from?
-    * Built-in (lib.d.ts)
-    * Inference
-    * Your own types
-    * Packaged types
-    * DefinitelyTyped
