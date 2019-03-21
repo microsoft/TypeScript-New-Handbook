@@ -2,7 +2,7 @@ import showdown = require("showdown");
 import fs = require("fs");
 import path = require("path");
 import { getCompilerExtension } from "./sample-compiler";
-import { textToAnchorName } from "./utils";
+import { textToAnchorName, strrep } from "./utils";
 import { getHeaders } from "./header-parser";
 import { renderTree } from "./toc";
 
@@ -44,12 +44,14 @@ export function render(content: string) {
 
 export type PageSettings = {
     title: string;
+    urlDepth: number;
 };
 
 export function makePage(content: string, settings?: Partial<PageSettings>) {
     const st: PageSettings = {
         ...{
-            title: "Handbook Page"
+            title: "Handbook Page",
+            urlDepth: 2
         },
         ...settings};
 
@@ -60,7 +62,7 @@ export function makePage(content: string, settings?: Partial<PageSettings>) {
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>${st.title}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" type="text/css" media="screen" href="/css/handbook.css" />
+        <link rel="stylesheet" type="text/css" media="screen" href="${strrep("../", st.urlDepth)}css/handbook.css" />
     </head>
     <body>
     <article>

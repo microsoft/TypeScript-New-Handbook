@@ -28,7 +28,7 @@ export const Outline: st.ServerFile = {
                     lines.push(renderTree(headers, 2, url));
                 }
                 lines.push("</ol>");
-                return makePage(lines.join(""));
+                return makePage(lines.join(""), { urlDepth: 1 });
             }
         };
     }
