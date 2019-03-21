@@ -459,6 +459,8 @@ const req = { url: "https://example.com", method: "GET" };
 handleRequest(req.url, req.method);
 ```
 
+<!-- TODO: Use and explain const contexts -->
+
 Because it'd be legal to assign a string like `"GUESS"` TO `req.method`, TypeScript considers this code to have an error.
 You can change this inference by adding a type assertion in either location:
 
