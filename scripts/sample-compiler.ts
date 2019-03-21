@@ -209,7 +209,7 @@ export function getCompilerExtension() {
                         if (pendingQuickInfo !== undefined) {
                             const displayParts = pendingQuickInfo.displayParts;
                             if (displayParts !== undefined) {
-                                displayText = displayParts.map(d => d.text).join("");
+                                displayText = displayParts.map(d => `<span class="${d.kind}">${d.text}</span>`).join("");
                             } else {
                                 displayText = "no display parts here";
                             }
