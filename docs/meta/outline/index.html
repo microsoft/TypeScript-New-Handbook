@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Handbook Page</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" media="screen" href="/css/handbook.css" />
+    </head>
+    <body>
+    <article>
+    <h1 id="outline"><a href="#outline">Outline</h1></a>
+<h2 id="introductions"><a href="#introductions">Introductions</h2></a>
+<h3 id="typescript-for-the-new-programmer"><a href="#typescript-for-the-new-programmer">TypeScript for the New Programmer</h3></a>
+<ul>
+<li><p>Getting Started Part 1: Customized Introductions to TypeScript</p></li>
+<li><p>TypeScript for the New Programmer</p>
+<ul>
+<li>What is JavaScript?</li>
+<li>Runs everywhere</li>
+<li>Untyped, error-prone language</li>
+<li>Super common</li>
+<li>What is TypeScript?</li>
+<li>Adds types to JavaScript</li>
+<li>Your existing code works</li>
+<li>What's a type? (For newbies)</li>
+<li>A type is a <em>kind</em> of value</li>
+<li>Types implicitly define what operations make sense on them</li>
+<li>Lots of different kinds, not just primitives</li>
+<li>We can make descriptions for all kinds of values</li>
+<li>Inference 101</li>
+<li>Examples</li>
+<li>TypeScript can figure out types most of the time</li>
+<li>Two places we'll ask you what the type is: Function boundaries, and later-initialized values</li>
+<li>Co-learning JavaScript</li>
+<li>You can+should read existing JS resources</li>
+<li>Just paste it in and see what happens</li>
+<li>Consider turning off 'strict'</li></ul></li>
+<li><p>TypeScript for the JavaScript Programmer</p>
+<ul>
+<li>What is TypeScript?</li>
+<li>What's a type? (For newbies)</li>
+<li>checkJs / ts-check</li>
+<li>Try this out on your existing files, see what happens!</li>
+<li>You can use JS Doc if you like</li>
+<li>Inference 101</li>
+<li>All JS is TS</li>
+<li>What this means (behavior)</li>
+<li>What this means (type errors)</li>
+<li>c.f. https://stackoverflow.com/questions/41750390/what-does-all-legal-javascript-is-legal-typescript-mean</li></ul></li>
+<li><p>TypeScript for the Java/C# Programmer</p>
+<ul>
+<li>Rethinking the OOP mold: Classes, namespaces</li>
+<li>OOP isn't mandatory in JS - no static classes, etc</li>
+<li>Therefore, classes will come late in this guide</li>
+<li>But we still got your back</li>
+<li>Preferred patterns - unions, etc vs inheritance</li>
+<li>JSON/POJOs as a data container vs classes</li>
+<li>Rethinking the OOP mold: Structural Types</li>
+<li>Types are a domain of values, not a class or built-in primitive</li>
+<li>Structural types are structural, yes, structural, see, structural</li>
+<li>Classes are structural</li>
+<li>Classes <em>are structural</em></li>
+<li>Inference 101</li>
+<li>Co-learning JavaScript</li></ul></li>
+<li><p>TypeScript for the Functional Programmer</p>
+<ul>
+<li>Welcome Home</li>
+<li>Inference 301</li></ul></li>
+<li><p>TypeScript for the Veteran Programmer</p>
+<ul>
+<li>--&gt; right to page 1</li></ul></li>
+<li><p>Chapter 1: Basics</p></li>
+<li><p>The What &amp; Why of Static Type Checking</p>
+<ul>
+<li>TypeScript <em>models</em> runtime behavior</li>
+<li>e.g. typeof operator exists</li>
+<li>Some operations make sense, some don't</li>
+<li>We try to catch nonsense operations early</li>
+<li>"static" means "before your code runs"</li>
+<li>Detect ahead of time whether your program makes sense</li>
+<li>"Checking" means "detecting errors"</li>
+<li>Examples of typo-catches</li>
+<li>Examples of wrong-value errors</li>
+<li>Examples of invalid operations</li>
+<li>Sometimes code you meant to write looks wrong; we'll tell you how to inform TS what you meant to do</li>
+<li>Tooling: Your editor will be extremely helpful now</li>
+<li>Completion, navigation, etc</li>
+<li>Only suggest things that make sense</li></ul></li>
+<li><p>What happens when I run tsc?</p>
+<ul>
+<li>Type checking</li>
+<li>Type errors won't block emit</li>
+<li>Feel free to run the JS anyway</li>
+<li>Remove type annotations</li>
+<li>TS doesn't add runtime checking</li>
+<li>TS won't cause your program to not work at runtime</li>
+<li>Downleveling </li>
+<li>Briefly explain ES3/5/6/+</li></ul></li>
+<li><p>Getting set up</p>
+<ul>
+<li>Install editor of your choice (VS Code or VS Code)</li>
+<li>checkJs / ts-check</li>
+<li>tsc --init</li>
+<li>Basic compiler options: strict, target, lib, module</li>
+<li>How to decide these settings</li></ul></li>
+<li><p>Chapter 2: Everyday Types</p></li>
+<li><p>Built-in Types</p>
+<ul>
+<li>string, number, boolean, any, and array</li>
+<li>Show inference and rules</li>
+<li>Examples of allowed and disallowed operations</li>
+<li>Type annotations on variable declarations</li></ul></li>
+<li><p>Functions</p>
+<ul>
+<li>Parameter type annotations</li>
+<li>Return type annotations and inference</li>
+<li>Inference in function expressions</li></ul></li>
+<li><p>Object Types</p>
+<ul>
+<li>Anonymous object types</li>
+<li>Type aliases and Interfaces</li></ul></li>
+<li><p>Union Types</p>
+<ul>
+<li>Simple concept: "This or that"</li>
+<li>Unions of primitives</li>
+<li>Introduce concept of type narrowing and demonstrate it with typeof</li></ul></li>
+<li><p>Type assertions</p>
+<ul>
+<li>Sometimes you know more than the checker</li>
+<li><code>e as T</code> vs <code>&lt;T&gt;e</code></li>
+<li>Not all assertions are valid</li></ul></li>
+<li><p>Literal Types</p>
+<ul>
+<li>String literals</li>
+<li>Numeric literals</li>
+<li>Boolean's just an alias for <code>true</code> | <code>false</code></li>
+<li>Combine these with unions for e.g. <code>"GET" | "POST"</code></li>
+<li>Why do I have to sometimes write <code>"foo" as "foo"</code></li></ul></li>
+<li><p>null and undefined</p>
+<ul>
+<li>--strictNullChecks: turn it on</li>
+<li>Undefined in optional parameters and properties</li>
+<li>Demonstrate basic narrowing to check for them</li>
+<li>Postfix unary <code>!</code></li></ul></li>
+<li><p>Where do types come from?</p>
+<ul>
+<li>Built-in (lib.d.ts)</li>
+<li>Inference</li>
+<li>Your own types</li>
+<li>Packaged types</li>
+<li>DefinitelyTyped</li></ul></li>
+<li><p>Chapter 3: TypeScript Understands Code</p></li>
+<li><p>Introduction: Narrowing</p></li>
+<li><p>Examples of built-in narrowing</p>
+<ul>
+<li>typeof</li>
+<li>instanceof</li>
+<li>truthy/falsy</li>
+<li>equality</li></ul></li>
+<li><p>Discriminated unions</p>
+<ul>
+<li>Combining literal types with unions yields a powerful pattern</li>
+<li>Show an example</li>
+<li>Show narrowing with the discriminant</li>
+<li>never</li></ul></li>
+<li><p>User-defined type guards</p></li>
+<li><p>Chapter 4: More on Functions</p></li>
+<li><p>Function type expressions</p></li>
+<li><p>Call/construct signatures</p></li>
+<li><p>Generics</p>
+<ul>
+<li>"Passing a value through"</li>
+<li>Stress that a type parameter should always appear in 2 places</li>
+<li>Generic constraints</li>
+<li>Using <code>T</code> in the body</li></ul></li>
+<li><p>Overloads</p>
+<ul>
+<li>How to write them</li>
+<li>The implementation signature is not visible</li>
+<li>When not to write them</li>
+<li>Union types</li>
+<li>Generics</li>
+<li>Optional parameters</li>
+<li>etc</li></ul></li>
+<li><p>Rest and destructuring parameters</p>
+<ul>
+<li>Where do type annotations go?</li></ul></li>
+<li><p>Other types to know about</p>
+<ul>
+<li>void, object, unknown, never</li></ul></li>
+<li><p>Chapter 5: More on Object Types</p></li>
+<li><p>Optional properties</p></li>
+<li><p>interfaces and type aliases</p>
+<ul>
+<li>Differences; pros/cons</li></ul></li>
+<li><p>Generic object types</p>
+<ul>
+<li>Arrays - you've been using them all along</li>
+<li>ReadonlyArray</li>
+<li>Always manifest the type parameter</li></ul></li>
+<li><p>readonly modifier</p></li>
+<li><p>Tuples</p></li>
+<li><p>Index signatures</p>
+<ul>
+<li>numeric</li>
+<li>string</li></ul></li>
+<li><p>Chapter 6: Types from Extraction</p></li>
+<li><p>typeof (in type positions)</p></li>
+<li><p>keyof</p>
+<ul>
+<li>Talk about what it does with index signatures</li></ul></li>
+<li><p>Indexed access types</p></li>
+<li><p><code>import</code></p></li>
+<li><p>Chapter 7: Types from Transformation</p></li>
+<li><p>Introduction</p></li>
+<li><p>Conditional types</p></li>
+<li><p>Mapped types</p>
+<ul>
+<li>Built-in mapped types ReadOnly, Exclude, etc</li></ul></li>
+<li><p>Intersection types</p>
+<ul>
+<li>Talk about nominal/tagging</li></ul></li>
+<li><p>Chapter 8: Classes</p></li>
+<li><p>Basics</p>
+<ul>
+<li>Hey it's just ES6</li>
+<li>Methods and properties</li></ul></li>
+<li><p>Class heritage</p>
+<ul>
+<li>inherits</li>
+<li>ES6 thing again</li>
+<li>We don't have inherited typing yet</li>
+<li>implements</li>
+<li>Again, just a check</li>
+<li>Be wary of anys</li></ul></li>
+<li><p>public, private, protected</p></li>
+<li><p>Generics</p></li>
+<li><p>Static</p></li>
+<li><p>Managing <code>this</code></p>
+<ul>
+<li>Arrow functions</li>
+<li><code>this</code> parameters</li>
+<li>The <code>this</code> type</li>
+<li><code>this</code>-related flags</li></ul></li>
+<li><p>Chapter 9: Modules</p></li>
+<li><p>Overview of Choices</p>
+<ul>
+<li>ES6 (read MDN)</li>
+<li>CommonJS</li>
+<li>AMD</li>
+<li>SystemJS</li>
+<li>UMD</li>
+<li>See the appendix because oh my god</li></ul></li>
+<li><p>Import forms</p></li>
+<li><p>Synthetic defaults</p></li>
+<li><p>WHERE TO PUT THIS</p></li>
+<li><p>Why do I have to sometimes write <code>"foo" as "foo"</code></p></li>
+<li><p>BigInt</p></li>
+<li><p>Chapter 10: Enums</p></li>
+<li><p>Numeric Enums</p>
+<ul>
+<li>Oh god there are so many kinds</li></ul></li>
+<li><p>String enums</p>
+<ul>
+<li>Compare and contrast with literal unions</li>
+<li>Consider not using them</li></ul></li>
+<li><p>Chapter 11: Namespaces</p></li>
+<li><p>Basics</p>
+<ul>
+<li>Actually two kinds (instantiated vs not)</li></ul></li>
+<li><p>Merging</p></li>
+<li><p>Appendix: Symbols / unique symbols</p></li>
+<li><p>Appendix: JS Doc in lieu of .ts</p></li>
+<li><p>Appendix: Decorators</p></li>
+<li><p>Appendix: Project references</p></li>
+<li><p>Appendix: Writing Definition Files</p></li>
+<li><p>Basics</p></li>
+<li><p>Declaration Merging</p></li>
+<li><p>UMD Globals</p></li>
+<li><p>Appendix: JSX with React</p></li>
+<li><p>Appendix: Module interop</p></li>
+<li><p>WTF is even going on</p></li>
+<li><p>allowSyntheticDefaultImports</p></li>
+<li><p>esModuleInterop</p></li>
+</ul>
+    </article>
+
+    <script src="https://unpkg.com/popper.js@1/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/tippy.js@4"></script>
+    <script>
+        tippy.setDefaults({preventOverflow: { enabled: false } });
+    </script>
+    </body>
+    </html>

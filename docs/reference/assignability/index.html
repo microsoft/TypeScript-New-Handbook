@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Handbook Page</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" media="screen" href="/css/handbook.css" />
+    </head>
+    <body>
+    <article>
+    <h1 id="assignability"><a href="#assignability">Assignability</h1></a>
+<ol>
+<li>Basics</li>
+<li>Structural assignability</li>
+<li>Algebraic assignability</li>
+<li>Special-cased assignability</li>
+</ol>
+<h2 id="basics"><a href="#basics">Basics</h2></a>
+<p>Assignability is the function that determines whether one variable can
+be assigned to another. It happens when the compiler checks
+assignments and function calls, but also return statements. For
+example:</p>
+<p><pre class="typescript-code"><span class="keyword">var</span> <span class="identifier">x</span><span class="punctuation">:</span> <span class="keyword">number</span><span class="punctuation">;</span>
+<span class="keyword">var</span> <span class="identifier">y</span><span class="punctuation">:</span> <span class="keyword">number</span><span class="punctuation">;</span>
+<span class="identifier">x</span> <span class="operator">=</span> <span class="error"><span class="error-highlight"></span><span class="identifier">y</span></span><span class="punctuation">;</span>
+
+<span class="keyword">function</span> <span class="identifier">f</span><span class="punctuation">(</span><span class="parameterName">s</span><span class="punctuation">:</span> <span class="keyword">string</span><span class="punctuation">)</span><span class="punctuation">:</span> <span class="keyword">number</span> <span class="punctuation">{</span>
+  <span class="keyword">return</span> <span class="identifier">s</span><span class="punctuation">.</span><span class="identifier">length</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+<span class="identifier">f</span><span class="punctuation">(</span><span class="error"><span class="error-highlight"></span><span class="keyword">false</span></span><span class="punctuation">)</span><span class="punctuation">;</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Variable 'y' is used before being assigned.</div></div><div class="listed-error"><div class="error-line">Argument of type 'false' is not assignable to parameter of type 'string'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=var%20x%3A%20number%3B%0Avar%20y%3A%20number%3B%0Ax%20%3D%20y%3B%0A%0Afunction%20f(s%3A%20string)%3A%20number%20%7B%0A%20%20return%20s.length%3B%0A%7D%0Af(false)%3B">Try</a></pre></p>
+<p>This code has three assignability checks:</p>
+<ol>
+<li><code>x = y</code>, which checks that <code>y</code> can be assigned to <code>x</code>.</li>
+<li><code>return s.length</code>, which checks that <code>s.length</code> can be returned
+from <code>f</code>.</li>
+<li><code>f(false)</code>, which checks that <code>false</code> can be assigned to <code>f</code>'s first parameter.</li>
+</ol>
+<p>To make this happen, the compiler finds the types of <code>x</code>, <code>y</code>, and <code>s.length</code> as well as
+the parameter and return types of <code>f</code>. This allows us to make the
+following judgements:</p>
+<ol>
+<li><code>y: number</code> is assignable to <code>x: number</code>.</li>
+<li><code>s.length: number</code> is assignable to <code>f</code>'s return <code>: number</code>.</li>
+<li><code>false: boolean</code> is not assignable to <code>s: string</code>.</li>
+</ol>
+<p>For a simple type system consisting only of the primitive types,
+assignability would just be equality:</p>
+<p><pre class="typescript-code"><span class="keyword">function</span> <span class="identifier">isAssignableTo</span><span class="punctuation">(</span><span class="parameterName">source</span><span class="punctuation">:</span> <span class="error"><span class="error-highlight"></span><span class="identifier">Type</span></span><span class="punctuation">,</span> <span class="parameterName">target</span><span class="punctuation">:</span> <span class="error"><span class="error-highlight"></span><span class="identifier">Type</span></span><span class="punctuation">)</span><span class="punctuation">:</span> <span class="keyword">boolean</span> <span class="punctuation">{</span>
+  <span class="keyword">return</span> <span class="identifier">source</span> <span class="operator">===</span> <span class="identifier">target</span><span class="punctuation">;</span>
+<span class="punctuation">}</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Cannot find name 'Type'.</div></div><div class="listed-error"><div class="error-line">Cannot find name 'Type'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20isAssignableTo(source%3A%20Type%2C%20target%3A%20Type)%3A%20boolean%20%7B%0A%20%20return%20source%20%3D%3D%3D%20target%3B%0A%7D">Try</a></pre></p>
+<p>For brevity's sake, this document uses the operator ⟹ to represent
+<code>isAssignableTo</code>, like this:</p>
+<p><code>number ⟹ number</code>.</p>
+<p>In fact, one common bug in the compiler code is to use <code>===</code> where
+<code>⟹</code> is the correct check. This is a bug because Typescript
+supports many more kinds of types than just the primitive
+types. Good examples include classes and interfaces, unions and
+intersections, and literal types and enums. Those 3 pairs are
+examples of three categories that make up the rest of this document:</p>
+<ul>
+<li>Structural types</li>
+<li>Types created using algebraic operators</li>
+<li>Special-cased types (literals and enums)</li>
+</ul>
+<p>Note that generics are a complex topic that spans both structural
+and algebraic types. They are covered <a href="Generics.md">in a separate reference page</a>.</p>
+<h2 id="structural-assignability"><a href="#structural-assignability">Structural Assignability</h2></a>
+<p>Structural assignability is an feature of Typescript that most
+languages do not have. But it's expensive: it's the last assignability
+check because it's so slow and painstaking. Structural assignability
+functions as a fallback when all other kinds of assignability have
+failed to return true.</p>
+<p>Structural assignability applies to anything that has
+properties or signatures: classes, interfaces, and object literal
+types, basically. Intersection types also try structural
+assignability if no other comparison works.</p>
+<p>The comparison itself is not that complicated. It first checks that
+every property in the target is present in the source. Here's a failing example:</p>
+<p><pre class="typescript-code"><span class="keyword">var</span> <span class="identifier">source</span><span class="punctuation">:</span> <span class="punctuation">{</span> <span class="error"><span class="error-highlight"></span><span class="identifier">a</span></span><span class="punctuation">,</span> <span class="error"><span class="error-highlight"></span><span class="identifier">b</span></span> <span class="punctuation">}</span><span class="punctuation">;</span>
+<span class="keyword">var</span> <span class="identifier">target</span><span class="punctuation">:</span> <span class="punctuation">{</span> <span class="error"><span class="error-highlight"></span><span class="identifier">a</span></span><span class="punctuation">,</span> <span class="error"><span class="error-highlight"></span><span class="identifier">b</span></span><span class="punctuation">,</span> <span class="error"><span class="error-highlight"></span><span class="identifier">c</span></span><span class="punctuation">}</span><span class="punctuation">;</span>
+<span class="error"><span class="error-highlight"></span><span class="identifier">target</span></span> <span class="operator">=</span> <span class="error"><span class="error-highlight"></span><span class="identifier">source</span></span><span class="punctuation">;</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Member 'a' implicitly has an 'any' type.</div></div><div class="listed-error"><div class="error-line">Member 'b' implicitly has an 'any' type.</div></div><div class="listed-error"><div class="error-line">Member 'a' implicitly has an 'any' type.</div></div><div class="listed-error"><div class="error-line">Member 'b' implicitly has an 'any' type.</div></div><div class="listed-error"><div class="error-line">Member 'c' implicitly has an 'any' type.</div></div><div class="listed-error"><div class="error-line">Property 'c' is missing in type '{ a: any; b: any; }' but required in type '{ a: any; b: any; c: any; }'.</div></div><div class="listed-error"><div class="error-line">Variable 'source' is used before being assigned.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=var%20source%3A%20%7B%20a%2C%20b%20%7D%3B%0Avar%20target%3A%20%7B%20a%2C%20b%2C%20c%7D%3B%0Atarget%20%3D%20source%3B">Try</a></pre></p>
+<p>But <code>{ a, b } ⟹ { a, b, c }</code> is not true because <code>source</code> doesn't have
+a property named <code>c</code>. On the other hand, the source is allowed to have
+extra properties, so <code>{ a, b, c } ⟹ { a, b }</code> is true:</p>
+<p><pre class="typescript-code"><span class="keyword">var</span> <span class="identifier">source</span><span class="punctuation">:</span> <span class="punctuation">{</span> <span class="error"><span class="error-highlight"></span><span class="identifier">a</span></span><span class="punctuation">,</span> <span class="error"><span class="error-highlight"></span><span class="identifier">b</span></span><span class="punctuation">,</span> <span class="error"><span class="error-highlight"></span><span class="identifier">c</span></span> <span class="punctuation">}</span><span class="punctuation">;</span>
+<span class="keyword">var</span> <span class="identifier">target</span><span class="punctuation">:</span> <span class="punctuation">{</span> <span class="error"><span class="error-highlight"></span><span class="identifier">a</span></span><span class="punctuation">,</span> <span class="error"><span class="error-highlight"></span><span class="identifier">b</span></span> <span class="punctuation">}</span><span class="punctuation">;</span>
+<span class="identifier">target</span> <span class="operator">=</span> <span class="error"><span class="error-highlight"></span><span class="identifier">source</span></span><span class="punctuation">;</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Member 'a' implicitly has an 'any' type.</div></div><div class="listed-error"><div class="error-line">Member 'b' implicitly has an 'any' type.</div></div><div class="listed-error"><div class="error-line">Member 'c' implicitly has an 'any' type.</div></div><div class="listed-error"><div class="error-line">Member 'a' implicitly has an 'any' type.</div></div><div class="listed-error"><div class="error-line">Member 'b' implicitly has an 'any' type.</div></div><div class="listed-error"><div class="error-line">Variable 'source' is used before being assigned.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=var%20source%3A%20%7B%20a%2C%20b%2C%20c%20%7D%3B%0Avar%20target%3A%20%7B%20a%2C%20b%20%7D%3B%0Atarget%20%3D%20source%3B">Try</a></pre></p>
+<p>If every source property has a matching target property, then matching
+properties recursively check that their types are assignable from
+source to target:</p>
+<p><pre class="typescript-code"><span class="keyword">var</span> <span class="identifier">source</span><span class="punctuation">:</span> <span class="punctuation">{</span> <span class="identifier">a</span><span class="punctuation">:</span> <span class="keyword">number</span><span class="punctuation">,</span> <span class="identifier">b</span><span class="punctuation">:</span> <span class="keyword">string</span> <span class="punctuation">}</span><span class="punctuation">;</span>
+<span class="keyword">var</span> <span class="identifier">target</span><span class="punctuation">:</span> <span class="punctuation">{</span> <span class="identifier">a</span><span class="punctuation">:</span> <span class="keyword">number</span> <span class="punctuation">}</span><span class="punctuation">;</span>
+<span class="identifier">target</span> <span class="operator">=</span> <span class="error"><span class="error-highlight"></span><span class="identifier">source</span></span><span class="punctuation">;</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Variable 'source' is used before being assigned.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=var%20source%3A%20%7B%20a%3A%20number%2C%20b%3A%20string%20%7D%3B%0Avar%20target%3A%20%7B%20a%3A%20number%20%7D%3B%0Atarget%20%3D%20source%3B">Try</a></pre></p>
+<p>Here, while checking <code>a</code>, assignability makes a recursive call to check whether
+<code>number</code> is assignable to <code>number</code>:</p>
+<blockquote>
+  <p><code>{ a: number, b: string } ⟹ { a: number }</code><br />
+  <code>number ⟹ number</code></p>
+</blockquote>
+<p>Of course, the second check returns true as soon as it hits the <code>===</code>
+fast path. But other types may recur several times before succeeding
+or failing:</p>
+<p><pre class="typescript-code"><span class="keyword">var</span> <span class="identifier">source</span><span class="punctuation">:</span> <span class="punctuation">{</span> <span class="identifier">a</span><span class="punctuation">:</span> <span class="punctuation">{</span> <span class="identifier">b</span><span class="punctuation">:</span> <span class="punctuation">{</span> <span class="identifier">c</span><span class="punctuation">:</span> <span class="keyword">null</span> <span class="punctuation">}</span> <span class="punctuation">}</span> <span class="punctuation">}</span><span class="punctuation">;</span>
+<span class="keyword">var</span> <span class="identifier">target</span><span class="punctuation">:</span> <span class="punctuation">{</span> <span class="identifier">a</span><span class="punctuation">:</span> <span class="punctuation">{</span> <span class="identifier">b</span><span class="punctuation">:</span> <span class="punctuation">{</span> <span class="identifier">c</span><span class="punctuation">:</span> <span class="keyword">string</span> <span class="punctuation">}</span> <span class="punctuation">}</span> <span class="punctuation">}</span><span class="punctuation">;</span>
+<span class="error"><span class="error-highlight"></span><span class="identifier">target</span></span> <span class="operator">=</span> <span class="error"><span class="error-highlight"></span><span class="identifier">source</span></span><span class="punctuation">;</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Type '{ a: { b: { c: null; }; }; }' is not assignable to type '{ a: { b: { c: string; }; }; }'.</div><div class="error-line"><div class="indent"></div>Types of property 'a' are incompatible.</div><div class="error-line"><div class="indent"></div><div class="indent"></div>Type '{ b: { c: null; }; }' is not assignable to type '{ b: { c: string; }; }'.</div><div class="error-line"><div class="indent"></div><div class="indent"></div><div class="indent"></div>Types of property 'b' are incompatible.</div><div class="error-line"><div class="indent"></div><div class="indent"></div><div class="indent"></div><div class="indent"></div>Type '{ c: null; }' is not assignable to type '{ c: string; }'.</div><div class="error-line"><div class="indent"></div><div class="indent"></div><div class="indent"></div><div class="indent"></div><div class="indent"></div>Types of property 'c' are incompatible.</div><div class="error-line"><div class="indent"></div><div class="indent"></div><div class="indent"></div><div class="indent"></div><div class="indent"></div><div class="indent"></div>Type 'null' is not assignable to type 'string'.</div></div><div class="listed-error"><div class="error-line">Variable 'source' is used before being assigned.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=var%20source%3A%20%7B%20a%3A%20%7B%20b%3A%20%7B%20c%3A%20null%20%7D%20%7D%20%7D%3B%0Avar%20target%3A%20%7B%20a%3A%20%7B%20b%3A%20%7B%20c%3A%20string%20%7D%20%7D%20%7D%3B%0Atarget%20%3D%20source%3B">Try</a></pre></p>
+<p>Call, construct and index signatures all work similarly:</p>
+<p><pre class="typescript-code"><span class="keyword">var</span> <span class="identifier">source</span><span class="punctuation">:</span> <span class="punctuation">(</span><span class="parameterName">a</span><span class="punctuation">:</span> <span class="keyword">number</span><span class="punctuation">,</span> <span class="parameterName">b</span><span class="punctuation">:</span> <span class="keyword">unknown</span><span class="punctuation">)</span> <span class="punctuation">=></span> <span class="keyword">boolean</span><span class="punctuation">;</span>
+<span class="keyword">var</span> <span class="identifier">target</span><span class="punctuation">:</span> <span class="punctuation">(</span><span class="parameterName">a</span><span class="punctuation">:</span> <span class="keyword">never</span><span class="punctuation">,</span> <span class="parameterName">b</span><span class="punctuation">:</span> <span class="keyword">string</span><span class="punctuation">)</span> <span class="punctuation">=></span> <span class="keyword">void</span><span class="punctuation">;</span>
+<span class="identifier">target</span> <span class="operator">=</span> <span class="error"><span class="error-highlight"></span><span class="identifier">source</span></span><span class="punctuation">;</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Variable 'source' is used before being assigned.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=var%20source%3A%20(a%3A%20number%2C%20b%3A%20unknown)%20%3D%3E%20boolean%3B%0Avar%20target%3A%20(a%3A%20never%2C%20b%3A%20string)%20%3D%3E%20void%3B%0Atarget%20%3D%20source%3B">Try</a></pre></p>
+<p>Except that signatures check for correct parameter count instead of
+missing properties, and iterate over parameters instead of properties.
+In addition, parameters compare contravariantly, which is a fancy way
+to say that the direction of source and target flips. That's because
+when a callback is assigned to another callback variable, the
+<em>parameters</em> are not actually being assigned. Instead, a callable thing is
+assigned to another callable thing. Here's an example where
+<code>string ⟹ unknown</code> but <code>(a: unknown) =&gt; void ⟹ (a: string) =&gt; void</code>. For
+example:</p>
+<p><pre class="typescript-code"><span class="keyword">var</span> <span class="identifier">source</span><span class="punctuation">:</span> <span class="keyword">string</span><span class="punctuation">;</span>
+<span class="keyword">var</span> <span class="identifier">target</span><span class="punctuation">:</span> <span class="keyword">unknown</span><span class="punctuation">;</span>
+<span class="identifier">target</span> <span class="operator">=</span> <span class="error"><span class="error-highlight"></span><span class="identifier">source</span></span><span class="punctuation">;</span> <span class="comment">// fine, target can be anything, including a string</span>
+
+<span class="keyword">var</span> <span class="error"><span class="error-highlight"></span><span class="identifier">source</span></span><span class="punctuation">:</span> <span class="punctuation">(</span><span class="parameterName">a</span><span class="punctuation">:</span> <span class="keyword">string</span><span class="punctuation">)</span> <span class="punctuation">=></span> <span class="keyword">void</span><span class="punctuation">;</span>
+<span class="keyword">var</span> <span class="error"><span class="error-highlight"></span><span class="identifier">target</span></span><span class="punctuation">:</span> <span class="punctuation">(</span><span class="parameterName">a</span><span class="punctuation">:</span> <span class="keyword">unknown</span><span class="punctuation">)</span> <span class="punctuation">=></span> <span class="keyword">void</span><span class="punctuation">;</span>
+<span class="identifier">target</span> <span class="operator">=</span> <span class="error"><span class="error-highlight"></span><span class="identifier">source</span></span><span class="punctuation">;</span> <span class="comment">// should be an error, because:</span>
+<span class="error"><span class="error-highlight"></span><span class="identifier">target</span></span><span class="punctuation">(</span><span class="numericLiteral">1</span><span class="punctuation">)</span><span class="punctuation">;</span> <span class="comment">// oops, can't pass numbers to source</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Variable 'source' is used before being assigned.</div></div><div class="listed-error"><div class="error-line">Subsequent variable declarations must have the same type.  Variable 'source' must be of type 'string', but here has type '(a: string) => void'.</div></div><div class="listed-error"><div class="error-line">Subsequent variable declarations must have the same type.  Variable 'target' must be of type 'unknown', but here has type '(a: unknown) => void'.</div></div><div class="listed-error"><div class="error-line">Variable 'source' is used before being assigned.</div></div><div class="listed-error"><div class="error-line">Object is of type 'unknown'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=var%20source%3A%20string%3B%0Avar%20target%3A%20unknown%3B%0Atarget%20%3D%20source%3B%20%2F%2F%20fine%2C%20target%20can%20be%20anything%2C%20including%20a%20string%0A%0Avar%20source%3A%20(a%3A%20string)%20%3D%3E%20void%3B%0Avar%20target%3A%20(a%3A%20unknown)%20%3D%3E%20void%3B%0Atarget%20%3D%20source%3B%20%2F%2F%20should%20be%20an%20error%2C%20because%3A%0Atarget(1)%3B%20%2F%2F%20oops%2C%20can't%20pass%20numbers%20to%20source">Try</a></pre></p>
+<h3 id="inheritance"><a href="#inheritance">Inheritance</h3></a>
+<p>Given structural assignability, there is no need for special rules to
+handle inheritance. Assignability can just check that derived classes
+are assignable to their base classes. Interfaces check the same thing
+for implements. In other words, for classes like this:</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">Base</span></span> <span class="punctuation">{</span>
+  <span class="keyword">constructor</span><span class="punctuation">(</span><span class="keyword">public</span> <span class="parameterName">b</span><span class="punctuation">:</span> <span class="keyword">number</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span>
+<span class="keyword">class</span> <span class="className"><span class="className">Derived</span></span> <span class="keyword">extends</span> <span class="className"><span class="identifier">Base</span></span> <span class="punctuation">{</span>
+  <span class="identifier">b</span> <span class="operator">=</span> <span class="numericLiteral">12</span>
+  <span class="keyword">constructor</span><span class="punctuation">(</span><span class="keyword">public</span> <span class="parameterName">d</span><span class="punctuation">:</span> <span class="keyword">string</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="keyword">super</span><span class="punctuation">(</span><span class="error"><span class="error-highlight"></span><span class="keyword">this</span></span><span class="punctuation">.</span><span class="identifier">b</span><span class="punctuation">)</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span><hr class="error-divider"><div class="listed-error"><div class="error-line">'super' must be called before accessing 'this' in the constructor of a derived class.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20Base%20%7B%0A%20%20constructor(public%20b%3A%20number)%20%7B%0A%20%20%7D%0A%7D%0Aclass%20Derived%20extends%20Base%20%7B%0A%20%20b%20%3D%2012%0A%20%20constructor(public%20d%3A%20string)%20%7B%0A%20%20%20%20super(this.b)%3B%0A%20%20%7D%0A%7D">Try</a></pre></p>
+<p>Variable declarations that use these types:</p>
+<p><pre class="typescript-code"><span class="keyword">var</span> <span class="identifier">derived</span><span class="punctuation">:</span> <span class="error"><span class="error-highlight"></span><span class="identifier">Derived</span></span><span class="punctuation">;</span>
+<span class="keyword">var</span> <span class="identifier">base</span><span class="punctuation">:</span> <span class="error"><span class="error-highlight"></span><span class="identifier">Base</span></span><span class="punctuation">;</span>
+<span class="identifier">base</span> <span class="operator">=</span> <span class="identifier">derived</span><span class="punctuation">;</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Cannot find name 'Derived'.</div></div><div class="listed-error"><div class="error-line">Cannot find name 'Base'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=var%20derived%3A%20Derived%3B%0Avar%20base%3A%20Base%3B%0Abase%20%3D%20derived%3B">Try</a></pre></p>
+<p>Are compared just like this:</p>
+<p><pre class="typescript-code"><span class="keyword">var</span> <span class="identifier">derived</span><span class="punctuation">:</span> <span class="punctuation">{</span> <span class="identifier">b</span><span class="punctuation">:</span> <span class="keyword">number</span><span class="punctuation">,</span> <span class="identifier">d</span><span class="punctuation">:</span> <span class="keyword">string</span> <span class="punctuation">}</span><span class="punctuation">;</span>
+<span class="keyword">var</span> <span class="identifier">base</span><span class="punctuation">:</span> <span class="punctuation">{</span> <span class="identifier">b</span><span class="punctuation">:</span> <span class="keyword">number</span> <span class="punctuation">}</span><span class="punctuation">;</span>
+<span class="identifier">base</span> <span class="operator">=</span> <span class="error"><span class="error-highlight"></span><span class="identifier">derived</span></span><span class="punctuation">;</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Variable 'derived' is used before being assigned.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=var%20derived%3A%20%7B%20b%3A%20number%2C%20d%3A%20string%20%7D%3B%0Avar%20base%3A%20%7B%20b%3A%20number%20%7D%3B%0Abase%20%3D%20derived%3B">Try</a></pre></p>
+<p>There is no inherent relation between <code>Derived</code> and <code>Base</code>. Of course,
+the assignability check caches its results so that once the compiler knows that
+a <code>Derived</code> is assignable to a <code>Base</code>, it doesn't have to run the
+expensive check again. In fact, this check runs as soon as the
+compiler sees <code>class Derived extends Base</code>, so the structural approach
+ends up costing about the same as the nominal one.</p>
+<h2 id="algebraic-assignability"><a href="#algebraic-assignability">Algebraic Assignability</h2></a>
+<p>Types with algebraic type operators can be checked algebraically.
+Sometimes this check is merely faster than a structural check, but if
+the type contains type variables, algebraic checks can succeed where a
+structural check would fail. For example:</p>
+<pre><code>function f&lt;T&gt;(source: T | never, target: T) {
+   target = source;
+}
+</code></pre>
+<p>The checker knows that <code>never</code> does not change a union it's part of,
+so it can eliminate it and recur with a smaller type:</p>
+<blockquote>
+  <p><code>T | never ⟹ T</code><br />
+  <code>T ⟹ T</code></p>
+</blockquote>
+<p>And since <code>T===T</code>, <code>T | never ⟹ T</code> is true.</p>
+<p>Some algebraic relations are pretty obvious. For example, when a union
+is the target, the source is assignable when it's assignable to any
+element of the union:</p>
+<blockquote>
+  <p><code>B ⟹ A | B | C</code><br />
+  <code>B ⟹ B</code></p>
+</blockquote>
+<p>But when a union is the source, <em>every</em> element needs to be assignable
+to the target. So <code>A | B | C ⟹ B</code> is not true in general. It's only
+true when the target is a supertype of all elements of the source.
+One example is with literal types: <code>'x' | 'y' | 'z' ⟹ string</code>.</p>
+<p>More complicated relations exist as well. For example, intersection
+distributes across union:</p>
+<blockquote>
+  <p><code>A &amp; (B | C) ⟹ (A &amp; B) | (A &amp; C)</code><br />
+  <code>(A &amp; B) | (A &amp; C) ⟹ (A &amp; B) | (A &amp; C)</code>  </p>
+</blockquote>
+<p>Mapped types, index access types, and keyof types also interact in a
+number of ways. First, if <code>B</code> is assignable to <code>A</code>, then <code>keyof A</code> is
+assignable to <code>keyof B</code>:</p>
+<blockquote>
+  <p><code>keyof A ⟹ keyof B</code><br />
+  <code>B ⟹ A</code></p>
+</blockquote>
+<p>Giving example types for <code>A</code> and <code>B</code> shows why the direction flips:</p>
+<blockquote>
+  <p><code>A = { a, b }</code><br />
+  <code>B = { a, b, c }</code>  </p>
+</blockquote>
+<p>Here, <code>B</code> has an extra property <code>c</code>, so it's OK to assign <code>B</code> to an
+<code>A</code> with fewer properties. But that doesn't mean that the keys of
+<code>B</code> can be assigned to the keys of <code>A</code>. That would be
+<code>"a" | "b" | "c" ⟹ "a" | "b"</code>, which fails for <code>"c"</code>. However, it
+is true that <code>"a" | "b" ⟹ "a" | "b" | "c"</code>, which is exactly the same
+as <code>keyof A ⟹ keyof B</code>.</p>
+<p>For mapped types, any type T is assignable to the identity mapping:</p>
+<blockquote>
+  <p><code>T ⟹ { [P in X]: T[P] }</code></p>
+</blockquote>
+<p>This follows from the definition of mapped types. Note that the
+reverse is not true because mapping a type loses some information.</p>
+<p>Finally, some complex relations involve all three kinds of type. For
+example, for some key type <code>K</code> and a rewrite type <code>X</code>, a
+mapped type <code>{ [P in K]: X }</code> is assignable to <code>T</code> if the keys of <code>T</code>
+are assignable to <code>K</code> and <code>X</code> is assignable to all the
+properties of <code>T</code>:</p>
+<blockquote>
+  <p><code>{ [P in K]: X } ⟹ T</code><br />
+  <code>keyof T ⟹ K</code> and <code>X ⟹ T[K]</code>  </p>
+</blockquote>
+<p>This is true in the other direction too:</p>
+<blockquote>
+  <p><code>T ⟹ { [P in K]: X }</code><br />
+  <code>K ⟹ keyof T</code> and <code>T[K] ⟹ X</code></p>
+</blockquote>
+<p>An example helps show that this rule is sound:</p>
+<blockquote>
+  <p><code>T = { a: C, b: D, c: C | D }</code><br />
+  <code>K = "a" | "b"</code><br />
+  <code>X = C | D</code>  </p>
+  <p><code>T ⟹ { [P in K]: X }</code><br />
+  <code>{ a: C, b: D, c: C | D } ⟹ { [P in "a" | "b"]: C | D }</code><br />
+  <code>{ a: C, b: D, c: C | D } ⟹ { "a": C | D, "b": C | D }</code></p>
+</blockquote>
+<p>is true whenever the following two things are true:</p>
+<blockquote>
+  <p><code>K ⟹ keyof T</code><br />
+  <code>"a" | "b" ⟹ "a" | "b" | "c"</code>  </p>
+</blockquote>
+<p>and</p>
+<blockquote>
+  <p><code>T[K] ⟹ X</code><br />
+  <code>T["a" | "b"] ⟹ C | D</code><br />
+  <code>C | D ⟹ C | D</code></p>
+</blockquote>
+<h2 id="special-cases"><a href="#special-cases">Special cases</h2></a>
+<p>In between simple equality and structural comparison, Typescript has
+quite a few special cases to handle specific types quickly.</p>
+<ol>
+<li>Unit and primitive types</li>
+<li>Excess properties and weak types</li>
+<li>Recursion cutoffs</li>
+</ol>
+<h3 id="simple-types"><a href="#simple-types">Simple Types</h3></a>
+<p>Primitive types and unit types are all compared with a long list of
+specific rules. The comparisons are quite fast because all of these
+types are marked with a bit flag, so the typical line of code looks
+like:</p>
+<p><pre class="typescript-code"><span class="keyword">if</span> <span class="punctuation">(</span><span class="error"><span class="error-highlight"></span><span class="identifier">source</span></span><span class="punctuation">.</span><span class="identifier">flags</span> <span class="operator">&</span> <span class="error"><span class="error-highlight"></span><span class="identifier">TypeFlags</span></span><span class="punctuation">.</span><span class="identifier">StringLike</span> <span class="operator">&&</span> <span class="error"><span class="error-highlight"></span><span class="identifier">target</span></span><span class="punctuation">.</span><span class="identifier">flags</span> <span class="operator">&</span> <span class="error"><span class="error-highlight"></span><span class="identifier">TypeFlags</span></span><span class="punctuation">.</span><span class="identifier">String</span><span class="punctuation">)</span> <span class="error"><span class="error-highlight"></span><span class="keyword">return</span></span> <span class="keyword">true</span><span class="punctuation">;</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Cannot find name 'source'.</div></div><div class="listed-error"><div class="error-line">Cannot find name 'TypeFlags'.</div></div><div class="listed-error"><div class="error-line">Cannot find name 'target'.</div></div><div class="listed-error"><div class="error-line">Cannot find name 'TypeFlags'.</div></div><div class="listed-error"><div class="error-line">A 'return' statement can only be used within a function body.</div></div></pre></p>
+<p>A few of the rules are odd because of historical restrictions. For
+example, any number is assignable to a numeric enum, but this is not
+true for string enums. Only strings that are known to be part of a
+string enum are assignable to it. That's because numeric enums existed
+before union types and literal types, so their rules were originally
+looser.</p>
+<p>Here are the types that are compared with simple rules:</p>
+<ul>
+<li>string</li>
+<li>number</li>
+<li>boolean</li>
+<li>symbol</li>
+<li>object</li>
+<li>any</li>
+<li>void</li>
+<li>null</li>
+<li>undefined</li>
+<li>never</li>
+<li>string enums</li>
+<li>number enums</li>
+<li>string literals</li>
+<li>number literals</li>
+<li>boolean literals</li>
+</ul>
+<p>Note that both the source and target have to be simple for a simple
+comparison to succeed. If the source is a string and the target is
+some object type, then the compiler will have to use structural
+comparison, and it will <em>first</em> have to get all the string's methods
+and properties.</p>
+<h3 id="excess-property-and-weak-type-checks"><a href="#excess-property-and-weak-type-checks">Excess property and weak type checks</h3></a>
+<p>The excess property check and weak type check run right after the
+simple type check. The reason they run so early is that, although they
+are expensive, if they end up failing an assignability check early,
+they save time compared to doing a full structural comparison.</p>
+<p>The excess property check applies only to the types of object
+literals. Its only purpose is to fail otherwise-legal assignments.
+With structural assignability, it's fine to have extra properties, so
+<code>{ a, b } ⟹ { a }</code>. However, when an author assigns an object literal
+to a variable with a type like <code>{ a }</code>, it's very unlikely that they
+want to include properties besides <code>a</code>. So the excess property check
+disallows this assignment.</p>
+<p>The weak type check applies only if the source contains nothing but
+optional properties. With structural assignability, <em>any</em> type is
+assignable to a weak type. All these assignments are structurally
+sound:</p>
+<blockquote>
+  <p><code>{ a } ⟹ { a?, b? }</code><br />
+  <code>{ a, b, e } ⟹ { a?, b? }</code><br />
+  <code>{ c, d } ⟹ { a?, b? }</code><br />
+  <code>{ } ⟹ { a?, b? }</code>  </p>
+</blockquote>
+<p>However, only the first two make any kind of sense, so the weak type
+check requires that the source share at least one property with a weak
+target.</p>
+<h3 id="structural-cutoffs"><a href="#structural-cutoffs">Structural cutoffs</h3></a>
+<p>Structural assignability has trouble with recursive types.
+Specifically, for a class like this:</p>
+<p><pre class="typescript-code"><span class="keyword">declare</span> <span class="keyword">class</span> <span class="className"><span class="className">Box</span></span><span class="punctuation"><</span><span class="typeParameterName"><span class="typeParameterName">T</span></span><span class="punctuation">></span> <span class="punctuation">{</span>
+  <span class="identifier">t</span><span class="punctuation">:</span> <span class="typeParameterName"><span class="identifier">T</span></span>
+  <span class="identifier">m</span><span class="punctuation">(</span><span class="parameterName">b</span><span class="punctuation">:</span> <span class="className"><span class="identifier">Box</span></span><span class="punctuation"><</span><span class="typeParameterName"><span class="identifier">T</span></span><span class="punctuation">></span><span class="punctuation">)</span><span class="punctuation">:</span> <span class="keyword">void</span>
+<span class="punctuation">}</span>
+<span class="keyword">var</span> <span class="identifier">source</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="className"><span class="identifier">Box</span></span><span class="punctuation"><</span><span class="keyword">string</span><span class="punctuation">></span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="keyword">var</span> <span class="identifier">target</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="className"><span class="identifier">Box</span></span><span class="punctuation"><</span><span class="keyword">unknown</span><span class="punctuation">></span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="identifier">target</span> <span class="operator">=</span> <span class="identifier">source</span><span class="punctuation">;</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=declare%20class%20Box%3CT%3E%20%7B%0A%20%20t%3A%20T%0A%20%20m(b%3A%20Box%3CT%3E)%3A%20void%0A%7D%0Avar%20source%20%3D%20new%20Box%3Cstring%3E()%3B%0Avar%20target%20%3D%20new%20Box%3Cunknown%3E()%3B%0Atarget%20%3D%20source%3B">Try</a></pre></p>
+<p>To find out whether target is assignable to source:</p>
+<blockquote>
+  <p><code>Box&lt;string&gt; ⟹ Box&lt;unknown&gt;</code><br />
+  <code>{ t: string, m(b: Box&lt;string&gt;): void } ⟹ { t: unknown, m(b: Box&lt;unknown&gt;): void }</code>  </p>
+</blockquote>
+<p>Now structural assignability has to show that the types of <code>t</code> and <code>m</code>
+are assignable. <code>t</code> is easy enough:</p>
+<blockquote>
+  <p><code>string ⟹ unknown</code></p>
+</blockquote>
+<p>But <code>m</code> poses a problem:</p>
+<blockquote>
+  <p><code>(b: Box&lt;string&gt;) =&gt; void ⟹ (b: Box&lt;unknown&gt;) =&gt; void</code><br />
+  <code>Box&lt;string&gt; ⟹ Box&lt;unknown&gt;</code><br />
+  <code>{ t: string, m(b: Box&lt;string&gt;): void } ⟹ { t: unknown, m(b: Box&lt;unknown&gt;): void }</code>  </p>
+</blockquote>
+<p>At this point it looks like an infinite loop.</p>
+<p>Typescript actually has two solutions for this problem. The simplest
+is to notice that <code>Box === Box</code> treat type arguments as an algebraic
+relation. Then it simplifies <code>Box&lt;T&gt; ⟹ Box&lt;U&gt;</code> to <code>T ⟹ U</code>. This is
+much faster than using structural assigning ability to decide whether
+<code>Box&lt;T&gt;.t</code> is assignable to <code>Box&lt;U&gt;.t</code>.</p>
+<blockquote>
+  <p><code>Box&lt;string&gt; ⟹ Box&lt;unknown&gt;</code><br />
+  <code>string ⟹ unknown</code>  </p>
+</blockquote>
+<p>This works quite often because most of the time people write nominal
+code, even in a structural type system. But what if somebody shows up
+with a similar class that they just updated to work with <code>Box</code>?</p>
+<p><pre class="typescript-code"><span class="keyword">declare</span> <span class="keyword">class</span> <span class="className"><span class="className">Ref</span></span><span class="punctuation"><</span><span class="typeParameterName"><span class="typeParameterName">T</span></span><span class="punctuation">></span> <span class="punctuation">{</span>
+  <span class="keyword">private</span> <span class="identifier">item</span><span class="punctuation">:</span> <span class="typeParameterName"><span class="identifier">T</span></span>
+  <span class="identifier">deref</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">:</span> <span class="typeParameterName"><span class="identifier">T</span></span>
+  <span class="comment">// for Box compatibility:</span>
+  <span class="keyword">readonly</span> <span class="identifier">t</span><span class="punctuation">:</span> <span class="typeParameterName"><span class="identifier">T</span></span>
+  <span class="identifier">m</span><span class="punctuation">(</span><span class="parameterName">b</span><span class="punctuation">:</span> <span class="className"><span class="identifier">Ref</span></span><span class="punctuation"><</span><span class="typeParameterName"><span class="identifier">T</span></span><span class="punctuation">></span><span class="punctuation">)</span><span class="punctuation">:</span> <span class="keyword">void</span>
+<span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=declare%20class%20Ref%3CT%3E%20%7B%0A%20%20private%20item%3A%20T%0A%20%20deref()%3A%20T%0A%20%20%2F%2F%20for%20Box%20compatibility%3A%0A%20%20readonly%20t%3A%20T%0A%20%20m(b%3A%20Ref%3CT%3E)%3A%20void%0A%7D">Try</a></pre></p>
+<p>Now, if the source is <code>Ref&lt;string&gt;</code> and target is <code>Box&lt;unknown&gt;</code>, the
+compiler has to compare the whole thing structurally. Everything goes well
+until it tries to check <code>other</code> again:</p>
+<blockquote>
+  <p><code>Ref&lt;string&gt; ⟹ Box&lt;unknown&gt;</code><br />
+  …<br />
+  <code>(b: Ref&lt;string&gt;) =&gt; void ⟹ (b: Box&lt;unknown&gt;) =&gt; void</code><br />
+  <code>Ref&lt;string&gt; ⟹ Box&lt;unknown&gt;</code>  </p>
+</blockquote>
+<p>Even though <code>Ref !== Box</code>, the fact that this is the second occurrence
+of <code>Ref&lt;string&gt; ⟹ Box&lt;unknown&gt;</code> implies that the second, recursive
+check will not provide any new information to prove or disprove
+<code>Ref&lt;string&gt; ⟹ Box&lt;unknown&gt;</code>. However, instead of returning True,
+structural assignability returns Maybe, a ternary value. A Maybe result
+becomes true if all non-Maybe results are true. Otherwise it stays
+Maybe.</p>
+<p>This causes <code>Ref&lt;string&gt; ⟹ Box&lt;unknown&gt;</code> to succeed because <code>Ref.t</code> is
+in fact assignable to <code>Box.t</code> and <code>item</code> and <code>deref</code> don't matter for
+assignability.</p>
+<p>However, there are <em>still</em> types that these two checks don't
+catch. Specifically:</p>
+<p><pre class="typescript-code"><span class="keyword">declare</span> <span class="keyword">class</span> <span class="className"><span class="className">Functor</span></span><span class="punctuation"><</span><span class="typeParameterName"><span class="typeParameterName">T</span></span><span class="punctuation">></span> <span class="punctuation">{</span>
+  <span class="identifier">fmap</span><span class="punctuation"><</span><span class="typeParameterName"><span class="typeParameterName">U</span></span><span class="punctuation">></span><span class="punctuation">(</span><span class="parameterName">f</span><span class="punctuation">:</span> <span class="punctuation">(</span><span class="parameterName">t</span><span class="punctuation">:</span> <span class="typeParameterName"><span class="identifier">T</span></span><span class="punctuation">)</span> <span class="punctuation">=></span> <span class="typeParameterName"><span class="identifier">U</span></span><span class="punctuation">)</span><span class="punctuation">:</span> <span class="className"><span class="identifier">Functor</span></span><span class="punctuation"><</span><span class="typeParameterName"><span class="identifier">U</span></span><span class="punctuation">></span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+<span class="keyword">declare</span> <span class="keyword">class</span> <span class="className"><span class="className">Mappable</span></span><span class="punctuation"><</span><span class="typeParameterName"><span class="typeParameterName">T</span></span><span class="punctuation">></span> <span class="punctuation">{</span>
+  <span class="identifier">fmap</span><span class="punctuation"><</span><span class="typeParameterName"><span class="typeParameterName">U</span></span><span class="punctuation">></span><span class="punctuation">(</span><span class="parameterName">f</span><span class="punctuation">:</span> <span class="punctuation">(</span><span class="parameterName">t</span><span class="punctuation">:</span> <span class="typeParameterName"><span class="identifier">T</span></span><span class="punctuation">)</span> <span class="punctuation">=></span> <span class="typeParameterName"><span class="identifier">U</span></span><span class="punctuation">)</span><span class="punctuation">:</span> <span class="className"><span class="identifier">Mappable</span></span><span class="punctuation"><</span><span class="typeParameterName"><span class="identifier">U</span></span><span class="punctuation">></span><span class="punctuation">;</span>
+<span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=declare%20class%20Functor%3CT%3E%20%7B%0A%20%20fmap%3CU%3E(f%3A%20(t%3A%20T)%20%3D%3E%20U)%3A%20Functor%3CU%3E%3B%0A%7D%0Adeclare%20class%20Mappable%3CT%3E%20%7B%0A%20%20fmap%3CU%3E(f%3A%20(t%3A%20T)%20%3D%3E%20U)%3A%20Mappable%3CU%3E%3B%0A%7D">Try</a></pre></p>
+<p>In this case, for <code>Functor&lt;string&gt; ⟹ Mappable&lt;unknown&gt;</code>, assignability
+has to check <code>Functor&lt;U&gt; ⟹ Mappable&lt;U&gt;</code> while checking the return
+type of <code>fmap</code>. Once it starts checking
+<code>Functor&lt;U&gt; ⟹ Mappable&lt;U&gt;</code>, it's stuck: every recursive check of
+<code>fmap</code> creates a fresh <code>U</code>, so it has to check
+<code>Functor&lt;U&gt; ⟹ Mappable&lt;U&gt;</code> for this fresh <code>U</code>.</p>
+<p>To prevent this, structural assignability has an arbitrary 5-deep
+cutoff for comparing identical pairs of types, even if their arguments
+are different. That is, if the assignability check encounters pair
+<code>(Functor, Mappable)</code> 5 times, that particular comparison will return
+Maybe.</p>
+<h2 id="summary"><a href="#summary">Summary</h2></a>
+<p>In order to present concepts in order of least to most complex, the document
+presents the parts of the assignability check in a different order
+than they actually occur. The actual algorithm proceeds as follows:</p>
+<ol>
+<li>If source === target, return true.</li>
+<li>If source and target are simple and are assignable, return true.</li>
+<li>If source is an object type and the target has excess properties, return false.</li>
+<li>If source type is weak and the target shares no properties, return false.</li>
+<li>If the source or target types are algebraic, simplify the types if possible and recur.</li>
+<li>If the source is structurally assignable to the target, return true.</li>
+<li>Otherwise, return false.</li>
+</ol>
+<p>As explained in the previous section, step 6 might return "Maybe", which
+counts as true.</p>
+<p>This document also skips quite a few small details like how private properties
+are handled. For the actual code, look at <code>checkTypeRelatedTo</code> in
+src/compiler/checker.ts in the TypeScript repository on github.</p>
+<p>Finally, it does not cover other relations like subtypable or
+comparable, because they are all variants of assignability.</p>
+    </article>
+
+    <script src="https://unpkg.com/popper.js@1/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/tippy.js@4"></script>
+    <script>
+        tippy.setDefaults({preventOverflow: { enabled: false } });
+    </script>
+    </body>
+    </html>

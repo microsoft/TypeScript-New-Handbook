@@ -1,0 +1,235 @@
+body article {
+    font-family: 'Segoe UI Semilight', Tahoma, Geneva, Verdana, sans-serif;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 65%;
+    line-height: 1.3em;
+}
+
+article :not(pre) code {
+    color: #a31515;
+    font-family: Consolas, Menlo, Monaco, Deja Vu Sans Mono, "Courier New", monospace;
+}
+
+article h1, article h2, article h3, article h4, article h5, article h6 {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+}
+
+/* Temporary */
+pre code {
+    display: block;
+    position: relative;
+    max-width: 80em;
+    width: max-content;
+    padding: 0.8em;
+    padding-left: 1.6em;
+    padding-right: 4em;
+    background: #F5F5F5;
+    border: solid #777 1px;
+    font-family: Menlo, Monaco, "Courier New", monospace;
+    font-size: 90%;
+    white-space: nowrap;
+}
+
+p code {
+    white-space: nowrap;
+}
+
+pre.typescript-code {
+    font-family: Consolas, Menlo, Monaco, Deja Vu Sans Mono, "Courier New", monospace;
+    font-size: 90%;
+}
+
+pre.typescript-code {
+    display: block;
+    position: relative;
+    max-width: 80em;
+    width: max-content;
+    padding: 0.8em;
+    padding-left: 1.6em;
+    padding-right: 4em;
+    background: #F5F5F5;
+    border: solid #777 1px;
+    line-height: 1.5em;
+    min-width: 30em;
+
+    box-shadow: 0px 0px 8px #00000020;
+}
+
+span.comment {
+    color: #148A14;
+    font-style: italic;
+}
+
+span.keyword {
+    color: #00A;
+}
+
+span.parameterName, span.identifier {
+    color: #77C;
+}
+
+span.stringLiteral {
+    color: #a31515;
+}
+
+span.numericLiteral {
+    color: #09885A;
+}
+
+span.className, span.interfaceName, span.typeParameterName, span.typeAliasName {
+    color: #267F99;
+}
+
+span.quickinfo-result {
+    cursor: help;
+    position: relative;
+    display: inline-block;
+    background: white;
+    padding: 3px 10px 3px 8px;
+    border: solid #AAAACC 1px;
+    left: 0.2em;
+    box-shadow: 0px 0px 3px #00000033;
+}
+
+span.quickinfo-arrow {
+    color: #AAAACC;
+    position: absolute;
+    top: -0.75em;
+    left: -0.3em;
+}
+
+span.error {
+    position: relative;
+}
+
+span.error-highlight {
+    background: #FF000010;
+    border-radius: 0.4em;
+    border-bottom: #F44 2px;
+    border-bottom-style: dotted;
+    position: absolute;
+    display: inline-block;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -5px;
+}
+
+span.highlight {
+    position: relative;
+}
+
+span.highlight-content {
+    background: #FFFF0040;
+    position: absolute;
+    display: inline-block;
+    top: -3px;
+    left: -1px;
+    right: -1px;
+    bottom: -3px;
+    border-radius: 6px;
+    box-shadow: 0px 0px 6px #00000088;
+}
+
+span.highlight-description {
+    display: none;
+}
+
+div.indent {
+    display: inline-block;
+    width: 1.1em;
+}
+div.indent::before {
+    content: "→";
+    color: #BBB;
+}
+
+span.className {
+    color: #790;
+}
+
+a, a:visited, a:active, a:hover {
+    color: #265988;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+span.toc-title {
+    font-weight: bold;
+    border-bottom: solid 1px gray;
+}
+
+ul {
+    padding-left: 1em;
+    margin-left: 1em;
+}
+
+ul ul, ul ul ul {
+    margin-left: 0.5em;
+}
+
+
+a.playground-link {
+    font-family: "wf_segoe-ui_normal", Verdana, Geneva, Tahoma, sans-serif;
+    position: absolute;
+    font-size: 12px;
+    bottom: 0px;
+    right: 0px;
+    padding: 6px;
+    background-color: #0074c1;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border: solid white 1px;
+    border-bottom: 0px;
+    border-right: 0px;
+}
+
+a.playground-link, a.playground-link:visited {
+    color: #FFF;
+    text-decoration: none;
+}
+
+h1 a, h2 a, h3 a {
+    text-decoration: none;
+    color: #000;
+    position: relative;
+}
+
+h1 a:hover::before, h2 a:hover::before, h3 a:hover::before {
+    content: "#";
+    position: absolute;
+    left: -0.7em;
+}
+
+h1 {
+    font-size: 170%;
+}
+
+hr.error-divider {
+    margin-left: -1em;
+    margin-right: -3em;
+    margin-top: 0.75em;
+    margin-bottom: 0.75em;
+}
+
+div.listed-error {
+    max-width: 40em;
+    word-wrap: normal;
+    overflow-wrap: normal;
+}
+
+div.error-line {
+    word-wrap: normal;
+    white-space: normal;
+}
+
+blockquote {
+    margin: 1em;
+    padding: 0.02em 1em 0.02em 1em;
+    background: #FFFFF0;
+    border-left: solid #EEB 4px;
+}
+

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Handbook Page</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" media="screen" href="/css/handbook.css" />
+    </head>
+    <body>
+    <article>
+    <h1 id="code-samples"><a href="#code-samples">Code Samples?</h1></a>
+<p><pre class="typescript-code"><span class="comment">// This is a TypeScript code block</span>
+<span class="comment">// It renders as code</span>
+<span class="keyword">function</span> <span class="identifier">fn</span><span class="punctuation">(</span><span class="parameterName">s</span><span class="punctuation">:</span> <span class="keyword">string</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="keyword">const</span> <span class="identifier">y</span> <span class="operator">=</span> <span class="stringLiteral">`Neat ${</span><span class="identifier">s</span><span class="punctuation">.</span><span class="identifier">toLowerCase</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="stringLiteral">}`</span><span class="punctuation">;</span>
+    <span class="keyword">return</span> <span class="identifier">y</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+<span class="keyword">const</span> <span class="identifier">m</span> <span class="operator">=</span> <span class="identifier">fn</span><span class="punctuation">(</span><span class="stringLiteral">"hello, world"</span><span class="punctuation">)</span><span class="punctuation">;</span>
+
+<span class="keyword">class</span> <span class="className"><span class="className">MyClass</span></span> <span class="punctuation">{</span>
+    <span class="identifier">m</span> <span class="operator">=</span> <span class="numericLiteral">10</span><span class="punctuation">;</span>
+    <span class="keyword">constructor</span><span class="punctuation">(</span><span class="keyword">public</span> <span class="parameterName">alfalfa</span> <span class="operator">=</span> <span class="stringLiteral">"100"</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+        <span class="error"><span class="error-highlight"></span><span class="keyword">this</span><span class="punctuation">.</span><span class="identifier">alfalfa</span></span> <span class="operator">=</span> <span class="numericLiteral">10</span><span class="punctuation">;</span>
+    <span class="punctuation">}</span>
+<span class="punctuation">}</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Type '10' is not assignable to type 'string'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20This%20is%20a%20TypeScript%20code%20block%0A%2F%2F%20It%20renders%20as%20code%0Afunction%20fn(s%3A%20string)%20%7B%0A%20%20%20%20const%20y%20%3D%20%60Neat%20%24%7Bs.toLowerCase()%7D%60%3B%0A%20%20%20%20return%20y%3B%0A%7D%0Aconst%20m%20%3D%20fn(%22hello%2C%20world%22)%3B%0A%0Aclass%20MyClass%20%7B%0A%20%20%20%20m%20%3D%2010%3B%0A%20%20%20%20constructor(public%20alfalfa%20%3D%20%22100%22)%20%7B%0A%20%20%20%20%20%20%20%20this.alfalfa%20%3D%2010%3B%0A%20%20%20%20%7D%0A%7D">Try</a></pre></p>
+<blockquote>
+  <p>This is a quote that
+  has multiple lines</p>
+</blockquote>
+<p>We should also have [Chapter Links]</p>
+<h1 id="heading"><a href="#heading">Heading</h1></a>
+<h2 id="heading-two"><a href="#heading-two">Heading two</h2></a>
+<h3 id="heading-three"><a href="#heading-three">Heading three</h3></a>
+<p><em>Do</em> use italics</p>
+<p><strong>Sometimes</strong> use bold!</p>
+    </article>
+
+    <script src="https://unpkg.com/popper.js@1/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/tippy.js@4"></script>
+    <script>
+        tippy.setDefaults({preventOverflow: { enabled: false } });
+    </script>
+    </body>
+    </html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Handbook Page</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" media="screen" href="/css/handbook.css" />
+    </head>
+    <body>
+    <article>
+    <h1 id="authoring-guide"><a href="#authoring-guide">Authoring Guide</h1></a>
+<h2 id="testing"><a href="#testing">Testing</h2></a>
+<p>To work on the Handbook:</p>
+<pre><code> &gt; npm run start
+</code></pre>
+<p>This will start a live development server at <a href="http://localhost:8087">http://localhost:8087</a>.
+These pages will reload automatically on edits to page contents or CSS.</p>
+<h2 id="special-syntax"><a href="#special-syntax">Special Syntax</h2></a>
+<h4 id="table-of-contents-__toc__">Table of Contents: <code>__toc__</code></h4>
+<p>Write <code>__toc__</code> on a line by itself to insert the Table of Contents for a page</p>
+<h4 id="code-highlights-">Code Highlights: <code>^^^^^</code></h4>
+<p>You can use carets to highlight a specific part of a code sample:</p>
+<pre>
+function foo() {
+         ^^^ Some text
+}
+</pre>
+<p>This will render as:
+<pre class="typescript-code"><span class="keyword">function</span> <span class="identifier"><span class="highlight"><span class="highlight-content"></span><span class="highlight-description">Some text</span>foo</span></span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+<span class="punctuation">}</span></pre></p>
+<h4 id="cut-comments"><code>//cut</code> comments</h4>
+<p>Sometimes a code sample should be able to refer to declarations that you don't want to display in a sample.
+Any code above a line containing only <code>//cut</code> will not be displayed, but the code will be highlighted and errored as if it were there.</p>
+<h2 id="walkthrough"><a href="#walkthrough">Walkthrough</h2></a>
+<p>The walkthrough is a series of pages which describe TypeScript, organized by concepts.</p>
+<p>Each page of the walkthrough should:</p>
+<ul>
+<li>Explain a single concept</li>
+<li>Be 1200 words or less</li>
+<li>Build on previous knowledge gained from prior pages</li>
+</ul>
+<p>The scope of each walkthrough page is not intended to be exhaustive.
+For example, the "compiler options" walkthrough page shouldn't list <em>every</em> option, just those that developers are most likely to need to know about.</p>
+<p>Nearly every walkthrough page should start with a link to <a href="https://developer.mozilla.org/en-US/">MDN Documentation</a> for "background reading".
+We <em>don't</em> want to waste time documenting JavaScript features - our documentation should build on existing JS knowledge and resources.</p>
+<h3 id="key-concepts"><a href="#key-concepts">Key Concepts!</h3></a>
+<h3 id="reading-level--vocabulary"><a href="#reading-level--vocabulary">Reading Level &amp; Vocabulary</h3></a>
+<p><em>Most</em> readers of this documentation will not be native English speakers. Keep the use of fancy words to a minumum; prefer short sentences and active-voice phrasing:</p>
+<blockquote>
+  <ul>
+  <li>❌ Understandability can become obfuscated if too many type aliases are used, so in these positions an anonymous type is indicated.</li>
+  <li>✅ Using too many type aliases here can make the code unreadable. You can use an anonymous type instead.</li>
+  </ul>
+</blockquote>
+<h3 id="voice-walkthrough"><a href="#voice-walkthrough">Voice (Walkthrough)</h3></a>
+<p>Consider using informal terms ("compatible with") when a technically-accurate description ("subtype of or assignable from") would interfere with understanding.</p>
+<p>Use instructional, second-person narrative:</p>
+<blockquote>
+  <ul>
+  <li>✅ You can detect errors like these with the <code>--strictNullChecks</code> option.</li>
+  <li>❌ Developers can use the <code>--strictNullChecks</code> option to detect errors like these.</li>
+  <li>❌ We encourage use of <code>--strict</code> in new codebase.</li>
+  </ul>
+</blockquote>
+<p>Use an approachable, but not overly chatty, level of formality:</p>
+<blockquote>
+  <ul>
+  <li>✅ Consider using <code>--fancyTuples</code> if your codebase mostly has fancy arrays instead of normal ones.</li>
+  <li>❌ <code>--fancyTuples</code> alters the assignability relationship when the contextual type hints a tuple format.</li>
+  <li>❌ I'd say <code>--fancyTuples</code> is pretty sweet, because it'll really fix your arrays where they need it.</li>
+  </ul>
+</blockquote>
+<h2 id="reference"><a href="#reference">Reference</h2></a>
+<p>Each reference article should provide a <em>complete</em>, spec-level explanation of a particular concept.
+A reader who completely understands all reference articles should be educated at the level of one of our own developers.</p>
+<h3 id="voice-reference"><a href="#voice-reference">Voice (Reference)</h3></a>
+<p>In reference modules, <em>do</em> use technically-accurate descriptions.</p>
+<p>Use third-person narrative:</p>
+<blockquote>
+  <ul>
+  <li>✅ The <code>--strictNullChecks</code> option removes <code>null</code> and <code>undefined</code> from the domain of all types.</li>
+  <li>❌ If you use the <code>--strictNullChecks</code> option, we won't put <code>null</code> and <code>undefined</code> into the domain of all types.</li>
+  </ul>
+</blockquote>
+    </article>
+
+    <script src="https://unpkg.com/popper.js@1/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/tippy.js@4"></script>
+    <script>
+        tippy.setDefaults({preventOverflow: { enabled: false } });
+    </script>
+    </body>
+    </html>

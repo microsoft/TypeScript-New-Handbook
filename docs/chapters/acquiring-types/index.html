@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Handbook Page</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" media="screen" href="/css/handbook.css" />
+    </head>
+    <body>
+    <article>
+    <h1 id="acquiring-types"><a href="#acquiring-types">Acquiring Types</h1></a>
+<p>Throughout the sections you've read so far, we've been demonstrating basic TypeScript concepts using the built-in functions present in all JavaScript runtimes.
+However, almost all JavaScript today includes many libraries to accomplish common tasks.
+Having types for the parts of your application that <em>aren't</em> your code will greatly improve your TypeScript experience.
+Where do these types come from?</p>
+<div class="toc"><span class="toc-title">Table of Contents</span><ul><li><a href="#built-in-type-definitions">Built-in Type Definitions</a></li><ul><li><a href="#target-setting"><code>target</code> setting</a></li><li><a href="#lib-setting"><code>lib</code> setting</a></li></ul><li><a href="#external-definitions">External Definitions</a></li><ul><li><a href="#bundled-types">Bundled Types</a></li><li><a href="#definitelytyped-/-@types">DefinitelyTyped / <code>@types</code></a></li><li><a href="#your-own-definitions">Your Own Definitions</a></li></ul></ul></ul></div>
+<h2 id="dts-files"><a href="#dts-files"><code>.d.ts</code> files</h2></a>
+<p>TypeScript has two main kinds of files.
+<code>.ts</code> files are <em>implementation</em> files that contain types and executable code.
+These are the files that produce <code>.js</code> outputs, and are where you'd normally write your code.</p>
+<p><code>.d.ts</code> files are <em>declaration</em> files that contain <em>only</em> type information.
+These files don't produce <code>.js</code> outputs; they are only used for typechecking.
+We'll learn more about how to write our own declaration files later.</p>
+<h2 id="built-in-type-definitions"><a href="#built-in-type-definitions">Built-in Type Definitions</h2></a>
+<p>TypeScript includes declaration files for all of the standardized built-in APIs available in JavaScript runtimes.
+This includes things like methods and properties of built-in types like <code>string</code> or <code>function</code>, top-level names like <code>Math</code> and <code>Object</code>, and their associated types.
+By default, TypeScript also includes types for things available when running inside the browser, such as <code>window</code> and <code>document</code>; these are collectively referred to as the DOM APIs.</p>
+<p>TypeScript names these declaration files with the pattern <code>lib.[something].d.ts</code>.
+If you navigate into a file with that name, you can know that you're dealing with some built-in part of the platform, not user code.</p>
+<h3 id="target-setting"><a href="#target-setting"><code>target</code> setting</h3></a>
+<p>The methods, properties, and functions available to you actually vary based on the <em>version</em> of JavaScript your code is running on.
+For example, the <code>startsWith</code> method of strings is available only starting with the version of JavaScript referred as <em>ECMAScript 6</em>.</p>
+<p>Being aware of what version of JavaScript your code ultimately runs on is important because you don't want to use APIs that are from a newer version than the platform you deploy to.
+This is one function of the <code>target</code> compiler setting.</p>
+<p>TypeScript helps with this problem by varying which <code>lib</code> files are included by default based on your <code>target</code> setting.
+For example, if <code>target</code> is <code>ES5</code>, you will see an error if trying to use the <code>startsWith</code> method, because that method is only available in <code>ES6</code> or later.</p>
+<h3 id="lib-setting"><a href="#lib-setting"><code>lib</code> setting</h3></a>
+<p>The <code>lib</code> setting allows more fine-grained control of which built-in declaration files are considered available in your program.
+See the documentation page on [[lib]] for more information.</p>
+<h2 id="external-definitions"><a href="#external-definitions">External Definitions</h2></a>
+<p>For non-built-in APIs, there are a variety of ways you can get declaration files.
+How you do this depends on exactly which library you're getting types for.</p>
+<h3 id="bundled-types"><a href="#bundled-types">Bundled Types</h3></a>
+<p>If a library you're using is published as an npm package, it may include type declaration files as part of its distribution already.
+You can read the project's documentation to find out, or simply try importing the package and see if TypeScript is able to automatically resolve the types for you.</p>
+<p>If you're a package author considering bundling type definitions with your package, you can read our guide on [[bundling type definitions]].</p>
+<h3 id="definitelytyped--types"><a href="#definitelytyped--types">DefinitelyTyped / <code>@types</code></h3></a>
+<p>The <a href="https://github.com/DefinitelyTyped/DefinitelyTyped/">DefinitelyTyped repository</a> is a centralized repo storing declaration files for thousands of libraries.
+The vast majority of commonly-used libraries have declaration files available on DefinitelyTyped.</p>
+<p>Definitions on DefinitelyTyped are also automatically published to npm under the <code>@types</code> scope.
+The name of the types package is always the same as the name of the underlying package itself.
+For example, if you installed the <code>react</code> npm package, you can install its corresponding types by running</p>
+<pre><code> npm install --save-dev @types/react
+</code></pre>
+<p>TypeScript automatically finds type definitions under <code>node_modules/@types</code>, so there's no other step needed to get these types available in your program.</p>
+<h3 id="your-own-definitions"><a href="#your-own-definitions">Your Own Definitions</h3></a>
+<p>In the uncommon event that a library didn't bundle its own types and didn't have a definition on DefinitelyTyped, you can write a declaration file yourself.
+See the appendix [[Writing Declaration Files]] for a guide.</p>
+<p>If you want to silence warnings about a particular module without writing a declaration file, you can also quick declare the module as type <code>any</code> by putting an empty declaration for it in a <code>.d.ts</code> file in your project.
+For example, if you wanted to use a module named <code>some-untyped-module</code> without having definitions for it, you would write:
+<pre class="typescript-code"><span class="keyword">declare</span> <span class="keyword">module</span> <span class="stringLiteral">"some-untyped-module"</span><span class="punctuation">;</span></pre></p>
+    </article>
+
+    <script src="https://unpkg.com/popper.js@1/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/tippy.js@4"></script>
+    <script>
+        tippy.setDefaults({preventOverflow: { enabled: false } });
+    </script>
+    </body>
+    </html>
