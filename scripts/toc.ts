@@ -2,7 +2,7 @@ import { Header } from "./header-parser";
 
 export function renderTree(headers: Header[], startingDepth: number, baseUrl: string = "") {
     const lines: string[] = [];
-    let depth = startingDepth - 1;;
+    let depth = startingDepth - 1;
     for (const header of headers.filter(h => h.depth >= startingDepth)) {
         let newDepth = header.depth;
         while (depth < newDepth) {
