@@ -1,6 +1,4 @@
 import showdown = require("showdown");
-import fs = require("fs");
-import path = require("path");
 import { getCompilerExtension } from "./sample-compiler";
 import { textToAnchorName, strrep } from "./utils";
 import { getHeaders } from "./header-parser";
@@ -30,6 +28,34 @@ showdown.extension("toc", function () {
     }];
 });
 
+let topicMap: { [name: string]: { link: string, title: string; } | { targets: string[] } } = {};
+export function updateTopicTargets(map: typeof topicMap) {
+    topicMap = map;
+}
+
+showdown.extension("topic-link", function () {
+    return [{
+        type: "lang",
+        regex: /\[\[(.+)\]\]/gm,
+        replace(_1: any, topic: string) {
+            if (topic in topicMap) {
+                const target = topicMap[topic];
+                if ('targets' in target) {
+                    console.warn(`Ambiguous topic reference ${topic}`);
+                    for (const t in target.targets) {
+                        console.warn(` -> ${t}`);
+                    }
+                } else {
+                    return `<a href="${target.link}">${target.title}</a>`;
+                }
+            } else {
+                console.warn(`No topic named ${topic} exists`);
+                return topic;
+            }
+        }
+    }];
+});
+
 export function render(content: string) {
     const conv = new showdown.Converter({
         customizedHeaderId: true,
@@ -39,6 +65,7 @@ export function render(content: string) {
     conv.addExtension(sampleCompiler, "ts");
     conv.useExtension("header-link");
     conv.useExtension("toc");
+    conv.useExtension("topic-link");
     return conv.makeHtml(content);
 }
 
@@ -76,36 +103,4 @@ export function makePage(content: string, settings?: Partial<PageSettings>) {
     </script>
     </body>
     </html>`;
-}
-
-const home = path.join(__dirname, "..");
-function processFile(fileName: string) {
-    fs.readFile(fileName, { encoding: "utf-8" }, (err, data) => {
-        if (err) throw err;
-
-        const fileOnly = path.basename(fileName);
-        const output = makePage(render(data));
-        fs.writeFile(path.join(__dirname, "../bin", fileOnly.replace(".md", ".html")), output, err => { if (err) throw err; });
-    });
-}
-
-function run() {
-    fs.readdir(home, (err, files) => {
-        if (err) throw err;
-        for (const file of files) {
-            if (file.indexOf(".md") > 0) {
-                processFile(file);
-            }
-        }
-        console.log(files.join(","));
-    });
-}
-
-function watch() {
-    fs.watch(home, {}, (event, fileName) => {
-        if (fileName.endsWith(".md")) {
-            console.log(`Update ${fileName}`);
-            processFile(fileName);
-        }
-    });
 }

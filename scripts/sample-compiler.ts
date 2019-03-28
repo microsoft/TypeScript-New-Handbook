@@ -269,13 +269,4 @@ export function getCompilerExtension() {
         }
     ];
     return ext;
-
-    function highlightAndBumpCounter(spans: number[], parts: string[], code: string, i: number) {
-        const [start, length, kind] = spans;
-        parts.push(`<span class="${ts.ClassificationType[kind]}">${code.substr(i, length)}</span>`);
-        spans.shift();
-        spans.shift();
-        spans.shift();
-        return i + length - 1;
-    }
 }
