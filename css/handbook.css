@@ -213,6 +213,14 @@ h1 {
     font-size: 170%;
 }
 
+h2 {
+    margin-top: 1.8em;
+}
+
+h3 {
+    margin-top: 1.6em;
+}
+
 hr.error-divider {
     margin-left: -1em;
     margin-right: -3em;
