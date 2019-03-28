@@ -9,7 +9,7 @@ const sampleCompiler = getCompilerExtension();
 showdown.extension("header-link", function () {
     return [{
         type: 'html',
-        regex: /(<h([1-3]) id="([^"]+?)">)(.*<\/h\2>)/g,
+        regex: /(<h([1-4]) id="([^"]+?)">)(.*<\/h\2>)/g,
         replace: `$1<a href="#$3">$4</a>`
     }];
 });
