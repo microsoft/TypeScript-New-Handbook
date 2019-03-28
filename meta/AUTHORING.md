@@ -29,18 +29,16 @@ Use <tt>&lsqb;&lsqb;Section Name&rsqb;&rsqb;</tt> to link to a section anywhere 
 The link text will always be the name of that section.
 
 This accepts any combination of the following:
- * The anchor name itself with a leading `#` (even if this anchor is on another page)
-    * e.g. `#parameter-type-annotations` 🠺 [[#parameter-type-annotations]]
- * The anchor name qualified by a page name
-    * e.g. `everyday-types#functions` 🠺 [[everyday-types#functions]]
  * The title of the section
-    * e.g. `Function Expressions` 🠺 [[Function Expressions]]
+    * e.g. <tt>&lsqb;&lsqb;Function Expressions&rsqb;&rsqb;</tt> ⟹ [[Function Expressions]]
+ * The anchor name itself with a leading `#` (even if this anchor is on another page)
+    * e.g. <tt>&lsqb;&lsqb;#parameter-type-annotations&rsqb;&rsqb;</tt> ⟹ [[#parameter-type-annotations]]
+ * The anchor name qualified by a page name
+    * e.g. <tt>&lsqb;&lsqb;everyday-types#functions&rsqb;&rsqb;</tt> ⟹ [[everyday-types#functions]]
  * Any case-insensitive variant of the above
-    * e.g. `return type annotations` 🠺 [[return type annotations]]
+    * e.g. <tt>&lsqb;&lsqb;return type annotations&rsqb;&rsqb;</tt> ⟹ [[return type annotations]]
 
 An error will be issued if a link is ambiguous.
-
-Example: [[Arrays]]
 
 ### Table of Contents: `__toc__`
 
