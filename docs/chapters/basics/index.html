@@ -3,14 +3,14 @@
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Static type-checking</title>
+        <title>Types in JavaScript: they <em>do</em> exist!</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" media="screen" href="../../css/handbook.css" />
     </head>
     <body>
     <article>
     <h1 id="types-in-javascript-they-do-exist"><a href="#types-in-javascript-they-do-exist">Types in JavaScript: they <em>do</em> exist!</h1></a>
-<div class="toc"><span class="toc-title">Table of Contents</span><ul><li><a href="#explicit-types">Explicit types</a></li><li><a href="#stripping-types-out">Stripping types out</a></li><li><a href="#downleveling">Downleveling</a></li><li><a href="#noimplicitany"><code>noImplicitAny</code></a></li><li><a href="#strictnullchecks"><code>strictNullChecks</code></a></li></ul></ul></div>
+<div class="toc"><span class="toc-title">Table of Contents</span><ul><li><a href="#errors-don't-block-output">Errors don't block output</a></li><li><a href="#explicit-types">Explicit types</a></li><li><a href="#stripping-types-out">Stripping types out</a></li><li><a href="#downleveling">Downleveling</a></li><li><a href="#noimplicitany"><code>noImplicitAny</code></a></li><li><a href="#strictnullchecks"><code>strictNullChecks</code></a></li></ul></ul></div>
 <p>Each and every value in JavaScript has a set of behaviors you can observe from running different operations.
 That sounds abstract, but as a quick example, consider some operations we might run on a variable named <code>foo</code>.</p>
 <p><pre class="typescript-code"><span class="comment">// accessing the property 'toLowerCase'</span>

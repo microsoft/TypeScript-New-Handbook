@@ -428,7 +428,7 @@ function configure(x: Options | "auto") {
 }
 configure({ width: 100 });
 configure("auto");
-configure("otto");
+configure("automatic");
 ```
 
 There's one more kind of literal type: boolean literals.

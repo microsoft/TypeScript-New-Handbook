@@ -350,14 +350,14 @@ It's the inferred type any time a function doesn't have any <code>return</code> 
 <span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20The%20inferred%20return%20type%20is%20void%0Afunction%20noop()%20%7B%0A%20%20return%3B%0A%7D">Try</a></pre></p>
 <p>In JavaScript, a function that doesn't return any value will implicitly return the value <code>undefined</code>.
 However, <code>void</code> and <code>undefined</code> are not the same thing in TypeScript.
-See the reference page [[Why void is a special type]] for a longer discussion about this.</p>
+See the reference page Why void is a special type for a longer discussion about this.</p>
 <blockquote>
   <p><code>void</code> is not the same as <code>undefined</code>.</p>
 </blockquote>
 <h3 id="object"><a href="#object"><code>object</code></h3></a>
 <p>The special type <code>object</code> refers to any value that isn't a primitive (<code>string</code>, <code>number</code>, <code>boolean</code>, <code>symbol</code>, <code>null</code>, or <code>undefined</code>).
 This is different from the <em>empty object type</em> <code>{ }</code>, and also different from the global type <code>Object</code>.
-You can read the reference page about [[The global types]] for information on what <code>Object</code> is for - long story short, don't ever use <code>Object</code>.</p>
+You can read the reference page about The global types for information on what <code>Object</code> is for - long story short, don't ever use <code>Object</code>.</p>
 <blockquote>
   <p><code>object</code> is not <code>Object</code>. <strong>Always</strong> use <code>object</code>!</p>
 </blockquote>

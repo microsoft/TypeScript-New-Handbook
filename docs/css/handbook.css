@@ -2,8 +2,13 @@ body article {
     font-family: 'Segoe UI Semilight', Tahoma, Geneva, Verdana, sans-serif;
     margin-left: auto;
     margin-right: auto;
-    max-width: 65%;
     line-height: 1.3em;
+}
+
+@media(min-width: 800px) {
+    body article {
+        max-width: 65%
+    }
 }
 
 article :not(pre) code {
@@ -44,7 +49,7 @@ pre.typescript-code {
     display: block;
     position: relative;
     max-width: 80em;
-    width: max-content;
+    width: 90%;
     padding: 0.8em;
     padding-left: 1.6em;
     padding-right: 4em;
@@ -216,7 +221,6 @@ hr.error-divider {
 }
 
 div.listed-error {
-    max-width: 40em;
     word-wrap: normal;
     overflow-wrap: normal;
 }

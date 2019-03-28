@@ -14,7 +14,7 @@
 However, almost all JavaScript today includes many libraries to accomplish common tasks.
 Having types for the parts of your application that <em>aren't</em> your code will greatly improve your TypeScript experience.
 Where do these types come from?</p>
-<div class="toc"><span class="toc-title">Table of Contents</span><ul><li><a href="#built-in-type-definitions">Built-in Type Definitions</a></li><ul><li><a href="#target-setting"><code>target</code> setting</a></li><li><a href="#lib-setting"><code>lib</code> setting</a></li></ul><li><a href="#external-definitions">External Definitions</a></li><ul><li><a href="#bundled-types">Bundled Types</a></li><li><a href="#definitelytyped-/-@types">DefinitelyTyped / <code>@types</code></a></li><li><a href="#your-own-definitions">Your Own Definitions</a></li></ul></ul></ul></div>
+<div class="toc"><span class="toc-title">Table of Contents</span><ul><li><a href="#.d.ts-files"><code>.d.ts</code> files</a></li><li><a href="#built-in-type-definitions">Built-in Type Definitions</a></li><ul><li><a href="#target-setting"><code>target</code> setting</a></li><li><a href="#lib-setting"><code>lib</code> setting</a></li></ul><li><a href="#external-definitions">External Definitions</a></li><ul><li><a href="#bundled-types">Bundled Types</a></li><li><a href="#definitelytyped-/-@types">DefinitelyTyped / <code>@types</code></a></li><li><a href="#your-own-definitions">Your Own Definitions</a></li></ul></ul></ul></div>
 <h2 id="dts-files"><a href="#dts-files"><code>.d.ts</code> files</h2></a>
 <p>TypeScript has two main kinds of files.
 <code>.ts</code> files are <em>implementation</em> files that contain types and executable code.
@@ -37,14 +37,14 @@ This is one function of the <code>target</code> compiler setting.</p>
 For example, if <code>target</code> is <code>ES5</code>, you will see an error if trying to use the <code>startsWith</code> method, because that method is only available in <code>ES6</code> or later.</p>
 <h3 id="lib-setting"><a href="#lib-setting"><code>lib</code> setting</h3></a>
 <p>The <code>lib</code> setting allows more fine-grained control of which built-in declaration files are considered available in your program.
-See the documentation page on [[lib]] for more information.</p>
+See the documentation page on lib for more information.</p>
 <h2 id="external-definitions"><a href="#external-definitions">External Definitions</h2></a>
 <p>For non-built-in APIs, there are a variety of ways you can get declaration files.
 How you do this depends on exactly which library you're getting types for.</p>
 <h3 id="bundled-types"><a href="#bundled-types">Bundled Types</h3></a>
 <p>If a library you're using is published as an npm package, it may include type declaration files as part of its distribution already.
 You can read the project's documentation to find out, or simply try importing the package and see if TypeScript is able to automatically resolve the types for you.</p>
-<p>If you're a package author considering bundling type definitions with your package, you can read our guide on [[bundling type definitions]].</p>
+<p>If you're a package author considering bundling type definitions with your package, you can read our guide on bundling type definitions.</p>
 <h3 id="definitelytyped--types"><a href="#definitelytyped--types">DefinitelyTyped / <code>@types</code></h3></a>
 <p>The <a href="https://github.com/DefinitelyTyped/DefinitelyTyped/">DefinitelyTyped repository</a> is a centralized repo storing declaration files for thousands of libraries.
 The vast majority of commonly-used libraries have declaration files available on DefinitelyTyped.</p>
@@ -56,7 +56,7 @@ For example, if you installed the <code>react</code> npm package, you can instal
 <p>TypeScript automatically finds type definitions under <code>node_modules/@types</code>, so there's no other step needed to get these types available in your program.</p>
 <h3 id="your-own-definitions"><a href="#your-own-definitions">Your Own Definitions</h3></a>
 <p>In the uncommon event that a library didn't bundle its own types and didn't have a definition on DefinitelyTyped, you can write a declaration file yourself.
-See the appendix [[Writing Declaration Files]] for a guide.</p>
+See the appendix Writing Declaration Files for a guide.</p>
 <p>If you want to silence warnings about a particular module without writing a declaration file, you can also quick declare the module as type <code>any</code> by putting an empty declaration for it in a <code>.d.ts</code> file in your project.
 For example, if you wanted to use a module named <code>some-untyped-module</code> without having definitions for it, you would write:
 <pre class="typescript-code"><span class="keyword">declare</span> <span class="keyword">module</span> <span class="stringLiteral">"some-untyped-module"</span><span class="punctuation">;</span></pre></p>
