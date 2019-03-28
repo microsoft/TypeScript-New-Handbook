@@ -13,7 +13,7 @@ These pages will reload automatically on edits to page contents or CSS.
 
 ## Encouraged Lesser-Known Syntax
 
-#### Anchor Links
+### Anchor Links
 
 Use `{#anchor-name}` to specify a custom page anchor name on a header:
 
@@ -23,7 +23,7 @@ Use `{#anchor-name}` to specify a custom page anchor name on a header:
 
 ## Special Syntax
 
-#### Inter-page Links
+### Inter-page Links
 
 Use <tt>&lsqb;&lsqb;Section Name&rsqb;&rsqb;</tt> to link to a section anywhere in the Handbook or Reference Pages by its title.
 The link text will always be the name of that section.
@@ -42,12 +42,12 @@ An error will be issued if a link is ambiguous.
 
 Example: [[Arrays]]
 
-#### Table of Contents: `__toc__`
+### Table of Contents: `__toc__`
 
 Write `__toc__` on a line by itself to insert the Table of Contents for a page.
 See the top of this page for an example.
 
-#### Code Highlights: `^^^^^`
+### Code Highlights: `^^^^^`
 
 You can use carets to highlight a specific part of a code sample:
 <pre>
@@ -63,7 +63,7 @@ function foo() {
 }
 ```
 
-#### Code QuickInfo Queries: `^?`
+### Code QuickInfo Queries: `^?`
 
 You can use `^?` to show the language service's quickinfo response at a location:
 
@@ -83,7 +83,7 @@ foo();
  ^?
 ```
 
-#### `//cut` comments
+### `//cut` comments
 
 Sometimes a code sample should be able to refer to declarations that you don't want to display in a sample.
 Any code above a line containing only `//cut` will not be displayed, but the code will be highlighted and errored as if it were there.
