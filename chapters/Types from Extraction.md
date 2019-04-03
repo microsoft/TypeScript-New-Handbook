@@ -124,7 +124,7 @@ type I3 = Person[AliveOrName];
      ^?
 ```
 
-You may even see an error if you try to index a property that doesn't exist:
+You'll even see an error if you try to index a property that doesn't exist:
 
 ```ts
 type Person = { age: number, name: string, alive: boolean };
@@ -145,3 +145,5 @@ const MyArray = [
 type T = (typeof MyArray)[number];
      ^?
 ```
+
+

@@ -206,11 +206,13 @@
   * public, private, protected
   * Generics
   * Static
+    * Instance type parameters
   * Managing `this`
     * Arrow functions
     * `this` parameters
     * The `this` type
     * `this`-related flags
+  * Parameter properties
 
  * Chapter 9: Modules (Ryan)
   * Overview of Choices

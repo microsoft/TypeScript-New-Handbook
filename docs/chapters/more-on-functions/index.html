@@ -158,7 +158,7 @@ For example, let's say you wrote a function to combine two arrays:</p>
 <h3 id="guidelines-for-writing-good-generic-functions"><a href="#guidelines-for-writing-good-generic-functions">Guidelines for Writing Good Generic Functions</h3></a>
 <p>Writing generic functions is fun, and it can be easy to get carried away with type parameters.
 Having too many type parameters or using constraints where they aren't needed can make inference less successful, frustrating callers of your function.</p>
-<h4 id="push-type-parameters-down">Push Type Parameters Down</h4>
+<h4 id="push-type-parameters-down"><a href="#push-type-parameters-down">Push Type Parameters Down</h4></a>
 <p>Here are two ways of writing a function that appear similar:</p>
 <p><pre class="typescript-code"><span class="keyword">function</span> <span class="identifier">firstElement1</span><span class="punctuation"><</span><span class="typeParameterName"><span class="typeParameterName">T</span></span><span class="punctuation">></span><span class="punctuation">(</span><span class="parameterName">arr</span><span class="punctuation">:</span> <span class="typeParameterName"><span class="identifier">T</span></span><span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">)</span> <span class="punctuation">{</span>
   <span class="keyword">return</span> <span class="identifier">arr</span><span class="punctuation">[</span><span class="numericLiteral">0</span><span class="punctuation">]</span><span class="punctuation">;</span>
@@ -177,7 +177,7 @@ Its inferred return type is <code>T</code>, but <code>firstElement2</code>'s inf
 <blockquote>
   <p><strong>Rule</strong>: When possible, use the type parameter itself rather than constraining it</p>
 </blockquote>
-<h4 id="use-fewer-type-parameters">Use Fewer Type Parameters</h4>
+<h4 id="use-fewer-type-parameters"><a href="#use-fewer-type-parameters">Use Fewer Type Parameters</h4></a>
 <p>Here's another pair of similar functions:</p>
 <p><pre class="typescript-code"><span class="keyword">function</span> <span class="identifier">filter1</span><span class="punctuation"><</span><span class="typeParameterName"><span class="typeParameterName">T</span></span><span class="punctuation">></span><span class="punctuation">(</span><span class="parameterName">arr</span><span class="punctuation">:</span> <span class="typeParameterName"><span class="identifier">T</span></span><span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span> <span class="parameterName">func</span><span class="punctuation">:</span> <span class="punctuation">(</span><span class="parameterName">arg</span><span class="punctuation">:</span> <span class="typeParameterName"><span class="identifier">T</span></span><span class="punctuation">)</span> <span class="punctuation">=></span> <span class="keyword">boolean</span><span class="punctuation">)</span><span class="punctuation">:</span> <span class="typeParameterName"><span class="identifier">T</span></span><span class="punctuation">[</span><span class="punctuation">]</span> <span class="punctuation">{</span>
     <span class="keyword">return</span> <span class="identifier">arr</span><span class="punctuation">.</span><span class="identifier">filter</span><span class="punctuation">(</span><span class="identifier">func</span><span class="punctuation">)</span><span class="punctuation">;</span>
@@ -192,7 +192,7 @@ That's always a red flag, because it means callers wanting to specify type argum
 <blockquote>
   <p><strong>Rule</strong>: Always use as few type parameters as possible</p>
 </blockquote>
-<h4 id="type-parameters-should-appear-twice">Type Parameters Should Appear Twice</h4>
+<h4 id="type-parameters-should-appear-twice"><a href="#type-parameters-should-appear-twice">Type Parameters Should Appear Twice</h4></a>
 <p>Sometimes we forget that function doesn't need to be generic:</p>
 <p><pre class="typescript-code"><span class="keyword">function</span> <span class="identifier">greet</span><span class="punctuation"><</span><span class="typeParameterName"><span class="typeParameterName">S</span></span> <span class="keyword">extends</span> <span class="keyword">string</span><span class="punctuation">></span><span class="punctuation">(</span><span class="parameterName">s</span><span class="punctuation">:</span> <span class="typeParameterName"><span class="identifier">S</span></span><span class="punctuation">)</span> <span class="punctuation">{</span>
   <span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="stringLiteral">"Hello, "</span> <span class="operator">+</span> <span class="identifier">s</span><span class="punctuation">)</span><span class="punctuation">;</span>

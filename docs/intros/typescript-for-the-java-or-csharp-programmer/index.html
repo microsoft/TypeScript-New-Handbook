@@ -103,7 +103,7 @@ In fact, the <code>Pointlike</code> type is not present <em>in any form</em> at 
 <p>Going back to the idea of <em>types as sets</em>, we can think of <code>obj</code> as being a member of both the <code>Pointlike</code> set of values and the <code>Named</code> set of values.</p>
 <h3 id="consequences-of-structural-typing"><a href="#consequences-of-structural-typing">Consequences of Structural Typing</h3></a>
 <p>OOP programmers are often surprised by two particular aspects of structural typing.</p>
-<h4 id="empty-types">Empty Types</h4>
+<h4 id="empty-types"><a href="#empty-types">Empty Types</h4></a>
 <p>The first is that the <em>empty type</em> seems to defy expectation:</p>
 <p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">Empty</span></span> <span class="punctuation">{</span> <span class="punctuation">}</span>
 
@@ -120,7 +120,7 @@ Therefore, this is a valid call!</p>
 <p>This may seem surprising, but it's ultimately a very similar to relationship to one enforced in nominal OOP languages.
 A subclass cannot <em>remove</em> a property of its base class, because doing so would destroy the natural subtype relationship between the derived class and its base.
 Structural type systems simply identify this relationship implicitly by describing subtypes in terms of having properties of compatible types.</p>
-<h4 id="identical-types">Identical Types</h4>
+<h4 id="identical-types"><a href="#identical-types">Identical Types</h4></a>
 <p>Another frequent source of surprise comes with identical types:</p>
 <p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">Car</span></span> <span class="punctuation">{</span>
     <span class="identifier">drive</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
