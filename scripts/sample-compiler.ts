@@ -153,15 +153,15 @@ function setOption(name: string, value: string, opts: ts.CompilerOptions) {
     console.error(`No compiler setting named ${name} exists!`);
 }
 
-function removeCompilerSettings(codeLines: string[], defaultCompilerOptions: ts.CompilerOptions) {
-    const options = {...defaultCompilerOptions};
-    for (let i = 0; i < codeLines.length; ) {
+function filterCompilerOptions(codeLines: string[], defaultCompilerOptions: ts.CompilerOptions) {
+    const options = { ...defaultCompilerOptions };
+    for (let i = 0; i < codeLines.length;) {
         let match;
         if (match = /^\/\/\s?@(\w+)$/.exec(codeLines[i])) {
             options[match[1]] = true;
-            setOption(match[1], "true", defaultCompilerOptions);
+            setOption(match[1], "true", options);
         } else if (match = /^\/\/\s?@(\w+):\s?(\w+)$/.exec(codeLines[i])) {
-            setOption(match[1], match[2], defaultCompilerOptions);
+            setOption(match[1], match[2], options);
         } else {
             i++;
             continue;
@@ -192,7 +192,7 @@ export function getCompilerExtension() {
 
                 const codeLines = code.split(/\r\n?|\n/g);
 
-                const options = removeCompilerSettings(codeLines, defaultCompilerOptions);
+                const options = filterCompilerOptions(codeLines, { ...defaultCompilerOptions });
                 lsHost.setOptions(options);
 
                 // Remove ^^^^^^ lines from example and store

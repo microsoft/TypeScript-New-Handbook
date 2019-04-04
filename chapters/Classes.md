@@ -21,24 +21,110 @@ This class isn't very useful yet, so let's start adding some members.
 
 ### Fields
 
+A field declaration creates a public writeable property on a class:
+
 ```ts
-//@strictPropertyInitialization: false
+// @strictPropertyInitialization: false
 class Point {
     x: number;
     y: number;
 }
+
+const pt = new Point();
+pt.x = 0;
+pt.y = 0;
 ```
 
+As with other locations, the type annotation is optional, but will be an implict `any` if not specified.
+
+Fields can also have *initializers*; these will run automatically when the class is instantiated:
+```ts
+class Point {
+    x = 0;
+    y = 0;
+}
+
+const pt = new Point();
+// Prints 0, 0
+console.log(`${pt.x}, ${pt.y}`);
+```
+
+Just like with `const`, `let`, and `var`, the initializer of a class property will be used to infer its type:
+
+```ts
+class Point {
+    x = 0;
+    y = 0;
+}
+//cut
+const pt = new Point();
+pt.x = "0";
+```
+
+#### `--strictPropertyInitialization`
+
+The `--strictPropertyInitialization` setting (in the `strict` family, see [[--strict]]) controls whether class fields need to be initialized in the constructor.
+
+```ts
+class BadGreeter {
+  name: string;
+}
+```
+
+```ts
+class GoodGreeter {
+  name: string;
+
+  constructor() {
+    this.name = "hello";
+  }
+}
+```
+
+Note that the field needs to be initialized *in the constructor itself*.
+TypeScript does not analyze methods you invoke from the constructor to detect initializations, because a derived class might override those methods and fail to initialize the members.
+
+If you intend to definitely initialize a field through means other than the constructor (for example, maybe an external library is filling in part of your class for you), you can use the *definite assignment assertion operator*, `!`:
+
+```ts
+class OKGreeter {
+  // Not initialized, but no error
+  name!: string;
+}
+```
+
+#### `readonly`
+
+Fields may be prefixed with the `readonly` modifier.
+This prevents assignments to the field outside of the constructor.
+
+```ts
+class Greeter {
+  readonly name: string = "world";
+
+  constructor(otherName?: string) {
+    if (otherName !== undefined) {
+      this.name = otherName;
+    }
+  }
+
+  err() {
+    this.name = "not ok";
+  }
+}
+const g = new Greeter();
+g.name = "also not ok";
+```
 
 ### Constructors
+
+
 
 ### Methods
 
 ### Getters / Setters
 
 ### Index Signatures
-
-#### `--strictPropertyInitialization`
 
 ## Class Heritage
 
