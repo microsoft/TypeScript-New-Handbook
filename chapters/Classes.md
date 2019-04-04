@@ -118,11 +118,121 @@ g.name = "also not ok";
 
 ### Constructors
 
+[Background Reading: Constructor (MDN)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/constructor)
 
+Class constructors are very similar to functions.
+You can add parameters with type annotations, default values, and overloads:
+
+```ts
+class Point {
+  x: number;
+  y: number;
+
+  // Normal signature with defaults
+  constructor(x = 0, y = 0) {
+    this.x = x;
+    this.y = y;
+  }
+}
+```
+
+```ts
+class Point {
+  // Overloads
+  constructor(x: number, y: string);
+  constructor(s: string);
+  constructor(xs: any, y?: any) {
+    // TBD
+  }
+}
+```
+
+There are just a few differences between class constructor signatures and function signatures:
+ * Constructors can't have type parameters - these belong on the outer class declaration, which we'll learn about later
+ * Constructors can't have return type annotations - the class instance type is always what's returned
+
+#### Super Calls
+
+Just as in JavaScript, if you have a base class, you'll need to call `super();` in your constructor body before using any `this.` members:
+
+```ts
+class Base {
+  k = 4;
+}
+
+class Derived extends Base {
+  constructor() {
+    // Prints a wrong value in ES5; throws exception in ES6
+    console.log(this.k);
+    super();
+  }
+}
+```
+
+Forgetting to call `super` is an easy mistake to make in JavaScript, but TypeScript will tell you when it's necessary
 
 ### Methods
 
+[Background Reading: Method definitions (MDN)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Method_definitions)
+
+Methods can use all the same type annotations as functions and constructors:
+
+```ts
+class Point {
+  x = 10;
+  y = 10;
+
+  scale(n: number): void {
+    this.x *= n;
+    this.y *= n;
+  }
+}
+```
+
+Other than the standard type annotations, TypeScript doesn't add anything else new to methods.
+
+Note that inside a method body, it is still mandatory to access fields and other methods via `this.`.
+An unqualified name in a method body will always refer to something in the enclosing scope:
+
+```ts
+let x: number = 0;
+
+class C {
+  x: string = "hello";
+
+  m() {
+    // This is trying to modify 'x' from line 1, not the class property
+    x = "world";
+  }
+}
+```
+
 ### Getters / Setters
+
+Classes can also have *accessors*:
+
+```ts
+class C {
+  _length = 0;
+  get length() {
+    return this._length;
+  }
+  set length(value) {
+    this._length = value;
+  }
+}
+```
+
+> Note that a field-backed get/set pair with no extra logic is very rarely useful in JavaScript.
+> It's fine to expose public fields if you don't need to add additional logic during the get/set operations.
+
+TypeScript has some special inference rules for accessors:
+ * If no `set` exists, the property is automatically `readonly`
+ * The type of the setter parameter is inferred from the return type of the getter
+ * If the setter parameter has a type annotation, it must match the return type of the getter
+ * Getters and setters must have the same [[Member Visibility]]
+
+It is not possible to have accessors with different types for getting and setting.
 
 ### Index Signatures
 
@@ -165,7 +275,14 @@ g.name = "also not ok";
 
 ## Class Expressions
 
+## `abstract` Classes and Methods
+
 ## Relationships Between Classes
+
+## Constructor Functions and Instance Types
+
+## Handling Generic Constructors
+
 
 ## Impact of the Class Fields Proposal
 

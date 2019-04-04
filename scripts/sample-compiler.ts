@@ -181,7 +181,8 @@ export function getCompilerExtension() {
     const docRegistry = ts.createDocumentRegistry(caseSensitiveFilenames, lsHost.getCurrentDirectory());
     const ls = ts.createLanguageService(lsHost, docRegistry);
     const defaultCompilerOptions: ts.CompilerOptions = {
-        strict: true
+        strict: true,
+        target: ts.ScriptTarget.ESNext
     };
     const ext: showdown.ShowdownExtension[] = [
         {
