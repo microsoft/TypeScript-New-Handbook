@@ -9,23 +9,36 @@ __toc__
 
 ## Class Members
 
-A class
+Here's the most basic class - an empty one:
+
+```ts
+class Point {
+
+}
+```
+
+This class isn't very useful yet, so let's start adding some members.
+
+### Fields
+
+```ts
+//@strictPropertyInitialization: false
+class Point {
+    x: number;
+    y: number;
+}
+```
+
 
 ### Constructors
 
 ### Methods
 
-### Fields
-
-#### `--strictPropertyInitialization`
-
-#### Class Fields Proposal
-
 ### Getters / Setters
 
 ### Index Signatures
 
-
+#### `--strictPropertyInitialization`
 
 ## Class Heritage
 
@@ -62,6 +75,14 @@ A class
 ### `--strictThis`
 
 ## Parameter Properties
+
+
+## Class Expressions
+
+## Relationships Between Classes
+
+## Impact of the Class Fields Proposal
+
 
 
   * Basics

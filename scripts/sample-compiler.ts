@@ -2,6 +2,17 @@ import fs = require("fs");
 import ts = require("typescript");
 import utils = require("./utils");
 
+// Hacking in some internal stuff
+declare module "typescript" {
+    type Option = {
+        name: string;
+        type: "list" | "boolean" | "number" | "string" | ts.Map<number>;
+        element?: Option;
+    }
+
+    const optionDeclarations: Array<Option>;
+}
+
 const { strrep, escapeHtml } = utils;
 
 function cleanMarkdownEscaped(code: string) {
@@ -10,13 +21,13 @@ function cleanMarkdownEscaped(code: string) {
     return code;
 }
 
-function createLanguageServiceHost(ref: SampleRef): ts.LanguageServiceHost {
-    const options: ts.CompilerOptions = {
+function createLanguageServiceHost(ref: SampleRef): ts.LanguageServiceHost & { setOptions(opts: ts.CompilerOptions): void } {
+    let options: ts.CompilerOptions = {
         allowJs: true,
         skipLibCheck: true,
         strict: true
     };
-    const servicesHost: ts.LanguageServiceHost = {
+    const servicesHost: ReturnType<typeof createLanguageServiceHost> = {
         getScriptFileNames: () => [ref.fileName!],
         getScriptVersion: fileName => ref.fileName === fileName ? "" + ref.versionNumber : "0",
         getScriptSnapshot: fileName => {
@@ -35,6 +46,9 @@ function createLanguageServiceHost(ref: SampleRef): ts.LanguageServiceHost {
         fileExists: ts.sys.fileExists,
         readFile: ts.sys.readFile,
         readDirectory: ts.sys.readDirectory,
+        setOptions(newOpts) {
+            options = newOpts;
+        }
     };
     return servicesHost;
 }
@@ -47,33 +61,35 @@ interface SampleRef {
 
 type QueryPosition = { kind: "query", position: number, offset: number };
 type HighlightPosition = { kind: "highlight", position: number, length: number, description: string };
-function filterHighlightLines(arr: string[]): { codeLines: string[], highlights: HighlightPosition[], queries: QueryPosition[] } {
-    const codeLines: string[] = [];
+function filterHighlightLines(codeLines: string[]): { highlights: HighlightPosition[], queries: QueryPosition[] } {
     const highlights: HighlightPosition[] = [];
     const queries: QueryPosition[] = [];
     let nextContentOffset = 0;
     let contentOffset = 0;
-    for (let i = 0; i < arr.length; i++) {
-        const line = arr[i];
+    for (let i = 0; i < codeLines.length; i++) {
+        const line = codeLines[i];
         const highlightMatch = /^\s*\^+( .+)?$/.exec(line);
         const queryMatch = /^\s*\^\?$/.exec(line);
         if (queryMatch !== null) {
             const start = line.indexOf("^");
             const position = contentOffset + start;
             queries.push({ kind: "query", offset: start, position });
+            codeLines.splice(i, 1);
+            i--;
         } else if (highlightMatch !== null) {
             const start = line.indexOf("^");
             const length = line.lastIndexOf("^") - start + 1;
             const position = contentOffset + start;
             const description = highlightMatch[1] ? highlightMatch[1].trim() : "";
             highlights.push({ kind: "highlight", position, length, description });
+            codeLines.splice(i, 1);
+            i--;
         } else {
-            codeLines.push(line);
             contentOffset = nextContentOffset;
             nextContentOffset += line.length + 1;
         }
     }
-    return { codeLines, highlights, queries };
+    return { highlights, queries };
 }
 
 type Tagging = {
@@ -109,6 +125,52 @@ function serverSpansToTaggings(arr: number[]) {
     return taggings;
 }
 
+function setOption(name: string, value: string, opts: ts.CompilerOptions) {
+    for (const opt of ts.optionDeclarations) {
+        if (opt.name.toLowerCase() === name.toLowerCase()) {
+            switch (opt.type) {
+                case "number":
+                case "string":
+                case "boolean":
+                    opts[opt.name] = parsePrimitive(value, opt.type);
+                    break;
+
+                case "list":
+                    opts[opt.name] = value.split(',').map(v => parsePrimitive(v, opt.element!.type as string));
+                    break;
+
+                default:
+                    opts[opt.name] = opt.type.get(value.toLowerCase());
+                    if (opts[opt.name] === undefined) {
+                        const keys = Array.from(opt.type.keys() as any);
+                        console.error(`Invalid value ${value} for ${opt.name}. Allowed values: ${keys.join(",")}`);
+                    }
+                    break;
+            }
+            return;
+        }
+    }
+    console.error(`No compiler setting named ${name} exists!`);
+}
+
+function removeCompilerSettings(codeLines: string[], defaultCompilerOptions: ts.CompilerOptions) {
+    const options = {...defaultCompilerOptions};
+    for (let i = 0; i < codeLines.length; ) {
+        let match;
+        if (match = /^\/\/\s?@(\w+)$/.exec(codeLines[i])) {
+            options[match[1]] = true;
+            setOption(match[1], "true", defaultCompilerOptions);
+        } else if (match = /^\/\/\s?@(\w+):\s?(\w+)$/.exec(codeLines[i])) {
+            setOption(match[1], match[2], defaultCompilerOptions);
+        } else {
+            i++;
+            continue;
+        }
+        codeLines.splice(i, 1);
+    }
+    return options;
+}
+
 export function getCompilerExtension() {
     const matches: string[] = [];
     let self = false;
@@ -118,8 +180,7 @@ export function getCompilerExtension() {
     const caseSensitiveFilenames = lsHost.useCaseSensitiveFileNames && lsHost.useCaseSensitiveFileNames();
     const docRegistry = ts.createDocumentRegistry(caseSensitiveFilenames, lsHost.getCurrentDirectory());
     const ls = ts.createLanguageService(lsHost, docRegistry);
-    // const compilerOptions = lsHost.getCompilationSettings();
-    const compilerOptions: ts.CompilerOptions = {
+    const defaultCompilerOptions: ts.CompilerOptions = {
         strict: true
     };
     const ext: showdown.ShowdownExtension[] = [
@@ -129,8 +190,13 @@ export function getCompilerExtension() {
             replace: function (_: string, extension: string, code: string) {
                 code = cleanMarkdownEscaped(code);
 
+                const codeLines = code.split(/\r\n?|\n/g);
+
+                const options = removeCompilerSettings(codeLines, defaultCompilerOptions);
+                lsHost.setOptions(options);
+
                 // Remove ^^^^^^ lines from example and store
-                const { codeLines, highlights, queries } = filterHighlightLines(code.split(/\r\n?|\n/g));
+                const { highlights, queries } = filterHighlightLines(codeLines);
                 code = codeLines.join("\n");
 
                 sampleFileRef.fileName = "input." + extension;
@@ -139,7 +205,7 @@ export function getCompilerExtension() {
 
                 const scriptSnapshot = lsHost.getScriptSnapshot(sampleFileRef.fileName);
                 const scriptVersion = "" + sampleFileRef.versionNumber;
-                docRegistry.updateDocument(sampleFileRef.fileName, compilerOptions, scriptSnapshot!, scriptVersion);
+                docRegistry.updateDocument(sampleFileRef.fileName, options, scriptSnapshot!, scriptVersion);
 
                 const syntaxSpans = ls.getEncodedSyntacticClassifications(sampleFileRef.fileName, ts.createTextSpan(0, code.length)).spans;
                 const semanticSpans = ls.getEncodedSemanticClassifications(sampleFileRef.fileName, ts.createTextSpan(0, code.length)).spans;
@@ -269,4 +335,13 @@ export function getCompilerExtension() {
         }
     ];
     return ext;
+}
+
+function parsePrimitive(value: string, type: string): any {
+    switch (type) {
+        case "number": return +value;
+        case "string": return value;
+        case "boolean": return (value.toLowerCase() === "true") || (value.length === 0);
+    }
+    throw new Error(`Unknown primitive type ${type}`);
 }
