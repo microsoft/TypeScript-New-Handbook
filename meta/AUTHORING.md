@@ -1,5 +1,7 @@
 # Authoring Guide
 
+__toc__
+
 ## Testing
 
 To work on the Handbook:
@@ -9,13 +11,41 @@ To work on the Handbook:
 This will start a live development server at [http://localhost:8087](http://localhost:8087).
 These pages will reload automatically on edits to page contents or CSS.
 
+## Encouraged Lesser-Known Syntax
+
+### Anchor Links
+
+Use `{#anchor-name}` to specify a custom page anchor name on a header:
+
+```
+  ### My Section Title about Things I Like {#things-i-like}
+```
+
 ## Special Syntax
 
-#### Table of Contents: `__toc__`
+### Inter-page Links
 
-Write `__toc__` on a line by itself to insert the Table of Contents for a page
+Use <tt>&lsqb;&lsqb;Section Name&rsqb;&rsqb;</tt> to link to a section anywhere in the Handbook or Reference Pages by its title.
+The link text will always be the name of that section.
 
-#### Code Highlights: `^^^^^`
+This accepts any combination of the following:
+ * The title of the section
+    * e.g. <tt>&lsqb;&lsqb;Function Expressions&rsqb;&rsqb;</tt> ⟹ [[Function Expressions]]
+ * The anchor name itself with a leading `#` (even if this anchor is on another page)
+    * e.g. <tt>&lsqb;&lsqb;#parameter-type-annotations&rsqb;&rsqb;</tt> ⟹ [[#parameter-type-annotations]]
+ * The anchor name qualified by a page name
+    * e.g. <tt>&lsqb;&lsqb;everyday-types#functions&rsqb;&rsqb;</tt> ⟹ [[everyday-types#functions]]
+ * Any case-insensitive variant of the above
+    * e.g. <tt>&lsqb;&lsqb;return type annotations&rsqb;&rsqb;</tt> ⟹ [[return type annotations]]
+
+An error will be issued if a link is ambiguous.
+
+### Table of Contents: `__toc__`
+
+Write `__toc__` on a line by itself to insert the Table of Contents for a page.
+See the top of this page for an example.
+
+### Code Highlights: `^^^^^`
 
 You can use carets to highlight a specific part of a code sample:
 <pre>
@@ -31,10 +61,31 @@ function foo() {
 }
 ```
 
-#### `//cut` comments
+### Code QuickInfo Queries: `^?`
+
+You can use `^?` to show the language service's quickinfo response at a location:
+
+<pre>
+function foo() {
+}
+foo();
+ ^?
+</pre>
+
+This will render as:
+
+```ts
+function foo() {
+}
+foo();
+ ^?
+```
+
+### `//cut` comments
 
 Sometimes a code sample should be able to refer to declarations that you don't want to display in a sample.
 Any code above a line containing only `//cut` will not be displayed, but the code will be highlighted and errored as if it were there.
+
 
 ## Walkthrough
 

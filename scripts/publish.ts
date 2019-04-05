@@ -7,7 +7,7 @@ const staging = path.join(home, "docs-staging");
 const prod = path.join(home, "docs");
 
 async function go() {
-    const instance = site.create();
+    const instance = await site.create();
 
     await fs.mkdirp(staging);
     await fs.mkdirp(prod);

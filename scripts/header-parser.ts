@@ -14,7 +14,7 @@ export function getHeaders(body: string): Header[] {
     // # header,
     // followed by some title,
     // with an optional {#anchor} tagging at the end
-    const rgx = /^(#+) ([\w\s\-\/\@`]*?)( \{#(.*)\})?$/gm;
+    const rgx = /^(#+) (.+?)( \{#(.*)\})?$/gm;
 
     let match: RegExpExecArray | null;
     while (match = rgx.exec(body)) {

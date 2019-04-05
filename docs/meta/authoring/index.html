@@ -10,16 +10,38 @@
     <body>
     <article>
     <h1 id="authoring-guide"><a href="#authoring-guide">Authoring Guide</h1></a>
+<div class="toc"><span class="toc-title">Table of Contents</span><ul><li><a href="#testing">Testing</a></li><li><a href="#encouraged-lesser-known-syntax">Encouraged Lesser-Known Syntax</a></li><ul><li><a href="#anchor-links">Anchor Links</a></li></ul><li><a href="#special-syntax">Special Syntax</a></li><ul><li><a href="#inter-page-links">Inter-page Links</a></li><li><a href="#table-of-contents:-__toc__">Table of Contents: <code>__toc__</code></a></li><li><a href="#code-highlights:-^^^^^">Code Highlights: <code>^^^^^</code></a></li><li><a href="#code-quickinfo-queries:-^?">Code QuickInfo Queries: <code>^?</code></a></li><li><a href="#//cut-comments"><code>//cut</code> comments</a></li></ul><li><a href="#walkthrough">Walkthrough</a></li><ul><li><a href="#key-concepts!">Key Concepts!</a></li><li><a href="#reading-level-&-vocabulary">Reading Level &amp; Vocabulary</a></li><li><a href="#voice-(walkthrough)">Voice (Walkthrough)</a></li></ul><li><a href="#reference">Reference</a></li><ul><li><a href="#voice-(reference)">Voice (Reference)</a></li></ul></ul></ul></div>
 <h2 id="testing"><a href="#testing">Testing</h2></a>
 <p>To work on the Handbook:</p>
 <pre><code> &gt; npm run start
 </code></pre>
 <p>This will start a live development server at <a href="http://localhost:8087">http://localhost:8087</a>.
 These pages will reload automatically on edits to page contents or CSS.</p>
+<h2 id="encouraged-lesser-known-syntax"><a href="#encouraged-lesser-known-syntax">Encouraged Lesser-Known Syntax</h2></a>
+<h3 id="anchor-links"><a href="#anchor-links">Anchor Links</h3></a>
+<p>Use <code>{#anchor-name}</code> to specify a custom page anchor name on a header:</p>
+<pre><code>  ### My Section Title about Things I Like {#things-i-like}
+</code></pre>
 <h2 id="special-syntax"><a href="#special-syntax">Special Syntax</h2></a>
-<h4 id="table-of-contents-__toc__">Table of Contents: <code>__toc__</code></h4>
-<p>Write <code>__toc__</code> on a line by itself to insert the Table of Contents for a page</p>
-<h4 id="code-highlights-">Code Highlights: <code>^^^^^</code></h4>
+<h3 id="inter-page-links"><a href="#inter-page-links">Inter-page Links</h3></a>
+<p>Use <tt>&lsqb;&lsqb;Section Name&rsqb;&rsqb;</tt> to link to a section anywhere in the Handbook or Reference Pages by its title.
+The link text will always be the name of that section.</p>
+<p>This accepts any combination of the following:</p>
+<ul>
+<li>The title of the section<ul>
+<li>e.g. <tt>&lsqb;&lsqb;Function Expressions&rsqb;&rsqb;</tt> ⟹ <a href="/chapters/everyday-types#function-expressions">Function Expressions</a></li></ul></li>
+<li>The anchor name itself with a leading <code>#</code> (even if this anchor is on another page)<ul>
+<li>e.g. <tt>&lsqb;&lsqb;#parameter-type-annotations&rsqb;&rsqb;</tt> ⟹ <a href="/chapters/everyday-types#parameter-type-annotations">Parameter Type Annotations</a></li></ul></li>
+<li>The anchor name qualified by a page name<ul>
+<li>e.g. <tt>&lsqb;&lsqb;everyday-types#functions&rsqb;&rsqb;</tt> ⟹ <a href="/chapters/everyday-types#functions">Functions</a></li></ul></li>
+<li>Any case-insensitive variant of the above<ul>
+<li>e.g. <tt>&lsqb;&lsqb;return type annotations&rsqb;&rsqb;</tt> ⟹ <a href="/chapters/everyday-types#return-type-annotations">Return Type Annotations</a></li></ul></li>
+</ul>
+<p>An error will be issued if a link is ambiguous.</p>
+<h3 id="table-of-contents-__toc__"><a href="#table-of-contents-__toc__">Table of Contents: <code>__toc__</code></h3></a>
+<p>Write <code>__toc__</code> on a line by itself to insert the Table of Contents for a page.
+See the top of this page for an example.</p>
+<h3 id="code-highlights-"><a href="#code-highlights-">Code Highlights: <code>^^^^^</code></h3></a>
 <p>You can use carets to highlight a specific part of a code sample:</p>
 <pre>
 function foo() {
@@ -29,7 +51,20 @@ function foo() {
 <p>This will render as:
 <pre class="typescript-code"><span class="keyword">function</span> <span class="identifier"><span class="highlight"><span class="highlight-content"></span><span class="highlight-description">Some text</span>foo</span></span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
 <span class="punctuation">}</span></pre></p>
-<h4 id="cut-comments"><code>//cut</code> comments</h4>
+<h3 id="code-quickinfo-queries-"><a href="#code-quickinfo-queries-">Code QuickInfo Queries: <code>^?</code></h3></a>
+<p>You can use <code>^?</code> to show the language service's quickinfo response at a location:</p>
+<pre>
+function foo() {
+}
+foo();
+ ^?
+</pre>
+<p>This will render as:</p>
+<p><pre class="typescript-code"><span class="keyword">function</span> <span class="identifier">foo</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+<span class="punctuation">}</span>
+<span class="identifier">foo</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+ <span class="quickinfo-result"><span class="quickinfo-arrow">▲</span><span class="keyword">function</span><span class="space"> </span><span class="functionName">foo</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">:</span><span class="space"> </span><span class="keyword">void</span></span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20foo()%20%7B%0A%7D%0Afoo()%3B">Try</a></pre></p>
+<h3 id="cut-comments"><a href="#cut-comments"><code>//cut</code> comments</h3></a>
 <p>Sometimes a code sample should be able to refer to declarations that you don't want to display in a sample.
 Any code above a line containing only <code>//cut</code> will not be displayed, but the code will be highlighted and errored as if it were there.</p>
 <h2 id="walkthrough"><a href="#walkthrough">Walkthrough</h2></a>

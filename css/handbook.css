@@ -197,13 +197,13 @@ a.playground-link, a.playground-link:visited {
     text-decoration: none;
 }
 
-h1 a, h2 a, h3 a {
+h1 a, h2 a, h3 a, h4 a {
     text-decoration: none;
     color: #000;
     position: relative;
 }
 
-h1 a:hover::before, h2 a:hover::before, h3 a:hover::before {
+h1 a:hover::before, h2 a:hover::before, h3 a:hover::before, h4 a:hover::before {
     content: "#";
     position: absolute;
     left: -0.7em;
@@ -211,6 +211,14 @@ h1 a:hover::before, h2 a:hover::before, h3 a:hover::before {
 
 h1 {
     font-size: 170%;
+}
+
+h2 {
+    margin-top: 1.8em;
+}
+
+h3 {
+    margin-top: 1.6em;
 }
 
 hr.error-divider {
