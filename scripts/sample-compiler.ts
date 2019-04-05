@@ -69,7 +69,7 @@ function filterHighlightLines(codeLines: string[]): { highlights: HighlightPosit
     for (let i = 0; i < codeLines.length; i++) {
         const line = codeLines[i];
         const highlightMatch = /^\s*\^+( .+)?$/.exec(line);
-        const queryMatch = /^\s*\^\?$/.exec(line);
+        const queryMatch = /^\s*\^\?\s*$/.exec(line);
         if (queryMatch !== null) {
             const start = line.indexOf("^");
             const position = contentOffset + start;
