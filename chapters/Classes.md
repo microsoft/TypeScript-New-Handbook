@@ -63,7 +63,7 @@ pt.x = "0";
 
 #### `--strictPropertyInitialization`
 
-The `--strictPropertyInitialization` setting (in the `strict` family, see [[--strict]]) controls whether class fields need to be initialized in the constructor.
+The [[strictPropertyInitialization]] setting controls whether class fields need to be initialized in the constructor.
 
 ```ts
 class BadGreeter {
@@ -169,12 +169,13 @@ class Derived extends Base {
 }
 ```
 
-Forgetting to call `super` is an easy mistake to make in JavaScript, but TypeScript will tell you when it's necessary
+Forgetting to call `super` is an easy mistake to make in JavaScript, but TypeScript will tell you when it's necessary.
 
 ### Methods
 
-[Background Reading: Method definitions (MDN)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Method_definitions)
+>> [Background Reading: Method definitions (MDN)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Method_definitions)
 
+A function property on a class is called a *method*.
 Methods can use all the same type annotations as functions and constructors:
 
 ```ts
@@ -234,17 +235,202 @@ TypeScript has some special inference rules for accessors:
 
 It is not possible to have accessors with different types for getting and setting.
 
-### Index Signatures
+### Index Signatures {#class-index-signatures}
+
+Classes can declare index signatures; these work the same as [[Index Signatures]] for other object types:
+
+```ts
+class MyClass {
+  [s: string]: boolean | ((s: string) => boolean);
+  check(s: string) {
+    return this[s] as boolean;
+  }
+}
+```
+
+Because the index signature type needs to also capture the types of methods, it's not easy to usefully use these types.
+Generally it's better to store indexed data in another place instead of on the class instance itself.
 
 ## Class Heritage
 
+Like other langauges with object-oriented features, classes in JavaScript can inherit from base classes.
+
 ### `implements` Clauses
 
-### `extends` Clauses
+You can use an `implements` clause to check that a class satisfies a particular `interface`.
+An error will be issued if a class fails to correctly implement it:
+
+```ts
+interface Pingable {
+  ping(): void;
+}
+
+class Sonar implements Pingable {
+  ping() {
+    console.log('ping!');
+  }
+}
+
+class Ball implements Pingable {
+  pong() {
+    console.log('pong!');
+  }
+}
+```
+
+Classes may also implement multiple interfaces, e.g. `class C implements A, B {`.
 
 #### Cautions
 
+It's important to understand that an `implements` clause is only a check that the class can be treated as the interface type.
+It doesn't change the type of the class or its methods *at all*.
+A common source of error is to assume that an `implements` clause will change the class type - it doesn't!
+
+```ts
+// @noImplicitAny: false
+interface Checkable {
+  check(name: string): boolean;
+}
+class NameChecker implements Checkable {
+  check(s) {
+    // Notice no error here
+    return s.toLowercse() === "ok";
+           ^?
+  }
+}
+```
+
+In this example, we perhaps expected that `s`'s type would be influenced by the `name: string` parameter of `check`.
+It is not - `implements` clauses don't change how the class body is checked or its type inferred.
+
+Similarly, implementing an interface with an optional property doesn't create that property:
+
+```ts
+interface A {
+  x: number;
+  y?: number;
+}
+class C implements A {
+  x = 0;
+}
+const c = new C();
+c.y = 10;
+```
+
+### `extends` Clauses
+
+>> [Background Reading: extends keyword (MDN)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/extends)
+
+Classes may `extend` from a base class.
+A derived class has all the properties and methods of its base class, and also define additional members.
+
+```ts
+class Animal {
+  move() {
+    console.log("Moving along!");
+  }
+}
+
+class Dog extends Animal {
+  woof(times: number) {
+    for (let i = 0; i < times; i++) {
+      console.log("woof!");
+    }
+  }
+}
+
+const d = new Dog();
+// Base class method
+d.move();
+// Derived class method
+d.woof(3);
+```
+
+#### Overriding Methods
+
+>> [Background reading: super keyword (MDN)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/super)
+
+A derived class can also override a base class field or property.
+You can use the `super.` syntax to access base class methods.
+Note that because JavaScript classes are a simple lookup object, there is no notion of a "super field".
+
+TypeScript enforces that a derived class is always a subtype of its base class.
+
+For example, here's a legal way to override a method:
+```ts
+class Base {
+  greet() {
+    console.log("Hello, world!");
+  }
+}
+
+class Derived extends Base {
+  greet(name?: string) {
+    if (name === undefined) {
+      super.greet();
+    } else {
+      console.log(`Hello, ${name.toUpperCase()}`);
+    }
+  }
+}
+
+const d = new Derived();
+d.greet();
+d.greet("reader");
+```
+
+It's important that a derived class follow its base class contract.
+Remember that it's very common (and always legal!) to refer to a derived class instance through a base class reference:
+
+```ts
+class Base {
+  greet() {
+    console.log("Hello, world!");
+  }
+}
+declare const d: Base;
+//cut
+// Alias the derived instance through a base class reference
+const b: Base = d;
+// No problem
+b.greet();
+```
+
+What if `Derived` didn't follow `Base`'s contract?
+
+```ts
+class Base {
+  greet() {
+    console.log("Hello, world!");
+  }
+}
+
+class Derived extends Base {
+  // Make this parameter required
+  greet(name: string) {
+    console.log(`Hello, ${name.toUpperCase()}`);
+  }
+}
+```
+
+If we compiled this code despite the error, this sample would then crash:
+
+```ts
+declare class Base  { greet(): void };
+declare class Derived extends Base { }
+//cut
+const b: Base = new Derived();
+// Crashes because "name" will be undefined
+b.greet();
+```
+
+#### Initialization Order and Virtual Behavior
+
+
+
 #### Inheriting Built-in Types
+
+
 
 ## Member Visibility
 

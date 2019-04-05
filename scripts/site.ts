@@ -4,6 +4,7 @@ import fs = require('fs-extra');
 
 import render = require('./render');
 import { Outline } from './master-outline-generator';
+import { Everything } from './everything-generator';
 import { fileNameToUrlName } from './utils';
 import { getHeaders } from './header-parser';
 
@@ -41,7 +42,8 @@ export async function create() {
     site.addFileProvider({
         async getServerFiles() {
             return [
-                Outline
+                Outline,
+                Everything
             ];
         }
     });

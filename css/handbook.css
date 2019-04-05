@@ -57,6 +57,7 @@ pre.typescript-code {
     border: solid #777 1px;
     line-height: 1.5em;
     min-width: 30em;
+    border-radius: 8px;
 
     box-shadow: 0px 0px 8px #00000020;
 }
@@ -185,11 +186,8 @@ a.playground-link {
     right: 0px;
     padding: 6px;
     background-color: #0074c1;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
-    border: solid white 1px;
-    border-bottom: 0px;
-    border-right: 0px;
+    border-top-left-radius: 7px;
+    border-bottom-right-radius: 7px;
 }
 
 a.playground-link, a.playground-link:visited {
@@ -245,3 +243,13 @@ blockquote {
     border-left: solid #EEB 4px;
 }
 
+aside {
+    width: fit-content;
+    margin-left: 0.5em;
+    padding: 0.1em;
+    padding-left: 1em;
+    padding-right: 1em;
+    background: #EEEEFF;
+    border: solid #33338855 3px;
+    border-radius: 17px;
+}

@@ -28,6 +28,14 @@ showdown.extension("toc", function () {
     }];
 });
 
+showdown.extension("aside", function () {
+    return {
+        type: 'output',
+        regex: /<blockquote>\s*<blockquote>([\s\S]+?)<\/blockquote>\s*<\/blockquote>/g,
+        replace: `<aside>$1</aside>`
+    };
+});
+
 let topicMap: { [name: string]: { link: string, title: string; } | { targets: string[] } } = {};
 export function updateTopicTargets(map: typeof topicMap) {
     topicMap = map;
@@ -65,6 +73,7 @@ export function render(content: string) {
     conv.addExtension(sampleCompiler, "ts");
     conv.useExtension("header-link");
     conv.useExtension("toc");
+    conv.useExtension("aside");
     conv.useExtension("topic-link");
     return conv.makeHtml(content);
 }

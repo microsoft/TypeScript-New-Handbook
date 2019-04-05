@@ -242,6 +242,7 @@
     * Actually two kinds (instantiated vs not)
   * Merging
 
+ * Appendix: Commandline flags
  * Appendix: Symbols / unique symbols
  * Appendix: JS Doc in lieu of .ts
  * Appendix: Decorators

@@ -182,7 +182,8 @@ export function getCompilerExtension() {
     const ls = ts.createLanguageService(lsHost, docRegistry);
     const defaultCompilerOptions: ts.CompilerOptions = {
         strict: true,
-        target: ts.ScriptTarget.ESNext
+        target: ts.ScriptTarget.ESNext,
+        allowJs: true
     };
     const ext: showdown.ShowdownExtension[] = [
         {
