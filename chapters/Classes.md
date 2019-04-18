@@ -93,7 +93,7 @@ class OKGreeter {
 }
 ```
 
-#### `readonly`
+### `readonly` {#readonly-class-properties}
 
 Fields may be prefixed with the `readonly` modifier.
 This prevents assignments to the field outside of the constructor.
@@ -234,6 +234,8 @@ TypeScript has some special inference rules for accessors:
  * Getters and setters must have the same [[Member Visibility]]
 
 It is not possible to have accessors with different types for getting and setting.
+
+If you have a getter without a setter, the field is automatically `readonly`
 
 ### Index Signatures {#class-index-signatures}
 
@@ -434,15 +436,256 @@ b.greet();
 
 ## Member Visibility
 
-(syntax)
+You can use TypeScript to control whether certain methods or properties are visible to code outside the class.
 
 ### `public`
 
+The default visibility of class members is `public`.
+A `public` member can be accessed by anywhere:
+
+```ts
+class Greeter {
+  public greet() {
+    console.log("hi!");
+  }
+}
+const g = new Greeter();
+g.greet();
+```
+
+Because `public` is already the default visibility modifier, you don't ever *need* to write it on a class member, but might choose to do so for style/readability reasons.
+
 ### `protected`
+
+`protected` members are only visible to subclasses of the class they're declared in.
+
+```ts
+class Greeter {
+  public greet() {
+    console.log("Hello, " + this.getName());
+  }
+  protected getName() {
+    return "hi";
+  }
+}
+
+class SpecialGreeter extends Greeter {
+  public howdy() {
+    // OK to access protected member here
+    console.log("Howdy, " + this.getName());
+                            ^^^^^^^^^^^^^^
+  }
+}
+const g = new SpecialGreeter();
+g.greet(); // OK
+g.getName();
+```
+
+#### Exposure of `protected` members
+
+Derived classes need to follow their base class contracts, but may choose to expose a more general type with more capabilities.
+This includes making `protected` members `public`:
+
+```ts
+class Base {
+  protected m = 10;
+}
+class Derived extends Base {
+  // No modifier, so default is 'public'
+  m = 15;
+}
+const d = new Derived();
+console.log(d.m); // OK
+```
+
+Note that `Derived` was already able to freely read and write `m`, so this doesn't meaningfully alter the "security" of this situation.
+The main thing to note here is that in the derived class, we need to be careful to repeat the `protected` modifier if this exposure isn't intentional.
+
+#### Cross-hierarchy `protected` access
+
+Different OOP languages disagree about whether it's legal to access a `protected` member through a base class reference:
+
+```ts
+class Base {
+    protected x: number = 1;
+}
+class Derived1 extends Base {
+    protected x: number = 5;
+}
+class Derived2 extends Base {
+    f1(other: Derived2) {
+        other.x = 10;
+    }
+    f2(other: Base) {
+        other.x = 10;
+    }
+}
+```
+
+Java, for example, considers this to be legal.
+On the other hand, C# and C++ chose that this code should be illegal.
+
+TypeScript sides with C# and C++ here, because accessing `x` in `Derived2` should only be legal from `Derived2`'s subclasses, and `Derived1` isn't one of them.
+Moreover, if accessing `x` through a `Derived2` reference is illegal (which it certainly should be!), then accessing it through a base class reference should never improve the situation.
+
+See also [Why Can’t I Access A Protected Member From A Derived Class?](https://blogs.msdn.microsoft.com/ericlippert/2005/11/09/why-cant-i-access-a-protected-member-from-a-derived-class/) which explains more of C#'s reasoning.
 
 ### `private`
 
+`private` is like `protected`, but doesn't allow access to the member even from subclasses:
+
+```ts
+class Base {
+  private x = 0;
+}
+const b = new Base();
+// Can't access from outside the class
+console.log(b.x);
+```
+
+```ts
+class Base {
+  private x = 0;
+}
+//cut
+class Derived extends Base {
+  showX() {
+    // Can't access in subclasses
+    console.log(this.x);
+  }
+}
+```
+
+Because `private` members aren't visible to derived classes, a derived class can't increase its visibility:
+
+
+```ts
+class Base {
+  private x = 0;
+}
+class Derived extends Base {
+  x = 1;
+}
+```
+
+#### Cross-instance `private` access
+
+Different OOP languages disagree about whether different instances of the same class may access each others' `private` members.
+While languages like Java, C#, C++, Swift, and PHP allow this, Ruby does not.
+
+TypeScript does allow cross-instance `private` access:
+
+```ts
+class A {
+  private x = 10;
+
+  public sameAs(other: A) {
+    // No error
+    return other.x === this.x;
+  }
+}
+```
+
+#### Caveats {#private-and-runtime-privacy}
+
+Like other aspects of TypeScript's type system, `private` and `protected` are only enforced during type checking.
+This means that JavaScript runtime constructs like `in` or simple property lookup can still access a `private` or `protected` member:
+
+```ts
+class MySafe {
+  private secretKey = 12345;
+}
+```
+```js
+// In a JavaScript file...
+const s = new MySafe();
+// Will print 12345
+console.log(s.secretKey);
+```
+
+If you need to protect values in your class from malicious actors, you should use mechanisms that offer hard runtime privacy, such as closures, weak maps, or [[private fields]].
+
 ## Static Members
+
+>> [Background Reading: Static Members (MDN)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/static)
+
+Classes may have `static` members.
+These members aren't associated with a particular instance of the class.
+They can be accessed through the class constructor object itself:
+
+```ts
+class MyClass {
+  static x = 0;
+  static printX() {
+    console.log(MyClass.x);
+  }
+}
+console.log(MyClass.x);
+MyClass.printX();
+```
+
+Static members can also use the same `public`, `protected`, and `private` visibility modifiers:
+
+```ts
+class MyClass {
+  private static x = 0;
+}
+console.log(MyClass.x);
+```
+
+Static members are also inherited:
+
+```ts
+class Base {
+  static getGreeting() {
+    return "Hello world";
+  }
+}
+class Derived extends Base {
+  myGreeting = Derived.getGreeting();
+}
+```
+
+### Special Static Names
+
+Because classes are themselves functions that can be invoked with `new`, certain `static` names can't be used.
+Function properties like `name`, `length`, and `call` aren't valid to define as `static` members:
+
+```ts
+class S {
+  static name = "S!";
+}
+```
+
+### Why No Static Classes?
+
+TypeScript (and JavaScript) don't have a construct called `static class` the same way C# and Java do.
+
+Those constructs *only* exist because those languages force all data and functions to be inside a class; because that restriction doesn't exist in TypeScript, there's no need for them.
+A class with only a single instance is typically just represented as a normal *object* in JavaScript/TypeScript.
+
+For example, we don't need a "static class" syntax in TypeScript because a regular object (or even top-level function) will do the job just as well:
+
+```ts
+// Unnecessary "static" class
+class MyStaticClass {
+    static doSomething() {
+
+    }
+}
+
+// Preferred (alternative 1)
+function doSomething() {
+
+}
+
+// Preferred (alternative 2)
+const MyHelperObject = {
+    dosomething() {
+
+    }
+}
+```
 
 ## Generic Classes
 

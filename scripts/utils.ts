@@ -11,7 +11,7 @@ export function strrep(text: string, count: number) {
 }
 
 export function textToAnchorName(text: string) {
-    return text.toLowerCase().replace(/ /g, "-").replace(/`|#/g, "");
+    return text.toLowerCase().replace(/ /g, "-").replace(/`|#|\//g, "");
 }
 
 export function fileNameToUrlName(s: string) {
