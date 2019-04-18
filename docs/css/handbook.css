@@ -255,3 +255,9 @@ blockquote {
     border-left: solid #EEB 4px;
 }
 
+aside {
+    margin: 1em;
+    padding: 0.02em 1em 0.02em 1em;
+    background: #FFFFF0;
+    border-left: solid #EEB 4px;
+}

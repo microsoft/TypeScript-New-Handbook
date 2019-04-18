@@ -9,3 +9,4 @@
  * Turn on a linter
  * Enable `[section links]`
  * Disable text selection from tooltips
+ * Semantic HTML, and tag parsing
