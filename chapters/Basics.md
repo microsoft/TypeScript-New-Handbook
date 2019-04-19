@@ -1,4 +1,4 @@
-# Types in JavaScript: they *do* exist!
+# TypeScript Basics
 
 __toc__
 
@@ -33,37 +33,37 @@ let foo = "Hello World!";
 
 As you can probably guess, if we try to run `foo.toLowerCase()`, we'll get the same string, but completely in lower-case letters.
 
-```
-"hello world!"
-```
-
 What about that second line of code?
-If you're familiar with JavaScript, you'll know this fails with a thrown error.
+If you're familiar with JavaScript, you'll know this fails with an exception:
 
 ```
 TypeError: foo is not a function
 ```
 
-Oof - it'd be great if we could avoid mistakes like this.
+It'd be great if we could avoid mistakes like this.
 When we run our code, the way that our JavaScript runtime chooses what to do is by figuring out the *type* of the value - what sorts of behaviors and capabilities it has.
-That's part of what that `TypeError` is alluding to - it's saying that there's nothing to call on the string `"Hello World"`
+That's part of what that `TypeError` is alluding to - it's saying that there's nothing to call on the string `"Hello World"`.
 
-You might have heard of types before and assumed it was a TypeScript-specific concept.
-That's totally understandable - I mean, it's got "type" right there in the name!
-But the truth is that types are firmly baked into JavaScript itself.
-That `TypeError` hinted to it before, but we can also see this for ourselves using the `typeof` operator.
+For some values, such as the primitives `string` and `number`, we can identify their type at runtime using the `typeof` operator.
+But for other things like functions, there's no corresponding runtime mechanism to identify their types.
+For example, consider this function:
 
 ```js
-typeof 1234; // has type "number"
-
-typeof "hello world" // has type "string"
+function fn(x) {
+    return x.flip();
+}
 ```
 
-These are what we call "runtime types" or "dynamic types".
-When we run our code, the value `1234` has a type called `number`, and the value `"hello world"` has the type `string`.
-When we say that JavaScript is a "dynamically typed" language, we mean the types are there, but we aren't concerned with them until our code actually runs.
+We can *observe* by reading the code that this function will only work if given an object with a callable `flip` property, but JavaScript doesn't surface this information in a way that we can check while the code is running.
+The only way in pure JavaScript to tell what `fn` does with a particular value is to call it and see what happens.
+This kind of behavior makes it hard to predict what code will do before it runs, which means it's harder to know what your code is going to do while you're writing it.
 
-# Static type-checking
+Seen in this way, a *type* is the concept of describing which values are legal to pass to `fn` and which aren't legal.
+JavaScript only truly provides *dynamic* typing - running the code to see what happens.
+
+The alternative is to use a *static* type system to make predictions about what code is legal *before* it runs.
+
+## Static type-checking
 
 Think back to that `TypeError` we got earlier from calling a `string`.
 *Most people* don't like to get any sorts of errors when running their code - those are considered bugs!
@@ -86,12 +86,14 @@ foo();
 
 Running that last sample with TypeScript will give us an error message before we run the code in the first place.
 
-# Bugs beyond runtime errors
+## Non-exception Failures
 
 So far we've been discussing certain things like runtime errors - cases where the JavaScript runtime throws its hands up and tells us that it thinks something is nonsensical.
-Those cases come up because [the ECMAScript specification](https://tc39.github.io/ecma262/) actually declares that trying to call something that isn't callable causes an error.
-Sounds obvious, but you could imagine that accessing a property on an object that doesn't exist would cause an error too.
-Instead, JavaScript gives us different behavior to keep things entertaining and gives us the value `undefined`.
+Those cases come up because [the ECMAScript specification](https://tc39.github.io/ecma262/) has explicit instructions on how the language should behave when it runs into something unexpected.
+
+For example, the specification says that trying to call something that isn't callable should throw an error.
+Maybe that sounds like "obvious behavior", but you could imagine that accessing a property that doesn't exist on an object should throw an error too.
+Instead, JavaScript gives us different behavior and returns the value `undefined`:
 
 ```js
 let foo = {
@@ -102,8 +104,8 @@ let foo = {
 foo.location; // returns undefined
 ```
 
-Ultimately, a static type system has to make the call over what code should be flagged as an error in its system, even if it's valid JavaScript that won't immediately throw an error.
-So in TypeScript, the following code produces an error about `location` not being defined.
+Ultimately, a static type system has to make the call over what code should be flagged as an error in its system, even if it's "valid" JavaScript that won't immediately throw an error.
+In TypeScript, the following code produces an error about `location` not being defined:
 
 ```ts
 let foo = {
@@ -114,7 +116,7 @@ let foo = {
 foo.location; // returns undefined
 ```
 
-While sometimes that implies a tradeoff in what you can express, the intent is to catch legitimate bugs in our programs.
+While sometimes that implies a trade-off in what you can express, the intent is to catch legitimate bugs in our programs.
 And TypeScript catches *a lot* of legitimate bugs.
 For example: typos,
 
@@ -139,37 +141,27 @@ function flipCoin() {
 
 or basic logic errors.
 
-<!-- TODO: this example screws with our tooltips -->
-
 ```ts
-const value =
-    Math.random() < 0.5 ? "a" :
-        Math.random() < 0.5 ? "b" :
-            "c";
-
-// Oops - neither 'else if' branch will ever run!
+const value = Math.random() < 0.5 ? "a" : "b";
 if (value !== "a") {
   // ...
 }
 else if (value === "b") {
-  // ...
-}
-else if (value === "c") {
-  // ...
+  // Oops, unreachable
 }
 ```
 
-# TypeScript tooling
+## Types for Tooling
 
 <!-- TODO: this section's title sucks -->
 
-So TypeScript can catch bugs when we make mistakes in our code.
+TypeScript can catch bugs when we make mistakes in our code.
 That's great, but TypeScript can *also* prevent us from making those mistakes in the first place.
 
-You see, the type-checker has information to check things like whether we're accessing the right properties on variables and other properties.
-But once it has that information, it can also start *suggesting* which properties you might want to use.
+The type-checker has information to check things like whether we're accessing the right properties on variables and other properties.
+Once it has that information, it can also start *suggesting* which properties you might want to use.
 
-That means TypeScript can be leveraged for editing code too, and so the core type-checker can provide error messages and code completion as you type across editors.
+That means TypeScript can be leveraged for editing code too, and the core type-checker can provide error messages and code completion as you type in the editor.
 That's part of what people often refer to when they talk about tooling in TypeScript.
 
 <!-- TODO: insert GIF of completions here -->
@@ -180,9 +172,8 @@ All of this is built on top of the type-checker and fully cross-platform, so it'
 
 <!-- TODO: validate that link -->
 
-# `tsc`, the TypeScript compiler
+## `tsc`, the TypeScript compiler
 
-Alright, alright, let's cut to the chase.
 We've been talking about type-checking, but we haven't yet used our type-*checker*.
 Let's get acquainted with our new friend `tsc`, the TypeScript compiler.
 First we'll need to grab it via npm.
@@ -191,12 +182,8 @@ First we'll need to grab it via npm.
 npm install -g typescript
 ```
 
-> **Side note:** Firstly, if you're on a Unix system like Mac or Linux, you might need a `sudo` at the front there. But secondly, if you're already pretty experienced with JavaScript and the npm ecosystem, you might be taken aback a bit here.
-> You're probably not the only one if you just had a reaction like  "**\*gasp\*** a global npm install!?" or "**\*groan\*** how am I going to fit this into my build system with Webpack/gulp/etc.?"
-> The good news is, no, you don't have to install TypeScript globally.
-> And don't worry, there are many different integrations for TypeScript with existing build tools.
-> If you already know better, then by all means do so with tools like npx, yarn, ts-loader, and gulp-typescript.
-> But this is by far the easiest way to use TypeScript today.
+> This installs the TypeScript Compiler `tsc` globally.
+> You can use `npx` or similar tools if you'd prefer to run `tsc` from a local `node_modules` package instead.
 
 Now let's move to an empty folder and try writing our first TypeScript program: `hello.ts`:
 
@@ -254,7 +241,7 @@ TypeScript is telling us we forgot to pass an argument to the `greet` function, 
 So far we've only written standard JavaScript, and yet type-checking was still able to find problems with our code.
 Thanks TypeScript!
 
-## Errors don't block output
+### Emitting with Errors
 
 One thing you might not have noticed from the last example was that our `hello.js` file changed again.
 If we open that file up then we'll see that the contents still basically look the same as our input file.
@@ -277,7 +264,7 @@ tsc --noEmitOnError hello.ts
 
 You'll notice that `hello.js` never gets updated.
 
-## Explicit types
+## Explicit Types
 
 Up until now, we haven't told TypeScript what `person` or `date` are.
 Let's change up our code a little bit so that we tell TypeScript that `person` is a `string`, and that `date` should be a `Date` object.
@@ -291,7 +278,7 @@ function greet(person: string, date: Date) {
 
 What we did was add *type annotations* on `person` and `date` to describe what types of values `greet` can be called with.
 You can read that signature as "`greet` takes a `person` of type `string`, and a `date` of type `Date`".
-<!-- TODO: is that really necessary? -->
+
 With this, TypeScript can tell us about other cases where we might have been called incorrectly.
 For example...
 
@@ -304,16 +291,10 @@ greet("Maddison", Date());
 ```
 
 Huh?
-TypeScript reported an error on our second argument:
-
-```
-Argument of type 'string' is not assignable to type 'Date'.
-```
+TypeScript reported an error on our second argument, but why?
 
 Perhaps surprisingly, calling `Date()` in JavaScript returns a `string`.
 On the other hand, constructing a `Date` with `new Date()` actually gives us what we were expecting.
-
-> **Side note**: Thanks JavaScript. We still ❤ you though.
 
 Anyway, we can quickly fix up the error:
 
@@ -325,11 +306,7 @@ function greet(person: string, date: Date) {
 greet("Maddison", new Date());
 ```
 
-# Optional types and type inference
-
-<!-- TODO talk about this and 'any' -->
-
-## Stripping types out
+## Erased Types
 
 Let's take a look at what happens when we compile with `tsc`:
 
@@ -350,6 +327,8 @@ Type annotations aren't part of JavaScript (or ECMAScript to be pedantic), so th
 That's why TypeScript needs a compiler in the first place - it needs some way to strip out or transform any TypeScript-specific code so that you can run it.
 Most TypeScript-specific code gets erased away, and likewise, here our type annotations were completely erased.
 
+> **Remember**: Type annotations never change the runtime behavior of your program.
+
 ## Downleveling
 
 One other difference from the above was that our template string was rewritten from
@@ -365,7 +344,8 @@ to
 ```
 
 Why did this happen?
-Well template strings are a feature from a version of ECMAScript called ECMAScript 2015 (a.k.a. ECMAScript 6, ES2015, ES6, etc. - don't ask).
+
+Template strings are a feature from a version of ECMAScript called ECMAScript 2015 (a.k.a. ECMAScript 6, ES2015, ES6, etc. - don't ask).
 TypeScript has the ability to rewrite code from newer versions of ECMAScript to older ones such as ECMAScript 3 or ECMAScript 5 (a.k.a. ES3 and ES5).
 This process from moving from a newer or "higher" version of ECMAScript to an older or "lower" one is sometimes called *downleveling*.
 
@@ -381,13 +361,10 @@ function greet(person, date) {
 greet("Maddison", new Date());
 ```
 
-<!-- TODO: is this side note needed? -->
+> While the default target is ES3, the great majority of running browsers support ES5.
+> Today, most developers can safely specify ES5 or even ES2016 as a target unless compatibility with certain ancient browers is important.
 
-> **For some historical context**, when TypeScript first came out, part of its vision was to provide the future features of JavaScript when they weren't supported in any runtime.
-> Given the fact that TypeScript needed a tool to strip types away, it made a lot of sense for the compiler to downlevel code as well.
-> While today there are other compilers that provide the same functionality and also strip out types (such as Babel), TypeScript is also incredibly efficient at this task, still produces approachable JavaScript output, and has very accurate source-mapping support so you can debug the code that you wrote.
-
-# Strictness
+## Strictness
 
 Users come to TypeScript looking for different things in a type-checker.
 Some people are looking for a more loose opt-in experience which can help validate only some parts of our program and give us decent tooling.
@@ -405,7 +382,7 @@ TypeScript has several type-checking strictness flags that can be turned on or o
 The `--strict` flag toggles them all on simultaneously, but we can opt out of them individually.
 The two biggest ones you should know about are `noImplicitAny` and `strictNullChecks`.
 
-## `noImplicitAny`
+### `noImplicitAny`
 
 Recall that in some places, TypeScript doesn't try to infer any types for us and instead falls back to the most lenient type: `any`.
 This isn't the worst thing that can happen - after all, falling back to `any` is just the JavaScript experience anyway.
@@ -414,7 +391,7 @@ However, using `any` often defeats the purpose of using TypeScript in the first 
 The more typed your program is, the more validation and tooling you'll get, meaning you'll run into fewer bugs as you code.
 Turning on the `noImplicitAny` flag will issue an error on any variables whose type is implicitly inferred as `any`.
 
-## `strictNullChecks`
+### `strictNullChecks`
 
 By default, values like `null` and `undefined` are assignable to any other type.
 This can make writing some code easier, but forgetting to handle `null` and `undefined` is the cause of countless bugs in the world - not even just JavaScript!
