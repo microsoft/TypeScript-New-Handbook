@@ -28,6 +28,12 @@ __toc__
 
 ### `emitBOM`
 
+**Default**: `false`
+
+Controls whether TypeScript will emit a [byte order mark (BOM)](https://en.wikipedia.org/wiki/Byte_order_mark) when writing output files.
+Some runtime environments require a BOM to correctly interpret a JavaScript files; others require that it is not present.
+The default value of `false` is generally best unless you have a reason to change it.
+
 ### `importHelpers`
 
 ### `sourceMap`
@@ -64,6 +70,11 @@ __toc__
 
 ### `charset`
 
+>> ❌ **Deprecated:** This option does nothing.
+
+In prior versions of TypeScript, this controlled what encoding was used when reading text files from disk.
+Today, TypeScript assumes UTF-8 encoding, but will correctly detect UTF-16 (BE and LE) or UTF-8 BOMs.
+
 ## Module Resolution Options
 
 ### `baseUrl`
@@ -94,15 +105,17 @@ __toc__
 
 ### `keyofStringsOnly`
 
+>> ❌ **Discouraged:** This flag was provided for backward compatibility reasons and should not be enabled in new or maintained codebases.
+
+**Default**: `false`
+
+This flag changes the `keyof` type operator to return `string` instead of `string | number` when applied to a type with a string index signature.
+
 ## Linting Options
 
 ### `allowUnreachableCode`
 
 ### `allowUnusedLabels`
-
-## Locale and Encoding
-
-### `emitBOM`
 
 ## Decorators
 
