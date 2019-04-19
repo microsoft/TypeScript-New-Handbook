@@ -19,9 +19,9 @@ JavaScript has three main [primitive](https://developer.mozilla.org/en-US/docs/G
 Each has a corresponding type in TypeScript.
 As you might expect, these are the same names you'd see if you used the JavaScript `typeof` operator on a value of those types:
 
- * `string` represents string values like `"Hello, world"`
- * `number` is for numbers like `42`. JavaScript does not have a special runtime value for integers, so there's no equivalent to `int` or `float` - everything is simply `number`
- * `boolean` is for the two values `true` and `false`
+* `string` represents string values like `"Hello, world"`
+* `number` is for numbers like `42`. JavaScript does not have a special runtime value for integers, so there's no equivalent to `int` or `float` - everything is simply `number`
+* `boolean` is for the two values `true` and `false`
 
 > The type names `String`, `Number`, and `Boolean` (starting with capital letters) are legal, but refer to some special built-in types that shouldn't appear in your code. *Always* use `string`, `number`, or `boolean`.
 
@@ -38,6 +38,7 @@ We'll learn more about the syntax `T<U>` when we cover *generics*.
 TypeScript also has a special type, `any`, that you can use whenever you don't want a particular value to cause typechecking errors.
 
 When a value is of type `any`, you can access any properties of it (which will in turn be of type `any`), call it like a function, assign it to (or from) a value of any type, or pretty much anything else that's syntactically legal:
+
 ```ts
 let obj: any = { x: 0 };
 // None of these lines of code are errors
@@ -59,6 +60,7 @@ The compiler flag `noImplicitAny` will cause any *implicit* `any` to be flagged 
 ## Type Annotations on Variables
 
 When you declare a variable using `const`, `var`, or `let`, you can optionally add a type annotation to explicitly specify the type of the variable:
+
 ```ts
 let myName: string = "Alice";
           ^^^^^^^^ Type annotation
@@ -70,6 +72,7 @@ let myName: string = "Alice";
 In most cases, though, this isn't needed.
 Wherever possible, TypeScript tries to automatically *infer* the types in your code.
 For example, the type of a variable is inferred based on the type of its initializer:
+
 ```ts
 // No type annotation needed -- 'myName' inferred as type 'string'
 let myName = "Alice";
@@ -119,7 +122,7 @@ function getFavoriteNumber(): number {
 
 Much like variable type annotations, you usually don't need a return type annotation because TypeScript will infer the function's return type based on its `return` statements.
 The type annotation in the above example doesn't change anything.
-Some codebases will explicitly specify a return type for documentation purposes, to prevent accidental changes, or just for personal preference. 
+Some codebases will explicitly specify a return type for documentation purposes, to prevent accidental changes, or just for personal preference.
 
 ### Function Expressions
 
@@ -206,6 +209,7 @@ A union type is type formed from two or more other types, representing values th
 We refer to each of these types as the union's *members*.
 
 Let's write a function that can operate on strings or numbers:
+
 ```ts
 function printId(id: number | string) {
   console.log("Your ID is: " + id);
@@ -225,6 +229,7 @@ If you *have* a value of a union type, how do you work with it?
 
 TypeScript will only allow you to do things with the union if that thing is valid for *every* member of the union.
 For example, if you have the union `string | number`, you can't use methods that are only available on `string`:
+
 ```ts
 function printId(id: number | string) {
   console.log(id.toUpperCase());
@@ -235,6 +240,7 @@ The solution is to *narrow* the union with code, the same as you would in JavaSc
 *Narrowing* occurs when TypeScript can deduce a more specific type for a value based on the structure of the code.
 
 For example, TypeScript knows that only a `string` value will have a `typeof` value `"string"`:
+
 ```ts
 function printId(id: number | string) {
   if (typeof id === "string") {
@@ -248,6 +254,7 @@ function printId(id: number | string) {
 ```
 
 Another example is to use a function like `Array.isArray`:
+
 ```ts
 function welcomePeople(x: string[] | string) {
   if (Array.isArray(x)) {
@@ -259,11 +266,13 @@ function welcomePeople(x: string[] | string) {
   }
 }
 ```
+
 Notice that in the `else` branch, we don't need to do anything special - if `x` wasn't a `string[]`, then it must have been a `string`.
 
 Sometimes you'll have a union where all the members have something in common.
 For example, both arrays and strings have a `slice` method.
 If every member in a union has a property in common, you can use that property without narrowing:
+
 ```ts
 // Return type is inferred as number[] | string
 function getFirstThree(x: number[] | string) {
@@ -388,6 +397,7 @@ const x = "hello" as number;
 
 Sometimes this rule can be too conservative and will disallow more complex coercions that might be valid.
 If this happens, you can use two assertions, first to `any` (or `unknown`, which we'll introduce later), then to the desired type:
+
 ```ts
 declare const expr: any;
 type T = any;
@@ -453,6 +463,7 @@ The type `boolean` itself is actually just an alias for the union `true | false`
 
 When you initialize a variable with an object, TypeScript assumes that the properties of that object might change values later.
 For example, if you wrote code like this:
+
 ```ts
 declare const someCondition: boolean;
 //cut
@@ -461,6 +472,7 @@ if (someCondition) {
   obj.counter = 1;
 }
 ```
+
 TypeScript doesn't assume the assignment of `1` to a field that previously had `0` to be an error.
 Another way of saying this is that `obj.counter` must have the type `number`, not `0`, because types are used to determine both *reading* and *writing* behavior.
 

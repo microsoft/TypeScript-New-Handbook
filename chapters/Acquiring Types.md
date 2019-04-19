@@ -63,8 +63,8 @@ Definitions on DefinitelyTyped are also automatically published to npm under the
 The name of the types package is always the same as the name of the underlying package itself.
 For example, if you installed the `react` npm package, you can install its corresponding types by running
 
-```
- npm install --save-dev @types/react
+```sh
+npm install --save-dev @types/react
 ```
 
 TypeScript automatically finds type definitions under `node_modules/@types`, so there's no other step needed to get these types available in your program.
@@ -76,6 +76,7 @@ See the appendix [[Writing Declaration Files]] for a guide.
 
 If you want to silence warnings about a particular module without writing a declaration file, you can also quick declare the module as type `any` by putting an empty declaration for it in a `.d.ts` file in your project.
 For example, if you wanted to use a module named `some-untyped-module` without having definitions for it, you would write:
+
 ```ts
 declare module "some-untyped-module";
 ```

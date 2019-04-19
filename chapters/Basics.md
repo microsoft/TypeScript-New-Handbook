@@ -36,7 +36,7 @@ As you can probably guess, if we try to run `foo.toLowerCase()`, we'll get the s
 What about that second line of code?
 If you're familiar with JavaScript, you'll know this fails with an exception:
 
-```
+```txt
 TypeError: foo is not a function
 ```
 
@@ -233,7 +233,7 @@ greet("Brendan");
 
 If we run `tsc hello.ts` again, notice that we get an error on the command line!
 
-```
+```txt
 Expected 2 arguments, but got 1.
 ```
 

@@ -58,6 +58,7 @@ Note that the syntax is slightly different compared to a function type expressio
 JavaScript functions can also be invoked with the `new` operator.
 TypeScript refers to these as *constructors* because they usually create a new object.
 You can write a *construct signature* by adding the `new` keyword in front of a call signature:
+
 ```ts
 type SomeObject = any;
 //cut
@@ -143,6 +144,7 @@ In this case, we can use a *constraint* to limit the kinds of types that a type 
 Let's write a function that returns the longer of two values.
 To do this, we need a `length` property that's a number.
 We *constrain* the type parameter to that type by writing an `extends` clause:
+
 ```ts
 function longest<T extends { length: number }>(a: T, b: T) {
   if (a.length >= b.length) {
@@ -651,6 +653,7 @@ const angle = Math.atan2(...args);
 ```
 
 The best fix for this situation depends a bit on your code, but in general a `const` context is the most straightforward solution:
+
 ```ts
 // Inferred as 2-length tuple
 const args = [8, 5] as const;
@@ -693,4 +696,3 @@ function sum({ a, b, c }: ABC) {
 ```
 
 ## Assignability of Functions
-

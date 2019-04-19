@@ -38,6 +38,7 @@ pt.y = 0;
 As with other locations, the type annotation is optional, but will be an implict `any` if not specified.
 
 Fields can also have *initializers*; these will run automatically when the class is instantiated:
+
 ```ts
 class Point {
     x = 0;
@@ -148,8 +149,9 @@ class Point {
 ```
 
 There are just a few differences between class constructor signatures and function signatures:
- * Constructors can't have type parameters - these belong on the outer class declaration, which we'll learn about later
- * Constructors can't have return type annotations - the class instance type is always what's returned
+
+* Constructors can't have type parameters - these belong on the outer class declaration, which we'll learn about later
+* Constructors can't have return type annotations - the class instance type is always what's returned
 
 #### Super Calls
 
@@ -228,10 +230,11 @@ class C {
 > It's fine to expose public fields if you don't need to add additional logic during the get/set operations.
 
 TypeScript has some special inference rules for accessors:
- * If no `set` exists, the property is automatically `readonly`
- * The type of the setter parameter is inferred from the return type of the getter
- * If the setter parameter has a type annotation, it must match the return type of the getter
- * Getters and setters must have the same [[Member Visibility]]
+
+* If no `set` exists, the property is automatically `readonly`
+* The type of the setter parameter is inferred from the return type of the getter
+* If the setter parameter has a type annotation, it must match the return type of the getter
+* Getters and setters must have the same [[Member Visibility]]
 
 It is not possible to have accessors with different types for getting and setting.
 
@@ -359,6 +362,7 @@ Note that because JavaScript classes are a simple lookup object, there is no not
 TypeScript enforces that a derived class is always a subtype of its base class.
 
 For example, here's a legal way to override a method:
+
 ```ts
 class Base {
   greet() {
@@ -596,6 +600,7 @@ class MySafe {
   private secretKey = 12345;
 }
 ```
+
 ```js
 // In a JavaScript file...
 const s = new MySafe();
@@ -701,7 +706,6 @@ const MyHelperObject = {
 
 ## Parameter Properties
 
-
 ## Class Expressions
 
 ## `abstract` Classes and Methods
@@ -712,29 +716,26 @@ const MyHelperObject = {
 
 ## Handling Generic Constructors
 
-
 ## Impact of the Class Fields Proposal
 
-
-
-  * Basics
-    * Hey it's just ES6
-    * Methods and properties
-  * Class heritage
-    * inherits
-      * ES6 thing again
-      * We don't have inherited typing yet
-      * Inheriting from Error / Array / etc
-    * implements
-      * Again, just a check
-      * Be wary of anys
-  * public, private, protected
-  * Generics
-  * Static
-    * Instance type parameters
-  * Managing `this`
-    * Arrow functions
-    * `this` parameters
-    * The `this` type
-    * `this`-related flags
-  * Parameter properties
+* Basics
+  * Hey it's just ES6
+  * Methods and properties
+* Class heritage
+  * inherits
+    * ES6 thing again
+    * We don't have inherited typing yet
+    * Inheriting from Error / Array / etc
+  * implements
+    * Again, just a check
+    * Be wary of anys
+* public, private, protected
+* Generics
+* Static
+  * Instance type parameters
+* Managing `this`
+  * Arrow functions
+  * `this` parameters
+  * The `this` type
+  * `this`-related flags
+* Parameter properties
