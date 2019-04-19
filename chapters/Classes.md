@@ -653,6 +653,7 @@ class Derived extends Base {
 
 ### Special Static Names
 
+It's generally not safe/possible to overwrite properties from the `Function` prototype.
 Because classes are themselves functions that can be invoked with `new`, certain `static` names can't be used.
 Function properties like `name`, `length`, and `call` aren't valid to define as `static` members:
 
@@ -694,21 +695,246 @@ const MyHelperObject = {
 
 ## Generic Classes
 
+Classes, much like interfaces, can be generic.
+When a generic class is instantiated with `new`, its type parameters are inferred the same way as in a function call:
+
+```ts
+class Box<T> {
+  contents: T;
+  constructor(value: T) {
+    this.contents = value;
+  }
+}
+
+const b = new Box("hello!");
+      ^?
+```
+
+Classes can use generic constraints and defaults the same way as interfaces.
+
 ### Type Parameters in Static Members
 
-## `this` in Classes {#this-in-classes}
+This code isn't legal, and it may not be obvious why:
 
-### `this` Types
+```ts
+class Box<T> {
+  static defaultValue: T;
+}
+```
 
-### Managing `this`
+Remember that types are always fully erased!
+At runtime, there's only *one* `Box.defaultValue` property slot.
+This means that setting `Box<string>.defaultValue` (if that were possible) would *also* change `Box<number>.defaultValue` - not good.
+The `static` members of a generic class can never refer to the class's type parameters.
 
-### `--strictThis`
+## `this` at Runtime in Classes {#runtime-this-in-classes}
+
+>> [Background Reading: `this` keyword (MDN)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this)
+
+It's important to remember that TypeScript doesn't change the runtime behavior of JavaScript, and that JavaScript is somewhat famous for having some peculiar runtime behaviors.
+
+JavaScript's handling of `this` is indeed unusual:
+
+```ts
+class MyClass {
+  name = "MyClass";
+  getName() {
+    return this.name;
+  }
+}
+const c = new MyClass();
+const obj = {
+  name: "obj",
+  getName: c.getName
+};
+
+// Prints "obj", not "MyClass"
+console.log(obj.getName());
+```
+
+Long story short, by default, the value of `this` inside a function depends on *how the function was called*.
+In this example, because the function was called through the `obj` reference, its value of `this` was `obj` rather than the class instance.
+
+This is rarely what you want to happen!
+TypeScript provides some ways to mitigate or prevent this kind of error.
+
+### Arrow Functions
+
+>> [Background Reading: Arrow functions (MDN)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
+
+If you have a function that will often be called in a way that loses its `this` context, it can make sense to use an arrow function property instead of a method definition:
+
+```ts
+class MyClass {
+  name = "MyClass";
+  getName = () => {
+    return this.name;
+  }
+}
+const c = new MyClass();
+const g = c.getName;
+// Prints "MyClass" instead of crashing
+console.log(g());
+```
+
+This has some trade-offs:
+ * The `this` value is guaranteed to be correct at runtime, even for code not checked with TypeScript
+ * This will use more memory, because each class instance will have its own copy of each function defined this way
+ * You can't use `super.getName` in a derived class, because there's no entry in the prototype chain to fetch the base class method from
+
+### `this` parameters
+
+In a method or function definition, an initial parameter named `this` has special meaning in TypeScript.
+These parameters are erased during compilation:
+
+```ts
+type SomeType = any
+//cut
+// TypeScript input with 'this' parameter
+function fn(this: SomeType, x: number) {
+  /* ... */
+}
+```
+```js
+// JavaScript output
+function fn(x) {
+  /* ... */
+}
+```
+
+TypeScript checks that calling a function with a `this` parameter is done so with a correct context.
+Instead of using an arrow function, we can add a `this` parameter to method definitions to statically enforce that the method is called correctly:
+
+```ts
+class MyClass {
+  name = "MyClass";
+  getName(this: MyClass) {
+    return this.name;
+  }
+}
+const c = new MyClass();
+// OK
+c.getName();
+
+// Error, would crash
+const g = c.getName;
+console.log(g());
+```
+
+This method takes the opposite trade-offs of the arrow function approach:
+ * JavaScript callers might still use the class method incorrectly without realizing it
+ * Only one function per class definition gets allocated, rather than one per class instance
+ * Base method definitions can still be called via `super.`
+
+## `this` Types
+
+In classes, a special type called `this` refers *dynamically* to the type of the current class.
+Let's see how this is useful:
+
+```ts
+class Box {
+  contents: string = "";
+  set(value: string) {
+   ^?
+    this.contents = value;
+    return this;
+  }
+}
+```
+
+Here, TypeScript inferred the return type of `set` to be `this`, rather than `Box`.
+Now let's make a subclass of `Box`:
+
+```ts
+class Box {
+  contents: string = "";
+  set(value: string) {
+    this.contents = value;
+    return this;
+  }
+}
+//cut
+class ClearableBox extends Box {
+  clear() {
+    this.contents = "";
+  }
+}
+
+const a = new ClearableBox();
+const b = a.set("hello");
+      ^?
+```
+
+You can also use `this` in a parameter type annotation:
+
+```ts
+class Box {
+  content: string = "";
+  sameAs(other: this) {
+    return other.content === this.content;
+  }
+}
+```
+
+This is different from writing `other: Box` -- if you have a derived class, its `sameAs` method will now only accept other instances of that same derived class:
+
+```ts
+class Box {
+  content: string = "";
+  sameAs(other: this) {
+    return other.content === this.content;
+  }
+}
+
+class DerivedBox extends Box  {
+  otherContent: string = "?";
+}
+
+const base = new Box();
+const derived = new DerivedBox();
+derived.sameAs(base);
+```
 
 ## Parameter Properties
 
+TypeScript offers special syntax for turning a constructor parameter into a class property with the same name and value.
+These are called *parameter properties* and are created by prefixing a constructor argument with one of the visibility modifiers `public`, `private`, `protected`, or `readonly`.
+The resulting field gets those modifier(s):
+
+```ts
+class A {
+  constructor (public readonly x: number, protected y: number, private z: number) {
+    // No body necessary
+  }
+}
+const a = new A(1, 2, 3);
+console.log(a.x);
+              ^?
+console.log(a.z);
+```
+
 ## Class Expressions
 
-## `abstract` Classes and Methods
+>> [Background reading: Class expressions (MDN)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/class)
+
+Class expressions are very similar to class declarations.
+The only real difference is that class expressions don't need a name, though we can refer to them via whatever identifier they ended up bound to:
+
+```ts
+const someClass = class<T> {
+  content: T;
+  constructor(value: T) {
+    this.content = value;
+  }
+}
+
+const m = new someClass("Hello, world");
+      ^?
+```
+
+## `abstract` Classes and Members
+
+### Abstract Construct Signatures
 
 ## Relationships Between Classes
 
