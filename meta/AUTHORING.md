@@ -86,6 +86,10 @@ foo();
 Sometimes a code sample should be able to refer to declarations that you don't want to display in a sample.
 Any code above a line containing only `//cut` will not be displayed, but the code will be highlighted and errored as if it were there.
 
+## Publishing
+
+The site is published at https://microsoft.github.io/TypeScript-New-Handbook/outline/index.html via the `master` branch `docs` folder.
+To update this copy, run `npm run publish`, review the diff, and commit and push the result.
 
 ## Walkthrough
 
