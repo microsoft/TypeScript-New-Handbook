@@ -11,5 +11,4 @@ PRs will be open once the initial round of writing is complete.
 
 ## Authoring
 
-See [https://microsoft.github.io/TypeScript-New-Handbook/meta/authoring/](Authoring) for how to contribute content
-
+See [Authoring](https://github.com/Microsoft/TypeScript-New-Handbook/blob/master/meta/AUTHORING.md) for how to contribute content.
