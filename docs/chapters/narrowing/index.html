@@ -123,7 +123,7 @@ As an example, let's try using it for our <code>printAll</code> function.</p>
 <span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20printAll(strs%3A%20string%20%7C%20string%5B%5D%20%7C%20null)%20%7B%0A%20%20%20%20if%20(strs%20%26%26%20typeof%20strs%20%3D%3D%3D%20%22object%22)%20%7B%0A%20%20%20%20%20%20%20%20for%20(const%20s%20of%20strs)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20console.log(s)%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%20%20%20%20else%20if%20(typeof%20strs%20%3D%3D%3D%20%22string%22)%20%7B%0A%20%20%20%20%20%20%20%20console.log(strs)%0A%20%20%20%20%7D%0A%7D">Try</a></pre></p>
 <p>You'll notice that we've gotten rid of the error above by checking if <code>strs</code> is truthy.
 This at least prevents us from dreaded errors when we run our code like:</p>
-<pre><code>TypeError: null is not iterable
+<pre><code class="txt language-txt">TypeError: null is not iterable
 </code></pre>
 <p>Keep in mind though that truthiness checking on primitives can often be error prone.
 As an example, consider a different attempt at writing <code>printAll</code></p>

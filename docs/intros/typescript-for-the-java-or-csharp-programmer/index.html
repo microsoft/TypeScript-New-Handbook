@@ -24,28 +24,8 @@ Forcing all functionality and data to be held in classes can be a good domain mo
 This flexibility is extremely powerful.
 "Free" functions (those not associated with a class) working over data without an implied OOP hierarchy tends to be the preferred model for writing programs in JavaScript.</p>
 <h3 id="static-classes"><a href="#static-classes">Static Classes</h3></a>
-<p>Additionally, certain constructs from C# and Java such as singletons and static classes are unnecessary in TypeScript.
-Those constructs <em>only</em> exist because those languages force all data and functions to be inside a class; because that restriction doesn't exist in TypeScript, there's no need for them.
-A class with only a single instance is typically just represented as a normal <em>object</em> in JavaScript/TypeScript.</p>
-<p>For example, we don't need a "static class" syntax in TypeScript because a regular object (or even top-level function) will do the job just as well:</p>
-<p><pre class="typescript-code"><span class="comment">// Unnecessary "static" class</span>
-<span class="keyword">class</span> <span class="className"><span class="className">MyStaticClass</span></span> <span class="punctuation">{</span>
-    <span class="keyword">static</span> <span class="identifier">doSomething</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
-
-    <span class="punctuation">}</span>
-<span class="punctuation">}</span>
-
-<span class="comment">// Preferred (alternative 1)</span>
-<span class="keyword">function</span> <span class="identifier">doSomething</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
-
-<span class="punctuation">}</span>
-
-<span class="comment">// Preferred (alternative 2)</span>
-<span class="keyword">const</span> <span class="identifier">MyHelperObject</span> <span class="operator">=</span> <span class="punctuation">{</span>
-    <span class="identifier">dosomething</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
-
-    <span class="punctuation">}</span>
-<span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20Unnecessary%20%22static%22%20class%0Aclass%20MyStaticClass%20%7B%0A%20%20%20%20static%20doSomething()%20%7B%0A%0A%20%20%20%20%7D%0A%7D%0A%0A%2F%2F%20Preferred%20(alternative%201)%0Afunction%20doSomething()%20%7B%0A%0A%7D%0A%0A%2F%2F%20Preferred%20(alternative%202)%0Aconst%20MyHelperObject%20%3D%20%7B%0A%20%20%20%20dosomething()%20%7B%0A%0A%20%20%20%20%7D%0A%7D">Try</a></pre></p>
+<p>Additionally, certain constructs from C# and Java such as singletons and static classes are unnecessary in TypeScript.</p>
+<p>See the <a href="/chapters/classes#why-no-static-classes?">Why No Static Classes?</a> section in the Classes chapter for more information and explanation.</p>
 <h2 id="oop-in-typescript"><a href="#oop-in-typescript">OOP in TypeScript</h2></a>
 <p>That said, you can still use classes if you like!
 Some problems are well-suited to being solved by a traditional OOP hierarchy, and TypeScript's support for JavaScript classes will make these models even more powerful.

@@ -57,6 +57,7 @@ pre.typescript-code {
     border: solid #777 1px;
     line-height: 1.5em;
     min-width: 30em;
+    border-radius: 8px;
 
     box-shadow: 0px 0px 8px #00000020;
 }
@@ -101,10 +102,10 @@ span.quickinfo-result {
      * This allows users to copy/paste examples without the quick info contents.
      * Ideally, we'd still allow users to select within a quick info bubble separately.
      */
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+     -webkit-user-select: none;
+     -moz-user-select: none;
+     -ms-user-select: none;
+     user-select: none;
 }
 
 span.quickinfo-arrow {
@@ -195,11 +196,8 @@ a.playground-link {
     right: 0px;
     padding: 6px;
     background-color: #0074c1;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
-    border: solid white 1px;
-    border-bottom: 0px;
-    border-right: 0px;
+    border-top-left-radius: 7px;
+    border-bottom-right-radius: 7px;
 }
 
 a.playground-link, a.playground-link:visited {
@@ -207,13 +205,13 @@ a.playground-link, a.playground-link:visited {
     text-decoration: none;
 }
 
-h1 a, h2 a, h3 a {
+h1 a, h2 a, h3 a, h4 a {
     text-decoration: none;
     color: #000;
     position: relative;
 }
 
-h1 a:hover::before, h2 a:hover::before, h3 a:hover::before {
+h1 a:hover::before, h2 a:hover::before, h3 a:hover::before, h4 a:hover::before {
     content: "#";
     position: absolute;
     left: -0.7em;
@@ -256,8 +254,12 @@ blockquote {
 }
 
 aside {
-    margin: 1em;
-    padding: 0.02em 1em 0.02em 1em;
-    background: #FFFFF0;
-    border-left: solid #EEB 4px;
+    width: fit-content;
+    margin-left: 0.5em;
+    padding: 0.1em;
+    padding-left: 1em;
+    padding-right: 1em;
+    background: #EEEEFF;
+    border: solid #33338855 3px;
+    border-radius: 17px;
 }

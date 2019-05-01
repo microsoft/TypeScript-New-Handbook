@@ -39,8 +39,8 @@ We'll learn more about the syntax <code>T&lt;U&gt;</code> when we cover <em>gene
 </blockquote>
 <h2 id="any"><a href="#any"><code>any</code></h2></a>
 <p>TypeScript also has a special type, <code>any</code>, that you can use whenever you don't want a particular value to cause typechecking errors.</p>
-<p>When a value is of type <code>any</code>, you can access any properties of it (which will in turn be of type <code>any</code>), call it like a function, assign it to (or from) a value of any type, or pretty much anything else that's syntactically legal:
-<pre class="typescript-code"><span class="keyword">let</span> <span class="identifier">obj</span><span class="punctuation">:</span> <span class="keyword">any</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="identifier">x</span><span class="punctuation">:</span> <span class="numericLiteral">0</span> <span class="punctuation">}</span><span class="punctuation">;</span>
+<p>When a value is of type <code>any</code>, you can access any properties of it (which will in turn be of type <code>any</code>), call it like a function, assign it to (or from) a value of any type, or pretty much anything else that's syntactically legal:</p>
+<p><pre class="typescript-code"><span class="keyword">let</span> <span class="identifier">obj</span><span class="punctuation">:</span> <span class="keyword">any</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="identifier">x</span><span class="punctuation">:</span> <span class="numericLiteral">0</span> <span class="punctuation">}</span><span class="punctuation">;</span>
 <span class="comment">// None of these lines of code are errors</span>
 <span class="identifier">obj</span><span class="punctuation">.</span><span class="identifier">foo</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
 <span class="identifier">obj</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
@@ -53,16 +53,16 @@ We'll learn more about the syntax <code>T&lt;U&gt;</code> when we cover <em>gene
 Because <code>any</code> values don't benefit from type-checking, it's usually desirable to avoid these situations.
 The compiler flag <code>noImplicitAny</code> will cause any <em>implicit</em> <code>any</code> to be flagged as an error.</p>
 <h2 id="type-annotations-on-variables"><a href="#type-annotations-on-variables">Type Annotations on Variables</h2></a>
-<p>When you declare a variable using <code>const</code>, <code>var</code>, or <code>let</code>, you can optionally add a type annotation to explicitly specify the type of the variable:
-<pre class="typescript-code"><span class="keyword">let</span> <span class="identifier">myName</span><span class="highlight"><span class="highlight-content"></span><span class="highlight-description">Type annotation</span><span class="punctuation">:</span> <span class="keyword">string</span></span> <span class="operator">=</span> <span class="stringLiteral">"Alice"</span><span class="punctuation">;</span></pre></p>
+<p>When you declare a variable using <code>const</code>, <code>var</code>, or <code>let</code>, you can optionally add a type annotation to explicitly specify the type of the variable:</p>
+<p><pre class="typescript-code"><span class="keyword">let</span> <span class="identifier">myName</span><span class="highlight"><span class="highlight-content"></span><span class="highlight-description">Type annotation</span><span class="punctuation">:</span> <span class="keyword">string</span></span> <span class="operator">=</span> <span class="stringLiteral">"Alice"</span><span class="punctuation">;</span></pre></p>
 <blockquote>
   <p>TypeScript doesn't use "types on the left"-style declarations like <code>int x = 0;</code>
   Type annotations will always go <em>after</em> the thing being typed.</p>
 </blockquote>
 <p>In most cases, though, this isn't needed.
 Wherever possible, TypeScript tries to automatically <em>infer</em> the types in your code.
-For example, the type of a variable is inferred based on the type of its initializer:
-<pre class="typescript-code"><span class="comment">// No type annotation needed -- 'myName' inferred as type 'string'</span>
+For example, the type of a variable is inferred based on the type of its initializer:</p>
+<p><pre class="typescript-code"><span class="comment">// No type annotation needed -- 'myName' inferred as type 'string'</span>
 <span class="keyword">let</span> <span class="identifier">myName</span> <span class="operator">=</span> <span class="stringLiteral">"Alice"</span><span class="punctuation">;</span></pre></p>
 <p>For the most part you don't need to explicitly learn the rules of inference.
 If you're starting out, try using fewer type annotations than you think - you might be surprised how few you need for TypeScript to fully understand what's going on.</p>
@@ -88,7 +88,7 @@ Return type annotations appear after the parameter list:</p>
 <span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20getFavoriteNumber()%3A%20number%20%7B%0A%20%20%20%20return%2026%3B%0A%7D">Try</a></pre></p>
 <p>Much like variable type annotations, you usually don't need a return type annotation because TypeScript will infer the function's return type based on its <code>return</code> statements.
 The type annotation in the above example doesn't change anything.
-Some codebases will explicitly specify a return type for documentation purposes, to prevent accidental changes, or just for personal preference. </p>
+Some codebases will explicitly specify a return type for documentation purposes, to prevent accidental changes, or just for personal preference.</p>
 <h3 id="function-expressions"><a href="#function-expressions">Function Expressions</h3></a>
 <p>Function expressions are a little bit different from function declarations.
 When a function expression appears in a place where TypeScript can determine how it's going to be called, the parameters of that function are automatically given types.</p>
@@ -143,8 +143,8 @@ Now that we know how to write a few types, it's time to start <em>combining</em>
 <p>The first way to combine types you might see is a <em>union</em> type.
 A union type is type formed from two or more other types, representing values that may be <em>any one</em> of those types.
 We refer to each of these types as the union's <em>members</em>.</p>
-<p>Let's write a function that can operate on strings or numbers:
-<pre class="typescript-code"><span class="keyword">function</span> <span class="identifier">printId</span><span class="punctuation">(</span><span class="parameterName">id</span><span class="punctuation">:</span> <span class="keyword">number</span> <span class="punctuation">|</span> <span class="keyword">string</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+<p>Let's write a function that can operate on strings or numbers:</p>
+<p><pre class="typescript-code"><span class="keyword">function</span> <span class="identifier">printId</span><span class="punctuation">(</span><span class="parameterName">id</span><span class="punctuation">:</span> <span class="keyword">number</span> <span class="punctuation">|</span> <span class="keyword">string</span><span class="punctuation">)</span> <span class="punctuation">{</span>
   <span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="stringLiteral">"Your ID is: "</span> <span class="operator">+</span> <span class="identifier">id</span><span class="punctuation">)</span><span class="punctuation">;</span>
 <span class="punctuation">}</span>
 <span class="comment">// OK</span>
@@ -157,14 +157,14 @@ We refer to each of these types as the union's <em>members</em>.</p>
 <p>It's easy to <em>provide</em> a value matching a union type - simply provide a type matching any of the union's members.
 If you <em>have</em> a value of a union type, how do you work with it?</p>
 <p>TypeScript will only allow you to do things with the union if that thing is valid for <em>every</em> member of the union.
-For example, if you have the union <code>string | number</code>, you can't use methods that are only available on <code>string</code>:
-<pre class="typescript-code"><span class="keyword">function</span> <span class="identifier">printId</span><span class="punctuation">(</span><span class="parameterName">id</span><span class="punctuation">:</span> <span class="keyword">number</span> <span class="punctuation">|</span> <span class="keyword">string</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+For example, if you have the union <code>string | number</code>, you can't use methods that are only available on <code>string</code>:</p>
+<p><pre class="typescript-code"><span class="keyword">function</span> <span class="identifier">printId</span><span class="punctuation">(</span><span class="parameterName">id</span><span class="punctuation">:</span> <span class="keyword">number</span> <span class="punctuation">|</span> <span class="keyword">string</span><span class="punctuation">)</span> <span class="punctuation">{</span>
   <span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="identifier">id</span><span class="punctuation">.</span><span class="error"><span class="error-highlight"></span><span class="identifier">toUpperCase</span></span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">;</span>
 <span class="punctuation">}</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Property 'toUpperCase' does not exist on type 'string | number'.</div><div class="error-line"><div class="indent"></div>Property 'toUpperCase' does not exist on type 'number'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20printId(id%3A%20number%20%7C%20string)%20%7B%0A%20%20console.log(id.toUpperCase())%3B%0A%7D">Try</a></pre></p>
 <p>The solution is to <em>narrow</em> the union with code, the same as you would in JavaScript without type annotations.
 <em>Narrowing</em> occurs when TypeScript can deduce a more specific type for a value based on the structure of the code.</p>
-<p>For example, TypeScript knows that only a <code>string</code> value will have a <code>typeof</code> value <code>"string"</code>:
-<pre class="typescript-code"><span class="keyword">function</span> <span class="identifier">printId</span><span class="punctuation">(</span><span class="parameterName">id</span><span class="punctuation">:</span> <span class="keyword">number</span> <span class="punctuation">|</span> <span class="keyword">string</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+<p>For example, TypeScript knows that only a <code>string</code> value will have a <code>typeof</code> value <code>"string"</code>:</p>
+<p><pre class="typescript-code"><span class="keyword">function</span> <span class="identifier">printId</span><span class="punctuation">(</span><span class="parameterName">id</span><span class="punctuation">:</span> <span class="keyword">number</span> <span class="punctuation">|</span> <span class="keyword">string</span><span class="punctuation">)</span> <span class="punctuation">{</span>
   <span class="keyword">if</span> <span class="punctuation">(</span><span class="keyword">typeof</span> <span class="identifier">id</span> <span class="operator">===</span> <span class="stringLiteral">"string"</span><span class="punctuation">)</span> <span class="punctuation">{</span>
     <span class="comment">// In this branch, id is of type 'string'</span>
     <span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="identifier">id</span><span class="punctuation">.</span><span class="identifier">toUpperCase</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">;</span>
@@ -173,8 +173,8 @@ For example, if you have the union <code>string | number</code>, you can't use m
     <span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="identifier">id</span><span class="punctuation">)</span><span class="punctuation">;</span>
   <span class="punctuation">}</span>
 <span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20printId(id%3A%20number%20%7C%20string)%20%7B%0A%20%20if%20(typeof%20id%20%3D%3D%3D%20%22string%22)%20%7B%0A%20%20%20%20%2F%2F%20In%20this%20branch%2C%20id%20is%20of%20type%20'string'%0A%20%20%20%20console.log(id.toUpperCase())%3B%0A%20%20%7D%20else%20%7B%0A%20%20%20%20%2F%2F%20Here%2C%20id%20is%20of%20type%20'number'%0A%20%20%20%20console.log(id)%3B%0A%20%20%7D%0A%7D">Try</a></pre></p>
-<p>Another example is to use a function like <code>Array.isArray</code>:
-<pre class="typescript-code"><span class="keyword">function</span> <span class="identifier">welcomePeople</span><span class="punctuation">(</span><span class="parameterName">x</span><span class="punctuation">:</span> <span class="keyword">string</span><span class="punctuation">[</span><span class="punctuation">]</span> <span class="punctuation">|</span> <span class="keyword">string</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+<p>Another example is to use a function like <code>Array.isArray</code>:</p>
+<p><pre class="typescript-code"><span class="keyword">function</span> <span class="identifier">welcomePeople</span><span class="punctuation">(</span><span class="parameterName">x</span><span class="punctuation">:</span> <span class="keyword">string</span><span class="punctuation">[</span><span class="punctuation">]</span> <span class="punctuation">|</span> <span class="keyword">string</span><span class="punctuation">)</span> <span class="punctuation">{</span>
   <span class="keyword">if</span> <span class="punctuation">(</span><span class="identifier">Array</span><span class="punctuation">.</span><span class="identifier">isArray</span><span class="punctuation">(</span><span class="identifier">x</span><span class="punctuation">)</span><span class="punctuation">)</span> <span class="punctuation">{</span>
     <span class="comment">// Here: 'x' is 'string[]'</span>
     <span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="stringLiteral">"Hello, "</span> <span class="operator">+</span> <span class="identifier">x</span><span class="punctuation">.</span><span class="identifier">join</span><span class="punctuation">(</span><span class="stringLiteral">" and "</span><span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">;</span>
@@ -182,12 +182,12 @@ For example, if you have the union <code>string | number</code>, you can't use m
     <span class="comment">// Here: 'x' is 'string'</span>
     <span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="stringLiteral">"Welcome lone traveler "</span> <span class="operator">+</span> <span class="identifier">x</span><span class="punctuation">)</span><span class="punctuation">;</span>
   <span class="punctuation">}</span>
-<span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20welcomePeople(x%3A%20string%5B%5D%20%7C%20string)%20%7B%0A%20%20if%20(Array.isArray(x))%20%7B%0A%20%20%20%20%2F%2F%20Here%3A%20'x'%20is%20'string%5B%5D'%0A%20%20%20%20console.log(%22Hello%2C%20%22%20%2B%20x.join(%22%20and%20%22))%3B%0A%20%20%7D%20else%20%7B%0A%20%20%20%20%2F%2F%20Here%3A%20'x'%20is%20'string'%0A%20%20%20%20console.log(%22Welcome%20lone%20traveler%20%22%20%2B%20x)%3B%0A%20%20%7D%0A%7D">Try</a></pre>
-Notice that in the <code>else</code> branch, we don't need to do anything special - if <code>x</code> wasn't a <code>string[]</code>, then it must have been a <code>string</code>.</p>
+<span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20welcomePeople(x%3A%20string%5B%5D%20%7C%20string)%20%7B%0A%20%20if%20(Array.isArray(x))%20%7B%0A%20%20%20%20%2F%2F%20Here%3A%20'x'%20is%20'string%5B%5D'%0A%20%20%20%20console.log(%22Hello%2C%20%22%20%2B%20x.join(%22%20and%20%22))%3B%0A%20%20%7D%20else%20%7B%0A%20%20%20%20%2F%2F%20Here%3A%20'x'%20is%20'string'%0A%20%20%20%20console.log(%22Welcome%20lone%20traveler%20%22%20%2B%20x)%3B%0A%20%20%7D%0A%7D">Try</a></pre></p>
+<p>Notice that in the <code>else</code> branch, we don't need to do anything special - if <code>x</code> wasn't a <code>string[]</code>, then it must have been a <code>string</code>.</p>
 <p>Sometimes you'll have a union where all the members have something in common.
 For example, both arrays and strings have a <code>slice</code> method.
-If every member in a union has a property in common, you can use that property without narrowing:
-<pre class="typescript-code"><span class="comment">// Return type is inferred as number[] | string</span>
+If every member in a union has a property in common, you can use that property without narrowing:</p>
+<p><pre class="typescript-code"><span class="comment">// Return type is inferred as number[] | string</span>
 <span class="keyword">function</span> <span class="identifier">getFirstThree</span><span class="punctuation">(</span><span class="parameterName">x</span><span class="punctuation">:</span> <span class="keyword">number</span><span class="punctuation">[</span><span class="punctuation">]</span> <span class="punctuation">|</span> <span class="keyword">string</span><span class="punctuation">)</span> <span class="punctuation">{</span>
   <span class="keyword">return</span> <span class="identifier">x</span><span class="punctuation">.</span><span class="identifier">slice</span><span class="punctuation">(</span><span class="numericLiteral">0</span><span class="punctuation">,</span> <span class="numericLiteral">3</span><span class="punctuation">)</span><span class="punctuation">;</span>
 <span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20Return%20type%20is%20inferred%20as%20number%5B%5D%20%7C%20string%0Afunction%20getFirstThree(x%3A%20number%5B%5D%20%7C%20string)%20%7B%0A%20%20return%20x.slice(0%2C%203)%3B%0A%7D">Try</a></pre></p>
@@ -212,7 +212,9 @@ The syntax for a type alias is:</p>
 <span class="keyword">function</span> <span class="identifier">printCoord</span><span class="punctuation">(</span><span class="parameterName">pt</span><span class="punctuation">:</span> <span class="typeAliasName"><span class="identifier">Point</span></span><span class="punctuation">)</span> <span class="punctuation">{</span>
   <span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="stringLiteral">"The coordinate's x value is "</span> <span class="operator">+</span> <span class="identifier">pt</span><span class="punctuation">.</span><span class="identifier">x</span><span class="punctuation">)</span><span class="punctuation">;</span>
   <span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="stringLiteral">"The coordinate's y value is "</span> <span class="operator">+</span> <span class="identifier">pt</span><span class="punctuation">.</span><span class="identifier">y</span><span class="punctuation">)</span><span class="punctuation">;</span>
-<span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=type%20Point%20%3D%20%7B%0A%20%20x%3A%20number%2C%0A%20%20y%3A%20number%0A%7D%3B%0A%0A%2F%2F%20Exactly%20the%20same%20as%20the%20earlier%20example%0Afunction%20printCoord(pt%3A%20Point)%20%7B%0A%20%20console.log(%22The%20coordinate's%20x%20value%20is%20%22%20%2B%20pt.x)%3B%0A%20%20console.log(%22The%20coordinate's%20y%20value%20is%20%22%20%2B%20pt.y)%3B%0A%7D">Try</a></pre></p>
+<span class="punctuation">}</span>
+
+<span class="identifier">printCoord</span><span class="punctuation">(</span><span class="punctuation">{</span> <span class="identifier">x</span><span class="punctuation">:</span> <span class="numericLiteral">100</span><span class="punctuation">,</span> <span class="identifier">y</span><span class="punctuation">:</span> <span class="numericLiteral">100</span> <span class="punctuation">}</span><span class="punctuation">)</span><span class="punctuation">;</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=type%20Point%20%3D%20%7B%0A%20%20x%3A%20number%2C%0A%20%20y%3A%20number%0A%7D%3B%0A%0A%2F%2F%20Exactly%20the%20same%20as%20the%20earlier%20example%0Afunction%20printCoord(pt%3A%20Point)%20%7B%0A%20%20console.log(%22The%20coordinate's%20x%20value%20is%20%22%20%2B%20pt.x)%3B%0A%20%20console.log(%22The%20coordinate's%20y%20value%20is%20%22%20%2B%20pt.y)%3B%0A%7D%0A%0AprintCoord(%7B%20x%3A%20100%2C%20y%3A%20100%20%7D)%3B">Try</a></pre></p>
 <p>You can actually use a type alias to give a name to any type at all, not just an object type.
 For example, a type alias can name a union type:</p>
 <p><pre class="typescript-code"><span class="keyword">type</span> <span class="typeAliasName"><span class="identifier">ID</span></span> <span class="punctuation">=</span> <span class="keyword">number</span> <span class="punctuation">|</span> <span class="keyword">string</span><span class="punctuation">;</span></pre></p>
@@ -226,11 +228,21 @@ In other words, this code might <em>look</em> illegal, but is OK according to Ty
 <span class="comment">// *not* an error</span>
 <span class="keyword">const</span> <span class="identifier">myWeight</span><span class="punctuation">:</span> <span class="typeAliasName"><span class="identifier">Weight</span></span> <span class="operator">=</span> <span class="identifier">myAge</span><span class="punctuation">;</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=type%20Age%20%3D%20number%3B%0Atype%20Weight%20%3D%20number%3B%0A%0Aconst%20myAge%3A%20Age%20%3D%2073%3B%0A%2F%2F%20*not*%20an%20error%0Aconst%20myWeight%3A%20Weight%20%3D%20myAge%3B">Try</a></pre></p>
 <h2 id="interfaces"><a href="#interfaces">Interfaces</h2></a>
-<p>An <em>interface declaration</em> is another way to name an object type:
-<pre class="typescript-code"><span class="keyword">interface</span> <span class="interfaceName"><span class="interfaceName">Point</span></span> <span class="punctuation">{</span>
+<p>An <em>interface declaration</em> is another way to name an object type:</p>
+<p><pre class="typescript-code"><span class="keyword">interface</span> <span class="interfaceName"><span class="interfaceName">Point</span></span> <span class="punctuation">{</span>
   <span class="identifier">x</span><span class="punctuation">:</span> <span class="keyword">number</span><span class="punctuation">;</span>
   <span class="identifier">y</span><span class="punctuation">:</span> <span class="keyword">number</span><span class="punctuation">;</span>
-<span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=interface%20Point%20%7B%0A%20%20x%3A%20number%3B%0A%20%20y%3A%20number%3B%0A%7D">Try</a></pre></p>
+<span class="punctuation">}</span>
+
+<span class="keyword">function</span> <span class="identifier">printCoord</span><span class="punctuation">(</span><span class="parameterName">pt</span><span class="punctuation">:</span> <span class="interfaceName"><span class="identifier">Point</span></span><span class="punctuation">)</span> <span class="punctuation">{</span>
+  <span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="stringLiteral">"The coordinate's x value is "</span> <span class="operator">+</span> <span class="identifier">pt</span><span class="punctuation">.</span><span class="identifier">x</span><span class="punctuation">)</span><span class="punctuation">;</span>
+  <span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="stringLiteral">"The coordinate's y value is "</span> <span class="operator">+</span> <span class="identifier">pt</span><span class="punctuation">.</span><span class="identifier">y</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="identifier">printCoord</span><span class="punctuation">(</span><span class="punctuation">{</span> <span class="identifier">x</span><span class="punctuation">:</span> <span class="numericLiteral">100</span><span class="punctuation">,</span> <span class="identifier">y</span><span class="punctuation">:</span> <span class="numericLiteral">100</span> <span class="punctuation">}</span><span class="punctuation">)</span><span class="punctuation">;</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=interface%20Point%20%7B%0A%20%20x%3A%20number%3B%0A%20%20y%3A%20number%3B%0A%7D%0A%0Afunction%20printCoord(pt%3A%20Point)%20%7B%0A%20%20console.log(%22The%20coordinate's%20x%20value%20is%20%22%20%2B%20pt.x)%3B%0A%20%20console.log(%22The%20coordinate's%20y%20value%20is%20%22%20%2B%20pt.y)%3B%0A%7D%0A%0AprintCoord(%7B%20x%3A%20100%2C%20y%3A%20100%20%7D)%3B">Try</a></pre></p>
+<p>Just like when we used a type alias above, the example works just as if we had used an anonymous object type.
+TypeScript is only concerned with the <em>structure</em> of the value we passed to <code>printCoord</code> - it only cares that it has the expected properties.
+Being concerned only with the structure and capabilities of types is why we call TypeScript a <em>structurally typed</em> type system.</p>
 <h3 id="interface-vs-alias"><a href="#interface-vs-alias">Differences Between Type Aliases and Interfaces</h3></a>
 <p>Type aliases and interfaces are very similar, and in many cases you can choose between them freely.
 Here are the most relevant differences between the two that you should be aware of.
@@ -259,8 +271,8 @@ You'll learn more about these concepts in later chapters, so don't worry if you 
 This rule prevents "impossible" coercions like:</p>
 <p><pre class="typescript-code"><span class="keyword">const</span> <span class="identifier">x</span> <span class="operator">=</span> <span class="error"><span class="error-highlight"></span><span class="stringLiteral">"hello"</span> <span class="keyword">as</span> <span class="keyword">number</span></span><span class="punctuation">;</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Conversion of type 'string' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.</div></div></pre></p>
 <p>Sometimes this rule can be too conservative and will disallow more complex coercions that might be valid.
-If this happens, you can use two assertions, first to <code>any</code> (or <code>unknown</code>, which we'll introduce later), then to the desired type:
-<pre class="typescript-code">
+If this happens, you can use two assertions, first to <code>any</code> (or <code>unknown</code>, which we'll introduce later), then to the desired type:</p>
+<p><pre class="typescript-code">
 <span class="keyword">const</span> <span class="identifier">a</span> <span class="operator">=</span> <span class="identifier">expr</span> <span class="keyword">as</span> <span class="keyword">any</span> <span class="keyword">as</span> <span class="typeAliasName"><span class="identifier">T</span></span><span class="punctuation">;</span></pre></p>
 <h2 id="literal-types"><a href="#literal-types">Literal Types</h2></a>
 <p>In addition to the general types <code>string</code> and <code>number</code>, we can refer to <em>specific</em> strings and numbers in type positions.</p>
@@ -298,13 +310,13 @@ There are only two boolean literal types, and as you might guess, they are the t
 The type <code>boolean</code> itself is actually just an alias for the union <code>true | false</code>.</p>
 <h3 id="literal-inference"><a href="#literal-inference">Literal Inference</h3></a>
 <p>When you initialize a variable with an object, TypeScript assumes that the properties of that object might change values later.
-For example, if you wrote code like this:
-<pre class="typescript-code">
+For example, if you wrote code like this:</p>
+<p><pre class="typescript-code">
 <span class="keyword">const</span> <span class="identifier">obj</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="identifier">counter</span><span class="punctuation">:</span> <span class="numericLiteral">0</span> <span class="punctuation">}</span><span class="punctuation">;</span>
 <span class="keyword">if</span> <span class="punctuation">(</span><span class="identifier">someCondition</span><span class="punctuation">)</span> <span class="punctuation">{</span>
   <span class="identifier">obj</span><span class="punctuation">.</span><span class="identifier">counter</span> <span class="operator">=</span> <span class="numericLiteral">1</span><span class="punctuation">;</span>
-<span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=declare%20const%20someCondition%3A%20boolean%3B%0A%2F%2Fcut%0Aconst%20obj%20%3D%20%7B%20counter%3A%200%20%7D%3B%0Aif%20(someCondition)%20%7B%0A%20%20obj.counter%20%3D%201%3B%0A%7D">Try</a></pre>
-TypeScript doesn't assume the assignment of <code>1</code> to a field that previously had <code>0</code> to be an error.
+<span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=declare%20const%20someCondition%3A%20boolean%3B%0A%2F%2Fcut%0Aconst%20obj%20%3D%20%7B%20counter%3A%200%20%7D%3B%0Aif%20(someCondition)%20%7B%0A%20%20obj.counter%20%3D%201%3B%0A%7D">Try</a></pre></p>
+<p>TypeScript doesn't assume the assignment of <code>1</code> to a field that previously had <code>0</code> to be an error.
 Another way of saying this is that <code>obj.counter</code> must have the type <code>number</code>, not <code>0</code>, because types are used to determine both <em>reading</em> and <em>writing</em> behavior.</p>
 <p>The same applies to strings:</p>
 <p><pre class="typescript-code">

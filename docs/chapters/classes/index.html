@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Classes</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" media="screen" href="../../css/handbook.css" />
+    </head>
+    <body>
+    <article>
+    <h1 id="classes"><a href="#classes">Classes</h1></a>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes">Background reading: Classes (MDN)</a></p>
+<p>TypeScript offers full support for the <code>class</code> keyword introduced in ES2015.
+As with other JavaScript language features, TypeScript adds type annotations and other syntax to allow you to express relationships between classes and other types.</p>
+<div class="toc"><span class="toc-title">Table of Contents</span><ul><li><a href="#class-members">Class Members</a></li><ul><li><a href="#fields">Fields</a></li><ul><li><a href="#--strictpropertyinitialization"><code>--strictPropertyInitialization</code></a></li></ul><li><a href="#readonly-class-properties"><code>readonly</code></a></li><li><a href="#constructors">Constructors</a></li><ul><li><a href="#super-calls">Super Calls</a></li></ul><li><a href="#methods">Methods</a></li><li><a href="#getters--setters">Getters / Setters</a></li><li><a href="#class-index-signatures">Index Signatures</a></li></ul><li><a href="#class-heritage">Class Heritage</a></li><ul><li><a href="#implements-clauses"><code>implements</code> Clauses</a></li><ul><li><a href="#cautions">Cautions</a></li></ul><li><a href="#extends-clauses"><code>extends</code> Clauses</a></li><ul><li><a href="#overriding-methods">Overriding Methods</a></li><li><a href="#initialization-order-and-virtual-behavior">Initialization Order and Virtual Behavior</a></li><li><a href="#inheriting-built-in-types">Inheriting Built-in Types</a></li></ul></ul><li><a href="#member-visibility">Member Visibility</a></li><ul><li><a href="#public"><code>public</code></a></li><li><a href="#protected"><code>protected</code></a></li><ul><li><a href="#exposure-of-protected-members">Exposure of <code>protected</code> members</a></li><li><a href="#cross-hierarchy-protected-access">Cross-hierarchy <code>protected</code> access</a></li></ul><li><a href="#private"><code>private</code></a></li><ul><li><a href="#cross-instance-private-access">Cross-instance <code>private</code> access</a></li><li><a href="#private-and-runtime-privacy">Caveats</a></li></ul></ul><li><a href="#static-members">Static Members</a></li><ul><li><a href="#special-static-names">Special Static Names</a></li><li><a href="#why-no-static-classes?">Why No Static Classes?</a></li></ul><li><a href="#generic-classes">Generic Classes</a></li><ul><li><a href="#type-parameters-in-static-members">Type Parameters in Static Members</a></li></ul><li><a href="#runtime-this-in-classes"><code>this</code> at Runtime in Classes</a></li><ul><li><a href="#arrow-functions">Arrow Functions</a></li><li><a href="#this-parameters"><code>this</code> parameters</a></li></ul><li><a href="#this-types"><code>this</code> Types</a></li><li><a href="#parameter-properties">Parameter Properties</a></li><li><a href="#class-expressions">Class Expressions</a></li><li><a href="#abstract-classes-and-members"><code>abstract</code> Classes and Members</a></li><ul><li><a href="#abstract-construct-signatures">Abstract Construct Signatures</a></li></ul><li><a href="#relationships-between-classes">Relationships Between Classes</a></li><li><a href="#constructor-functions-and-instance-types">Constructor Functions and Instance Types</a></li><li><a href="#handling-generic-constructors">Handling Generic Constructors</a></li><li><a href="#impact-of-the-class-fields-proposal">Impact of the Class Fields Proposal</a></li></ul></ul></div>
+<h2 id="class-members"><a href="#class-members">Class Members</h2></a>
+<p>Here's the most basic class - an empty one:</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">Point</span></span> <span class="punctuation">{</span>
+
+<span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20Point%20%7B%0A%0A%7D">Try</a></pre></p>
+<p>This class isn't very useful yet, so let's start adding some members.</p>
+<h3 id="fields"><a href="#fields">Fields</h3></a>
+<p>A field declaration creates a public writeable property on a class:</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">Point</span></span> <span class="punctuation">{</span>
+    <span class="identifier">x</span><span class="punctuation">:</span> <span class="keyword">number</span><span class="punctuation">;</span>
+    <span class="identifier">y</span><span class="punctuation">:</span> <span class="keyword">number</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="keyword">const</span> <span class="identifier">pt</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="className"><span class="identifier">Point</span></span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="identifier">pt</span><span class="punctuation">.</span><span class="identifier">x</span> <span class="operator">=</span> <span class="numericLiteral">0</span><span class="punctuation">;</span>
+<span class="identifier">pt</span><span class="punctuation">.</span><span class="identifier">y</span> <span class="operator">=</span> <span class="numericLiteral">0</span><span class="punctuation">;</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20Point%20%7B%0A%20%20%20%20x%3A%20number%3B%0A%20%20%20%20y%3A%20number%3B%0A%7D%0A%0Aconst%20pt%20%3D%20new%20Point()%3B%0Apt.x%20%3D%200%3B%0Apt.y%20%3D%200%3B">Try</a></pre></p>
+<p>As with other locations, the type annotation is optional, but will be an implict <code>any</code> if not specified.</p>
+<p>Fields can also have <em>initializers</em>; these will run automatically when the class is instantiated:</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">Point</span></span> <span class="punctuation">{</span>
+    <span class="identifier">x</span> <span class="operator">=</span> <span class="numericLiteral">0</span><span class="punctuation">;</span>
+    <span class="identifier">y</span> <span class="operator">=</span> <span class="numericLiteral">0</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="keyword">const</span> <span class="identifier">pt</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="className"><span class="identifier">Point</span></span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="comment">// Prints 0, 0</span>
+<span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="stringLiteral">`${</span><span class="identifier">pt</span><span class="punctuation">.</span><span class="identifier">x</span><span class="stringLiteral">}, ${</span><span class="identifier">pt</span><span class="punctuation">.</span><span class="identifier">y</span><span class="stringLiteral">}`</span><span class="punctuation">)</span><span class="punctuation">;</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20Point%20%7B%0A%20%20%20%20x%20%3D%200%3B%0A%20%20%20%20y%20%3D%200%3B%0A%7D%0A%0Aconst%20pt%20%3D%20new%20Point()%3B%0A%2F%2F%20Prints%200%2C%200%0Aconsole.log(%60%24%7Bpt.x%7D%2C%20%24%7Bpt.y%7D%60)%3B">Try</a></pre></p>
+<p>Just like with <code>const</code>, <code>let</code>, and <code>var</code>, the initializer of a class property will be used to infer its type:</p>
+<p><pre class="typescript-code">
+<span class="keyword">const</span> <span class="identifier">pt</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="className"><span class="identifier">Point</span></span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="error"><span class="error-highlight"></span><span class="identifier">pt</span><span class="punctuation">.</span><span class="identifier">x</span></span> <span class="operator">=</span> <span class="stringLiteral">"0"</span><span class="punctuation">;</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Type '"0"' is not assignable to type 'number'.</div></div></pre></p>
+<h4 id="--strictpropertyinitialization"><a href="#--strictpropertyinitialization"><code>--strictPropertyInitialization</code></h4></a>
+<p>The strictPropertyInitialization setting controls whether class fields need to be initialized in the constructor.</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">BadGreeter</span></span> <span class="punctuation">{</span>
+  <span class="error"><span class="error-highlight"></span><span class="identifier">name</span></span><span class="punctuation">:</span> <span class="keyword">string</span><span class="punctuation">;</span>
+<span class="punctuation">}</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Property 'name' has no initializer and is not definitely assigned in the constructor.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20BadGreeter%20%7B%0A%20%20name%3A%20string%3B%0A%7D">Try</a></pre></p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">GoodGreeter</span></span> <span class="punctuation">{</span>
+  <span class="identifier">name</span><span class="punctuation">:</span> <span class="keyword">string</span><span class="punctuation">;</span>
+
+  <span class="keyword">constructor</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="keyword">this</span><span class="punctuation">.</span><span class="identifier">name</span> <span class="operator">=</span> <span class="stringLiteral">"hello"</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20GoodGreeter%20%7B%0A%20%20name%3A%20string%3B%0A%0A%20%20constructor()%20%7B%0A%20%20%20%20this.name%20%3D%20%22hello%22%3B%0A%20%20%7D%0A%7D">Try</a></pre></p>
+<p>Note that the field needs to be initialized <em>in the constructor itself</em>.
+TypeScript does not analyze methods you invoke from the constructor to detect initializations, because a derived class might override those methods and fail to initialize the members.</p>
+<p>If you intend to definitely initialize a field through means other than the constructor (for example, maybe an external library is filling in part of your class for you), you can use the <em>definite assignment assertion operator</em>, <code>!</code>:</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">OKGreeter</span></span> <span class="punctuation">{</span>
+  <span class="comment">// Not initialized, but no error</span>
+  <span class="identifier">name</span><span class="punctuation">!</span><span class="punctuation">:</span> <span class="keyword">string</span><span class="punctuation">;</span>
+<span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20OKGreeter%20%7B%0A%20%20%2F%2F%20Not%20initialized%2C%20but%20no%20error%0A%20%20name!%3A%20string%3B%0A%7D">Try</a></pre></p>
+<h3 id="readonly-class-properties"><a href="#readonly-class-properties"><code>readonly</code></h3></a>
+<p>Fields may be prefixed with the <code>readonly</code> modifier.
+This prevents assignments to the field outside of the constructor.</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">Greeter</span></span> <span class="punctuation">{</span>
+  <span class="keyword">readonly</span> <span class="identifier">name</span><span class="punctuation">:</span> <span class="keyword">string</span> <span class="operator">=</span> <span class="stringLiteral">"world"</span><span class="punctuation">;</span>
+
+  <span class="keyword">constructor</span><span class="punctuation">(</span><span class="parameterName">otherName</span><span class="punctuation">?</span><span class="punctuation">:</span> <span class="keyword">string</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="keyword">if</span> <span class="punctuation">(</span><span class="identifier">otherName</span> <span class="operator">!==</span> <span class="identifier">undefined</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+      <span class="keyword">this</span><span class="punctuation">.</span><span class="identifier">name</span> <span class="operator">=</span> <span class="identifier">otherName</span><span class="punctuation">;</span>
+    <span class="punctuation">}</span>
+  <span class="punctuation">}</span>
+
+  <span class="identifier">err</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="keyword">this</span><span class="punctuation">.</span><span class="error"><span class="error-highlight"></span><span class="identifier">name</span></span> <span class="operator">=</span> <span class="stringLiteral">"not ok"</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span>
+<span class="keyword">const</span> <span class="identifier">g</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="className"><span class="identifier">Greeter</span></span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="identifier">g</span><span class="punctuation">.</span><span class="error"><span class="error-highlight"></span><span class="identifier">name</span></span> <span class="operator">=</span> <span class="stringLiteral">"also not ok"</span><span class="punctuation">;</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Cannot assign to 'name' because it is a read-only property.</div></div><div class="listed-error"><div class="error-line">Cannot assign to 'name' because it is a read-only property.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20Greeter%20%7B%0A%20%20readonly%20name%3A%20string%20%3D%20%22world%22%3B%0A%0A%20%20constructor(otherName%3F%3A%20string)%20%7B%0A%20%20%20%20if%20(otherName%20!%3D%3D%20undefined)%20%7B%0A%20%20%20%20%20%20this.name%20%3D%20otherName%3B%0A%20%20%20%20%7D%0A%20%20%7D%0A%0A%20%20err()%20%7B%0A%20%20%20%20this.name%20%3D%20%22not%20ok%22%3B%0A%20%20%7D%0A%7D%0Aconst%20g%20%3D%20new%20Greeter()%3B%0Ag.name%20%3D%20%22also%20not%20ok%22%3B">Try</a></pre></p>
+<h3 id="constructors"><a href="#constructors">Constructors</h3></a>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/constructor">Background Reading: Constructor (MDN)</a></p>
+<p>Class constructors are very similar to functions.
+You can add parameters with type annotations, default values, and overloads:</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">Point</span></span> <span class="punctuation">{</span>
+  <span class="identifier">x</span><span class="punctuation">:</span> <span class="keyword">number</span><span class="punctuation">;</span>
+  <span class="identifier">y</span><span class="punctuation">:</span> <span class="keyword">number</span><span class="punctuation">;</span>
+
+  <span class="comment">// Normal signature with defaults</span>
+  <span class="keyword">constructor</span><span class="punctuation">(</span><span class="parameterName">x</span> <span class="operator">=</span> <span class="numericLiteral">0</span><span class="punctuation">,</span> <span class="parameterName">y</span> <span class="operator">=</span> <span class="numericLiteral">0</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="keyword">this</span><span class="punctuation">.</span><span class="identifier">x</span> <span class="operator">=</span> <span class="identifier">x</span><span class="punctuation">;</span>
+    <span class="keyword">this</span><span class="punctuation">.</span><span class="identifier">y</span> <span class="operator">=</span> <span class="identifier">y</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20Point%20%7B%0A%20%20x%3A%20number%3B%0A%20%20y%3A%20number%3B%0A%0A%20%20%2F%2F%20Normal%20signature%20with%20defaults%0A%20%20constructor(x%20%3D%200%2C%20y%20%3D%200)%20%7B%0A%20%20%20%20this.x%20%3D%20x%3B%0A%20%20%20%20this.y%20%3D%20y%3B%0A%20%20%7D%0A%7D">Try</a></pre></p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">Point</span></span> <span class="punctuation">{</span>
+  <span class="comment">// Overloads</span>
+  <span class="keyword">constructor</span><span class="punctuation">(</span><span class="parameterName">x</span><span class="punctuation">:</span> <span class="keyword">number</span><span class="punctuation">,</span> <span class="parameterName">y</span><span class="punctuation">:</span> <span class="keyword">string</span><span class="punctuation">)</span><span class="punctuation">;</span>
+  <span class="keyword">constructor</span><span class="punctuation">(</span><span class="parameterName">s</span><span class="punctuation">:</span> <span class="keyword">string</span><span class="punctuation">)</span><span class="punctuation">;</span>
+  <span class="keyword">constructor</span><span class="punctuation">(</span><span class="parameterName">xs</span><span class="punctuation">:</span> <span class="keyword">any</span><span class="punctuation">,</span> <span class="parameterName">y</span><span class="punctuation">?</span><span class="punctuation">:</span> <span class="keyword">any</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="comment">// TBD</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20Point%20%7B%0A%20%20%2F%2F%20Overloads%0A%20%20constructor(x%3A%20number%2C%20y%3A%20string)%3B%0A%20%20constructor(s%3A%20string)%3B%0A%20%20constructor(xs%3A%20any%2C%20y%3F%3A%20any)%20%7B%0A%20%20%20%20%2F%2F%20TBD%0A%20%20%7D%0A%7D">Try</a></pre></p>
+<p>There are just a few differences between class constructor signatures and function signatures:</p>
+<ul>
+<li>Constructors can't have type parameters - these belong on the outer class declaration, which we'll learn about later</li>
+<li>Constructors can't have return type annotations - the class instance type is always what's returned</li>
+</ul>
+<h4 id="super-calls"><a href="#super-calls">Super Calls</h4></a>
+<p>Just as in JavaScript, if you have a base class, you'll need to call <code>super();</code> in your constructor body before using any <code>this.</code> members:</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">Base</span></span> <span class="punctuation">{</span>
+  <span class="identifier">k</span> <span class="operator">=</span> <span class="numericLiteral">4</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="keyword">class</span> <span class="className"><span class="className">Derived</span></span> <span class="keyword">extends</span> <span class="className"><span class="identifier">Base</span></span> <span class="punctuation">{</span>
+  <span class="keyword">constructor</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="comment">// Prints a wrong value in ES5; throws exception in ES6</span>
+    <span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="error"><span class="error-highlight"></span><span class="keyword">this</span></span><span class="punctuation">.</span><span class="identifier">k</span><span class="punctuation">)</span><span class="punctuation">;</span>
+    <span class="keyword">super</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span><hr class="error-divider"><div class="listed-error"><div class="error-line">'super' must be called before accessing 'this' in the constructor of a derived class.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20Base%20%7B%0A%20%20k%20%3D%204%3B%0A%7D%0A%0Aclass%20Derived%20extends%20Base%20%7B%0A%20%20constructor()%20%7B%0A%20%20%20%20%2F%2F%20Prints%20a%20wrong%20value%20in%20ES5%3B%20throws%20exception%20in%20ES6%0A%20%20%20%20console.log(this.k)%3B%0A%20%20%20%20super()%3B%0A%20%20%7D%0A%7D">Try</a></pre></p>
+<p>Forgetting to call <code>super</code> is an easy mistake to make in JavaScript, but TypeScript will tell you when it's necessary.</p>
+<h3 id="methods"><a href="#methods">Methods</h3></a>
+<aside>
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Method_definitions">Background Reading: Method definitions (MDN)</a></p>
+  </aside>
+<p>A function property on a class is called a <em>method</em>.
+Methods can use all the same type annotations as functions and constructors:</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">Point</span></span> <span class="punctuation">{</span>
+  <span class="identifier">x</span> <span class="operator">=</span> <span class="numericLiteral">10</span><span class="punctuation">;</span>
+  <span class="identifier">y</span> <span class="operator">=</span> <span class="numericLiteral">10</span><span class="punctuation">;</span>
+
+  <span class="identifier">scale</span><span class="punctuation">(</span><span class="parameterName">n</span><span class="punctuation">:</span> <span class="keyword">number</span><span class="punctuation">)</span><span class="punctuation">:</span> <span class="keyword">void</span> <span class="punctuation">{</span>
+    <span class="keyword">this</span><span class="punctuation">.</span><span class="identifier">x</span> <span class="operator">*=</span> <span class="identifier">n</span><span class="punctuation">;</span>
+    <span class="keyword">this</span><span class="punctuation">.</span><span class="identifier">y</span> <span class="operator">*=</span> <span class="identifier">n</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20Point%20%7B%0A%20%20x%20%3D%2010%3B%0A%20%20y%20%3D%2010%3B%0A%0A%20%20scale(n%3A%20number)%3A%20void%20%7B%0A%20%20%20%20this.x%20*%3D%20n%3B%0A%20%20%20%20this.y%20*%3D%20n%3B%0A%20%20%7D%0A%7D">Try</a></pre></p>
+<p>Other than the standard type annotations, TypeScript doesn't add anything else new to methods.</p>
+<p>Note that inside a method body, it is still mandatory to access fields and other methods via <code>this.</code>.
+An unqualified name in a method body will always refer to something in the enclosing scope:</p>
+<p><pre class="typescript-code"><span class="keyword">let</span> <span class="identifier">x</span><span class="punctuation">:</span> <span class="keyword">number</span> <span class="operator">=</span> <span class="numericLiteral">0</span><span class="punctuation">;</span>
+
+<span class="keyword">class</span> <span class="className"><span class="className">C</span></span> <span class="punctuation">{</span>
+  <span class="identifier">x</span><span class="punctuation">:</span> <span class="keyword">string</span> <span class="operator">=</span> <span class="stringLiteral">"hello"</span><span class="punctuation">;</span>
+
+  <span class="identifier">m</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="comment">// This is trying to modify 'x' from line 1, not the class property</span>
+    <span class="error"><span class="error-highlight"></span><span class="identifier">x</span></span> <span class="operator">=</span> <span class="stringLiteral">"world"</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Type '"world"' is not assignable to type 'number'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=let%20x%3A%20number%20%3D%200%3B%0A%0Aclass%20C%20%7B%0A%20%20x%3A%20string%20%3D%20%22hello%22%3B%0A%0A%20%20m()%20%7B%0A%20%20%20%20%2F%2F%20This%20is%20trying%20to%20modify%20'x'%20from%20line%201%2C%20not%20the%20class%20property%0A%20%20%20%20x%20%3D%20%22world%22%3B%0A%20%20%7D%0A%7D">Try</a></pre></p>
+<h3 id="getters--setters"><a href="#getters--setters">Getters / Setters</h3></a>
+<p>Classes can also have <em>accessors</em>:</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">C</span></span> <span class="punctuation">{</span>
+  <span class="identifier">_length</span> <span class="operator">=</span> <span class="numericLiteral">0</span><span class="punctuation">;</span>
+  <span class="keyword">get</span> <span class="identifier">length</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="keyword">return</span> <span class="keyword">this</span><span class="punctuation">.</span><span class="identifier">_length</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+  <span class="keyword">set</span> <span class="identifier">length</span><span class="punctuation">(</span><span class="parameterName">value</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="keyword">this</span><span class="punctuation">.</span><span class="identifier">_length</span> <span class="operator">=</span> <span class="identifier">value</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20C%20%7B%0A%20%20_length%20%3D%200%3B%0A%20%20get%20length()%20%7B%0A%20%20%20%20return%20this._length%3B%0A%20%20%7D%0A%20%20set%20length(value)%20%7B%0A%20%20%20%20this._length%20%3D%20value%3B%0A%20%20%7D%0A%7D">Try</a></pre></p>
+<blockquote>
+  <p>Note that a field-backed get/set pair with no extra logic is very rarely useful in JavaScript.
+  It's fine to expose public fields if you don't need to add additional logic during the get/set operations.</p>
+</blockquote>
+<p>TypeScript has some special inference rules for accessors:</p>
+<ul>
+<li>If no <code>set</code> exists, the property is automatically <code>readonly</code></li>
+<li>The type of the setter parameter is inferred from the return type of the getter</li>
+<li>If the setter parameter has a type annotation, it must match the return type of the getter</li>
+<li>Getters and setters must have the same <a href="/chapters/classes#member-visibility">Member Visibility</a></li>
+</ul>
+<p>It is not possible to have accessors with different types for getting and setting.</p>
+<p>If you have a getter without a setter, the field is automatically <code>readonly</code></p>
+<h3 id="class-index-signatures"><a href="#class-index-signatures">Index Signatures</h3></a>
+<p>Classes can declare index signatures; these work the same as <a href="/chapters/object-types#index-signatures">Index Signatures</a> for other object types:</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">MyClass</span></span> <span class="punctuation">{</span>
+  <span class="punctuation">[</span><span class="parameterName">s</span><span class="punctuation">:</span> <span class="keyword">string</span><span class="punctuation">]</span><span class="punctuation">:</span> <span class="keyword">boolean</span> <span class="punctuation">|</span> <span class="punctuation">(</span><span class="punctuation">(</span><span class="parameterName">s</span><span class="punctuation">:</span> <span class="keyword">string</span><span class="punctuation">)</span> <span class="punctuation">=></span> <span class="keyword">boolean</span><span class="punctuation">)</span><span class="punctuation">;</span>
+  <span class="identifier">check</span><span class="punctuation">(</span><span class="parameterName">s</span><span class="punctuation">:</span> <span class="keyword">string</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="keyword">return</span> <span class="keyword">this</span><span class="punctuation">[</span><span class="identifier">s</span><span class="punctuation">]</span> <span class="keyword">as</span> <span class="keyword">boolean</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20MyClass%20%7B%0A%20%20%5Bs%3A%20string%5D%3A%20boolean%20%7C%20((s%3A%20string)%20%3D%3E%20boolean)%3B%0A%20%20check(s%3A%20string)%20%7B%0A%20%20%20%20return%20this%5Bs%5D%20as%20boolean%3B%0A%20%20%7D%0A%7D">Try</a></pre></p>
+<p>Because the index signature type needs to also capture the types of methods, it's not easy to usefully use these types.
+Generally it's better to store indexed data in another place instead of on the class instance itself.</p>
+<h2 id="class-heritage"><a href="#class-heritage">Class Heritage</h2></a>
+<p>Like other langauges with object-oriented features, classes in JavaScript can inherit from base classes.</p>
+<h3 id="implements-clauses"><a href="#implements-clauses"><code>implements</code> Clauses</h3></a>
+<p>You can use an <code>implements</code> clause to check that a class satisfies a particular <code>interface</code>.
+An error will be issued if a class fails to correctly implement it:</p>
+<p><pre class="typescript-code"><span class="keyword">interface</span> <span class="interfaceName"><span class="interfaceName">Pingable</span></span> <span class="punctuation">{</span>
+  <span class="identifier">ping</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">:</span> <span class="keyword">void</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="keyword">class</span> <span class="className"><span class="className">Sonar</span></span> <span class="keyword">implements</span> <span class="interfaceName"><span class="identifier">Pingable</span></span> <span class="punctuation">{</span>
+  <span class="identifier">ping</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="stringLiteral">'ping!'</span><span class="punctuation">)</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span>
+
+<span class="keyword">class</span> <span class="error"><span class="error-highlight"></span><span class="className"><span class="className">Ball</span></span></span> <span class="keyword">implements</span> <span class="interfaceName"><span class="identifier">Pingable</span></span> <span class="punctuation">{</span>
+  <span class="identifier">pong</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="stringLiteral">'pong!'</span><span class="punctuation">)</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Class 'Ball' incorrectly implements interface 'Pingable'.</div><div class="error-line"><div class="indent"></div>Property 'ping' is missing in type 'Ball' but required in type 'Pingable'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=interface%20Pingable%20%7B%0A%20%20ping()%3A%20void%3B%0A%7D%0A%0Aclass%20Sonar%20implements%20Pingable%20%7B%0A%20%20ping()%20%7B%0A%20%20%20%20console.log('ping!')%3B%0A%20%20%7D%0A%7D%0A%0Aclass%20Ball%20implements%20Pingable%20%7B%0A%20%20pong()%20%7B%0A%20%20%20%20console.log('pong!')%3B%0A%20%20%7D%0A%7D">Try</a></pre></p>
+<p>Classes may also implement multiple interfaces, e.g. <code>class C implements A, B {</code>.</p>
+<h4 id="cautions"><a href="#cautions">Cautions</h4></a>
+<p>It's important to understand that an <code>implements</code> clause is only a check that the class can be treated as the interface type.
+It doesn't change the type of the class or its methods <em>at all</em>.
+A common source of error is to assume that an <code>implements</code> clause will change the class type - it doesn't!</p>
+<p><pre class="typescript-code"><span class="keyword">interface</span> <span class="interfaceName"><span class="interfaceName">Checkable</span></span> <span class="punctuation">{</span>
+  <span class="identifier">check</span><span class="punctuation">(</span><span class="parameterName">name</span><span class="punctuation">:</span> <span class="keyword">string</span><span class="punctuation">)</span><span class="punctuation">:</span> <span class="keyword">boolean</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+<span class="keyword">class</span> <span class="className"><span class="className">NameChecker</span></span> <span class="keyword">implements</span> <span class="interfaceName"><span class="identifier">Checkable</span></span> <span class="punctuation">{</span>
+  <span class="identifier">check</span><span class="punctuation">(</span><span class="parameterName">s</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="comment">// Notice no error here</span>
+    <span class="keyword">return</span> <span class="identifier">s</span><span class="punctuation">.</span><span class="identifier">toLowercse</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="operator">===</span> <span class="stringLiteral">"ok"</span><span class="punctuation">;</span>
+           <span class="quickinfo-result"><span class="quickinfo-arrow">▲</span><span class="punctuation">(</span><span class="text">parameter</span><span class="punctuation">)</span><span class="space"> </span><span class="parameterName">s</span><span class="punctuation">:</span><span class="space"> </span><span class="keyword">any</span></span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=interface%20Checkable%20%7B%0A%20%20check(name%3A%20string)%3A%20boolean%3B%0A%7D%0Aclass%20NameChecker%20implements%20Checkable%20%7B%0A%20%20check(s)%20%7B%0A%20%20%20%20%2F%2F%20Notice%20no%20error%20here%0A%20%20%20%20return%20s.toLowercse()%20%3D%3D%3D%20%22ok%22%3B%0A%20%20%7D%0A%7D">Try</a></pre></p>
+<p>In this example, we perhaps expected that <code>s</code>'s type would be influenced by the <code>name: string</code> parameter of <code>check</code>.
+It is not - <code>implements</code> clauses don't change how the class body is checked or its type inferred.</p>
+<p>Similarly, implementing an interface with an optional property doesn't create that property:</p>
+<p><pre class="typescript-code"><span class="keyword">interface</span> <span class="interfaceName"><span class="interfaceName">A</span></span> <span class="punctuation">{</span>
+  <span class="identifier">x</span><span class="punctuation">:</span> <span class="keyword">number</span><span class="punctuation">;</span>
+  <span class="identifier">y</span><span class="punctuation">?</span><span class="punctuation">:</span> <span class="keyword">number</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+<span class="keyword">class</span> <span class="className"><span class="className">C</span></span> <span class="keyword">implements</span> <span class="interfaceName"><span class="identifier">A</span></span> <span class="punctuation">{</span>
+  <span class="identifier">x</span> <span class="operator">=</span> <span class="numericLiteral">0</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+<span class="keyword">const</span> <span class="identifier">c</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="className"><span class="identifier">C</span></span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="identifier">c</span><span class="punctuation">.</span><span class="error"><span class="error-highlight"></span><span class="identifier">y</span></span> <span class="operator">=</span> <span class="numericLiteral">10</span><span class="punctuation">;</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Property 'y' does not exist on type 'C'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=interface%20A%20%7B%0A%20%20x%3A%20number%3B%0A%20%20y%3F%3A%20number%3B%0A%7D%0Aclass%20C%20implements%20A%20%7B%0A%20%20x%20%3D%200%3B%0A%7D%0Aconst%20c%20%3D%20new%20C()%3B%0Ac.y%20%3D%2010%3B">Try</a></pre></p>
+<h3 id="extends-clauses"><a href="#extends-clauses"><code>extends</code> Clauses</h3></a>
+<aside>
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/extends">Background Reading: extends keyword (MDN)</a></p>
+  </aside>
+<p>Classes may <code>extend</code> from a base class.
+A derived class has all the properties and methods of its base class, and also define additional members.</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">Animal</span></span> <span class="punctuation">{</span>
+  <span class="identifier">move</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="stringLiteral">"Moving along!"</span><span class="punctuation">)</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span>
+
+<span class="keyword">class</span> <span class="className"><span class="className">Dog</span></span> <span class="keyword">extends</span> <span class="className"><span class="identifier">Animal</span></span> <span class="punctuation">{</span>
+  <span class="identifier">woof</span><span class="punctuation">(</span><span class="parameterName">times</span><span class="punctuation">:</span> <span class="keyword">number</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="keyword">for</span> <span class="punctuation">(</span><span class="keyword">let</span> <span class="identifier">i</span> <span class="operator">=</span> <span class="numericLiteral">0</span><span class="punctuation">;</span> <span class="identifier">i</span> <span class="operator"><</span> <span class="identifier">times</span><span class="punctuation">;</span> <span class="identifier">i</span><span class="operator">++</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+      <span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="stringLiteral">"woof!"</span><span class="punctuation">)</span><span class="punctuation">;</span>
+    <span class="punctuation">}</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span>
+
+<span class="keyword">const</span> <span class="identifier">d</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="className"><span class="identifier">Dog</span></span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="comment">// Base class method</span>
+<span class="identifier">d</span><span class="punctuation">.</span><span class="identifier">move</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="comment">// Derived class method</span>
+<span class="identifier">d</span><span class="punctuation">.</span><span class="identifier">woof</span><span class="punctuation">(</span><span class="numericLiteral">3</span><span class="punctuation">)</span><span class="punctuation">;</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20Animal%20%7B%0A%20%20move()%20%7B%0A%20%20%20%20console.log(%22Moving%20along!%22)%3B%0A%20%20%7D%0A%7D%0A%0Aclass%20Dog%20extends%20Animal%20%7B%0A%20%20woof(times%3A%20number)%20%7B%0A%20%20%20%20for%20(let%20i%20%3D%200%3B%20i%20%3C%20times%3B%20i%2B%2B)%20%7B%0A%20%20%20%20%20%20console.log(%22woof!%22)%3B%0A%20%20%20%20%7D%0A%20%20%7D%0A%7D%0A%0Aconst%20d%20%3D%20new%20Dog()%3B%0A%2F%2F%20Base%20class%20method%0Ad.move()%3B%0A%2F%2F%20Derived%20class%20method%0Ad.woof(3)%3B">Try</a></pre></p>
+<h4 id="overriding-methods"><a href="#overriding-methods">Overriding Methods</h4></a>
+<aside>
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/super">Background reading: super keyword (MDN)</a></p>
+  </aside>
+<p>A derived class can also override a base class field or property.
+You can use the <code>super.</code> syntax to access base class methods.
+Note that because JavaScript classes are a simple lookup object, there is no notion of a "super field".</p>
+<p>TypeScript enforces that a derived class is always a subtype of its base class.</p>
+<p>For example, here's a legal way to override a method:</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">Base</span></span> <span class="punctuation">{</span>
+  <span class="identifier">greet</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="stringLiteral">"Hello, world!"</span><span class="punctuation">)</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span>
+
+<span class="keyword">class</span> <span class="className"><span class="className">Derived</span></span> <span class="keyword">extends</span> <span class="className"><span class="identifier">Base</span></span> <span class="punctuation">{</span>
+  <span class="identifier">greet</span><span class="punctuation">(</span><span class="parameterName">name</span><span class="punctuation">?</span><span class="punctuation">:</span> <span class="keyword">string</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="keyword">if</span> <span class="punctuation">(</span><span class="identifier">name</span> <span class="operator">===</span> <span class="identifier">undefined</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+      <span class="keyword">super</span><span class="punctuation">.</span><span class="identifier">greet</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+    <span class="punctuation">}</span> <span class="keyword">else</span> <span class="punctuation">{</span>
+      <span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="stringLiteral">`Hello, ${</span><span class="identifier">name</span><span class="punctuation">.</span><span class="identifier">toUpperCase</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="stringLiteral">}`</span><span class="punctuation">)</span><span class="punctuation">;</span>
+    <span class="punctuation">}</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span>
+
+<span class="keyword">const</span> <span class="identifier">d</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="className"><span class="identifier">Derived</span></span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="identifier">d</span><span class="punctuation">.</span><span class="identifier">greet</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="identifier">d</span><span class="punctuation">.</span><span class="identifier">greet</span><span class="punctuation">(</span><span class="stringLiteral">"reader"</span><span class="punctuation">)</span><span class="punctuation">;</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20Base%20%7B%0A%20%20greet()%20%7B%0A%20%20%20%20console.log(%22Hello%2C%20world!%22)%3B%0A%20%20%7D%0A%7D%0A%0Aclass%20Derived%20extends%20Base%20%7B%0A%20%20greet(name%3F%3A%20string)%20%7B%0A%20%20%20%20if%20(name%20%3D%3D%3D%20undefined)%20%7B%0A%20%20%20%20%20%20super.greet()%3B%0A%20%20%20%20%7D%20else%20%7B%0A%20%20%20%20%20%20console.log(%60Hello%2C%20%24%7Bname.toUpperCase()%7D%60)%3B%0A%20%20%20%20%7D%0A%20%20%7D%0A%7D%0A%0Aconst%20d%20%3D%20new%20Derived()%3B%0Ad.greet()%3B%0Ad.greet(%22reader%22)%3B">Try</a></pre></p>
+<p>It's important that a derived class follow its base class contract.
+Remember that it's very common (and always legal!) to refer to a derived class instance through a base class reference:</p>
+<p><pre class="typescript-code">
+<span class="comment">// Alias the derived instance through a base class reference</span>
+<span class="keyword">const</span> <span class="identifier">b</span><span class="punctuation">:</span> <span class="className"><span class="identifier">Base</span></span> <span class="operator">=</span> <span class="identifier">d</span><span class="punctuation">;</span>
+<span class="comment">// No problem</span>
+<span class="identifier">b</span><span class="punctuation">.</span><span class="identifier">greet</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20Base%20%7B%0A%20%20greet()%20%7B%0A%20%20%20%20console.log(%22Hello%2C%20world!%22)%3B%0A%20%20%7D%0A%7D%0Adeclare%20const%20d%3A%20Base%3B%0A%2F%2Fcut%0A%2F%2F%20Alias%20the%20derived%20instance%20through%20a%20base%20class%20reference%0Aconst%20b%3A%20Base%20%3D%20d%3B%0A%2F%2F%20No%20problem%0Ab.greet()%3B">Try</a></pre></p>
+<p>What if <code>Derived</code> didn't follow <code>Base</code>'s contract?</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">Base</span></span> <span class="punctuation">{</span>
+  <span class="identifier">greet</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="stringLiteral">"Hello, world!"</span><span class="punctuation">)</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span>
+
+<span class="keyword">class</span> <span class="className"><span class="className">Derived</span></span> <span class="keyword">extends</span> <span class="className"><span class="identifier">Base</span></span> <span class="punctuation">{</span>
+  <span class="comment">// Make this parameter required</span>
+  <span class="error"><span class="error-highlight"></span><span class="identifier">greet</span></span><span class="punctuation">(</span><span class="parameterName">name</span><span class="punctuation">:</span> <span class="keyword">string</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="stringLiteral">`Hello, ${</span><span class="identifier">name</span><span class="punctuation">.</span><span class="identifier">toUpperCase</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="stringLiteral">}`</span><span class="punctuation">)</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Property 'greet' in type 'Derived' is not assignable to the same property in base type 'Base'.</div><div class="error-line"><div class="indent"></div>Type '(name: string) => void' is not assignable to type '() => void'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20Base%20%7B%0A%20%20greet()%20%7B%0A%20%20%20%20console.log(%22Hello%2C%20world!%22)%3B%0A%20%20%7D%0A%7D%0A%0Aclass%20Derived%20extends%20Base%20%7B%0A%20%20%2F%2F%20Make%20this%20parameter%20required%0A%20%20greet(name%3A%20string)%20%7B%0A%20%20%20%20console.log(%60Hello%2C%20%24%7Bname.toUpperCase()%7D%60)%3B%0A%20%20%7D%0A%7D">Try</a></pre></p>
+<p>If we compiled this code despite the error, this sample would then crash:</p>
+<p><pre class="typescript-code">
+<span class="keyword">const</span> <span class="identifier">b</span><span class="punctuation">:</span> <span class="className"><span class="identifier">Base</span></span> <span class="operator">=</span> <span class="keyword">new</span> <span class="className"><span class="identifier">Derived</span></span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="comment">// Crashes because "name" will be undefined</span>
+<span class="identifier">b</span><span class="punctuation">.</span><span class="identifier">greet</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=declare%20class%20Base%20%20%7B%20greet()%3A%20void%20%7D%3B%0Adeclare%20class%20Derived%20extends%20Base%20%7B%20%7D%0A%2F%2Fcut%0Aconst%20b%3A%20Base%20%3D%20new%20Derived()%3B%0A%2F%2F%20Crashes%20because%20%22name%22%20will%20be%20undefined%0Ab.greet()%3B">Try</a></pre></p>
+<h4 id="initialization-order-and-virtual-behavior"><a href="#initialization-order-and-virtual-behavior">Initialization Order and Virtual Behavior</h4></a>
+<h4 id="inheriting-built-in-types"><a href="#inheriting-built-in-types">Inheriting Built-in Types</h4></a>
+<h2 id="member-visibility"><a href="#member-visibility">Member Visibility</h2></a>
+<p>You can use TypeScript to control whether certain methods or properties are visible to code outside the class.</p>
+<h3 id="public"><a href="#public"><code>public</code></h3></a>
+<p>The default visibility of class members is <code>public</code>.
+A <code>public</code> member can be accessed by anywhere:</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">Greeter</span></span> <span class="punctuation">{</span>
+  <span class="keyword">public</span> <span class="identifier">greet</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="stringLiteral">"hi!"</span><span class="punctuation">)</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span>
+<span class="keyword">const</span> <span class="identifier">g</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="className"><span class="identifier">Greeter</span></span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="identifier">g</span><span class="punctuation">.</span><span class="identifier">greet</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20Greeter%20%7B%0A%20%20public%20greet()%20%7B%0A%20%20%20%20console.log(%22hi!%22)%3B%0A%20%20%7D%0A%7D%0Aconst%20g%20%3D%20new%20Greeter()%3B%0Ag.greet()%3B">Try</a></pre></p>
+<p>Because <code>public</code> is already the default visibility modifier, you don't ever <em>need</em> to write it on a class member, but might choose to do so for style/readability reasons.</p>
+<h3 id="protected"><a href="#protected"><code>protected</code></h3></a>
+<p><code>protected</code> members are only visible to subclasses of the class they're declared in.</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">Greeter</span></span> <span class="punctuation">{</span>
+  <span class="keyword">public</span> <span class="identifier">greet</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="stringLiteral">"Hello, "</span> <span class="operator">+</span> <span class="keyword">this</span><span class="punctuation">.</span><span class="identifier">getName</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+  <span class="keyword">protected</span> <span class="identifier">getName</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="keyword">return</span> <span class="stringLiteral">"hi"</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span>
+
+<span class="keyword">class</span> <span class="className"><span class="className">SpecialGreeter</span></span> <span class="keyword">extends</span> <span class="className"><span class="identifier">Greeter</span></span> <span class="punctuation">{</span>
+  <span class="keyword">public</span> <span class="identifier">howdy</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="comment">// OK to access protected member here</span>
+    <span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="stringLiteral">"Howdy, "</span> <span class="operator">+</span> <span class="highlight"><span class="highlight-content"></span><span class="highlight-description"></span><span class="keyword">this</span><span class="punctuation">.</span><span class="identifier">getName</span><span class="punctuation">(</span><span class="punctuation">)</span></span><span class="punctuation">)</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span>
+<span class="keyword">const</span> <span class="identifier">g</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="className"><span class="identifier">SpecialGreeter</span></span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="identifier">g</span><span class="punctuation">.</span><span class="identifier">greet</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span> <span class="comment">// OK</span>
+<span class="identifier">g</span><span class="punctuation">.</span><span class="error"><span class="error-highlight"></span><span class="identifier">getName</span></span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Property 'getName' is protected and only accessible within class 'Greeter' and its subclasses.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20Greeter%20%7B%0A%20%20public%20greet()%20%7B%0A%20%20%20%20console.log(%22Hello%2C%20%22%20%2B%20this.getName())%3B%0A%20%20%7D%0A%20%20protected%20getName()%20%7B%0A%20%20%20%20return%20%22hi%22%3B%0A%20%20%7D%0A%7D%0A%0Aclass%20SpecialGreeter%20extends%20Greeter%20%7B%0A%20%20public%20howdy()%20%7B%0A%20%20%20%20%2F%2F%20OK%20to%20access%20protected%20member%20here%0A%20%20%20%20console.log(%22Howdy%2C%20%22%20%2B%20this.getName())%3B%0A%20%20%7D%0A%7D%0Aconst%20g%20%3D%20new%20SpecialGreeter()%3B%0Ag.greet()%3B%20%2F%2F%20OK%0Ag.getName()%3B">Try</a></pre></p>
+<h4 id="exposure-of-protected-members"><a href="#exposure-of-protected-members">Exposure of <code>protected</code> members</h4></a>
+<p>Derived classes need to follow their base class contracts, but may choose to expose a more general type with more capabilities.
+This includes making <code>protected</code> members <code>public</code>:</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">Base</span></span> <span class="punctuation">{</span>
+  <span class="keyword">protected</span> <span class="identifier">m</span> <span class="operator">=</span> <span class="numericLiteral">10</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+<span class="keyword">class</span> <span class="className"><span class="className">Derived</span></span> <span class="keyword">extends</span> <span class="className"><span class="identifier">Base</span></span> <span class="punctuation">{</span>
+  <span class="comment">// No modifier, so default is 'public'</span>
+  <span class="identifier">m</span> <span class="operator">=</span> <span class="numericLiteral">15</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+<span class="keyword">const</span> <span class="identifier">d</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="className"><span class="identifier">Derived</span></span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="identifier">d</span><span class="punctuation">.</span><span class="identifier">m</span><span class="punctuation">)</span><span class="punctuation">;</span> <span class="comment">// OK</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20Base%20%7B%0A%20%20protected%20m%20%3D%2010%3B%0A%7D%0Aclass%20Derived%20extends%20Base%20%7B%0A%20%20%2F%2F%20No%20modifier%2C%20so%20default%20is%20'public'%0A%20%20m%20%3D%2015%3B%0A%7D%0Aconst%20d%20%3D%20new%20Derived()%3B%0Aconsole.log(d.m)%3B%20%2F%2F%20OK">Try</a></pre></p>
+<p>Note that <code>Derived</code> was already able to freely read and write <code>m</code>, so this doesn't meaningfully alter the "security" of this situation.
+The main thing to note here is that in the derived class, we need to be careful to repeat the <code>protected</code> modifier if this exposure isn't intentional.</p>
+<h4 id="cross-hierarchy-protected-access"><a href="#cross-hierarchy-protected-access">Cross-hierarchy <code>protected</code> access</h4></a>
+<p>Different OOP languages disagree about whether it's legal to access a <code>protected</code> member through a base class reference:</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">Base</span></span> <span class="punctuation">{</span>
+    <span class="keyword">protected</span> <span class="identifier">x</span><span class="punctuation">:</span> <span class="keyword">number</span> <span class="operator">=</span> <span class="numericLiteral">1</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+<span class="keyword">class</span> <span class="className"><span class="className">Derived1</span></span> <span class="keyword">extends</span> <span class="className"><span class="identifier">Base</span></span> <span class="punctuation">{</span>
+    <span class="keyword">protected</span> <span class="identifier">x</span><span class="punctuation">:</span> <span class="keyword">number</span> <span class="operator">=</span> <span class="numericLiteral">5</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+<span class="keyword">class</span> <span class="className"><span class="className">Derived2</span></span> <span class="keyword">extends</span> <span class="className"><span class="identifier">Base</span></span> <span class="punctuation">{</span>
+    <span class="identifier">f1</span><span class="punctuation">(</span><span class="parameterName">other</span><span class="punctuation">:</span> <span class="className"><span class="identifier">Derived2</span></span><span class="punctuation">)</span> <span class="punctuation">{</span>
+        <span class="identifier">other</span><span class="punctuation">.</span><span class="identifier">x</span> <span class="operator">=</span> <span class="numericLiteral">10</span><span class="punctuation">;</span>
+    <span class="punctuation">}</span>
+    <span class="identifier">f2</span><span class="punctuation">(</span><span class="parameterName">other</span><span class="punctuation">:</span> <span class="className"><span class="identifier">Base</span></span><span class="punctuation">)</span> <span class="punctuation">{</span>
+        <span class="identifier">other</span><span class="punctuation">.</span><span class="error"><span class="error-highlight"></span><span class="identifier">x</span></span> <span class="operator">=</span> <span class="numericLiteral">10</span><span class="punctuation">;</span>
+    <span class="punctuation">}</span>
+<span class="punctuation">}</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Property 'x' is protected and only accessible through an instance of class 'Derived2'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20Base%20%7B%0A%20%20%20%20protected%20x%3A%20number%20%3D%201%3B%0A%7D%0Aclass%20Derived1%20extends%20Base%20%7B%0A%20%20%20%20protected%20x%3A%20number%20%3D%205%3B%0A%7D%0Aclass%20Derived2%20extends%20Base%20%7B%0A%20%20%20%20f1(other%3A%20Derived2)%20%7B%0A%20%20%20%20%20%20%20%20other.x%20%3D%2010%3B%0A%20%20%20%20%7D%0A%20%20%20%20f2(other%3A%20Base)%20%7B%0A%20%20%20%20%20%20%20%20other.x%20%3D%2010%3B%0A%20%20%20%20%7D%0A%7D">Try</a></pre></p>
+<p>Java, for example, considers this to be legal.
+On the other hand, C# and C++ chose that this code should be illegal.</p>
+<p>TypeScript sides with C# and C++ here, because accessing <code>x</code> in <code>Derived2</code> should only be legal from <code>Derived2</code>'s subclasses, and <code>Derived1</code> isn't one of them.
+Moreover, if accessing <code>x</code> through a <code>Derived2</code> reference is illegal (which it certainly should be!), then accessing it through a base class reference should never improve the situation.</p>
+<p>See also <a href="https://blogs.msdn.microsoft.com/ericlippert/2005/11/09/why-cant-i-access-a-protected-member-from-a-derived-class/">Why Can’t I Access A Protected Member From A Derived Class?</a> which explains more of C#'s reasoning.</p>
+<h3 id="private"><a href="#private"><code>private</code></h3></a>
+<p><code>private</code> is like <code>protected</code>, but doesn't allow access to the member even from subclasses:</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">Base</span></span> <span class="punctuation">{</span>
+  <span class="keyword">private</span> <span class="identifier">x</span> <span class="operator">=</span> <span class="numericLiteral">0</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+<span class="keyword">const</span> <span class="identifier">b</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="className"><span class="identifier">Base</span></span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="comment">// Can't access from outside the class</span>
+<span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="identifier">b</span><span class="punctuation">.</span><span class="error"><span class="error-highlight"></span><span class="identifier">x</span></span><span class="punctuation">)</span><span class="punctuation">;</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Property 'x' is private and only accessible within class 'Base'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20Base%20%7B%0A%20%20private%20x%20%3D%200%3B%0A%7D%0Aconst%20b%20%3D%20new%20Base()%3B%0A%2F%2F%20Can't%20access%20from%20outside%20the%20class%0Aconsole.log(b.x)%3B">Try</a></pre></p>
+<p><pre class="typescript-code">
+<span class="keyword">class</span> <span class="className"><span class="className">Derived</span></span> <span class="keyword">extends</span> <span class="className"><span class="identifier">Base</span></span> <span class="punctuation">{</span>
+  <span class="identifier">showX</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="comment">// Can't access in subclasses</span>
+    <span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="keyword">this</span><span class="punctuation">.</span><span class="error"><span class="error-highlight"></span><span class="identifier">x</span></span><span class="punctuation">)</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Property 'x' is private and only accessible within class 'Base'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20Base%20%7B%0A%20%20private%20x%20%3D%200%3B%0A%7D%0A%2F%2Fcut%0Aclass%20Derived%20extends%20Base%20%7B%0A%20%20showX()%20%7B%0A%20%20%20%20%2F%2F%20Can't%20access%20in%20subclasses%0A%20%20%20%20console.log(this.x)%3B%0A%20%20%7D%0A%7D">Try</a></pre></p>
+<p>Because <code>private</code> members aren't visible to derived classes, a derived class can't increase its visibility:</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">Base</span></span> <span class="punctuation">{</span>
+  <span class="keyword">private</span> <span class="identifier">x</span> <span class="operator">=</span> <span class="numericLiteral">0</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+<span class="keyword">class</span> <span class="error"><span class="error-highlight"></span><span class="className"><span class="className">Derived</span></span></span> <span class="keyword">extends</span> <span class="className"><span class="identifier">Base</span></span> <span class="punctuation">{</span>
+  <span class="identifier">x</span> <span class="operator">=</span> <span class="numericLiteral">1</span><span class="punctuation">;</span>
+<span class="punctuation">}</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Class 'Derived' incorrectly extends base class 'Base'.</div><div class="error-line"><div class="indent"></div>Property 'x' is private in type 'Base' but not in type 'Derived'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20Base%20%7B%0A%20%20private%20x%20%3D%200%3B%0A%7D%0Aclass%20Derived%20extends%20Base%20%7B%0A%20%20x%20%3D%201%3B%0A%7D">Try</a></pre></p>
+<h4 id="cross-instance-private-access"><a href="#cross-instance-private-access">Cross-instance <code>private</code> access</h4></a>
+<p>Different OOP languages disagree about whether different instances of the same class may access each others' <code>private</code> members.
+While languages like Java, C#, C++, Swift, and PHP allow this, Ruby does not.</p>
+<p>TypeScript does allow cross-instance <code>private</code> access:</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">A</span></span> <span class="punctuation">{</span>
+  <span class="keyword">private</span> <span class="identifier">x</span> <span class="operator">=</span> <span class="numericLiteral">10</span><span class="punctuation">;</span>
+
+  <span class="keyword">public</span> <span class="identifier">sameAs</span><span class="punctuation">(</span><span class="parameterName">other</span><span class="punctuation">:</span> <span class="className"><span class="identifier">A</span></span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="comment">// No error</span>
+    <span class="keyword">return</span> <span class="identifier">other</span><span class="punctuation">.</span><span class="identifier">x</span> <span class="operator">===</span> <span class="keyword">this</span><span class="punctuation">.</span><span class="identifier">x</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20A%20%7B%0A%20%20private%20x%20%3D%2010%3B%0A%0A%20%20public%20sameAs(other%3A%20A)%20%7B%0A%20%20%20%20%2F%2F%20No%20error%0A%20%20%20%20return%20other.x%20%3D%3D%3D%20this.x%3B%0A%20%20%7D%0A%7D">Try</a></pre></p>
+<h4 id="private-and-runtime-privacy"><a href="#private-and-runtime-privacy">Caveats</h4></a>
+<p>Like other aspects of TypeScript's type system, <code>private</code> and <code>protected</code> are only enforced during type checking.
+This means that JavaScript runtime constructs like <code>in</code> or simple property lookup can still access a <code>private</code> or <code>protected</code> member:</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">MySafe</span></span> <span class="punctuation">{</span>
+  <span class="keyword">private</span> <span class="identifier">secretKey</span> <span class="operator">=</span> <span class="numericLiteral">12345</span><span class="punctuation">;</span>
+<span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20MySafe%20%7B%0A%20%20private%20secretKey%20%3D%2012345%3B%0A%7D">Try</a></pre></p>
+<p><pre class="typescript-code"><span class="comment">// In a JavaScript file...</span>
+<span class="keyword">const</span> <span class="identifier">s</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="identifier">MySafe</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="comment">// Will print 12345</span>
+<span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="identifier">s</span><span class="punctuation">.</span><span class="identifier">secretKey</span><span class="punctuation">)</span><span class="punctuation">;</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20In%20a%20JavaScript%20file...%0Aconst%20s%20%3D%20new%20MySafe()%3B%0A%2F%2F%20Will%20print%2012345%0Aconsole.log(s.secretKey)%3B">Try</a></pre></p>
+<p>If you need to protect values in your class from malicious actors, you should use mechanisms that offer hard runtime privacy, such as closures, weak maps, or private fields.</p>
+<h2 id="static-members"><a href="#static-members">Static Members</h2></a>
+<aside>
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/static">Background Reading: Static Members (MDN)</a></p>
+  </aside>
+<p>Classes may have <code>static</code> members.
+These members aren't associated with a particular instance of the class.
+They can be accessed through the class constructor object itself:</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">MyClass</span></span> <span class="punctuation">{</span>
+  <span class="keyword">static</span> <span class="identifier">x</span> <span class="operator">=</span> <span class="numericLiteral">0</span><span class="punctuation">;</span>
+  <span class="keyword">static</span> <span class="identifier">printX</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="className"><span class="identifier">MyClass</span></span><span class="punctuation">.</span><span class="identifier">x</span><span class="punctuation">)</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span>
+<span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="className"><span class="identifier">MyClass</span></span><span class="punctuation">.</span><span class="identifier">x</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="className"><span class="identifier">MyClass</span></span><span class="punctuation">.</span><span class="identifier">printX</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20MyClass%20%7B%0A%20%20static%20x%20%3D%200%3B%0A%20%20static%20printX()%20%7B%0A%20%20%20%20console.log(MyClass.x)%3B%0A%20%20%7D%0A%7D%0Aconsole.log(MyClass.x)%3B%0AMyClass.printX()%3B">Try</a></pre></p>
+<p>Static members can also use the same <code>public</code>, <code>protected</code>, and <code>private</code> visibility modifiers:</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">MyClass</span></span> <span class="punctuation">{</span>
+  <span class="keyword">private</span> <span class="keyword">static</span> <span class="identifier">x</span> <span class="operator">=</span> <span class="numericLiteral">0</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+<span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="className"><span class="identifier">MyClass</span></span><span class="punctuation">.</span><span class="error"><span class="error-highlight"></span><span class="identifier">x</span></span><span class="punctuation">)</span><span class="punctuation">;</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Property 'x' is private and only accessible within class 'MyClass'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20MyClass%20%7B%0A%20%20private%20static%20x%20%3D%200%3B%0A%7D%0Aconsole.log(MyClass.x)%3B">Try</a></pre></p>
+<p>Static members are also inherited:</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">Base</span></span> <span class="punctuation">{</span>
+  <span class="keyword">static</span> <span class="identifier">getGreeting</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="keyword">return</span> <span class="stringLiteral">"Hello world"</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span>
+<span class="keyword">class</span> <span class="className"><span class="className">Derived</span></span> <span class="keyword">extends</span> <span class="className"><span class="identifier">Base</span></span> <span class="punctuation">{</span>
+  <span class="identifier">myGreeting</span> <span class="operator">=</span> <span class="className"><span class="identifier">Derived</span></span><span class="punctuation">.</span><span class="identifier">getGreeting</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20Base%20%7B%0A%20%20static%20getGreeting()%20%7B%0A%20%20%20%20return%20%22Hello%20world%22%3B%0A%20%20%7D%0A%7D%0Aclass%20Derived%20extends%20Base%20%7B%0A%20%20myGreeting%20%3D%20Derived.getGreeting()%3B%0A%7D">Try</a></pre></p>
+<h3 id="special-static-names"><a href="#special-static-names">Special Static Names</h3></a>
+<p>It's generally not safe/possible to overwrite properties from the <code>Function</code> prototype.
+Because classes are themselves functions that can be invoked with <code>new</code>, certain <code>static</code> names can't be used.
+Function properties like <code>name</code>, <code>length</code>, and <code>call</code> aren't valid to define as <code>static</code> members:</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">S</span></span> <span class="punctuation">{</span>
+  <span class="keyword">static</span> <span class="error"><span class="error-highlight"></span><span class="identifier">name</span></span> <span class="operator">=</span> <span class="stringLiteral">"S!"</span><span class="punctuation">;</span>
+<span class="punctuation">}</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'S'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20S%20%7B%0A%20%20static%20name%20%3D%20%22S!%22%3B%0A%7D">Try</a></pre></p>
+<h3 id="why-no-static-classes"><a href="#why-no-static-classes">Why No Static Classes?</h3></a>
+<p>TypeScript (and JavaScript) don't have a construct called <code>static class</code> the same way C# and Java do.</p>
+<p>Those constructs <em>only</em> exist because those languages force all data and functions to be inside a class; because that restriction doesn't exist in TypeScript, there's no need for them.
+A class with only a single instance is typically just represented as a normal <em>object</em> in JavaScript/TypeScript.</p>
+<p>For example, we don't need a "static class" syntax in TypeScript because a regular object (or even top-level function) will do the job just as well:</p>
+<p><pre class="typescript-code"><span class="comment">// Unnecessary "static" class</span>
+<span class="keyword">class</span> <span class="className"><span class="className">MyStaticClass</span></span> <span class="punctuation">{</span>
+    <span class="keyword">static</span> <span class="identifier">doSomething</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+
+    <span class="punctuation">}</span>
+<span class="punctuation">}</span>
+
+<span class="comment">// Preferred (alternative 1)</span>
+<span class="keyword">function</span> <span class="identifier">doSomething</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+
+<span class="punctuation">}</span>
+
+<span class="comment">// Preferred (alternative 2)</span>
+<span class="keyword">const</span> <span class="identifier">MyHelperObject</span> <span class="operator">=</span> <span class="punctuation">{</span>
+    <span class="identifier">dosomething</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+
+    <span class="punctuation">}</span>
+<span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20Unnecessary%20%22static%22%20class%0Aclass%20MyStaticClass%20%7B%0A%20%20%20%20static%20doSomething()%20%7B%0A%0A%20%20%20%20%7D%0A%7D%0A%0A%2F%2F%20Preferred%20(alternative%201)%0Afunction%20doSomething()%20%7B%0A%0A%7D%0A%0A%2F%2F%20Preferred%20(alternative%202)%0Aconst%20MyHelperObject%20%3D%20%7B%0A%20%20%20%20dosomething()%20%7B%0A%0A%20%20%20%20%7D%0A%7D">Try</a></pre></p>
+<h2 id="generic-classes"><a href="#generic-classes">Generic Classes</h2></a>
+<p>Classes, much like interfaces, can be generic.
+When a generic class is instantiated with <code>new</code>, its type parameters are inferred the same way as in a function call:</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">Box</span></span><span class="punctuation"><</span><span class="typeParameterName"><span class="typeParameterName">T</span></span><span class="punctuation">></span> <span class="punctuation">{</span>
+  <span class="identifier">contents</span><span class="punctuation">:</span> <span class="typeParameterName"><span class="identifier">T</span></span><span class="punctuation">;</span>
+  <span class="keyword">constructor</span><span class="punctuation">(</span><span class="parameterName">value</span><span class="punctuation">:</span> <span class="typeParameterName"><span class="identifier">T</span></span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="keyword">this</span><span class="punctuation">.</span><span class="identifier">contents</span> <span class="operator">=</span> <span class="identifier">value</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span>
+
+<span class="keyword">const</span> <span class="identifier">b</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="className"><span class="identifier">Box</span></span><span class="punctuation">(</span><span class="stringLiteral">"hello!"</span><span class="punctuation">)</span><span class="punctuation">;</span>
+      <span class="quickinfo-result"><span class="quickinfo-arrow">▲</span><span class="keyword">const</span><span class="space"> </span><span class="localName">b</span><span class="punctuation">:</span><span class="space"> </span><span class="className">Box</span><span class="punctuation"><</span><span class="keyword">string</span><span class="punctuation">></span></span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20Box%3CT%3E%20%7B%0A%20%20contents%3A%20T%3B%0A%20%20constructor(value%3A%20T)%20%7B%0A%20%20%20%20this.contents%20%3D%20value%3B%0A%20%20%7D%0A%7D%0A%0Aconst%20b%20%3D%20new%20Box(%22hello!%22)%3B">Try</a></pre></p>
+<p>Classes can use generic constraints and defaults the same way as interfaces.</p>
+<h3 id="type-parameters-in-static-members"><a href="#type-parameters-in-static-members">Type Parameters in Static Members</h3></a>
+<p>This code isn't legal, and it may not be obvious why:</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">Box</span></span><span class="punctuation"><</span><span class="typeParameterName"><span class="typeParameterName">T</span></span><span class="punctuation">></span> <span class="punctuation">{</span>
+  <span class="keyword">static</span> <span class="identifier">defaultValue</span><span class="punctuation">:</span> <span class="error"><span class="error-highlight"></span><span class="identifier">T</span></span><span class="punctuation">;</span>
+<span class="punctuation">}</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Static members cannot reference class type parameters.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20Box%3CT%3E%20%7B%0A%20%20static%20defaultValue%3A%20T%3B%0A%7D">Try</a></pre></p>
+<p>Remember that types are always fully erased!
+At runtime, there's only <em>one</em> <code>Box.defaultValue</code> property slot.
+This means that setting <code>Box&lt;string&gt;.defaultValue</code> (if that were possible) would <em>also</em> change <code>Box&lt;number&gt;.defaultValue</code> - not good.
+The <code>static</code> members of a generic class can never refer to the class's type parameters.</p>
+<h2 id="runtime-this-in-classes"><a href="#runtime-this-in-classes"><code>this</code> at Runtime in Classes</h2></a>
+<aside>
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this">Background Reading: <code>this</code> keyword (MDN)</a></p>
+  </aside>
+<p>It's important to remember that TypeScript doesn't change the runtime behavior of JavaScript, and that JavaScript is somewhat famous for having some peculiar runtime behaviors.</p>
+<p>JavaScript's handling of <code>this</code> is indeed unusual:</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">MyClass</span></span> <span class="punctuation">{</span>
+  <span class="identifier">name</span> <span class="operator">=</span> <span class="stringLiteral">"MyClass"</span><span class="punctuation">;</span>
+  <span class="identifier">getName</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="keyword">return</span> <span class="keyword">this</span><span class="punctuation">.</span><span class="identifier">name</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span>
+<span class="keyword">const</span> <span class="identifier">c</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="className"><span class="identifier">MyClass</span></span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="keyword">const</span> <span class="identifier">obj</span> <span class="operator">=</span> <span class="punctuation">{</span>
+  <span class="identifier">name</span><span class="punctuation">:</span> <span class="stringLiteral">"obj"</span><span class="punctuation">,</span>
+  <span class="identifier">getName</span><span class="punctuation">:</span> <span class="identifier">c</span><span class="punctuation">.</span><span class="identifier">getName</span>
+<span class="punctuation">}</span><span class="punctuation">;</span>
+
+<span class="comment">// Prints "obj", not "MyClass"</span>
+<span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="identifier">obj</span><span class="punctuation">.</span><span class="identifier">getName</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">;</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20MyClass%20%7B%0A%20%20name%20%3D%20%22MyClass%22%3B%0A%20%20getName()%20%7B%0A%20%20%20%20return%20this.name%3B%0A%20%20%7D%0A%7D%0Aconst%20c%20%3D%20new%20MyClass()%3B%0Aconst%20obj%20%3D%20%7B%0A%20%20name%3A%20%22obj%22%2C%0A%20%20getName%3A%20c.getName%0A%7D%3B%0A%0A%2F%2F%20Prints%20%22obj%22%2C%20not%20%22MyClass%22%0Aconsole.log(obj.getName())%3B">Try</a></pre></p>
+<p>Long story short, by default, the value of <code>this</code> inside a function depends on <em>how the function was called</em>.
+In this example, because the function was called through the <code>obj</code> reference, its value of <code>this</code> was <code>obj</code> rather than the class instance.</p>
+<p>This is rarely what you want to happen!
+TypeScript provides some ways to mitigate or prevent this kind of error.</p>
+<h3 id="arrow-functions"><a href="#arrow-functions">Arrow Functions</h3></a>
+<aside>
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions">Background Reading: Arrow functions (MDN)</a></p>
+  </aside>
+<p>If you have a function that will often be called in a way that loses its <code>this</code> context, it can make sense to use an arrow function property instead of a method definition:</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">MyClass</span></span> <span class="punctuation">{</span>
+  <span class="identifier">name</span> <span class="operator">=</span> <span class="stringLiteral">"MyClass"</span><span class="punctuation">;</span>
+  <span class="identifier">getName</span> <span class="operator">=</span> <span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">=></span> <span class="punctuation">{</span>
+    <span class="keyword">return</span> <span class="keyword">this</span><span class="punctuation">.</span><span class="identifier">name</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span>
+<span class="keyword">const</span> <span class="identifier">c</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="className"><span class="identifier">MyClass</span></span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="keyword">const</span> <span class="identifier">g</span> <span class="operator">=</span> <span class="identifier">c</span><span class="punctuation">.</span><span class="identifier">getName</span><span class="punctuation">;</span>
+<span class="comment">// Prints "MyClass" instead of crashing</span>
+<span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="identifier">g</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">;</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20MyClass%20%7B%0A%20%20name%20%3D%20%22MyClass%22%3B%0A%20%20getName%20%3D%20()%20%3D%3E%20%7B%0A%20%20%20%20return%20this.name%3B%0A%20%20%7D%0A%7D%0Aconst%20c%20%3D%20new%20MyClass()%3B%0Aconst%20g%20%3D%20c.getName%3B%0A%2F%2F%20Prints%20%22MyClass%22%20instead%20of%20crashing%0Aconsole.log(g())%3B">Try</a></pre></p>
+<p>This has some trade-offs:</p>
+<ul>
+<li>The <code>this</code> value is guaranteed to be correct at runtime, even for code not checked with TypeScript</li>
+<li>This will use more memory, because each class instance will have its own copy of each function defined this way</li>
+<li>You can't use <code>super.getName</code> in a derived class, because there's no entry in the prototype chain to fetch the base class method from</li>
+</ul>
+<h3 id="this-parameters"><a href="#this-parameters"><code>this</code> parameters</h3></a>
+<p>In a method or function definition, an initial parameter named <code>this</code> has special meaning in TypeScript.
+These parameters are erased during compilation:</p>
+<p><pre class="typescript-code">
+<span class="comment">// TypeScript input with 'this' parameter</span>
+<span class="keyword">function</span> <span class="identifier">fn</span><span class="punctuation">(</span><span class="keyword">this</span><span class="punctuation">:</span> <span class="typeAliasName"><span class="identifier">SomeType</span></span><span class="punctuation">,</span> <span class="parameterName">x</span><span class="punctuation">:</span> <span class="keyword">number</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+  <span class="comment">/* ... */</span>
+<span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=type%20SomeType%20%3D%20any%0A%2F%2Fcut%0A%2F%2F%20TypeScript%20input%20with%20'this'%20parameter%0Afunction%20fn(this%3A%20SomeType%2C%20x%3A%20number)%20%7B%0A%20%20%2F*%20...%20*%2F%0A%7D">Try</a></pre>
+<pre class="typescript-code"><span class="comment">// JavaScript output</span>
+<span class="keyword">function</span> <span class="identifier">fn</span><span class="punctuation">(</span><span class="parameterName">x</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+  <span class="comment">/* ... */</span>
+<span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20JavaScript%20output%0Afunction%20fn(x)%20%7B%0A%20%20%2F*%20...%20*%2F%0A%7D">Try</a></pre></p>
+<p>TypeScript checks that calling a function with a <code>this</code> parameter is done so with a correct context.
+Instead of using an arrow function, we can add a <code>this</code> parameter to method definitions to statically enforce that the method is called correctly:</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">MyClass</span></span> <span class="punctuation">{</span>
+  <span class="identifier">name</span> <span class="operator">=</span> <span class="stringLiteral">"MyClass"</span><span class="punctuation">;</span>
+  <span class="identifier">getName</span><span class="punctuation">(</span><span class="keyword">this</span><span class="punctuation">:</span> <span class="className"><span class="identifier">MyClass</span></span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="keyword">return</span> <span class="keyword">this</span><span class="punctuation">.</span><span class="identifier">name</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span>
+<span class="keyword">const</span> <span class="identifier">c</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="className"><span class="identifier">MyClass</span></span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="comment">// OK</span>
+<span class="identifier">c</span><span class="punctuation">.</span><span class="identifier">getName</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+
+<span class="comment">// Error, would crash</span>
+<span class="keyword">const</span> <span class="identifier">g</span> <span class="operator">=</span> <span class="identifier">c</span><span class="punctuation">.</span><span class="identifier">getName</span><span class="punctuation">;</span>
+<span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="error"><span class="error-highlight"></span><span class="identifier">g</span><span class="punctuation">(</span><span class="punctuation">)</span></span><span class="punctuation">)</span><span class="punctuation">;</span><hr class="error-divider"><div class="listed-error"><div class="error-line">The 'this' context of type 'void' is not assignable to method's 'this' of type 'MyClass'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20MyClass%20%7B%0A%20%20name%20%3D%20%22MyClass%22%3B%0A%20%20getName(this%3A%20MyClass)%20%7B%0A%20%20%20%20return%20this.name%3B%0A%20%20%7D%0A%7D%0Aconst%20c%20%3D%20new%20MyClass()%3B%0A%2F%2F%20OK%0Ac.getName()%3B%0A%0A%2F%2F%20Error%2C%20would%20crash%0Aconst%20g%20%3D%20c.getName%3B%0Aconsole.log(g())%3B">Try</a></pre></p>
+<p>This method takes the opposite trade-offs of the arrow function approach:</p>
+<ul>
+<li>JavaScript callers might still use the class method incorrectly without realizing it</li>
+<li>Only one function per class definition gets allocated, rather than one per class instance</li>
+<li>Base method definitions can still be called via <code>super.</code></li>
+</ul>
+<h2 id="this-types"><a href="#this-types"><code>this</code> Types</h2></a>
+<p>In classes, a special type called <code>this</code> refers <em>dynamically</em> to the type of the current class.
+Let's see how this is useful:</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">Box</span></span> <span class="punctuation">{</span>
+  <span class="identifier">contents</span><span class="punctuation">:</span> <span class="keyword">string</span> <span class="operator">=</span> <span class="stringLiteral">""</span><span class="punctuation">;</span>
+  <span class="identifier">set</span><span class="punctuation">(</span><span class="parameterName">value</span><span class="punctuation">:</span> <span class="keyword">string</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+   <span class="quickinfo-result"><span class="quickinfo-arrow">▲</span><span class="punctuation">(</span><span class="text">method</span><span class="punctuation">)</span><span class="space"> </span><span class="className">Box</span><span class="punctuation">.</span><span class="methodName">set</span><span class="punctuation">(</span><span class="parameterName">value</span><span class="punctuation">:</span><span class="space"> </span><span class="keyword">string</span><span class="punctuation">)</span><span class="punctuation">:</span><span class="space"> </span><span class="keyword">this</span></span>
+    <span class="keyword">this</span><span class="punctuation">.</span><span class="identifier">contents</span> <span class="operator">=</span> <span class="identifier">value</span><span class="punctuation">;</span>
+    <span class="keyword">return</span> <span class="keyword">this</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20Box%20%7B%0A%20%20contents%3A%20string%20%3D%20%22%22%3B%0A%20%20set(value%3A%20string)%20%7B%0A%20%20%20%20this.contents%20%3D%20value%3B%0A%20%20%20%20return%20this%3B%0A%20%20%7D%0A%7D">Try</a></pre></p>
+<p>Here, TypeScript inferred the return type of <code>set</code> to be <code>this</code>, rather than <code>Box</code>.
+Now let's make a subclass of <code>Box</code>:</p>
+<p><pre class="typescript-code">
+<span class="keyword">class</span> <span class="className"><span class="className">ClearableBox</span></span> <span class="keyword">extends</span> <span class="className"><span class="identifier">Box</span></span> <span class="punctuation">{</span>
+  <span class="identifier">clear</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="keyword">this</span><span class="punctuation">.</span><span class="identifier">contents</span> <span class="operator">=</span> <span class="stringLiteral">""</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span>
+
+<span class="keyword">const</span> <span class="identifier">a</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="className"><span class="identifier">ClearableBox</span></span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="keyword">const</span> <span class="identifier">b</span> <span class="operator">=</span> <span class="identifier">a</span><span class="punctuation">.</span><span class="identifier">set</span><span class="punctuation">(</span><span class="stringLiteral">"hello"</span><span class="punctuation">)</span><span class="punctuation">;</span>
+      <span class="quickinfo-result"><span class="quickinfo-arrow">▲</span><span class="keyword">const</span><span class="space"> </span><span class="localName">b</span><span class="punctuation">:</span><span class="space"> </span><span class="className">ClearableBox</span></span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20Box%20%7B%0A%20%20contents%3A%20string%20%3D%20%22%22%3B%0A%20%20set(value%3A%20string)%20%7B%0A%20%20%20%20this.contents%20%3D%20value%3B%0A%20%20%20%20return%20this%3B%0A%20%20%7D%0A%7D%0A%2F%2Fcut%0Aclass%20ClearableBox%20extends%20Box%20%7B%0A%20%20clear()%20%7B%0A%20%20%20%20this.contents%20%3D%20%22%22%3B%0A%20%20%7D%0A%7D%0A%0Aconst%20a%20%3D%20new%20ClearableBox()%3B%0Aconst%20b%20%3D%20a.set(%22hello%22)%3B">Try</a></pre></p>
+<p>You can also use <code>this</code> in a parameter type annotation:</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">Box</span></span> <span class="punctuation">{</span>
+  <span class="identifier">content</span><span class="punctuation">:</span> <span class="keyword">string</span> <span class="operator">=</span> <span class="stringLiteral">""</span><span class="punctuation">;</span>
+  <span class="identifier">sameAs</span><span class="punctuation">(</span><span class="parameterName">other</span><span class="punctuation">:</span> <span class="keyword">this</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="keyword">return</span> <span class="identifier">other</span><span class="punctuation">.</span><span class="identifier">content</span> <span class="operator">===</span> <span class="keyword">this</span><span class="punctuation">.</span><span class="identifier">content</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20Box%20%7B%0A%20%20content%3A%20string%20%3D%20%22%22%3B%0A%20%20sameAs(other%3A%20this)%20%7B%0A%20%20%20%20return%20other.content%20%3D%3D%3D%20this.content%3B%0A%20%20%7D%0A%7D">Try</a></pre></p>
+<p>This is different from writing <code>other: Box</code> -- if you have a derived class, its <code>sameAs</code> method will now only accept other instances of that same derived class:</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">Box</span></span> <span class="punctuation">{</span>
+  <span class="identifier">content</span><span class="punctuation">:</span> <span class="keyword">string</span> <span class="operator">=</span> <span class="stringLiteral">""</span><span class="punctuation">;</span>
+  <span class="identifier">sameAs</span><span class="punctuation">(</span><span class="parameterName">other</span><span class="punctuation">:</span> <span class="keyword">this</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="keyword">return</span> <span class="identifier">other</span><span class="punctuation">.</span><span class="identifier">content</span> <span class="operator">===</span> <span class="keyword">this</span><span class="punctuation">.</span><span class="identifier">content</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span>
+
+<span class="keyword">class</span> <span class="className"><span class="className">DerivedBox</span></span> <span class="keyword">extends</span> <span class="className"><span class="identifier">Box</span></span>  <span class="punctuation">{</span>
+  <span class="identifier">otherContent</span><span class="punctuation">:</span> <span class="keyword">string</span> <span class="operator">=</span> <span class="stringLiteral">"?"</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="keyword">const</span> <span class="identifier">base</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="className"><span class="identifier">Box</span></span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="keyword">const</span> <span class="identifier">derived</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="className"><span class="identifier">DerivedBox</span></span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="identifier">derived</span><span class="punctuation">.</span><span class="identifier">sameAs</span><span class="punctuation">(</span><span class="error"><span class="error-highlight"></span><span class="identifier">base</span></span><span class="punctuation">)</span><span class="punctuation">;</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Argument of type 'Box' is not assignable to parameter of type 'DerivedBox'.</div><div class="error-line"><div class="indent"></div>Property 'otherContent' is missing in type 'Box' but required in type 'DerivedBox'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20Box%20%7B%0A%20%20content%3A%20string%20%3D%20%22%22%3B%0A%20%20sameAs(other%3A%20this)%20%7B%0A%20%20%20%20return%20other.content%20%3D%3D%3D%20this.content%3B%0A%20%20%7D%0A%7D%0A%0Aclass%20DerivedBox%20extends%20Box%20%20%7B%0A%20%20otherContent%3A%20string%20%3D%20%22%3F%22%3B%0A%7D%0A%0Aconst%20base%20%3D%20new%20Box()%3B%0Aconst%20derived%20%3D%20new%20DerivedBox()%3B%0Aderived.sameAs(base)%3B">Try</a></pre></p>
+<h2 id="parameter-properties"><a href="#parameter-properties">Parameter Properties</h2></a>
+<p>TypeScript offers special syntax for turning a constructor parameter into a class property with the same name and value.
+These are called <em>parameter properties</em> and are created by prefixing a constructor argument with one of the visibility modifiers <code>public</code>, <code>private</code>, <code>protected</code>, or <code>readonly</code>.
+The resulting field gets those modifier(s):</p>
+<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">A</span></span> <span class="punctuation">{</span>
+  <span class="keyword">constructor</span> <span class="punctuation">(</span><span class="keyword">public</span> <span class="keyword">readonly</span> <span class="parameterName">x</span><span class="punctuation">:</span> <span class="keyword">number</span><span class="punctuation">,</span> <span class="keyword">protected</span> <span class="parameterName">y</span><span class="punctuation">:</span> <span class="keyword">number</span><span class="punctuation">,</span> <span class="keyword">private</span> <span class="parameterName">z</span><span class="punctuation">:</span> <span class="keyword">number</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="comment">// No body necessary</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span>
+<span class="keyword">const</span> <span class="identifier">a</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="className"><span class="identifier">A</span></span><span class="punctuation">(</span><span class="numericLiteral">1</span><span class="punctuation">,</span> <span class="numericLiteral">2</span><span class="punctuation">,</span> <span class="numericLiteral">3</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="identifier">a</span><span class="punctuation">.</span><span class="identifier">x</span><span class="punctuation">)</span><span class="punctuation">;</span>
+              <span class="quickinfo-result"><span class="quickinfo-arrow">▲</span><span class="punctuation">(</span><span class="text">property</span><span class="punctuation">)</span><span class="space"> </span><span class="className">A</span><span class="punctuation">.</span><span class="propertyName">x</span><span class="punctuation">:</span><span class="space"> </span><span class="keyword">number</span></span>
+<span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="identifier">a</span><span class="punctuation">.</span><span class="error"><span class="error-highlight"></span><span class="identifier">z</span></span><span class="punctuation">)</span><span class="punctuation">;</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Property 'z' is private and only accessible within class 'A'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20A%20%7B%0A%20%20constructor%20(public%20readonly%20x%3A%20number%2C%20protected%20y%3A%20number%2C%20private%20z%3A%20number)%20%7B%0A%20%20%20%20%2F%2F%20No%20body%20necessary%0A%20%20%7D%0A%7D%0Aconst%20a%20%3D%20new%20A(1%2C%202%2C%203)%3B%0Aconsole.log(a.x)%3B%0Aconsole.log(a.z)%3B">Try</a></pre></p>
+<h2 id="class-expressions"><a href="#class-expressions">Class Expressions</h2></a>
+<aside>
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/class">Background reading: Class expressions (MDN)</a></p>
+  </aside>
+<p>Class expressions are very similar to class declarations.
+The only real difference is that class expressions don't need a name, though we can refer to them via whatever identifier they ended up bound to:</p>
+<p><pre class="typescript-code"><span class="keyword">const</span> <span class="identifier">someClass</span> <span class="operator">=</span> <span class="keyword">class</span><span class="punctuation"><</span><span class="typeParameterName"><span class="typeParameterName">T</span></span><span class="punctuation">></span> <span class="punctuation">{</span>
+  <span class="identifier">content</span><span class="punctuation">:</span> <span class="typeParameterName"><span class="identifier">T</span></span><span class="punctuation">;</span>
+  <span class="keyword">constructor</span><span class="punctuation">(</span><span class="parameterName">value</span><span class="punctuation">:</span> <span class="typeParameterName"><span class="identifier">T</span></span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="keyword">this</span><span class="punctuation">.</span><span class="identifier">content</span> <span class="operator">=</span> <span class="identifier">value</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span>
+
+<span class="keyword">const</span> <span class="identifier">m</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="identifier">someClass</span><span class="punctuation">(</span><span class="stringLiteral">"Hello, world"</span><span class="punctuation">)</span><span class="punctuation">;</span>
+      <span class="quickinfo-result"><span class="quickinfo-arrow">▲</span><span class="keyword">const</span><span class="space"> </span><span class="localName">m</span><span class="punctuation">:</span><span class="space"> </span><span class="className">someClass</span><span class="punctuation"><</span><span class="keyword">string</span><span class="punctuation">></span></span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=const%20someClass%20%3D%20class%3CT%3E%20%7B%0A%20%20content%3A%20T%3B%0A%20%20constructor(value%3A%20T)%20%7B%0A%20%20%20%20this.content%20%3D%20value%3B%0A%20%20%7D%0A%7D%0A%0Aconst%20m%20%3D%20new%20someClass(%22Hello%2C%20world%22)%3B">Try</a></pre></p>
+<h2 id="abstract-classes-and-members"><a href="#abstract-classes-and-members"><code>abstract</code> Classes and Members</h2></a>
+<h3 id="abstract-construct-signatures"><a href="#abstract-construct-signatures">Abstract Construct Signatures</h3></a>
+<h2 id="relationships-between-classes"><a href="#relationships-between-classes">Relationships Between Classes</h2></a>
+<h2 id="constructor-functions-and-instance-types"><a href="#constructor-functions-and-instance-types">Constructor Functions and Instance Types</h2></a>
+<h2 id="handling-generic-constructors"><a href="#handling-generic-constructors">Handling Generic Constructors</h2></a>
+<h2 id="impact-of-the-class-fields-proposal"><a href="#impact-of-the-class-fields-proposal">Impact of the Class Fields Proposal</h2></a>
+<ul>
+<li>Basics</li>
+<li>Hey it's just ES6</li>
+<li>Methods and properties</li>
+<li>Class heritage</li>
+<li>inherits<ul>
+<li>ES6 thing again</li>
+<li>We don't have inherited typing yet</li>
+<li>Inheriting from Error / Array / etc</li></ul></li>
+<li>implements<ul>
+<li>Again, just a check</li>
+<li>Be wary of anys</li></ul></li>
+<li>public, private, protected</li>
+<li>Generics</li>
+<li>Static</li>
+<li>Instance type parameters</li>
+<li>Managing <code>this</code></li>
+<li>Arrow functions</li>
+<li><code>this</code> parameters</li>
+<li>The <code>this</code> type</li>
+<li><code>this</code>-related flags</li>
+<li>Parameter properties</li>
+</ul>
+    </article>
+
+    <script src="https://unpkg.com/popper.js@1/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/tippy.js@4"></script>
+    <script>
+        tippy.setDefaults({preventOverflow: { enabled: false } });
+    </script>
+    </body>
+    </html>

@@ -14,7 +14,7 @@
 However, almost all JavaScript today includes many libraries to accomplish common tasks.
 Having types for the parts of your application that <em>aren't</em> your code will greatly improve your TypeScript experience.
 Where do these types come from?</p>
-<div class="toc"><span class="toc-title">Table of Contents</span><ul><li><a href="#.d.ts-files"><code>.d.ts</code> files</a></li><li><a href="#built-in-type-definitions">Built-in Type Definitions</a></li><ul><li><a href="#target-setting"><code>target</code> setting</a></li><li><a href="#lib-setting"><code>lib</code> setting</a></li></ul><li><a href="#external-definitions">External Definitions</a></li><ul><li><a href="#bundled-types">Bundled Types</a></li><li><a href="#definitelytyped-/-@types">DefinitelyTyped / <code>@types</code></a></li><li><a href="#your-own-definitions">Your Own Definitions</a></li></ul></ul></ul></div>
+<div class="toc"><span class="toc-title">Table of Contents</span><ul><li><a href="#.d.ts-files"><code>.d.ts</code> files</a></li><li><a href="#built-in-type-definitions">Built-in Type Definitions</a></li><ul><li><a href="#target-setting"><code>target</code> setting</a></li><li><a href="#lib-setting"><code>lib</code> setting</a></li></ul><li><a href="#external-definitions">External Definitions</a></li><ul><li><a href="#bundled-types">Bundled Types</a></li><li><a href="#definitelytyped--@types">DefinitelyTyped / <code>@types</code></a></li><li><a href="#your-own-definitions">Your Own Definitions</a></li></ul></ul></ul></div>
 <h2 id="dts-files"><a href="#dts-files"><code>.d.ts</code> files</h2></a>
 <p>TypeScript has two main kinds of files.
 <code>.ts</code> files are <em>implementation</em> files that contain types and executable code.
@@ -51,15 +51,15 @@ The vast majority of commonly-used libraries have declaration files available on
 <p>Definitions on DefinitelyTyped are also automatically published to npm under the <code>@types</code> scope.
 The name of the types package is always the same as the name of the underlying package itself.
 For example, if you installed the <code>react</code> npm package, you can install its corresponding types by running</p>
-<pre><code> npm install --save-dev @types/react
+<pre><code class="sh language-sh">npm install --save-dev @types/react
 </code></pre>
 <p>TypeScript automatically finds type definitions under <code>node_modules/@types</code>, so there's no other step needed to get these types available in your program.</p>
 <h3 id="your-own-definitions"><a href="#your-own-definitions">Your Own Definitions</h3></a>
 <p>In the uncommon event that a library didn't bundle its own types and didn't have a definition on DefinitelyTyped, you can write a declaration file yourself.
 See the appendix Writing Declaration Files for a guide.</p>
 <p>If you want to silence warnings about a particular module without writing a declaration file, you can also quick declare the module as type <code>any</code> by putting an empty declaration for it in a <code>.d.ts</code> file in your project.
-For example, if you wanted to use a module named <code>some-untyped-module</code> without having definitions for it, you would write:
-<pre class="typescript-code"><span class="keyword">declare</span> <span class="keyword">module</span> <span class="stringLiteral">"some-untyped-module"</span><span class="punctuation">;</span></pre></p>
+For example, if you wanted to use a module named <code>some-untyped-module</code> without having definitions for it, you would write:</p>
+<p><pre class="typescript-code"><span class="keyword">declare</span> <span class="keyword">module</span> <span class="stringLiteral">"some-untyped-module"</span><span class="punctuation">;</span></pre></p>
     </article>
 
     <script src="https://unpkg.com/popper.js@1/dist/umd/popper.min.js"></script>

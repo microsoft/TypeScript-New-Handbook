@@ -3,14 +3,14 @@
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Types in JavaScript: they <em>do</em> exist!</title>
+        <title>TypeScript Basics</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" media="screen" href="../../css/handbook.css" />
     </head>
     <body>
     <article>
-    <h1 id="types-in-javascript-they-do-exist"><a href="#types-in-javascript-they-do-exist">Types in JavaScript: they <em>do</em> exist!</h1></a>
-<div class="toc"><span class="toc-title">Table of Contents</span><ul><li><a href="#errors-don't-block-output">Errors don't block output</a></li><li><a href="#explicit-types">Explicit types</a></li><li><a href="#stripping-types-out">Stripping types out</a></li><li><a href="#downleveling">Downleveling</a></li><li><a href="#noimplicitany"><code>noImplicitAny</code></a></li><li><a href="#strictnullchecks"><code>strictNullChecks</code></a></li></ul></ul></div>
+    <h1 id="typescript-basics"><a href="#typescript-basics">TypeScript Basics</h1></a>
+<div class="toc"><span class="toc-title">Table of Contents</span><ul><li><a href="#static-type-checking">Static type-checking</a></li><li><a href="#non-exception-failures">Non-exception Failures</a></li><li><a href="#types-for-tooling">Types for Tooling</a></li><li><a href="#tsc,-the-typescript-compiler"><code>tsc</code>, the TypeScript compiler</a></li><ul><li><a href="#emitting-with-errors">Emitting with Errors</a></li></ul><li><a href="#explicit-types">Explicit Types</a></li><li><a href="#erased-types">Erased Types</a></li><li><a href="#downleveling">Downleveling</a></li><li><a href="#strictness">Strictness</a></li><ul><li><a href="#noimplicitany"><code>noImplicitAny</code></a></li><li><a href="#strictnullchecks"><code>strictNullChecks</code></a></li></ul></ul></ul></div>
 <p>Each and every value in JavaScript has a set of behaviors you can observe from running different operations.
 That sounds abstract, but as a quick example, consider some operations we might run on a variable named <code>foo</code>.</p>
 <p><pre class="typescript-code"><span class="comment">// accessing the property 'toLowerCase'</span>
@@ -31,26 +31,26 @@ The answers to these questions are usually things we keep in our heads when we w
 <p>Let's say <code>foo</code> was defined in the following way.</p>
 <p><pre class="typescript-code"><span class="keyword">let</span> <span class="identifier">foo</span> <span class="operator">=</span> <span class="stringLiteral">"Hello World!"</span><span class="punctuation">;</span></pre></p>
 <p>As you can probably guess, if we try to run <code>foo.toLowerCase()</code>, we'll get the same string, but completely in lower-case letters.</p>
-<pre><code>"hello world!"
-</code></pre>
 <p>What about that second line of code?
-If you're familiar with JavaScript, you'll know this fails with a thrown error.</p>
-<pre><code>TypeError: foo is not a function
+If you're familiar with JavaScript, you'll know this fails with an exception:</p>
+<pre><code class="txt language-txt">TypeError: foo is not a function
 </code></pre>
-<p>Oof - it'd be great if we could avoid mistakes like this.
+<p>It'd be great if we could avoid mistakes like this.
 When we run our code, the way that our JavaScript runtime chooses what to do is by figuring out the <em>type</em> of the value - what sorts of behaviors and capabilities it has.
-That's part of what that <code>TypeError</code> is alluding to - it's saying that there's nothing to call on the string <code>"Hello World"</code></p>
-<p>You might have heard of types before and assumed it was a TypeScript-specific concept.
-That's totally understandable - I mean, it's got "type" right there in the name!
-But the truth is that types are firmly baked into JavaScript itself.
-That <code>TypeError</code> hinted to it before, but we can also see this for ourselves using the <code>typeof</code> operator.</p>
-<p><pre class="typescript-code"><span class="keyword">typeof</span> <span class="numericLiteral">1234</span><span class="punctuation">;</span> <span class="comment">// has type "number"</span>
-
-<span class="keyword">typeof</span> <span class="stringLiteral">"hello world"</span> <span class="comment">// has type "string"</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=typeof%201234%3B%20%2F%2F%20has%20type%20%22number%22%0A%0Atypeof%20%22hello%20world%22%20%2F%2F%20has%20type%20%22string%22">Try</a></pre></p>
-<p>These are what we call "runtime types" or "dynamic types".
-When we run our code, the value <code>1234</code> has a type called <code>number</code>, and the value <code>"hello world"</code> has the type <code>string</code>.
-When we say that JavaScript is a "dynamically typed" language, we mean the types are there, but we aren't concerned with them until our code actually runs.</p>
-<h1 id="static-type-checking"><a href="#static-type-checking">Static type-checking</h1></a>
+That's part of what that <code>TypeError</code> is alluding to - it's saying that there's nothing to call on the string <code>"Hello World"</code>.</p>
+<p>For some values, such as the primitives <code>string</code> and <code>number</code>, we can identify their type at runtime using the <code>typeof</code> operator.
+But for other things like functions, there's no corresponding runtime mechanism to identify their types.
+For example, consider this function:</p>
+<p><pre class="typescript-code"><span class="keyword">function</span> <span class="identifier">fn</span><span class="punctuation">(</span><span class="parameterName">x</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="keyword">return</span> <span class="identifier">x</span><span class="punctuation">.</span><span class="identifier">flip</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20fn(x)%20%7B%0A%20%20%20%20return%20x.flip()%3B%0A%7D">Try</a></pre></p>
+<p>We can <em>observe</em> by reading the code that this function will only work if given an object with a callable <code>flip</code> property, but JavaScript doesn't surface this information in a way that we can check while the code is running.
+The only way in pure JavaScript to tell what <code>fn</code> does with a particular value is to call it and see what happens.
+This kind of behavior makes it hard to predict what code will do before it runs, which means it's harder to know what your code is going to do while you're writing it.</p>
+<p>Seen in this way, a <em>type</em> is the concept of describing which values are legal to pass to <code>fn</code> and which aren't legal.
+JavaScript only truly provides <em>dynamic</em> typing - running the code to see what happens.</p>
+<p>The alternative is to use a <em>static</em> type system to make predictions about what code is legal <em>before</em> it runs.</p>
+<h2 id="static-type-checking"><a href="#static-type-checking">Static type-checking</h2></a>
 <p>Think back to that <code>TypeError</code> we got earlier from calling a <code>string</code>.
 <em>Most people</em> don't like to get any sorts of errors when running their code - those are considered bugs!
 And when we write new code, we try our best to avoid introducing new bugs.</p>
@@ -65,26 +65,27 @@ A type-checker like TypeScript uses that information and tells us when things mi
 
 <span class="error"><span class="error-highlight"></span><span class="identifier">foo</span><span class="punctuation">(</span><span class="punctuation">)</span></span><span class="punctuation">;</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Cannot invoke an expression whose type lacks a call signature. Type 'String' has no compatible call signatures.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=let%20foo%20%3D%20%22hello!%22%3B%0A%0Afoo()%3B">Try</a></pre></p>
 <p>Running that last sample with TypeScript will give us an error message before we run the code in the first place.</p>
-<h1 id="bugs-beyond-runtime-errors"><a href="#bugs-beyond-runtime-errors">Bugs beyond runtime errors</h1></a>
+<h2 id="non-exception-failures"><a href="#non-exception-failures">Non-exception Failures</h2></a>
 <p>So far we've been discussing certain things like runtime errors - cases where the JavaScript runtime throws its hands up and tells us that it thinks something is nonsensical.
-Those cases come up because <a href="https://tc39.github.io/ecma262/">the ECMAScript specification</a> actually declares that trying to call something that isn't callable causes an error.
-Sounds obvious, but you could imagine that accessing a property on an object that doesn't exist would cause an error too.
-Instead, JavaScript gives us different behavior to keep things entertaining and gives us the value <code>undefined</code>.</p>
+Those cases come up because <a href="https://tc39.github.io/ecma262/">the ECMAScript specification</a> has explicit instructions on how the language should behave when it runs into something unexpected.</p>
+<p>For example, the specification says that trying to call something that isn't callable should throw an error.
+Maybe that sounds like "obvious behavior", but you could imagine that accessing a property that doesn't exist on an object should throw an error too.
+Instead, JavaScript gives us different behavior and returns the value <code>undefined</code>:</p>
 <p><pre class="typescript-code"><span class="keyword">let</span> <span class="identifier">foo</span> <span class="operator">=</span> <span class="punctuation">{</span>
     <span class="identifier">name</span><span class="punctuation">:</span> <span class="stringLiteral">"Daniel"</span><span class="punctuation">,</span>
     <span class="identifier">age</span><span class="punctuation">:</span> <span class="numericLiteral">26</span><span class="punctuation">,</span>
 <span class="punctuation">}</span><span class="punctuation">;</span>
 
 <span class="identifier">foo</span><span class="punctuation">.</span><span class="identifier">location</span><span class="punctuation">;</span> <span class="comment">// returns undefined</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=let%20foo%20%3D%20%7B%0A%20%20%20%20name%3A%20%22Daniel%22%2C%0A%20%20%20%20age%3A%2026%2C%0A%7D%3B%0A%0Afoo.location%3B%20%2F%2F%20returns%20undefined">Try</a></pre></p>
-<p>Ultimately, a static type system has to make the call over what code should be flagged as an error in its system, even if it's valid JavaScript that won't immediately throw an error.
-So in TypeScript, the following code produces an error about <code>location</code> not being defined.</p>
+<p>Ultimately, a static type system has to make the call over what code should be flagged as an error in its system, even if it's "valid" JavaScript that won't immediately throw an error.
+In TypeScript, the following code produces an error about <code>location</code> not being defined:</p>
 <p><pre class="typescript-code"><span class="keyword">let</span> <span class="identifier">foo</span> <span class="operator">=</span> <span class="punctuation">{</span>
     <span class="identifier">name</span><span class="punctuation">:</span> <span class="stringLiteral">"Daniel"</span><span class="punctuation">,</span>
     <span class="identifier">age</span><span class="punctuation">:</span> <span class="numericLiteral">26</span><span class="punctuation">,</span>
 <span class="punctuation">}</span><span class="punctuation">;</span>
 
 <span class="identifier">foo</span><span class="punctuation">.</span><span class="error"><span class="error-highlight"></span><span class="identifier">location</span></span><span class="punctuation">;</span> <span class="comment">// returns undefined</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Property 'location' does not exist on type '{ name: string; age: number; }'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=let%20foo%20%3D%20%7B%0A%20%20%20%20name%3A%20%22Daniel%22%2C%0A%20%20%20%20age%3A%2026%2C%0A%7D%3B%0A%0Afoo.location%3B%20%2F%2F%20returns%20undefined">Try</a></pre></p>
-<p>While sometimes that implies a tradeoff in what you can express, the intent is to catch legitimate bugs in our programs.
+<p>While sometimes that implies a trade-off in what you can express, the intent is to catch legitimate bugs in our programs.
 And TypeScript catches <em>a lot</em> of legitimate bugs.
 For example: typos,</p>
 <p><pre class="typescript-code"><span class="keyword">let</span> <span class="identifier">someString</span> <span class="operator">=</span> <span class="stringLiteral">"Hello World!"</span><span class="punctuation">;</span>
@@ -100,49 +101,35 @@ For example: typos,</p>
     <span class="keyword">return</span> <span class="error"><span class="error-highlight"></span><span class="identifier">Math</span><span class="punctuation">.</span><span class="identifier">random</span> <span class="operator"><</span> <span class="numericLiteral">0.5</span></span><span class="punctuation">;</span>
 <span class="punctuation">}</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Operator '&lt;' cannot be applied to types '() => number' and 'number'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20flipCoin()%20%7B%0A%20%20%20%20return%20Math.random%20%3C%200.5%3B%0A%7D">Try</a></pre></p>
 <p>or basic logic errors.</p>
-<!-- TODO: this example screws with our tooltips -->
-<p><pre class="typescript-code"><span class="keyword">const</span> <span class="identifier">value</span> <span class="operator">=</span>
-    <span class="identifier">Math</span><span class="punctuation">.</span><span class="identifier">random</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="operator"><</span> <span class="numericLiteral">0.5</span> <span class="operator">?</span> <span class="stringLiteral">"a"</span> <span class="operator">:</span>
-        <span class="identifier">Math</span><span class="punctuation">.</span><span class="identifier">random</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="operator"><</span> <span class="numericLiteral">0.5</span> <span class="operator">?</span> <span class="stringLiteral">"b"</span> <span class="operator">:</span>
-            <span class="stringLiteral">"c"</span><span class="punctuation">;</span>
-
-<span class="comment">// Oops - neither 'else if' branch will ever run!</span>
+<p><pre class="typescript-code"><span class="keyword">const</span> <span class="identifier">value</span> <span class="operator">=</span> <span class="identifier">Math</span><span class="punctuation">.</span><span class="identifier">random</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="operator"><</span> <span class="numericLiteral">0.5</span> <span class="operator">?</span> <span class="stringLiteral">"a"</span> <span class="operator">:</span> <span class="stringLiteral">"b"</span><span class="punctuation">;</span>
 <span class="keyword">if</span> <span class="punctuation">(</span><span class="identifier">value</span> <span class="operator">!==</span> <span class="stringLiteral">"a"</span><span class="punctuation">)</span> <span class="punctuation">{</span>
   <span class="comment">// ...</span>
 <span class="punctuation">}</span>
 <span class="keyword">else</span> <span class="keyword">if</span> <span class="punctuation">(</span><span class="error"><span class="error-highlight"></span><span class="identifier">value</span> <span class="operator">===</span> <span class="stringLiteral">"b"</span></span><span class="punctuation">)</span> <span class="punctuation">{</span>
-  <span class="comment">// ...</span>
-<span class="punctuation">}</span>
-<span class="keyword">else</span> <span class="keyword">if</span> <span class="punctuation">(</span><span class="error"><span class="error-highlight"></span><span class="identifier">value</span> <span class="operator">===</span> <span class="stringLiteral">"c"</span></span><span class="punctuation">)</span> <span class="punctuation">{</span>
-  <span class="comment">// ...</span>
-<span class="punctuation">}</span><hr class="error-divider"><div class="listed-error"><div class="error-line">This condition will always return 'false' since the types '"a"' and '"b"' have no overlap.</div></div><div class="listed-error"><div class="error-line">This condition will always return 'false' since the types '"a"' and '"c"' have no overlap.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=const%20value%20%3D%0A%20%20%20%20Math.random()%20%3C%200.5%20%3F%20%22a%22%20%3A%0A%20%20%20%20%20%20%20%20Math.random()%20%3C%200.5%20%3F%20%22b%22%20%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%22c%22%3B%0A%0A%2F%2F%20Oops%20-%20neither%20'else%20if'%20branch%20will%20ever%20run!%0Aif%20(value%20!%3D%3D%20%22a%22)%20%7B%0A%20%20%2F%2F%20...%0A%7D%0Aelse%20if%20(value%20%3D%3D%3D%20%22b%22)%20%7B%0A%20%20%2F%2F%20...%0A%7D%0Aelse%20if%20(value%20%3D%3D%3D%20%22c%22)%20%7B%0A%20%20%2F%2F%20...%0A%7D">Try</a></pre></p>
-<h1 id="typescript-tooling"><a href="#typescript-tooling">TypeScript tooling</h1></a>
+  <span class="comment">// Oops, unreachable</span>
+<span class="punctuation">}</span><hr class="error-divider"><div class="listed-error"><div class="error-line">This condition will always return 'false' since the types '"a"' and '"b"' have no overlap.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=const%20value%20%3D%20Math.random()%20%3C%200.5%20%3F%20%22a%22%20%3A%20%22b%22%3B%0Aif%20(value%20!%3D%3D%20%22a%22)%20%7B%0A%20%20%2F%2F%20...%0A%7D%0Aelse%20if%20(value%20%3D%3D%3D%20%22b%22)%20%7B%0A%20%20%2F%2F%20Oops%2C%20unreachable%0A%7D">Try</a></pre></p>
+<h2 id="types-for-tooling"><a href="#types-for-tooling">Types for Tooling</h2></a>
 <!-- TODO: this section's title sucks -->
-<p>So TypeScript can catch bugs when we make mistakes in our code.
+<p>TypeScript can catch bugs when we make mistakes in our code.
 That's great, but TypeScript can <em>also</em> prevent us from making those mistakes in the first place.</p>
-<p>You see, the type-checker has information to check things like whether we're accessing the right properties on variables and other properties.
-But once it has that information, it can also start <em>suggesting</em> which properties you might want to use.</p>
-<p>That means TypeScript can be leveraged for editing code too, and so the core type-checker can provide error messages and code completion as you type across editors.
+<p>The type-checker has information to check things like whether we're accessing the right properties on variables and other properties.
+Once it has that information, it can also start <em>suggesting</em> which properties you might want to use.</p>
+<p>That means TypeScript can be leveraged for editing code too, and the core type-checker can provide error messages and code completion as you type in the editor.
 That's part of what people often refer to when they talk about tooling in TypeScript.</p>
 <!-- TODO: insert GIF of completions here -->
 <p>TypeScript takes tooling seriously, and that goes beyond completions and errors as you type.
 An editor that supports TypeScript can deliver "quick fixes" to automatically fix errors, refactorings to easily re-organize code, and useful navigation features for jumping to definitions of a variable, or finding all references to a given variable.
 All of this is built on top of the type-checker and fully cross-platform, so it's likely that <a href="https://github.com/Microsoft/TypeScript/wiki/TypeScript-Editor-Support">your favorite editor has TypeScript support available</a>.</p>
 <!-- TODO: validate that link -->
-<h1 id="tsc-the-typescript-compiler"><a href="#tsc-the-typescript-compiler"><code>tsc</code>, the TypeScript compiler</h1></a>
-<p>Alright, alright, let's cut to the chase.
-We've been talking about type-checking, but we haven't yet used our type-<em>checker</em>.
+<h2 id="tsc-the-typescript-compiler"><a href="#tsc-the-typescript-compiler"><code>tsc</code>, the TypeScript compiler</h2></a>
+<p>We've been talking about type-checking, but we haven't yet used our type-<em>checker</em>.
 Let's get acquainted with our new friend <code>tsc</code>, the TypeScript compiler.
 First we'll need to grab it via npm.</p>
 <pre><code class="sh language-sh">npm install -g typescript
 </code></pre>
 <blockquote>
-  <p><strong>Side note:</strong> Firstly, if you're on a Unix system like Mac or Linux, you might need a <code>sudo</code> at the front there. But secondly, if you're already pretty experienced with JavaScript and the npm ecosystem, you might be taken aback a bit here.
-  You're probably not the only one if you just had a reaction like  "<strong>*gasp*</strong> a global npm install!?" or "<strong>*groan*</strong> how am I going to fit this into my build system with Webpack/gulp/etc.?"
-  The good news is, no, you don't have to install TypeScript globally.
-  And don't worry, there are many different integrations for TypeScript with existing build tools.
-  If you already know better, then by all means do so with tools like npx, yarn, ts-loader, and gulp-typescript.
-  But this is by far the easiest way to use TypeScript today.</p>
+  <p>This installs the TypeScript Compiler <code>tsc</code> globally.
+  You can use <code>npx</code> or similar tools if you'd prefer to run <code>tsc</code> from a local <code>node_modules</code> package instead.</p>
 </blockquote>
 <p>Now let's move to an empty folder and try writing our first TypeScript program: <code>hello.ts</code>:</p>
 <p><pre class="typescript-code"><span class="comment">// Greets the world.</span>
@@ -173,12 +160,12 @@ Let's rewrite <code>hello.ts</code>:</p>
 
 <span class="error"><span class="error-highlight"></span><span class="identifier">greet</span><span class="punctuation">(</span><span class="stringLiteral">"Brendan"</span><span class="punctuation">)</span></span><span class="punctuation">;</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Parameter 'person' implicitly has an 'any' type.</div></div><div class="listed-error"><div class="error-line">Parameter 'date' implicitly has an 'any' type.</div></div><div class="listed-error"><div class="error-line">Expected 2 arguments, but got 1.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20This%20is%20an%20industrial-grade%20general-purpose%20greeter%20function%3A%0Afunction%20greet(person%2C%20date)%20%7B%0A%20%20%20%20console.log(%60Hello%20%24%7Bperson%7D%2C%20today%20is%20%24%7Bdate%7D!%60)%3B%0A%7D%0A%0Agreet(%22Brendan%22)%3B">Try</a></pre></p>
 <p>If we run <code>tsc hello.ts</code> again, notice that we get an error on the command line!</p>
-<pre><code>Expected 2 arguments, but got 1.
+<pre><code class="txt language-txt">Expected 2 arguments, but got 1.
 </code></pre>
 <p>TypeScript is telling us we forgot to pass an argument to the <code>greet</code> function, and rightfully so.
 So far we've only written standard JavaScript, and yet type-checking was still able to find problems with our code.
 Thanks TypeScript!</p>
-<h2 id="errors-dont-block-output"><a href="#errors-dont-block-output">Errors don't block output</h2></a>
+<h3 id="emitting-with-errors"><a href="#emitting-with-errors">Emitting with Errors</h3></a>
 <p>One thing you might not have noticed from the last example was that our <code>hello.js</code> file changed again.
 If we open that file up then we'll see that the contents still basically look the same as our input file.
 That might be a bit surprising given the fact that <code>tsc</code> reported an error about our code, but this based on one of TypeScript's core values: much of the time, <em>you</em> will know better than TypeScript.</p>
@@ -194,7 +181,7 @@ Try changing your <code>hello.ts</code> file and running <code>tsc</code> with t
 <pre><code class="sh language-sh">tsc --noEmitOnError hello.ts
 </code></pre>
 <p>You'll notice that <code>hello.js</code> never gets updated.</p>
-<h2 id="explicit-types"><a href="#explicit-types">Explicit types</h2></a>
+<h2 id="explicit-types"><a href="#explicit-types">Explicit Types</h2></a>
 <p>Up until now, we haven't told TypeScript what <code>person</code> or <code>date</code> are.
 Let's change up our code a little bit so that we tell TypeScript that <code>person</code> is a <code>string</code>, and that <code>date</code> should be a <code>Date</code> object.
 We'll also use the <code>toDateString()</code> method on <code>date</code>.</p>
@@ -203,7 +190,6 @@ We'll also use the <code>toDateString()</code> method on <code>date</code>.</p>
 <span class="punctuation">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20greet(person%3A%20string%2C%20date%3A%20Date)%20%7B%0A%20%20%20%20console.log(%60Hello%20%24%7Bperson%7D%2C%20today%20is%20%24%7Bdate.toDateString()%7D!%60)%3B%0A%7D">Try</a></pre></p>
 <p>What we did was add <em>type annotations</em> on <code>person</code> and <code>date</code> to describe what types of values <code>greet</code> can be called with.
 You can read that signature as "<code>greet</code> takes a <code>person</code> of type <code>string</code>, and a <code>date</code> of type <code>Date</code>".</p>
-<!-- TODO: is that really necessary? -->
 <p>With this, TypeScript can tell us about other cases where we might have been called incorrectly.
 For example…</p>
 <p><pre class="typescript-code"><span class="keyword">function</span> <span class="identifier">greet</span><span class="punctuation">(</span><span class="parameterName">person</span><span class="punctuation">:</span> <span class="keyword">string</span><span class="punctuation">,</span> <span class="parameterName">date</span><span class="punctuation">:</span> <span class="interfaceName"><span class="identifier">Date</span></span><span class="punctuation">)</span> <span class="punctuation">{</span>
@@ -212,23 +198,16 @@ For example…</p>
 
 <span class="identifier">greet</span><span class="punctuation">(</span><span class="stringLiteral">"Maddison"</span><span class="punctuation">,</span> <span class="error"><span class="error-highlight"></span><span class="identifier">Date</span><span class="punctuation">(</span><span class="punctuation">)</span></span><span class="punctuation">)</span><span class="punctuation">;</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Argument of type 'string' is not assignable to parameter of type 'Date'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20greet(person%3A%20string%2C%20date%3A%20Date)%20%7B%0A%20%20%20%20console.log(%60Hello%20%24%7Bperson%7D%2C%20today%20is%20%24%7Bdate.toDateString()%7D!%60)%3B%0A%7D%0A%0Agreet(%22Maddison%22%2C%20Date())%3B">Try</a></pre></p>
 <p>Huh?
-TypeScript reported an error on our second argument:</p>
-<pre><code>Argument of type 'string' is not assignable to type 'Date'.
-</code></pre>
+TypeScript reported an error on our second argument, but why?</p>
 <p>Perhaps surprisingly, calling <code>Date()</code> in JavaScript returns a <code>string</code>.
 On the other hand, constructing a <code>Date</code> with <code>new Date()</code> actually gives us what we were expecting.</p>
-<blockquote>
-  <p><strong>Side note</strong>: Thanks JavaScript. We still ❤ you though.</p>
-</blockquote>
 <p>Anyway, we can quickly fix up the error:</p>
 <p><pre class="typescript-code"><span class="keyword">function</span> <span class="identifier">greet</span><span class="punctuation">(</span><span class="parameterName">person</span><span class="punctuation">:</span> <span class="keyword">string</span><span class="punctuation">,</span> <span class="parameterName">date</span><span class="punctuation">:</span> <span class="interfaceName"><span class="identifier">Date</span></span><span class="punctuation">)</span> <span class="punctuation">{</span>
     <span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="stringLiteral">`Hello ${</span><span class="identifier">person</span><span class="stringLiteral">}, today is ${</span><span class="identifier">date</span><span class="punctuation">.</span><span class="identifier">toDateString</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="stringLiteral">}!`</span><span class="punctuation">)</span><span class="punctuation">;</span>
 <span class="punctuation">}</span>
 
 <span class="identifier">greet</span><span class="punctuation">(</span><span class="stringLiteral">"Maddison"</span><span class="punctuation">,</span> <span class="keyword">new</span> <span class="identifier">Date</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">;</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20greet(person%3A%20string%2C%20date%3A%20Date)%20%7B%0A%20%20%20%20console.log(%60Hello%20%24%7Bperson%7D%2C%20today%20is%20%24%7Bdate.toDateString()%7D!%60)%3B%0A%7D%0A%0Agreet(%22Maddison%22%2C%20new%20Date())%3B">Try</a></pre></p>
-<h1 id="optional-types-and-type-inference"><a href="#optional-types-and-type-inference">Optional types and type inference</h1></a>
-<!-- TODO talk about this and 'any' -->
-<h2 id="stripping-types-out"><a href="#stripping-types-out">Stripping types out</h2></a>
+<h2 id="erased-types"><a href="#erased-types">Erased Types</h2></a>
 <p>Let's take a look at what happens when we compile with <code>tsc</code>:</p>
 <p><pre class="typescript-code"><span class="keyword">function</span> <span class="identifier">greet</span><span class="punctuation">(</span><span class="parameterName">person</span><span class="punctuation">,</span> <span class="parameterName">date</span><span class="punctuation">)</span> <span class="punctuation">{</span>
     <span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="stringLiteral">"Hello "</span> <span class="operator">+</span> <span class="identifier">person</span> <span class="operator">+</span> <span class="stringLiteral">", today is "</span> <span class="operator">+</span> <span class="identifier">date</span><span class="punctuation">.</span><span class="identifier">toDateString</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="operator">+</span> <span class="stringLiteral">"!"</span><span class="punctuation">)</span><span class="punctuation">;</span>
@@ -243,13 +222,16 @@ On the other hand, constructing a <code>Date</code> with <code>new Date()</code>
 Type annotations aren't part of JavaScript (or ECMAScript to be pedantic), so there really aren't any browsers or other runtimes that can just run TypeScript unmodified.
 That's why TypeScript needs a compiler in the first place - it needs some way to strip out or transform any TypeScript-specific code so that you can run it.
 Most TypeScript-specific code gets erased away, and likewise, here our type annotations were completely erased.</p>
+<blockquote>
+  <p><strong>Remember</strong>: Type annotations never change the runtime behavior of your program.</p>
+</blockquote>
 <h2 id="downleveling"><a href="#downleveling">Downleveling</h2></a>
 <p>One other difference from the above was that our template string was rewritten from</p>
 <p><pre class="typescript-code"><span class="stringLiteral">`Hello ${</span><span class="identifier">person</span><span class="stringLiteral">}, today is ${</span><span class="identifier">date</span><span class="punctuation">.</span><span class="identifier">toDateString</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="stringLiteral">}!`</span></pre></p>
 <p>to</p>
 <p><pre class="typescript-code"><span class="stringLiteral">"Hello "</span> <span class="operator">+</span> <span class="identifier">person</span> <span class="operator">+</span> <span class="stringLiteral">", today is "</span> <span class="operator">+</span> <span class="identifier">date</span><span class="punctuation">.</span><span class="identifier">toDateString</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="operator">+</span> <span class="stringLiteral">"!"</span></pre></p>
-<p>Why did this happen?
-Well template strings are a feature from a version of ECMAScript called ECMAScript 2015 (a.k.a. ECMAScript 6, ES2015, ES6, etc. - don't ask).
+<p>Why did this happen?</p>
+<p>Template strings are a feature from a version of ECMAScript called ECMAScript 2015 (a.k.a. ECMAScript 6, ES2015, ES6, etc. - don't ask).
 TypeScript has the ability to rewrite code from newer versions of ECMAScript to older ones such as ECMAScript 3 or ECMAScript 5 (a.k.a. ES3 and ES5).
 This process from moving from a newer or "higher" version of ECMAScript to an older or "lower" one is sometimes called <em>downleveling</em>.</p>
 <p>By default TypeScript targets ES3, an extremely old version of ECMAScript.
@@ -260,13 +242,11 @@ So running <code>tsc --target es2015 input.ts</code> gives us the following outp
     <span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="stringLiteral">`Hello ${</span><span class="identifier">person</span><span class="stringLiteral">}, today is ${</span><span class="identifier">date</span><span class="punctuation">.</span><span class="identifier">toDateString</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="stringLiteral">}!`</span><span class="punctuation">)</span><span class="punctuation">;</span>
 <span class="punctuation">}</span>
 <span class="identifier">greet</span><span class="punctuation">(</span><span class="stringLiteral">"Maddison"</span><span class="punctuation">,</span> <span class="keyword">new</span> <span class="identifier">Date</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">;</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20greet(person%2C%20date)%20%7B%0A%20%20%20%20console.log(%60Hello%20%24%7Bperson%7D%2C%20today%20is%20%24%7Bdate.toDateString()%7D!%60)%3B%0A%7D%0Agreet(%22Maddison%22%2C%20new%20Date())%3B">Try</a></pre></p>
-<!-- TODO: is this side note needed? -->
 <blockquote>
-  <p><strong>For some historical context</strong>, when TypeScript first came out, part of its vision was to provide the future features of JavaScript when they weren't supported in any runtime.
-  Given the fact that TypeScript needed a tool to strip types away, it made a lot of sense for the compiler to downlevel code as well.
-  While today there are other compilers that provide the same functionality and also strip out types (such as Babel), TypeScript is also incredibly efficient at this task, still produces approachable JavaScript output, and has very accurate source-mapping support so you can debug the code that you wrote.</p>
+  <p>While the default target is ES3, the great majority of running browsers support ES5.
+  Today, most developers can safely specify ES5 or even ES2016 as a target unless compatibility with certain ancient browers is important.</p>
 </blockquote>
-<h1 id="strictness"><a href="#strictness">Strictness</h1></a>
+<h2 id="strictness"><a href="#strictness">Strictness</h2></a>
 <p>Users come to TypeScript looking for different things in a type-checker.
 Some people are looking for a more loose opt-in experience which can help validate only some parts of our program and give us decent tooling.
 This is actually the default experience with TypeScript.
@@ -280,13 +260,13 @@ This can require a little extra work, but generally speaking it pays for itself 
 <p>TypeScript has several type-checking strictness flags that can be turned on or off, and all of our examples will be written with all of them enabled unless otherwise stated.
 The <code>--strict</code> flag toggles them all on simultaneously, but we can opt out of them individually.
 The two biggest ones you should know about are <code>noImplicitAny</code> and <code>strictNullChecks</code>.</p>
-<h2 id="noimplicitany"><a href="#noimplicitany"><code>noImplicitAny</code></h2></a>
+<h3 id="noimplicitany"><a href="#noimplicitany"><code>noImplicitAny</code></h3></a>
 <p>Recall that in some places, TypeScript doesn't try to infer any types for us and instead falls back to the most lenient type: <code>any</code>.
 This isn't the worst thing that can happen - after all, falling back to <code>any</code> is just the JavaScript experience anyway.</p>
 <p>However, using <code>any</code> often defeats the purpose of using TypeScript in the first place.
 The more typed your program is, the more validation and tooling you'll get, meaning you'll run into fewer bugs as you code.
 Turning on the <code>noImplicitAny</code> flag will issue an error on any variables whose type is implicitly inferred as <code>any</code>.</p>
-<h2 id="strictnullchecks"><a href="#strictnullchecks"><code>strictNullChecks</code></h2></a>
+<h3 id="strictnullchecks"><a href="#strictnullchecks"><code>strictNullChecks</code></h3></a>
 <p>By default, values like <code>null</code> and <code>undefined</code> are assignable to any other type.
 This can make writing some code easier, but forgetting to handle <code>null</code> and <code>undefined</code> is the cause of countless bugs in the world - not even just JavaScript!</p>
 <p>The <code>strictNullChecks</code> flag makes handling <code>null</code> and <code>undefined</code> more explicit, and <em>spares</em> us from worrying about whether we <em>forgot</em> to handle <code>null</code> and <code>undefined</code>.</p>

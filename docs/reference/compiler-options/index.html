@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Compiler Options</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" media="screen" href="../../css/handbook.css" />
+    </head>
+    <body>
+    <article>
+    <h1 id="compiler-options"><a href="#compiler-options">Compiler Options</h1></a>
+<p>TypeScript has a wide array of configuration options.</p>
+<div class="toc"><span class="toc-title">Table of Contents</span><ul><li><a href="#code-emit-options">Code Emit Options</a></li><ul><li><a href="#target"><code>target</code></a></li><li><a href="#module"><code>module</code></a></li><li><a href="#jsx"><code>jsx</code></a></li><li><a href="#jsxfactory"><code>jsxFactory</code></a></li><li><a href="#declaration"><code>declaration</code></a></li><li><a href="#declarationdir"><code>declarationDir</code></a></li><li><a href="#declarationmap"><code>declarationMap</code></a></li><li><a href="#emitdeclarationonly"><code>emitDeclarationOnly</code></a></li><li><a href="#downleveliteration"><code>downlevelIteration</code></a></li><li><a href="#esmoduleinterop"><code>esModuleInterop</code></a></li><li><a href="#emitbom"><code>emitBOM</code></a></li><li><a href="#importhelpers"><code>importHelpers</code></a></li><li><a href="#sourcemap"><code>sourceMap</code></a></li><li><a href="#inlinesources"><code>inlineSources</code></a></li><li><a href="#inlinesourcemap"><code>inlineSourceMap</code></a></li></ul><li><a href="#emit-location-options">Emit Location Options</a></li><ul><li><a href="#rootdir"><code>rootDir</code></a></li><li><a href="#outdir"><code>outDir</code></a></li><li><a href="#outfile"><code>outFile</code></a></li><li><a href="#out"><code>out</code></a></li></ul><li><a href="#library-options">Library Options</a></li><ul><li><a href="#nolib"><code>noLib</code></a></li><li><a href="#lib"><code>lib</code></a></li></ul><li><a href="#file-inclusion-options">File Inclusion Options</a></li><ul><li><a href="#noresolve"><code>noResolve</code></a></li><li><a href="#composite"><code>composite</code></a></li><li><a href="#allowjs"><code>allowJs</code></a></li><li><a href="#forceconsistentcasinginfilenames"><code>forceConsistentCasingInFileNames</code></a></li><li><a href="#charset"><code>charset</code></a></li></ul><li><a href="#module-resolution-options">Module Resolution Options</a></li><ul><li><a href="#baseurl"><code>baseUrl</code></a></li><li><a href="#allowsyntheticdefaultimports"><code>allowSyntheticDefaultImports</code></a></li></ul><li><a href="#typechecking-options">Typechecking Options</a></li><ul><li><a href="#--strict"><code>strict</code></a></li><ul><li><a href="#strictpropertyinitialization"><code>strictPropertyInitialization</code></a></li><li><a href="#strictbindcallapply"><code>strictBindCallApply</code></a></li><li><a href="#strictnullchecks"><code>strictNullChecks</code></a></li><li><a href="#strictfunctiontypes"><code>strictFunctionTypes</code></a></li><li><a href="#noimplicitany"><code>noImplicitAny</code></a></li><li><a href="#noimplicitthis"><code>noImplicitThis</code></a></li><li><a href="#alwaysstrict"><code>alwaysStrict</code></a></li></ul><li><a href="#suppressexcesspropertyerrors"><code>suppressExcessPropertyErrors</code></a></li><li><a href="#suppressimplicitanyindexerrors"><code>suppressImplicitAnyIndexErrors</code></a></li><li><a href="#keyofstringsonly"><code>keyofStringsOnly</code></a></li></ul><li><a href="#linting-options">Linting Options</a></li><ul><li><a href="#allowunreachablecode"><code>allowUnreachableCode</code></a></li><li><a href="#allowunusedlabels"><code>allowUnusedLabels</code></a></li></ul><li><a href="#decorators">Decorators</a></li><ul><li><a href="#experimentaldecorators"><code>experimentalDecorators</code></a></li><li><a href="#emitdecoratormetadata"><code>emitDecoratorMetadata</code></a></li></ul><li><a href="#debugging">Debugging</a></li><ul><li><a href="#diagnostics"><code>diagnostics</code></a></li><li><a href="#traceresolution"><code>traceResolution</code></a></li><li><a href="#listfiles"><code>listFiles</code></a></li></ul><li><a href="#miscellaneous">Miscellaneous</a></li><ul><li><a href="#init"><code>init</code></a></li><li><a href="#help"><code>help</code></a></li></ul></ul></ul></div>
+<h2 id="code-emit-options"><a href="#code-emit-options">Code Emit Options</h2></a>
+<h3 id="target"><a href="#target"><code>target</code></h3></a>
+<h3 id="module"><a href="#module"><code>module</code></h3></a>
+<h3 id="jsx"><a href="#jsx"><code>jsx</code></h3></a>
+<h3 id="jsxfactory"><a href="#jsxfactory"><code>jsxFactory</code></h3></a>
+<h3 id="declaration"><a href="#declaration"><code>declaration</code></h3></a>
+<h3 id="declarationdir"><a href="#declarationdir"><code>declarationDir</code></h3></a>
+<h3 id="declarationmap"><a href="#declarationmap"><code>declarationMap</code></h3></a>
+<h3 id="emitdeclarationonly"><a href="#emitdeclarationonly"><code>emitDeclarationOnly</code></h3></a>
+<h3 id="downleveliteration"><a href="#downleveliteration"><code>downlevelIteration</code></h3></a>
+<h3 id="esmoduleinterop"><a href="#esmoduleinterop"><code>esModuleInterop</code></h3></a>
+<h3 id="emitbom"><a href="#emitbom"><code>emitBOM</code></h3></a>
+<p><strong>Default</strong>: <code>false</code></p>
+<p>Controls whether TypeScript will emit a <a href="https://en.wikipedia.org/wiki/Byte_order_mark">byte order mark (BOM)</a> when writing output files.
+Some runtime environments require a BOM to correctly interpret a JavaScript files; others require that it is not present.
+The default value of <code>false</code> is generally best unless you have a reason to change it.</p>
+<h3 id="importhelpers"><a href="#importhelpers"><code>importHelpers</code></h3></a>
+<h3 id="sourcemap"><a href="#sourcemap"><code>sourceMap</code></h3></a>
+<h3 id="inlinesources"><a href="#inlinesources"><code>inlineSources</code></h3></a>
+<h3 id="inlinesourcemap"><a href="#inlinesourcemap"><code>inlineSourceMap</code></h3></a>
+<h2 id="emit-location-options"><a href="#emit-location-options">Emit Location Options</h2></a>
+<h3 id="rootdir"><a href="#rootdir"><code>rootDir</code></h3></a>
+<h3 id="outdir"><a href="#outdir"><code>outDir</code></h3></a>
+<h3 id="outfile"><a href="#outfile"><code>outFile</code></h3></a>
+<h3 id="out"><a href="#out"><code>out</code></h3></a>
+<h2 id="library-options"><a href="#library-options">Library Options</h2></a>
+<h3 id="nolib"><a href="#nolib"><code>noLib</code></h3></a>
+<h3 id="lib"><a href="#lib"><code>lib</code></h3></a>
+<h2 id="file-inclusion-options"><a href="#file-inclusion-options">File Inclusion Options</h2></a>
+<h3 id="noresolve"><a href="#noresolve"><code>noResolve</code></h3></a>
+<h3 id="composite"><a href="#composite"><code>composite</code></h3></a>
+<h3 id="allowjs"><a href="#allowjs"><code>allowJs</code></h3></a>
+<h3 id="forceconsistentcasinginfilenames"><a href="#forceconsistentcasinginfilenames"><code>forceConsistentCasingInFileNames</code></h3></a>
+<h3 id="charset"><a href="#charset"><code>charset</code></h3></a>
+<aside>
+    <p>❌ <strong>Deprecated:</strong> This option does nothing.</p>
+  </aside>
+<p>In prior versions of TypeScript, this controlled what encoding was used when reading text files from disk.
+Today, TypeScript assumes UTF-8 encoding, but will correctly detect UTF-16 (BE and LE) or UTF-8 BOMs.</p>
+<h2 id="module-resolution-options"><a href="#module-resolution-options">Module Resolution Options</h2></a>
+<h3 id="baseurl"><a href="#baseurl"><code>baseUrl</code></h3></a>
+<h3 id="allowsyntheticdefaultimports"><a href="#allowsyntheticdefaultimports"><code>allowSyntheticDefaultImports</code></h3></a>
+<h2 id="typechecking-options"><a href="#typechecking-options">Typechecking Options</h2></a>
+<h3 id="--strict"><a href="#--strict"><code>strict</code></h3></a>
+<h4 id="strictpropertyinitialization"><a href="#strictpropertyinitialization"><code>strictPropertyInitialization</code></h4></a>
+<h4 id="strictbindcallapply"><a href="#strictbindcallapply"><code>strictBindCallApply</code></h4></a>
+<h4 id="strictnullchecks"><a href="#strictnullchecks"><code>strictNullChecks</code></h4></a>
+<h4 id="strictfunctiontypes"><a href="#strictfunctiontypes"><code>strictFunctionTypes</code></h4></a>
+<h4 id="noimplicitany"><a href="#noimplicitany"><code>noImplicitAny</code></h4></a>
+<h4 id="noimplicitthis"><a href="#noimplicitthis"><code>noImplicitThis</code></h4></a>
+<h4 id="alwaysstrict"><a href="#alwaysstrict"><code>alwaysStrict</code></h4></a>
+<h3 id="suppressexcesspropertyerrors"><a href="#suppressexcesspropertyerrors"><code>suppressExcessPropertyErrors</code></h3></a>
+<h3 id="suppressimplicitanyindexerrors"><a href="#suppressimplicitanyindexerrors"><code>suppressImplicitAnyIndexErrors</code></h3></a>
+<h3 id="keyofstringsonly"><a href="#keyofstringsonly"><code>keyofStringsOnly</code></h3></a>
+<aside>
+    <p>❌ <strong>Discouraged:</strong> This flag was provided for backward compatibility reasons and should not be enabled in new or maintained codebases.</p>
+  </aside>
+<p><strong>Default</strong>: <code>false</code></p>
+<p>This flag changes the <code>keyof</code> type operator to return <code>string</code> instead of <code>string | number</code> when applied to a type with a string index signature.</p>
+<h2 id="linting-options"><a href="#linting-options">Linting Options</h2></a>
+<h3 id="allowunreachablecode"><a href="#allowunreachablecode"><code>allowUnreachableCode</code></h3></a>
+<h3 id="allowunusedlabels"><a href="#allowunusedlabels"><code>allowUnusedLabels</code></h3></a>
+<h2 id="decorators"><a href="#decorators">Decorators</h2></a>
+<h3 id="experimentaldecorators"><a href="#experimentaldecorators"><code>experimentalDecorators</code></h3></a>
+<h3 id="emitdecoratormetadata"><a href="#emitdecoratormetadata"><code>emitDecoratorMetadata</code></h3></a>
+<h2 id="debugging"><a href="#debugging">Debugging</h2></a>
+<h3 id="diagnostics"><a href="#diagnostics"><code>diagnostics</code></h3></a>
+<h3 id="traceresolution"><a href="#traceresolution"><code>traceResolution</code></h3></a>
+<h3 id="listfiles"><a href="#listfiles"><code>listFiles</code></h3></a>
+<h2 id="miscellaneous"><a href="#miscellaneous">Miscellaneous</h2></a>
+<h3 id="init"><a href="#init"><code>init</code></h3></a>
+<h3 id="help"><a href="#help"><code>help</code></h3></a>
+    </article>
+
+    <script src="https://unpkg.com/popper.js@1/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/tippy.js@4"></script>
+    <script>
+        tippy.setDefaults({preventOverflow: { enabled: false } });
+    </script>
+    </body>
+    </html>
