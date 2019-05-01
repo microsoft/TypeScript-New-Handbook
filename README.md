@@ -1,4 +1,4 @@
-# The New TypeScriptHandbook
+# The New TypeScript Handbook
 
 ## 👶
 
