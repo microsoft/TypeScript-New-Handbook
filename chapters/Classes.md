@@ -430,13 +430,89 @@ const b: Base = new Derived();
 b.greet();
 ```
 
-#### Initialization Order and Virtual Behavior
+#### Initialization Order
 
+The order that JavaScript classes initialize can be surprising in some cases.
+Let's consider this code:
 
+```ts
+class Base {
+  name = "base";
+  constructor() {
+    console.log("My name is " + name);
+  }
+}
+
+class Derived extends Base {
+  name = "derived";
+}
+
+// Prints "base", not "derived"
+const d = new Derived();
+```
+
+What happened here?
+
+The order of class initialization, as defined by JavaScript, is:
+ * The base class fields are initialized
+ * The base class constructor runs
+ * The derived class fields are initialized
+ * The derived class constructor runs
+
+This means that the base class constructor saw its own value for `name` during its own constructor, because the derived class field initializations hadn't run yet.
 
 #### Inheriting Built-in Types
 
+> Note: If you don't plan to inherit from built-in types like `Array`, `Error`, `Map`, etc., you may skip this section
 
+In ES2015, constructors which return an object implicitly substitute the value of `this` for any callers of `super(...)`.
+It is necessary for generated constructor code to capture any potential return value of `super(...)` and replace it with `this`.
+
+As a result, subclassing `Error`, `Array`, and others may no longer work as expected.
+This is due to the fact that constructor functions for `Error`, `Array`, and the like use ECMAScript 6's `new.target` to adjust the prototype chain;
+however, there is no way to ensure a value for `new.target` when invoking a constructor in ECMAScript 5.
+Other downlevel compilers generally have the same limitation by default.
+
+For a subclass like the following:
+
+```ts
+class FooError extends Error {
+    constructor(m: string) {
+        super(m);
+    }
+    sayHello() {
+        return "hello " + this.message;
+    }
+}
+```
+
+you may find that:
+
+* methods may be `undefined` on objects returned by constructing these subclasses, so calling `sayHello` will result in an error.
+* `instanceof` will be broken between instances of the subclass and their instances, so `(new FooError()) instanceof FooError` will return `false`.
+
+As a recommendation, you can manually adjust the prototype immediately after any `super(...)` calls.
+
+```ts
+class FooError extends Error {
+    constructor(m: string) {
+        super(m);
+
+        // Set the prototype explicitly.
+        Object.setPrototypeOf(this, FooError.prototype);
+    }
+
+    sayHello() {
+        return "hello " + this.message;
+    }
+}
+```
+
+However, any subclass of `FooError` will have to manually set the prototype as well.
+For runtimes that don't support [`Object.setPrototypeOf`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/setPrototypeOf), you may instead be able to use [`__proto__`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/proto).
+
+Unfortunately, [these workarounds will not work on Internet Explorer 10 and prior](https://msdn.microsoft.com/en-us/library/s4esdbwz(v=vs.94).aspx).
+One can manually copy methods from the prototype onto the instance itself (i.e. `FooError.prototype` onto `this`), but the prototype chain itself cannot be fixed.
 
 ## Member Visibility
 
@@ -934,34 +1010,162 @@ const m = new someClass("Hello, world");
 
 ## `abstract` Classes and Members
 
+Classes, methods, and fields in TypeScript may be *abstract*.
+
+An *abstract method* or *abstract field* is one that hasn't had an implementation provided.
+These members must exist inside an *abstract class*, which cannot be directly instantiated.
+
+The role of abstract classes is to serve as a base class for subclasses which do implement all the abstract members.
+When a class doesn't have any abstract members, it is said to be *concrete*.
+
+Let's look at an example
+
+```ts
+abstract class Base {
+  abstract getName(): string;
+
+  printName() {
+    console.log("Hello, " + this.getName());
+  }
+}
+
+const b = new Base();
+```
+
+We can't instantiate `Base` with `new` because it's abstract.
+Instead, we need to make a derived class and implement the abstract members:
+
+```ts
+abstract class Base {
+  abstract getName(): string;
+  printName() { }
+}
+//cut
+class Derived extends Base {
+  getName() {
+    return "world";
+  }
+}
+
+const d = new Derived();
+d.printName();
+```
+
+Notice that if we forget to implement the base class's abstract members, we'll get an error:
+```ts
+abstract class Base {
+  abstract getName(): string;
+  printName() { }
+}
+//cut
+class Derived extends Base {
+  // forgot to do anything
+}
+```
+
 ### Abstract Construct Signatures
+
+Sometimes you want to accept some class constructor function that produces an instance of a class which derives from some abstract class.
+
+For example, you might want to write this code:
+
+```ts
+abstract class Base {
+  abstract getName(): string;
+  printName() { }
+}
+class Derived extends Base { getName() { return "" } }
+//cut
+function greet(ctor: typeof Base) {
+  const instance = new ctor();
+  instance.printName();
+}
+```
+
+TypeScript is correctly telling you that you're trying to instantiate an abstract class.
+After all, given the definition of `greet`, it's perfectly legal to write this code, which would end up constructing an abstract class:
+
+```ts
+declare const greet: any, Base: any;
+//cut
+// Bad!
+greet(Base);
+```
+
+Instead, you want to write a function that accepts something with a construct signature:
+
+```ts
+abstract class Base {
+  abstract getName(): string;
+  printName() { }
+}
+class Derived extends Base { getName() { return "" } }
+//cut
+function greet(ctor: new() => Base) {
+  const instance = new ctor();
+  instance.printName();
+}
+greet(Derived);
+greet(Base);
+```
+
+Now TypeScript correctly tells you about which class constructor functions can be invoked - `Derived` can because it's concrete, but `Base` cannot.
 
 ## Relationships Between Classes
 
-## Constructor Functions and Instance Types
+In most cases, classes in TypeScript are compared structurally, the same as other types.
 
-## Handling Generic Constructors
+For example, these two classes can be used in place of each other because they're identical:
 
-## Impact of the Class Fields Proposal
+```ts
+class Point1 {
+  x = 0;
+  y = 0;
+}
 
-* Basics
-  * Hey it's just ES6
-  * Methods and properties
-* Class heritage
-  * inherits
-    * ES6 thing again
-    * We don't have inherited typing yet
-    * Inheriting from Error / Array / etc
-  * implements
-    * Again, just a check
-    * Be wary of anys
-* public, private, protected
-* Generics
-* Static
-  * Instance type parameters
-* Managing `this`
-  * Arrow functions
-  * `this` parameters
-  * The `this` type
-  * `this`-related flags
-* Parameter properties
+class Point2 {
+  x = 0;
+  y = 0;
+}
+
+// OK
+const p: Point1 = new Point2();
+```
+
+Similarly, subtype relationships between classes exist even if there's no explicit inheritance:
+
+```ts
+// @strict: false
+class Person {
+  name: string;
+  age: number;
+}
+
+class Employee {
+  name: string;
+  age: number;
+  salary: number;
+}
+
+// OK
+const p: Person = new Employee();
+```
+
+This sounds straightforward, but there are a few cases that seem stranger than others.
+
+Empty classes have no members.
+In a structural type system, a type with no members is generally a supertype of anything else.
+So if you write an empty class (don't!), anything can be used in place of it:
+
+```ts
+class Empty { }
+
+function fn(x: Empty) {
+  // can't do anything with 'x', so I won't
+}
+
+// All OK!
+fn(window);
+fn({ });
+fn(fn);
+```
