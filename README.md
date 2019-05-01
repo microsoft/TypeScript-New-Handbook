@@ -4,7 +4,7 @@
 
 This repo is still in early development.
 
-You can read an early version (starting from the Outline)[https://microsoft.github.io/TypeScript-New-Handbook/outline/] or (read one enormous page)[https://microsoft.github.io/TypeScript-New-Handbook/everything/]
+You can read an early version [starting from the Outline](https://microsoft.github.io/TypeScript-New-Handbook/outline/) or [read one enormous page](https://microsoft.github.io/TypeScript-New-Handbook/everything/)
 
 ## Pull Requests
 
