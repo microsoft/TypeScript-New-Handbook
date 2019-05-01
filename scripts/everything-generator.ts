@@ -22,7 +22,7 @@ export const Everything: st.ServerFile = {
                 for (const ch of chapters) {
                     const chFileName = path.join(root, "chapters", ch) + ".md";
                     const content = await fs.readFile(chFileName, { encoding: "utf-8"});
-                    parts.push(render(content));
+                    parts.push(await render(content));
                 }
                 return makePage(parts.join("<hr>"), { urlDepth: 1 });
             }

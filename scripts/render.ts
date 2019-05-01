@@ -4,7 +4,13 @@ import { textToAnchorName, strrep } from "./utils";
 import { getHeaders } from "./header-parser";
 import { renderTree } from "./toc";
 
-const sampleCompiler = getCompilerExtension();
+async function createCompiler() {
+    if (createCompiler.cached) {
+        return createCompiler.cached;
+    }
+    return createCompiler.cached = await getCompilerExtension();
+}
+createCompiler.cached = null! as showdown.ShowdownExtension[];
 
 showdown.extension("header-link", function () {
     return [{
@@ -64,13 +70,13 @@ showdown.extension("topic-link", function () {
     }];
 });
 
-export function render(content: string) {
+export async function render(content: string) {
     const conv = new showdown.Converter({
         customizedHeaderId: true,
         ghCompatibleHeaderId: true,
         ghCodeBlocks: true
     });
-    conv.addExtension(sampleCompiler, "ts");
+    conv.addExtension(await createCompiler(), "ts");
     conv.useExtension("header-link");
     conv.useExtension("toc");
     conv.useExtension("aside");

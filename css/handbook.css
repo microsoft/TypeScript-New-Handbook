@@ -1,3 +1,7 @@
+body {
+    background: #FCFCFC;
+}
+
 body article {
     font-family: 'Segoe UI Semilight', Tahoma, Geneva, Verdana, sans-serif;
     margin-left: auto;
@@ -53,39 +57,15 @@ pre.typescript-code {
     padding: 0.8em;
     padding-left: 1.6em;
     padding-right: 4em;
-    background: #F5F5F5;
+    background: #000000;
     border: solid #777 1px;
-    line-height: 1.5em;
+    line-height: 1.45em;
     min-width: 30em;
     border-radius: 8px;
 
     box-shadow: 0px 0px 8px #00000020;
 }
 
-span.comment {
-    color: #148A14;
-    font-style: italic;
-}
-
-span.keyword {
-    color: #00A;
-}
-
-span.parameterName, span.identifier {
-    color: #77C;
-}
-
-span.stringLiteral {
-    color: #a31515;
-}
-
-span.numericLiteral {
-    color: #09885A;
-}
-
-span.className, span.interfaceName, span.typeParameterName, span.typeAliasName {
-    color: #267F99;
-}
 
 span.quickinfo-result {
     cursor: help;
@@ -159,10 +139,6 @@ div.indent {
 div.indent::before {
     content: "→";
     color: #BBB;
-}
-
-span.className {
-    color: #790;
 }
 
 a, a:visited, a:active, a:hover {
@@ -263,3 +239,22 @@ aside {
     border: solid #33338855 3px;
     border-radius: 17px;
 }
+
+/**
+ * Colors from VS Code Light+ theme as surfaced from TextMate grammar.
+ * Generate this with theme-to-css.js
+ */
+tm-cmt { color: #008000; }
+tm-kw { color: #0000FF; }
+tm-def { color: #000000; }
+tm-typ { color: #267F99; }
+tm-vr { color: #001080; }
+tm-str { color: #A31515; }
+tm-mth { color: #795E26; }
+tm-num { color: #09885A; }
+
+/**
+ * Colors from our own classifier
+ */
+.keyword { color: #0000ff; }
+.className { color: #267f99; }

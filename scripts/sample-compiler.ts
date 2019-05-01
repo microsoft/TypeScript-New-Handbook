@@ -1,6 +1,9 @@
 import fs = require("fs");
 import ts = require("typescript");
+import shiki = require("shiki");
+import { Highlighter } from "shiki/dist/highlighter";
 import utils = require("./utils");
+const colorToStyleName = require("./theme-data/vs-light-plus.json");
 
 // Hacking in some internal stuff
 declare module "typescript" {
@@ -171,9 +174,37 @@ function filterCompilerOptions(codeLines: string[], defaultCompilerOptions: ts.C
     return options;
 }
 
-export function getCompilerExtension() {
+function shikiSpans(highlighter: Highlighter, code: string, lang: string) {
+    const spans: Tagging[] = [];
+    const tokens = highlighter.codeToThemedTokens(code, lang);
+    let i = 0;
+    for (const line of tokens) {
+        for (const token of line) {
+            if (token.color) {
+                const styleName = colorToStyleName[token.color.toUpperCase()];
+                if (styleName === undefined) {
+                    console.log(JSON.stringify(token, undefined, 2));
+                }
+                spans.push({
+                    position: i,
+                    length: token.content.length,
+                    start: `<span class="tm-${styleName}">`,
+                    end: `</span>`
+                });
+            }
+            i += token.content.length;
+        }
+        // \n
+        i++;
+    }
+    return spans;
+}
+
+export async function getCompilerExtension() {
     const matches: string[] = [];
     let self = false;
+
+    const highlighter = await shiki.getHighlighter({ theme: "light_plus" });
 
     const sampleFileRef: SampleRef = { fileName: undefined, content: "", versionNumber: 0 };
     const lsHost = createLanguageServiceHost(sampleFileRef);
@@ -209,7 +240,6 @@ export function getCompilerExtension() {
                 const scriptVersion = "" + sampleFileRef.versionNumber;
                 docRegistry.updateDocument(sampleFileRef.fileName, options, scriptSnapshot!, scriptVersion);
 
-                const syntaxSpans = ls.getEncodedSyntacticClassifications(sampleFileRef.fileName, ts.createTextSpan(0, code.length)).spans;
                 const semanticSpans = ls.getEncodedSemanticClassifications(sampleFileRef.fileName, ts.createTextSpan(0, code.length)).spans;
                 const errs = ls.getSemanticDiagnostics(sampleFileRef.fileName);
                 errs.push(...ls.getSyntacticDiagnostics(sampleFileRef.fileName));
@@ -229,8 +259,8 @@ export function getCompilerExtension() {
                     });
                 }
 
+                taggings.push(...shikiSpans(highlighter, code, "ts"));
                 taggings.push(...serverSpansToTaggings(semanticSpans));
-                taggings.push(...serverSpansToTaggings(syntaxSpans));
 
                 for (const highlight of highlights) {
                     taggings.push({

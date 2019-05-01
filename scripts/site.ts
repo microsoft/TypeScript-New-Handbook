@@ -16,14 +16,14 @@ function changeFileName(fn: string) {
 
 const renderMarkdownPage: staticy.TextTransform = {
     changeFileName,
-    transform(context) {
+    async transform(context) {
         let title: string = context.fileName.replace(/\.md$/, "");
         let h1 = getHeaders(context.content).filter(h => h.depth === 1)[0];
         if (h1 !== undefined) {
             title = h1.title;
         }
         return {
-            content: render.makePage(render.render(context.content), { title })
+            content: render.makePage(await render.render(context.content), { title })
         };
     }
 }
