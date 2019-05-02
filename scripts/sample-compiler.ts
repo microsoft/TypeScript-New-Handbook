@@ -182,15 +182,14 @@ function shikiSpans(highlighter: Highlighter, code: string, lang: string) {
         for (const token of line) {
             if (token.color) {
                 const styleName = colorToStyleName[token.color.toUpperCase()];
-                if (styleName === undefined) {
-                    console.log(JSON.stringify(token, undefined, 2));
+                if (styleName !== "def") {
+                    spans.push({
+                        position: i,
+                        length: token.content.length,
+                        start: `<span class="tm-${styleName}">`,
+                        end: `</span>`
+                    });
                 }
-                spans.push({
-                    position: i,
-                    length: token.content.length,
-                    start: `<span class="tm-${styleName}">`,
-                    end: `</span>`
-                });
             }
             i += token.content.length;
         }
@@ -259,9 +258,6 @@ export async function getCompilerExtension() {
                     });
                 }
 
-                taggings.push(...shikiSpans(highlighter, code, "ts"));
-                taggings.push(...serverSpansToTaggings(semanticSpans));
-
                 for (const highlight of highlights) {
                     taggings.push({
                         position: highlight.position,
@@ -270,6 +266,9 @@ export async function getCompilerExtension() {
                         end: `</span>`
                     });
                 }
+
+                taggings.push(...shikiSpans(highlighter, code, "ts"));
+                taggings.push(...serverSpansToTaggings(semanticSpans));
 
                 let pendingQuery: QueryPosition | undefined = undefined;
                 let pendingQuickInfo: ts.QuickInfo | undefined = undefined;

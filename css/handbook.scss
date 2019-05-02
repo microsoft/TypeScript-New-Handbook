@@ -274,6 +274,7 @@ body.dark, body.light-dark {
 
     pre.typescript-code {
         background: #111;
+        color: $def;
 
         .tm-cmt { color: $cmt; }
         .tm-kw { color: $kw; }
@@ -311,6 +312,7 @@ body.light, body.dark-light {
 
     pre.typescript-code {
         background: #FFF;
+        color: $def;
 
         .tm-cmt { color: $cmt; }
         .tm-kw { color: $kw; }
