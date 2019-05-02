@@ -1,0 +1,418 @@
+ body {
+    background: #FCFCFC;
+    position: relative;
+    margin: 0px;
+}
+
+body article {
+    font-family: 'Segoe UI Semilight', Tahoma, Geneva, Verdana, sans-serif;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.3em;
+}
+
+@media(min-width: 800px) {
+    body article {
+        max-width: 65%
+    }
+}
+
+div.theme-selector {
+    font-family: 'Segoe UI Semilight', Tahoma, Geneva, Verdana, sans-serif;
+
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    padding-top: 0.25em;
+    padding-bottom: 0.25em;
+    border-radius: 0px 0px 0px 8px;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    background: #777;
+    width: fit-content;
+    color: white;
+
+    div {
+        display: inline-block;
+        font-size: 160%;
+        width: 1.3em;
+        height: 1.3em;
+        border-radius: 6px;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    #set-theme-light {
+        color: white;
+        background: white;
+    }
+    #set-theme-dark {
+        color: black;
+        background: black;
+    }
+    #set-theme-light-dark {
+        background: white;
+        color: black;
+    }
+    #set-theme-dark-light {
+        background: black;
+        color: white;
+    }
+}
+
+// Inline fixed-width `blocks`
+article :not(pre) code {
+    font-family: Consolas, Menlo, Monaco, Deja Vu Sans Mono, "Courier New", monospace;
+}
+
+// Header styling
+article {
+    padding-top: 1em;
+
+    h1, h2, h3, h4, h5, h6 {
+        margin-top: 0px;
+        margin-bottom: 0.6em;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+    }
+
+    h1 {
+        font-size: 170%;
+    }
+    
+    h2 {
+        margin-top: 1.8em;
+    }
+    
+    h3 {
+        margin-top: 1.6em;
+    }
+}
+
+// Non-theme-specific rules for code blocks
+pre.typescript-code {
+    font-family: Consolas, Menlo, Monaco, Deja Vu Sans Mono, "Courier New", monospace;
+    font-size: 90%;
+
+    display: block;
+    position: relative;
+    max-width: 80em;
+    width: 90%;
+    padding: 0.8em;
+    padding-left: 1.6em;
+    padding-right: 4em;
+    border: solid #777 1px;
+    line-height: 1.45em;
+    min-width: 30em;
+    border-radius: 8px;
+
+    box-shadow: 0px 0px 8px #00000020;
+}
+
+span.quickinfo-result {
+    cursor: help;
+    position: relative;
+    display: inline-block;
+    background: white;
+    padding: 3px 10px 3px 8px;
+    border: solid #AAAACC 1px;
+    left: 0.2em;
+    box-shadow: 0px 0px 3px #00000033;
+
+    /*
+     * Disallow user-selection on quick-info.
+     * This allows users to copy/paste examples without the quick info contents.
+     * Ideally, we'd still allow users to select within a quick info bubble separately.
+     */
+     -webkit-user-select: none;
+     -moz-user-select: none;
+     -ms-user-select: none;
+     user-select: none;
+}
+
+span.quickinfo-arrow {
+    color: #AAAACC;
+    position: absolute;
+    top: -0.75em;
+    left: -0.3em;
+}
+
+span.error {
+    position: relative;
+}
+
+span.error-highlight {
+    background: #FF000010;
+    border-radius: 0.4em;
+    border-bottom: #F44 2px;
+    border-bottom-style: dotted;
+    position: absolute;
+    display: inline-block;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -5px;
+}
+
+span.highlight {
+    position: relative;
+}
+
+span.highlight-content {
+    background: #FFFF0040;
+    position: absolute;
+    display: inline-block;
+    top: -3px;
+    left: -1px;
+    right: -1px;
+    bottom: -3px;
+    border-radius: 6px;
+    box-shadow: 0px 0px 6px #00000088;
+}
+
+span.highlight-description {
+    display: none;
+}
+
+div.indent {
+    display: inline-block;
+    width: 1.1em;
+}
+div.indent::before {
+    content: "→";
+    color: #BBB;
+}
+
+a, a:visited, a:active, a:hover {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+// Table of contents formatting
+span.toc-title {
+    font-weight: bold;
+    border-bottom: solid 1px gray;
+}
+
+ul {
+    padding-left: 1em;
+    margin-left: 1em;
+}
+
+ul ul, ul ul ul {
+    margin-left: 0.5em;
+}
+
+
+h1 a, h2 a, h3 a, h4 a {
+    text-decoration: none;
+    position: relative;
+}
+
+h1 a:hover::before, h2 a:hover::before, h3 a:hover::before, h4 a:hover::before {
+    content: "#";
+    position: absolute;
+    left: -0.7em;
+}
+
+hr.error-divider {
+    margin-left: -1em;
+    margin-right: -3em;
+    margin-top: 0.75em;
+    margin-bottom: 0.75em;
+}
+
+div.listed-error, div.error-line {
+    word-wrap: normal;
+    overflow-wrap: normal;
+}
+
+blockquote {
+    margin: 1em;
+    padding: 0.02em 1em 0.02em 1em;
+}
+
+aside {
+    width: fit-content;
+    margin-left: 0.5em;
+    padding: 0.4em;
+    padding-left: 1em;
+    padding-right: 1em;
+    border-radius: 12px;
+}
+
+// Generated using scripts/theme-to-css.js
+$light-cmt: #008000;
+$light-kw: #0000FF;
+$light-def: #000000;
+$light-typ: #267F99;
+$light-vr: #001080;
+$light-str: #A31515;
+$light-mth: #795E26;
+$light-num: #09885A;
+
+$dark-cmt: #608B4E;
+$dark-kw: #569CD6;
+$dark-def: #D4D4D4;
+$dark-typ: #4EC9B0;
+$dark-vr: #9CDCFE;
+$dark-str: #CE9178;
+$dark-mth: #DCDCAA;
+$dark-num: #B5CEA8;
+
+body.dark, body.light-dark {
+    $cmt: $dark-cmt;
+    $kw: $dark-kw;
+    $def: $dark-def;
+    $typ: $dark-typ;
+    $vr: $dark-vr;
+    $str: $dark-str;
+    $mth: $dark-mth;
+    $num: $dark-num;
+
+    pre.typescript-code {
+        background: #111;
+
+        .tm-cmt { color: $cmt; }
+        .tm-kw { color: $kw; }
+        .tm-def { color: $def; }
+        .tm-typ { color: $typ; }
+        .tm-vr { color: $vr; }
+        .tm-str { color: $str; }
+        .tm-mth { color: $mth; }
+        .tm-num { color: $num; }
+
+        .punctuation, .operator, .text, .localName, .propertyName, .methodName, .parameterName { color: $def; }
+        .keyword { color: $kw; }
+        .className, .typeParameterName, .interfaceName, .aliasName { color: $typ; }
+        .stringLiteral { color: $str; }
+
+        span.quickinfo-result {
+            background: #222;
+        }
+    }
+
+    div.listed-error {
+        color: #D4D4D4;
+    }
+}
+
+body.light, body.dark-light {
+    $cmt: $light-cmt;
+    $kw: $light-kw;
+    $def: $light-def;
+    $typ: $light-typ;
+    $vr: $light-vr;
+    $str: $light-str;
+    $mth: $light-mth;
+    $num: $light-num;
+
+    pre.typescript-code {
+        background: #FFF;
+
+        .tm-cmt { color: $cmt; }
+        .tm-kw { color: $kw; }
+        .tm-def { color: $def; }
+        .tm-typ { color: $typ; }
+        .tm-vr { color: $vr; }
+        .tm-str { color: $str; }
+        .tm-mth { color: $mth; }
+        .tm-num { color: $num; }
+
+        /**
+        * Colors from our own classifier
+        */
+        .punctuation, .operator, .text, .localName, .propertyName, .methodName, .parameterName { color: $def; }
+        .keyword { color: $kw; }
+        .className, .typeParameterName, .interfaceName, .aliasName { color: $typ; }
+        .stringLiteral { color: $str; }
+
+        span.quickinfo-result {
+            background: #f5f5f5;
+        }
+    }
+
+    div.listed-error {
+        color: #000000;
+    }
+}
+
+body.dark, body.dark-light {
+    background: #222;
+    color: #E4E4E4;
+
+    a, a:hover, a:visited, a:active {
+        color: #FFD;
+    }
+
+    h1, h2, h3, h4 {
+        a, a:visited, a:active, a:hover {
+            color: #EEE;
+        }
+    }
+
+    aside {
+        background: #444;
+        border: solid #999 3px;
+    }
+
+    blockquote {
+        background: #005;
+        border-left: solid #44F 4px;
+    }
+
+    article :not(pre) code {
+        color: #F37575;
+    }
+}
+
+body.light, body.light-dark {
+    background: #FFF;
+    color: #000;
+
+    a, a:visited, a:active, a:hover {
+        color: #265988;
+    }
+    
+    h1, h2, h3, h4 {
+        a, a:visited, a:active, a:hover {
+            color: #000;
+        }
+    }
+
+    aside {
+        background: #EEEEFF;
+        border: solid #33338855 3px;
+    }
+
+    blockquote {
+        background: #FFFFF0;
+        border-left: solid #EEB 4px;
+    }
+
+    article :not(pre) code {
+        color: #a31515;
+    }
+}
+
+body.light, body.light-dark, body.dark-light, body.dark {
+    a.playground-link {
+        font-family: "wf_segoe-ui_normal", Verdana, Geneva, Tahoma, sans-serif;
+        position: absolute;
+        font-size: 12px;
+        bottom: 0px;
+        right: 0px;
+        padding: 6px;
+        background-color: #0074c1;
+        border-top-left-radius: 7px;
+        border-bottom-right-radius: 7px;
+    }
+
+    // Keep below theme-specific rules since they don't flip on theme
+    a.playground-link, a.playground-link:visited {
+        color: #FFF;
+        text-decoration: none;
+    }
+}
