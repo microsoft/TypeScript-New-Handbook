@@ -32,8 +32,8 @@ It takes a *function type* and produces its return type:
 
 ```ts
 type Predicate = (x: unknown) => boolean;
-// K is just "boolean"
 type K = ReturnType<Predicate>;
+     ^?
 ```
 
 If we try to use `ReturnType` on a function name, we see an instructive error:

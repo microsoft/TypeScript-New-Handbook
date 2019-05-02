@@ -402,7 +402,7 @@ interface Shape {
 //cut
 function handleShape(shape: Shape) {
     // oops!
-    if (shape.kind === "circel") {
+    if (shape.kind === "rect") {
         // ...
     }
 }

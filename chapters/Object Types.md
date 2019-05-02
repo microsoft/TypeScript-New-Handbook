@@ -351,6 +351,9 @@ type ColorfulCircle = Colorful & Circle;
 Here, we've intersected `Colorful` and `Circle` to produce a new type that has all the members of `Colorful` *and* `Circle`.
 
 ```ts
+interface Colorful { color: string; }
+interface Circle { radius: number; }
+//cut
 function draw(circle: Colorful & Circle) {
     console.log(`Color was ${circle.color}`);
     console.log(`Radius was ${circle.radius}`);
