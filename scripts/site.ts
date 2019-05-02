@@ -2,11 +2,12 @@ import staticy = require('staticy');
 import path = require('path');
 import fs = require('fs-extra');
 
-import render = require('./render');
+import * as render from './render';
 import { Outline } from './master-outline-generator';
 import { Everything } from './everything-generator';
 import { fileNameToUrlName } from './utils';
 import { getHeaders } from './header-parser';
+import { sassCompiler } from './sass-compiler';
 
 const home = path.join(__dirname, "..");
 
@@ -31,7 +32,9 @@ const renderMarkdownPage: staticy.TextTransform = {
 export async function create() {
     const site = staticy.site.createSite({ fileRoot: home });
 
+    site.addDirectory("css/*.scss", { textTransformer: sassCompiler });
     site.addDirectory("css/*.css");
+    site.addDirectory("js/*.js");
     site.addDirectory("chapters/*.md", { textTransformer: renderMarkdownPage });
     site.addDirectory("reference/*.md", { textTransformer: renderMarkdownPage });
     site.addDirectory("intros/*.md", { textTransformer: renderMarkdownPage });

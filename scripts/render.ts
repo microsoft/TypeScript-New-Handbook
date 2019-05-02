@@ -95,7 +95,8 @@ export function makePage(content: string, settings?: Partial<PageSettings>) {
             title: "Handbook Page",
             urlDepth: 2
         },
-        ...settings};
+        ...settings
+    };
 
     return `<!DOCTYPE html>
     <html>
@@ -105,17 +106,19 @@ export function makePage(content: string, settings?: Partial<PageSettings>) {
         <title>${st.title}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" media="screen" href="${strrep("../", st.urlDepth)}css/handbook.css" />
+        <script src="${strrep("../", st.urlDepth)}js/handbook.js"></script>
     </head>
-    <body>
+    <body class="dark-light">
+        <div class="theme-selector">
+            Theme:
+            <div id="set-theme-light">■</div>
+            <div id="set-theme-dark">■</div>
+            <div id="set-theme-dark-light">■</div>
+            <div id="set-theme-light-dark">■</div>
+        </div>
     <article>
     ${content}
     </article>
-
-    <script src="https://unpkg.com/popper.js@1/dist/umd/popper.min.js"></script>
-    <script src="https://unpkg.com/tippy.js@4"></script>
-    <script>
-        tippy.setDefaults({preventOverflow: { enabled: false } });
-    </script>
     </body>
     </html>`;
 }
