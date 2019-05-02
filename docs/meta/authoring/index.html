@@ -6,8 +6,16 @@
         <title>Authoring Guide</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" media="screen" href="../../css/handbook.css" />
+        <script src="../../js/handbook.js"></script>
     </head>
-    <body>
+    <body class="dark-light">
+        <div class="theme-selector">
+            Theme:
+            <div id="set-theme-light">■</div>
+            <div id="set-theme-dark">■</div>
+            <div id="set-theme-dark-light">■</div>
+            <div id="set-theme-light-dark">■</div>
+        </div>
     <article>
     <h1 id="authoring-guide"><a href="#authoring-guide">Authoring Guide</h1></a>
 <div class="toc"><span class="toc-title">Table of Contents</span><ul><li><a href="#testing">Testing</a></li><li><a href="#encouraged-lesser-known-syntax">Encouraged Lesser-Known Syntax</a></li><ul><li><a href="#anchor-links">Anchor Links</a></li></ul><li><a href="#special-syntax">Special Syntax</a></li><ul><li><a href="#inter-page-links">Inter-page Links</a></li><li><a href="#table-of-contents:-__toc__">Table of Contents: <code>__toc__</code></a></li><li><a href="#code-highlights:-^^^^^">Code Highlights: <code>^^^^^</code></a></li><li><a href="#code-quickinfo-queries:-^?">Code QuickInfo Queries: <code>^?</code></a></li><li><a href="#cut-comments"><code>//cut</code> comments</a></li></ul><li><a href="#publishing">Publishing</a></li><li><a href="#walkthrough">Walkthrough</a></li><ul><li><a href="#key-concepts!">Key Concepts!</a></li><li><a href="#reading-level-&-vocabulary">Reading Level &amp; Vocabulary</a></li><li><a href="#voice-(walkthrough)">Voice (Walkthrough)</a></li></ul><li><a href="#reference">Reference</a></li><ul><li><a href="#voice-(reference)">Voice (Reference)</a></li></ul></ul></ul></div>
@@ -49,8 +57,8 @@ function foo() {
 }
 </pre>
 <p>This will render as:
-<pre class="typescript-code"><span class="keyword">function</span> <span class="identifier"><span class="highlight"><span class="highlight-content"></span><span class="highlight-description">Some text</span>foo</span></span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
-<span class="punctuation">}</span></pre></p>
+<pre class="typescript-code"><span class="tm-kw">function</span><span class="tm-def"> </span><span class="tm-mth"><span class="highlight"><span class="highlight-content"></span><span class="highlight-description">Some text</span>foo</span></span><span class="tm-def">() {</span>
+<span class="tm-def">}</span></pre></p>
 <h3 id="code-quickinfo-queries-"><a href="#code-quickinfo-queries-">Code QuickInfo Queries: <code>^?</code></h3></a>
 <p>You can use <code>^?</code> to show the language service's quickinfo response at a location:</p>
 <pre>
@@ -60,9 +68,9 @@ foo();
  ^?
 </pre>
 <p>This will render as:</p>
-<p><pre class="typescript-code"><span class="keyword">function</span> <span class="identifier">foo</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
-<span class="punctuation">}</span>
-<span class="identifier">foo</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<p><pre class="typescript-code"><span class="tm-kw">function</span><span class="tm-def"> </span><span class="tm-mth">foo</span><span class="tm-def">() {</span>
+<span class="tm-def">}</span>
+<span class="tm-mth">foo</span><span class="tm-def">();</span>
  <span class="quickinfo-result"><span class="quickinfo-arrow">▲</span><span class="keyword">function</span><span class="space"> </span><span class="functionName">foo</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">:</span><span class="space"> </span><span class="keyword">void</span></span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20foo()%20%7B%0A%7D%0Afoo()%3B">Try</a></pre></p>
 <h3 id="cut-comments"><a href="#cut-comments"><code>//cut</code> comments</h3></a>
 <p>Sometimes a code sample should be able to refer to declarations that you don't want to display in a sample.
@@ -122,11 +130,5 @@ A reader who completely understands all reference articles should be educated at
   </ul>
 </blockquote>
     </article>
-
-    <script src="https://unpkg.com/popper.js@1/dist/umd/popper.min.js"></script>
-    <script src="https://unpkg.com/tippy.js@4"></script>
-    <script>
-        tippy.setDefaults({preventOverflow: { enabled: false } });
-    </script>
     </body>
     </html>

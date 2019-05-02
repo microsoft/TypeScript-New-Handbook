@@ -6,8 +6,16 @@
         <title>TypeScript for the Java/C# Programmer</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" media="screen" href="../../css/handbook.css" />
+        <script src="../../js/handbook.js"></script>
     </head>
-    <body>
+    <body class="dark-light">
+        <div class="theme-selector">
+            Theme:
+            <div id="set-theme-light">■</div>
+            <div id="set-theme-dark">■</div>
+            <div id="set-theme-dark-light">■</div>
+            <div id="set-theme-light-dark">■</div>
+        </div>
     <article>
     <h1 id="typescript-for-the-javac-programmer"><a href="#typescript-for-the-javac-programmer">TypeScript for the Java/C# Programmer</h1></a>
 <p>TypeScript is a popular choice for programmers accustomed to other languages with static typing, such as C# and Java.
@@ -53,29 +61,29 @@ It simply belongs to the <em>union</em> of those sets: <code>string | number</co
 <h3 id="erased-structrual-types"><a href="#erased-structrual-types">Erased Structrual Types</h3></a>
 <p>In TypeScript, objects are <em>not</em> of a single exact type.
 For example, if we construct an object that satisfies an interface, we can use that object where that interface is expected even though there was no declarative relationship between the two.</p>
-<p><pre class="typescript-code"><span class="keyword">interface</span> <span class="interfaceName"><span class="interfaceName">Pointlike</span></span> <span class="punctuation">{</span>
-    <span class="identifier">x</span><span class="punctuation">:</span> <span class="keyword">number</span><span class="punctuation">;</span>
-    <span class="identifier">y</span><span class="punctuation">:</span> <span class="keyword">number</span><span class="punctuation">;</span>
-<span class="punctuation">}</span>
-<span class="keyword">interface</span> <span class="interfaceName"><span class="interfaceName">Named</span></span> <span class="punctuation">{</span>
-    <span class="identifier">name</span><span class="punctuation">:</span> <span class="keyword">string</span><span class="punctuation">;</span>
-<span class="punctuation">}</span>
+<p><pre class="typescript-code"><span class="tm-kw">interface</span><span class="tm-def"> </span><span class="tm-typ"><span class="interfaceName">Pointlike</span></span><span class="tm-def"> {</span>
+<span class="tm-def">    </span><span class="tm-vr">x</span><span class="tm-def">: </span><span class="tm-typ">number</span><span class="tm-def">;</span>
+<span class="tm-def">    </span><span class="tm-vr">y</span><span class="tm-def">: </span><span class="tm-typ">number</span><span class="tm-def">;</span>
+<span class="tm-def">}</span>
+<span class="tm-kw">interface</span><span class="tm-def"> </span><span class="tm-typ"><span class="interfaceName">Named</span></span><span class="tm-def"> {</span>
+<span class="tm-def">    </span><span class="tm-vr">name</span><span class="tm-def">: </span><span class="tm-typ">string</span><span class="tm-def">;</span>
+<span class="tm-def">}</span>
 
-<span class="keyword">function</span> <span class="identifier">printPoint</span><span class="punctuation">(</span><span class="parameterName">point</span><span class="punctuation">:</span> <span class="interfaceName"><span class="identifier">Pointlike</span></span><span class="punctuation">)</span> <span class="punctuation">{</span>
-    <span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="stringLiteral">"x = "</span> <span class="operator">+</span> <span class="identifier">point</span><span class="punctuation">.</span><span class="identifier">x</span> <span class="operator">+</span> <span class="stringLiteral">", y = "</span> <span class="operator">+</span> <span class="identifier">point</span><span class="punctuation">.</span><span class="identifier">y</span><span class="punctuation">)</span><span class="punctuation">;</span>
-<span class="punctuation">}</span>
+<span class="tm-kw">function</span><span class="tm-def"> </span><span class="tm-mth">printPoint</span><span class="tm-def">(</span><span class="tm-vr">point</span><span class="tm-def">: </span><span class="tm-typ"><span class="interfaceName">Pointlike</span></span><span class="tm-def">) {</span>
+<span class="tm-def">    </span><span class="tm-typ">console</span><span class="tm-def">.</span><span class="tm-mth">log</span><span class="tm-def">(</span><span class="tm-str">"x = "</span><span class="tm-def"> + </span><span class="tm-vr">point</span><span class="tm-def">.</span><span class="tm-vr">x</span><span class="tm-def"> + </span><span class="tm-str">", y = "</span><span class="tm-def"> + </span><span class="tm-vr">point</span><span class="tm-def">.</span><span class="tm-vr">y</span><span class="tm-def">);</span>
+<span class="tm-def">}</span>
 
-<span class="keyword">function</span> <span class="identifier">printName</span><span class="punctuation">(</span><span class="parameterName">x</span><span class="punctuation">:</span> <span class="interfaceName"><span class="identifier">Named</span></span><span class="punctuation">)</span> <span class="punctuation">{</span>
-    <span class="identifier">console</span><span class="punctuation">.</span><span class="identifier">log</span><span class="punctuation">(</span><span class="stringLiteral">"Hello, "</span> <span class="operator">+</span> <span class="identifier">x</span><span class="punctuation">.</span><span class="identifier">name</span><span class="punctuation">)</span><span class="punctuation">;</span>
-<span class="punctuation">}</span>
+<span class="tm-kw">function</span><span class="tm-def"> </span><span class="tm-mth">printName</span><span class="tm-def">(</span><span class="tm-vr">x</span><span class="tm-def">: </span><span class="tm-typ"><span class="interfaceName">Named</span></span><span class="tm-def">) {</span>
+<span class="tm-def">    </span><span class="tm-typ">console</span><span class="tm-def">.</span><span class="tm-mth">log</span><span class="tm-def">(</span><span class="tm-str">"Hello, "</span><span class="tm-def"> + </span><span class="tm-vr">x</span><span class="tm-def">.</span><span class="tm-vr">name</span><span class="tm-def">);</span>
+<span class="tm-def">}</span>
 
-<span class="keyword">const</span> <span class="identifier">obj</span> <span class="operator">=</span> <span class="punctuation">{</span>
-    <span class="identifier">x</span><span class="punctuation">:</span> <span class="numericLiteral">0</span><span class="punctuation">,</span>
-    <span class="identifier">y</span><span class="punctuation">:</span> <span class="numericLiteral">0</span><span class="punctuation">,</span>
-    <span class="identifier">name</span><span class="punctuation">:</span> <span class="stringLiteral">"Origin"</span>
-<span class="punctuation">}</span><span class="punctuation">;</span>
-<span class="identifier">printPoint</span><span class="punctuation">(</span><span class="identifier">obj</span><span class="punctuation">)</span><span class="punctuation">;</span>
-<span class="identifier">printName</span><span class="punctuation">(</span><span class="identifier">obj</span><span class="punctuation">)</span><span class="punctuation">;</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=interface%20Pointlike%20%7B%0A%20%20%20%20x%3A%20number%3B%0A%20%20%20%20y%3A%20number%3B%0A%7D%0Ainterface%20Named%20%7B%0A%20%20%20%20name%3A%20string%3B%0A%7D%0A%0Afunction%20printPoint(point%3A%20Pointlike)%20%7B%0A%20%20%20%20console.log(%22x%20%3D%20%22%20%2B%20point.x%20%2B%20%22%2C%20y%20%3D%20%22%20%2B%20point.y)%3B%0A%7D%0A%0Afunction%20printName(x%3A%20Named)%20%7B%0A%20%20%20%20console.log(%22Hello%2C%20%22%20%2B%20x.name)%3B%0A%7D%0A%0Aconst%20obj%20%3D%20%7B%0A%20%20%20%20x%3A%200%2C%0A%20%20%20%20y%3A%200%2C%0A%20%20%20%20name%3A%20%22Origin%22%0A%7D%3B%0AprintPoint(obj)%3B%0AprintName(obj)%3B">Try</a></pre></p>
+<span class="tm-kw">const</span><span class="tm-def"> </span><span class="tm-vr">obj</span><span class="tm-def"> = {</span>
+<span class="tm-def">    </span><span class="tm-vr">x:</span><span class="tm-def"> </span><span class="tm-num">0</span><span class="tm-def">,</span>
+<span class="tm-def">    </span><span class="tm-vr">y:</span><span class="tm-def"> </span><span class="tm-num">0</span><span class="tm-def">,</span>
+<span class="tm-def">    </span><span class="tm-vr">name:</span><span class="tm-def"> </span><span class="tm-str">"Origin"</span>
+<span class="tm-def">};</span>
+<span class="tm-mth">printPoint</span><span class="tm-def">(</span><span class="tm-vr">obj</span><span class="tm-def">);</span>
+<span class="tm-mth">printName</span><span class="tm-def">(</span><span class="tm-vr">obj</span><span class="tm-def">);</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=interface%20Pointlike%20%7B%0A%20%20%20%20x%3A%20number%3B%0A%20%20%20%20y%3A%20number%3B%0A%7D%0Ainterface%20Named%20%7B%0A%20%20%20%20name%3A%20string%3B%0A%7D%0A%0Afunction%20printPoint(point%3A%20Pointlike)%20%7B%0A%20%20%20%20console.log(%22x%20%3D%20%22%20%2B%20point.x%20%2B%20%22%2C%20y%20%3D%20%22%20%2B%20point.y)%3B%0A%7D%0A%0Afunction%20printName(x%3A%20Named)%20%7B%0A%20%20%20%20console.log(%22Hello%2C%20%22%20%2B%20x.name)%3B%0A%7D%0A%0Aconst%20obj%20%3D%20%7B%0A%20%20%20%20x%3A%200%2C%0A%20%20%20%20y%3A%200%2C%0A%20%20%20%20name%3A%20%22Origin%22%0A%7D%3B%0AprintPoint(obj)%3B%0AprintName(obj)%3B">Try</a></pre></p>
 <p>TypeScript's type system is <em>structural</em>, not nominal: We can use <code>obj</code> as a <code>Pointlike</code> because it has <code>x</code> and <code>y</code> properties that are both numbers.
 The relationships between types are determined by the properties they contain, not whether they were declared with some particular relationship.</p>
 <p>TypeScript's type system is also <em>not reified</em>: There's nothing at runtime that will tell us that <code>obj</code> is <code>Pointlike</code>.
@@ -85,14 +93,14 @@ In fact, the <code>Pointlike</code> type is not present <em>in any form</em> at 
 <p>OOP programmers are often surprised by two particular aspects of structural typing.</p>
 <h4 id="empty-types"><a href="#empty-types">Empty Types</h4></a>
 <p>The first is that the <em>empty type</em> seems to defy expectation:</p>
-<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">Empty</span></span> <span class="punctuation">{</span> <span class="punctuation">}</span>
+<p><pre class="typescript-code"><span class="tm-kw">class</span><span class="tm-def"> </span><span class="tm-typ"><span class="className">Empty</span></span><span class="tm-def"> { }</span>
 
-<span class="keyword">function</span> <span class="identifier">fn</span><span class="punctuation">(</span><span class="parameterName">arg</span><span class="punctuation">:</span> <span class="className"><span class="identifier">Empty</span></span><span class="punctuation">)</span> <span class="punctuation">{</span>
-    <span class="comment">// do something?</span>
-<span class="punctuation">}</span>
+<span class="tm-kw">function</span><span class="tm-def"> </span><span class="tm-mth">fn</span><span class="tm-def">(</span><span class="tm-vr">arg</span><span class="tm-def">: </span><span class="tm-typ"><span class="className">Empty</span></span><span class="tm-def">) {</span>
+<span class="tm-def">    </span><span class="tm-cmt">// do something?</span>
+<span class="tm-def">}</span>
 
-<span class="comment">// No error, but this isn't an 'Empty' ?</span>
-<span class="identifier">fn</span><span class="punctuation">(</span><span class="punctuation">{</span> <span class="identifier">k</span><span class="punctuation">:</span> <span class="numericLiteral">10</span> <span class="punctuation">}</span><span class="punctuation">)</span><span class="punctuation">;</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20Empty%20%7B%20%7D%0A%0Afunction%20fn(arg%3A%20Empty)%20%7B%0A%20%20%20%20%2F%2F%20do%20something%3F%0A%7D%0A%0A%2F%2F%20No%20error%2C%20but%20this%20isn't%20an%20'Empty'%20%3F%0Afn(%7B%20k%3A%2010%20%7D)%3B">Try</a></pre></p>
+<span class="tm-cmt">// No error, but this isn't an 'Empty' ?</span>
+<span class="tm-mth">fn</span><span class="tm-def">({ </span><span class="tm-vr">k:</span><span class="tm-def"> </span><span class="tm-num">10</span><span class="tm-def"> });</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20Empty%20%7B%20%7D%0A%0Afunction%20fn(arg%3A%20Empty)%20%7B%0A%20%20%20%20%2F%2F%20do%20something%3F%0A%7D%0A%0A%2F%2F%20No%20error%2C%20but%20this%20isn't%20an%20'Empty'%20%3F%0Afn(%7B%20k%3A%2010%20%7D)%3B">Try</a></pre></p>
 <p>TypeScript determines if the call to <code>fn</code> here is valid by seeing if the provided argument is a valid <code>Empty</code>.
 It does so by examining the <em>structure</em> of <code>{ k: 10 }</code> and <code>class Empty { }</code>.
 We can see that <code>{ k: 10 }</code> has <em>all</em> of the properties that <code>Empty</code> does, because <code>Empty</code> has no properties.
@@ -102,19 +110,19 @@ A subclass cannot <em>remove</em> a property of its base class, because doing so
 Structural type systems simply identify this relationship implicitly by describing subtypes in terms of having properties of compatible types.</p>
 <h4 id="identical-types"><a href="#identical-types">Identical Types</h4></a>
 <p>Another frequent source of surprise comes with identical types:</p>
-<p><pre class="typescript-code"><span class="keyword">class</span> <span class="className"><span class="className">Car</span></span> <span class="punctuation">{</span>
-    <span class="identifier">drive</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
-        <span class="comment">// hit the gas</span>
-    <span class="punctuation">}</span>
-<span class="punctuation">}</span>
-<span class="keyword">class</span> <span class="className"><span class="className">Golfer</span></span> <span class="punctuation">{</span>
-    <span class="identifier">drive</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="punctuation">{</span>
-        <span class="comment">// hit the ball far</span>
-    <span class="punctuation">}</span>
-<span class="punctuation">}</span>
+<p><pre class="typescript-code"><span class="tm-kw">class</span><span class="tm-def"> </span><span class="tm-typ"><span class="className">Car</span></span><span class="tm-def"> {</span>
+<span class="tm-def">    </span><span class="tm-mth">drive</span><span class="tm-def">() {</span>
+<span class="tm-def">        </span><span class="tm-cmt">// hit the gas</span>
+<span class="tm-def">    }</span>
+<span class="tm-def">}</span>
+<span class="tm-kw">class</span><span class="tm-def"> </span><span class="tm-typ"><span class="className">Golfer</span></span><span class="tm-def"> {</span>
+<span class="tm-def">    </span><span class="tm-mth">drive</span><span class="tm-def">() {</span>
+<span class="tm-def">        </span><span class="tm-cmt">// hit the ball far</span>
+<span class="tm-def">    }</span>
+<span class="tm-def">}</span>
 
-<span class="comment">// No error?</span>
-<span class="keyword">let</span> <span class="identifier">w</span><span class="punctuation">:</span> <span class="className"><span class="identifier">Car</span></span> <span class="operator">=</span> <span class="keyword">new</span> <span class="className"><span class="identifier">Golfer</span></span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20Car%20%7B%0A%20%20%20%20drive()%20%7B%0A%20%20%20%20%20%20%20%20%2F%2F%20hit%20the%20gas%0A%20%20%20%20%7D%0A%7D%0Aclass%20Golfer%20%7B%0A%20%20%20%20drive()%20%7B%0A%20%20%20%20%20%20%20%20%2F%2F%20hit%20the%20ball%20far%0A%20%20%20%20%7D%0A%7D%0A%0A%2F%2F%20No%20error%3F%0Alet%20w%3A%20Car%20%3D%20new%20Golfer()%3B">Try</a></pre></p>
+<span class="tm-cmt">// No error?</span>
+<span class="tm-kw">let</span><span class="tm-def"> </span><span class="tm-vr">w</span><span class="tm-def">: </span><span class="tm-typ"><span class="className">Car</span></span><span class="tm-def"> = </span><span class="tm-kw">new</span><span class="tm-def"> </span><span class="tm-typ"><span class="className">Golfer</span></span><span class="tm-def">();</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20Car%20%7B%0A%20%20%20%20drive()%20%7B%0A%20%20%20%20%20%20%20%20%2F%2F%20hit%20the%20gas%0A%20%20%20%20%7D%0A%7D%0Aclass%20Golfer%20%7B%0A%20%20%20%20drive()%20%7B%0A%20%20%20%20%20%20%20%20%2F%2F%20hit%20the%20ball%20far%0A%20%20%20%20%7D%0A%7D%0A%0A%2F%2F%20No%20error%3F%0Alet%20w%3A%20Car%20%3D%20new%20Golfer()%3B">Try</a></pre></p>
 <p>Again, this isn't an error because the <em>structures</em> of these classes are the same.
 While this may seem like a potential source of confusion, in practice, identical classes that shouldn't be related are not common.</p>
 <p>We'll learn more about how classes relate to each other in the Classes chapter.</p>
@@ -130,11 +138,5 @@ static void PrintType&lt;T&gt;() {
 For example, <code>typeof (new Car())</code> will be <code>"object"</code>, not <code>Car</code> or <code>"Car"</code>.</p>
 <h2 id="co-learning-javascript"><a href="#co-learning-javascript">Co-learning JavaScript</h2></a>
     </article>
-
-    <script src="https://unpkg.com/popper.js@1/dist/umd/popper.min.js"></script>
-    <script src="https://unpkg.com/tippy.js@4"></script>
-    <script>
-        tippy.setDefaults({preventOverflow: { enabled: false } });
-    </script>
     </body>
     </html>

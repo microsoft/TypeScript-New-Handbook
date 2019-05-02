@@ -6,8 +6,16 @@
         <title>TODO</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" media="screen" href="../../css/handbook.css" />
+        <script src="../../js/handbook.js"></script>
     </head>
-    <body>
+    <body class="dark-light">
+        <div class="theme-selector">
+            Theme:
+            <div id="set-theme-light">■</div>
+            <div id="set-theme-dark">■</div>
+            <div id="set-theme-dark-light">■</div>
+            <div id="set-theme-light-dark">■</div>
+        </div>
     <article>
     <h2 id="new-syntax-not-yet-covered"><a href="#new-syntax-not-yet-covered">New Syntax Not Yet Covered</h2></a>
 <ul>
@@ -15,20 +23,12 @@
 </ul>
 <h2 id="infrastructure"><a href="#infrastructure">Infrastructure</h2></a>
 <ul>
-<li>Allow changing compiler settings in samples</li>
 <li>Turn on a linter</li>
-<li>Enable <code>[section links]</code></li>
 <li>Disable text selection from tooltips</li>
 <li>Semantic HTML, and tag parsing</li>
 <li>Weird highlighting for <code>T extends (...args: never[]) =&gt; infer U ? U : never;</code><ul>
 <li>Are the classifiers fighting with each other?</li></ul></li>
 </ul>
     </article>
-
-    <script src="https://unpkg.com/popper.js@1/dist/umd/popper.min.js"></script>
-    <script src="https://unpkg.com/tippy.js@4"></script>
-    <script>
-        tippy.setDefaults({preventOverflow: { enabled: false } });
-    </script>
     </body>
     </html>

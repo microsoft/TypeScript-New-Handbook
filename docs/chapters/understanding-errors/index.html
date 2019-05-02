@@ -6,8 +6,16 @@
         <title>Understanding Errors</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" media="screen" href="../../css/handbook.css" />
+        <script src="../../js/handbook.js"></script>
     </head>
-    <body>
+    <body class="dark-light">
+        <div class="theme-selector">
+            Theme:
+            <div id="set-theme-light">■</div>
+            <div id="set-theme-dark">■</div>
+            <div id="set-theme-dark-light">■</div>
+            <div id="set-theme-light-dark">■</div>
+        </div>
     <article>
     <h1 id="understanding-errors"><a href="#understanding-errors">Understanding Errors</h1></a>
 <p>Whenever TypeScript finds an error, it tries to explain what went wrong in as much detail as possible.
@@ -28,9 +36,9 @@ You can think of each sub-message as answering a "why?" question about the messa
 Let's work through some examples to see how they work in practice.</p>
 <h3 id="example-1"><a href="#example-1">Example 1</h3></a>
 <p>Here's an example that produces an error message longer than the example itself:</p>
-<p><pre class="typescript-code"><span class="keyword">let</span> <span class="identifier">a</span><span class="punctuation">:</span> <span class="punctuation">{</span> <span class="identifier">m</span><span class="punctuation">:</span> <span class="keyword">number</span><span class="punctuation">[</span><span class="punctuation">]</span> <span class="punctuation">}</span><span class="punctuation">;</span>
-<span class="keyword">let</span> <span class="identifier">b</span> <span class="operator">=</span> <span class="punctuation">{</span> <span class="identifier">m</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="stringLiteral">""</span><span class="punctuation">]</span> <span class="punctuation">}</span><span class="punctuation">;</span>
-<span class="error"><span class="error-highlight"></span><span class="identifier">a</span></span> <span class="operator">=</span> <span class="identifier">b</span><span class="punctuation">;</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Type '{ m: string[]; }' is not assignable to type '{ m: number[]; }'.</div><div class="error-line"><div class="indent"></div>Types of property 'm' are incompatible.</div><div class="error-line"><div class="indent"></div><div class="indent"></div>Type 'string[]' is not assignable to type 'number[]'.</div><div class="error-line"><div class="indent"></div><div class="indent"></div><div class="indent"></div>Type 'string' is not assignable to type 'number'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=let%20a%3A%20%7B%20m%3A%20number%5B%5D%20%7D%3B%0Alet%20b%20%3D%20%7B%20m%3A%20%5B%22%22%5D%20%7D%3B%0Aa%20%3D%20b%3B">Try</a></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">let</span><span class="tm-def"> </span><span class="tm-vr">a</span><span class="tm-def">: { </span><span class="tm-vr">m</span><span class="tm-def">: </span><span class="tm-typ">number</span><span class="tm-def">[] };</span>
+<span class="tm-kw">let</span><span class="tm-def"> </span><span class="tm-vr">b</span><span class="tm-def"> = { </span><span class="tm-vr">m:</span><span class="tm-def"> [</span><span class="tm-str">""</span><span class="tm-def">] };</span>
+<span class="error"><span class="error-highlight"></span><span class="tm-vr">a</span></span><span class="tm-def"> = </span><span class="tm-vr">b</span><span class="tm-def">;</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Type '{ m: string[]; }' is not assignable to type '{ m: number[]; }'.</div><div class="error-line"><div class="indent"></div>Types of property 'm' are incompatible.</div><div class="error-line"><div class="indent"></div><div class="indent"></div>Type 'string[]' is not assignable to type 'number[]'.</div><div class="error-line"><div class="indent"></div><div class="indent"></div><div class="indent"></div>Type 'string' is not assignable to type 'number'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=let%20a%3A%20%7B%20m%3A%20number%5B%5D%20%7D%3B%0Alet%20b%20%3D%20%7B%20m%3A%20%5B%22%22%5D%20%7D%3B%0Aa%20%3D%20b%3B">Try</a></pre></p>
 <p>TypeScript found an error when checking the last line.
 Its logic for issuing an error follows from its logic for determining if the assignment is OK:</p>
 <ol>
@@ -40,11 +48,5 @@ Its logic for issuing an error follows from its logic for determining if the ass
 <li>Because one array's element type (<code>string</code>) is not assignable to the other (<code>number</code>)</li>
 </ol>
     </article>
-
-    <script src="https://unpkg.com/popper.js@1/dist/umd/popper.min.js"></script>
-    <script src="https://unpkg.com/tippy.js@4"></script>
-    <script>
-        tippy.setDefaults({preventOverflow: { enabled: false } });
-    </script>
     </body>
     </html>

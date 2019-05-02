@@ -6,8 +6,16 @@
         <title>Acquiring Types</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" media="screen" href="../../css/handbook.css" />
+        <script src="../../js/handbook.js"></script>
     </head>
-    <body>
+    <body class="dark-light">
+        <div class="theme-selector">
+            Theme:
+            <div id="set-theme-light">■</div>
+            <div id="set-theme-dark">■</div>
+            <div id="set-theme-dark-light">■</div>
+            <div id="set-theme-light-dark">■</div>
+        </div>
     <article>
     <h1 id="acquiring-types"><a href="#acquiring-types">Acquiring Types</h1></a>
 <p>Throughout the sections you've read so far, we've been demonstrating basic TypeScript concepts using the built-in functions present in all JavaScript runtimes.
@@ -59,13 +67,7 @@ For example, if you installed the <code>react</code> npm package, you can instal
 See the appendix Writing Declaration Files for a guide.</p>
 <p>If you want to silence warnings about a particular module without writing a declaration file, you can also quick declare the module as type <code>any</code> by putting an empty declaration for it in a <code>.d.ts</code> file in your project.
 For example, if you wanted to use a module named <code>some-untyped-module</code> without having definitions for it, you would write:</p>
-<p><pre class="typescript-code"><span class="keyword">declare</span> <span class="keyword">module</span> <span class="stringLiteral">"some-untyped-module"</span><span class="punctuation">;</span></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">declare</span><span class="tm-def"> </span><span class="tm-kw">module</span><span class="tm-def"> </span><span class="tm-str">"some-untyped-module"</span><span class="tm-def">;</span></pre></p>
     </article>
-
-    <script src="https://unpkg.com/popper.js@1/dist/umd/popper.min.js"></script>
-    <script src="https://unpkg.com/tippy.js@4"></script>
-    <script>
-        tippy.setDefaults({preventOverflow: { enabled: false } });
-    </script>
     </body>
     </html>

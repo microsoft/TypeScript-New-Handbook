@@ -6,20 +6,22 @@
         <title>Style Guide</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" media="screen" href="../../css/handbook.css" />
+        <script src="../../js/handbook.js"></script>
     </head>
-    <body>
+    <body class="dark-light">
+        <div class="theme-selector">
+            Theme:
+            <div id="set-theme-light">■</div>
+            <div id="set-theme-dark">■</div>
+            <div id="set-theme-dark-light">■</div>
+            <div id="set-theme-light-dark">■</div>
+        </div>
     <article>
     <h2 id="types-in-code-blocks"><a href="#types-in-code-blocks">Types in Code Blocks</h2></a>
-<p><pre class="typescript-code"><span class="comment">// Use single quotes when referring to identifiers</span>
-<span class="comment">// Variable 'p' is of type 'string'</span>
-<span class="keyword">const</span> <span class="identifier">p</span> <span class="operator">=</span> <span class="stringLiteral">""</span><span class="punctuation">;</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20Use%20single%20quotes%20when%20referring%20to%20identifiers%0A%2F%2F%20Variable%20'p'%20is%20of%20type%20'string'%0Aconst%20p%20%3D%20%22%22%3B">Try</a></pre></p>
+<p><pre class="typescript-code"><span class="tm-cmt">// Use single quotes when referring to identifiers</span>
+<span class="tm-cmt">// Variable 'p' is of type 'string'</span>
+<span class="tm-kw">const</span><span class="tm-def"> </span><span class="tm-vr">p</span><span class="tm-def"> = </span><span class="tm-str">""</span><span class="tm-def">;</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20Use%20single%20quotes%20when%20referring%20to%20identifiers%0A%2F%2F%20Variable%20'p'%20is%20of%20type%20'string'%0Aconst%20p%20%3D%20%22%22%3B">Try</a></pre></p>
 <h2 id="title-casing"><a href="#title-casing">Title Casing</h2></a>
     </article>
-
-    <script src="https://unpkg.com/popper.js@1/dist/umd/popper.min.js"></script>
-    <script src="https://unpkg.com/tippy.js@4"></script>
-    <script>
-        tippy.setDefaults({preventOverflow: { enabled: false } });
-    </script>
     </body>
     </html>

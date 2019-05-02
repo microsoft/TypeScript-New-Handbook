@@ -6,8 +6,16 @@
         <title>Compiler Options</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" media="screen" href="../../css/handbook.css" />
+        <script src="../../js/handbook.js"></script>
     </head>
-    <body>
+    <body class="dark-light">
+        <div class="theme-selector">
+            Theme:
+            <div id="set-theme-light">■</div>
+            <div id="set-theme-dark">■</div>
+            <div id="set-theme-dark-light">■</div>
+            <div id="set-theme-light-dark">■</div>
+        </div>
     <article>
     <h1 id="compiler-options"><a href="#compiler-options">Compiler Options</h1></a>
 <p>TypeScript has a wide array of configuration options.</p>
@@ -85,11 +93,5 @@ Today, TypeScript assumes UTF-8 encoding, but will correctly detect UTF-16 (BE a
 <h3 id="init"><a href="#init"><code>init</code></h3></a>
 <h3 id="help"><a href="#help"><code>help</code></h3></a>
     </article>
-
-    <script src="https://unpkg.com/popper.js@1/dist/umd/popper.min.js"></script>
-    <script src="https://unpkg.com/tippy.js@4"></script>
-    <script>
-        tippy.setDefaults({preventOverflow: { enabled: false } });
-    </script>
     </body>
     </html>
