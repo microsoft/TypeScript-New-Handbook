@@ -4,7 +4,7 @@
 Whenever TypeScript finds an error, it tries to explain what went wrong in as much detail as possible.
 Because its type system is structural, this often means providing somewhat lengthy descriptions of where it found a problem.
 
-## Glossary
+## Terminology
 
 There is some terminology you'll frequently see in error messages that is helpful to understand.
 
@@ -22,11 +22,13 @@ However, note that this is a *directional* relationship: `S` being assignable to
 
 ## Examples
 
+Let's look at some example error messages and understand what's going on.
+
+### Error Elaborations
+
 Each error starts with a leading message, sometimes followed by more sub-messages.
 You can think of each sub-message as answering a "why?" question about the message above it.
 Let's work through some examples to see how they work in practice.
-
-### Example 1
 
 Here's an example that produces an error message longer than the example itself:
 
@@ -43,3 +45,20 @@ Its logic for issuing an error follows from its logic for determining if the ass
 2. Because the type of the `m` property is incompatible. Why?
 3. Because `b`'s `m` property (`string[]`) is not assignable to `a`'s `m` property (`number[]`). Why?
 4. Because one array's element type (`string`) is not assignable to the other (`number`)
+
+### Extra Properties
+
+```ts
+type A = { m: number };
+const a: A = { m: 10, n: "" };
+```
+
+
+### Union Assignments
+
+```ts
+type Thing = "none" | { name: string };
+
+const a: Thing = { name: 0 };
+```
+

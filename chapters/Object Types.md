@@ -30,7 +30,7 @@ or a type alias.
 
 ```ts
 type Person = {
-^^^^^^^^^^^ sup
+^^^^^^^^^^^
     name: string;
     age: number;
 }

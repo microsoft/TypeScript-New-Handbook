@@ -224,35 +224,35 @@
     * See the appendix because oh my god
   * Import forms
   * Synthetic defaults
+  * Module resolution
 
  * WHERE TO PUT THIS
    * Why do I have to sometimes write `"foo" as "foo"`
    * BigInt
 
-
- * Chapter 10: Enums
+ * Chapter 10: Enums (Daniel)
   * Numeric Enums
     * Oh god there are so many kinds
   * String enums
     * Compare and contrast with literal unions
     * Consider not using them
 
- * Chapter 11: Namespaces
+ * Chapter 11: Namespaces (Daniel)
   * Basics
     * Actually two kinds (instantiated vs not)
   * Merging
 
- * Appendix: Commandline flags
+ * Appendix: Commandline flags (Ryan)
  * Appendix: Symbols / unique symbols
  * Appendix: JS Doc in lieu of .ts
  * Appendix: Decorators
  * Appendix: Project references
- * Appendix: Writing Definition Files
+ * Appendix: Writing Definition Files (Ryan)
   * Basics
   * Declaration Merging
   * UMD Globals
- * Appendix: JSX with React
- * Appendix: Module interop
+ * Appendix: JSX with React (Ryan)
+ * Appendix: Module interop (Daniel)
    * WTF is even going on
    * allowSyntheticDefaultImports
    * esModuleInterop

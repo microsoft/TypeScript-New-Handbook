@@ -1,12 +1,12 @@
 {
     "chapters": [
         "Basics",
-        "Acquiring Types",
         "Everyday Types",
-        "Understanding Errors",
+        "Type Declarations",
         "Narrowing",
         "More on Functions",
         "Types from Extraction",
+        "Types from Transformation",
         "Classes"
     ]
 }

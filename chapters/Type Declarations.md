@@ -1,4 +1,4 @@
-# Acquiring Types
+# Type Declarations
 
 Throughout the sections you've read so far, we've been demonstrating basic TypeScript concepts using the built-in functions present in all JavaScript runtimes.
 However, almost all JavaScript today includes many libraries to accomplish common tasks.
@@ -6,6 +6,20 @@ Having types for the parts of your application that *aren't* your code will grea
 Where do these types come from?
 
 __toc__
+
+## What Do Type Declarations Look Like?
+
+Let's say you write some code like this:
+
+```ts
+const k = Math.max(5, 6);
+const j = Math.mix(7, 8);
+```
+
+How did TypeScript know that `max` was present but not `mix`, even though `Math`'s implementation wasn't part of your code?
+
+The answer is that there are *declaration files* describing these built-in objects.
+A declaration file provides a way to *declare* the existence of some types or values without actually providing implementations for those values.
 
 ## `.d.ts` files
 

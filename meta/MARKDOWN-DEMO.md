@@ -1,5 +1,13 @@
 # Code Samples?
 
+Highlight test
+```ts
+function greet(person: { name: string, age: number }) {
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    return "Hello " + person.age;
+}
+```
+
 ```ts
 // This is a TypeScript code block
 // It renders as code
@@ -20,15 +28,27 @@ class MyClass {
 > This is a quote that
 > has multiple lines
 
+Neat!
+
+>> Double-bracket
+
 We should also have [Chapter Links]
 
 # Heading
 
+Content
+
 ## Heading two
+
+Content
 
 ### Heading three
 
+Content
 
+#### Heading four
+
+Content
 
 *Do* use italics
 
