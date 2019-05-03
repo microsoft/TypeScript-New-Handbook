@@ -256,7 +256,7 @@ export async function getCompilerExtension() {
                         position: err.start!,
                         length: err.length!,
                         start: `<span class="error" tabindex="0" aria-describedby="${tooltipId}"><span class="error-highlight"></span>`,
-                        end: `</span><pre id="${tooltipId}" role="tooltip" class="error-tooltip">${text}</pre>`
+                        end: `<span id="${tooltipId}" role="tooltip" class="error-tooltip">${text}</span></span>`
                     });
                 }
 

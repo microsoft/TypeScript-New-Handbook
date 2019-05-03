@@ -89,11 +89,11 @@ article {
     h1 {
         font-size: 170%;
     }
-    
+
     h2 {
         margin-top: 1.8em;
     }
-    
+
     h3 {
         margin-top: 1.6em;
     }
@@ -165,18 +165,26 @@ span.error-highlight {
 }
 
 .error-tooltip {
+    display: block;
     opacity: 0;
+    margin: 0;
     font-family: $monospace-font-family;
     padding: 3px 10px 3px 8px;
     border: solid #AAAACC 1px;
-    left: 0.2em;
     box-shadow: 0px 0px 3px #00000033;
 
     position: absolute;
-    top: $sample-code-line-height * 1.5;
-    left: 10px;
+    visibility: hidden;
+    top: $sample-code-line-height * 1.05;
+    left: 0px;
     transition-property: opacity;
-    transition-duration: 0.15s;
+    transition-duration: 0.25s;
+}
+
+.error:hover > .error-tooltip, .error:focus > .error-tooltip {
+    visibility: visible;
+    opacity: 1;
+    z-index: 1;
 }
 
 .dark, .light-dark {
@@ -191,11 +199,6 @@ span.error-highlight {
         background: $light-content-background;
         color: $light-content-color;
     }
-}
-
-.error:hover + .error-tooltip, .error:focus + .error-tooltip {
-    display: block;
-    opacity: 1;
 }
 
 span.highlight {
@@ -425,7 +428,7 @@ body.light, body.light-dark {
     a, a:visited, a:active, a:hover {
         color: #265988;
     }
-    
+
     h1, h2, h3, h4 {
         a, a:visited, a:active, a:hover {
             color: #000;
