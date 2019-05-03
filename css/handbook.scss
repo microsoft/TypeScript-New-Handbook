@@ -1,4 +1,15 @@
- body {
+$monospace-font-family: Consolas, Menlo, Monaco, Deja Vu Sans Mono, "Courier New", monospace;
+$typescript-code-max-width: 80em;
+
+$light-content-background: #FFF;
+$light-content-color: #000;
+
+$dark-content-background: #222;
+$dark-content-color: #E4E4E4;
+
+$sample-code-line-height: 1.45em;
+
+body {
     background: #FCFCFC;
     position: relative;
     margin: 0px;
@@ -62,7 +73,7 @@ div.theme-selector {
 
 // Inline fixed-width `blocks`
 article :not(pre) code {
-    font-family: Consolas, Menlo, Monaco, Deja Vu Sans Mono, "Courier New", monospace;
+    font-family: $monospace-font-family;
 }
 
 // Header styling
@@ -90,18 +101,18 @@ article {
 
 // Non-theme-specific rules for code blocks
 pre.typescript-code {
-    font-family: Consolas, Menlo, Monaco, Deja Vu Sans Mono, "Courier New", monospace;
-    font-size: 90%;
+    font-family: $monospace-font-family;
+    font-size: 100%;
 
     display: block;
     position: relative;
-    max-width: 80em;
+    max-width: $typescript-code-max-width;
     width: 90%;
     padding: 0.8em;
     padding-left: 1.6em;
     padding-right: 4em;
     border: solid #777 1px;
-    line-height: 1.45em;
+    line-height: $sample-code-line-height;
     min-width: 30em;
     border-radius: 8px;
 
@@ -151,6 +162,40 @@ span.error-highlight {
     left: -2px;
     right: -2px;
     bottom: -5px;
+}
+
+.error-tooltip {
+    opacity: 0;
+    font-family: $monospace-font-family;
+    padding: 3px 10px 3px 8px;
+    border: solid #AAAACC 1px;
+    left: 0.2em;
+    box-shadow: 0px 0px 3px #00000033;
+
+    position: absolute;
+    top: $sample-code-line-height * 1.5;
+    left: 10px;
+    transition-property: opacity;
+    transition-duration: 0.15s;
+}
+
+.dark, .light-dark {
+    .error-tooltip {
+        background: $dark-content-background;
+        color: $dark-content-color;
+    }
+}
+
+.light, .dark-light {
+    .error-tooltip {
+        background: $light-content-background;
+        color: $light-content-color;
+    }
+}
+
+.error:hover + .error-tooltip, .error:focus + .error-tooltip {
+    display: block;
+    opacity: 1;
 }
 
 span.highlight {
@@ -243,6 +288,9 @@ aside {
     border-radius: 12px;
 }
 
+$light-tooltip-bg: #f5f5f5;
+$dark-tooltip-bg: #222;
+
 // Generated using scripts/theme-to-css.js
 $light-cmt: #008000;
 $light-kw: #0000FF;
@@ -291,7 +339,7 @@ body.dark, body.light-dark {
         .stringLiteral { color: $str; }
 
         span.quickinfo-result {
-            background: #222;
+            background: $dark-tooltip-bg;
         }
     }
 
@@ -332,7 +380,7 @@ body.light, body.dark-light {
         .stringLiteral { color: $str; }
 
         span.quickinfo-result {
-            background: #f5f5f5;
+            background: $light-tooltip-bg;
         }
     }
 
@@ -342,8 +390,8 @@ body.light, body.dark-light {
 }
 
 body.dark, body.dark-light {
-    background: #222;
-    color: #E4E4E4;
+    background: $dark-content-background;
+    color: $dark-content-color;
 
     a, a:hover, a:visited, a:active {
         color: #FFD;
@@ -371,8 +419,8 @@ body.dark, body.dark-light {
 }
 
 body.light, body.light-dark {
-    background: #FFF;
-    color: #000;
+    background: $light-content-background;
+    color: $light-content-color;
 
     a, a:visited, a:active, a:hover {
         color: #265988;
