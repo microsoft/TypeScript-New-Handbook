@@ -11,3 +11,6 @@
  * Weird highlighting for `T extends (...args: never[]) => infer U ? U : never;`
     * Are the classifiers fighting with each other?
 * Text wrapping in a bunch of stuff...
+* Highlight descriptions
+    * Evaluate reusing tooltips for quickinfo.
+    * Need to be linked via `aria-describedby`
