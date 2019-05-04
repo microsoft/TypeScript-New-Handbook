@@ -255,8 +255,8 @@ export async function getCompilerExtension() {
                     taggings.push({
                         position: err.start!,
                         length: err.length!,
-                        start: `<span class="error" tabindex="0" aria-describedby="${tooltipId}"><span class="error-highlight"></span>`,
-                        end: `<span id="${tooltipId}" role="tooltip" class="error-tooltip">${text}</span></span>`
+                        start: `<mark class="error" tabindex="0" aria-describedby="${tooltipId}">`,
+                        end: `<span id="${tooltipId}" role="tooltip" class="error-tooltip">${text}</span></mark>`
                     });
                 }
 

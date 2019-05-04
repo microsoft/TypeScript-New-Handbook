@@ -147,16 +147,12 @@ span.quickinfo-arrow {
     left: -0.3em;
 }
 
-span.error {
+.error {
     position: relative;
-}
-
-span.error-highlight {
     background: #FF000010;
     border-radius: 0.4em;
     border-bottom: #F44 2px;
     border-bottom-style: dotted;
-    position: absolute;
     display: inline-block;
     top: -2px;
     left: -2px;
