@@ -66,7 +66,7 @@ article {
 
 pre.typescript-code {
   font-family: Consolas, Menlo, Monaco, Deja Vu Sans Mono, "Courier New", monospace;
-  font-size: 90%;
+  font-size: 100%;
   display: block;
   position: relative;
   max-width: 80em;
@@ -119,6 +119,34 @@ span.error-highlight {
   left: -2px;
   right: -2px;
   bottom: -5px; }
+
+.error-tooltip {
+  display: block;
+  opacity: 0;
+  margin: 0;
+  font-family: Consolas, Menlo, Monaco, Deja Vu Sans Mono, "Courier New", monospace;
+  padding: 3px 10px 3px 8px;
+  border: solid #AAAACC 1px;
+  box-shadow: 0px 0px 3px #00000033;
+  position: absolute;
+  visibility: hidden;
+  top: 1.5225em;
+  left: 0px;
+  transition-property: opacity;
+  transition-duration: 0.25s; }
+
+.error:hover > .error-tooltip, .error:focus > .error-tooltip {
+  visibility: visible;
+  opacity: 1;
+  z-index: 1; }
+
+.dark .error-tooltip, .light-dark .error-tooltip {
+  background: #222;
+  color: #E4E4E4; }
+
+.light .error-tooltip, .dark-light .error-tooltip {
+  background: #FFF;
+  color: #000; }
 
 span.highlight {
   position: relative; }
@@ -194,7 +222,8 @@ aside {
   border-radius: 12px; }
 
 body.dark pre.typescript-code, body.light-dark pre.typescript-code {
-  background: #111; }
+  background: #111;
+  color: #D4D4D4; }
   body.dark pre.typescript-code .tm-cmt, body.light-dark pre.typescript-code .tm-cmt {
     color: #608B4E; }
   body.dark pre.typescript-code .tm-kw, body.light-dark pre.typescript-code .tm-kw {
@@ -227,6 +256,7 @@ body.dark div.listed-error, body.light-dark div.listed-error {
 
 body.light pre.typescript-code, body.dark-light pre.typescript-code {
   background: #FFF;
+  color: #000000;
   /**
         * Colors from our own classifier
         */ }

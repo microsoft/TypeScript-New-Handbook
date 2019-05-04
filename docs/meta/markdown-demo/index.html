@@ -18,28 +18,41 @@
         </div>
     <article>
     <h1 id="code-samples"><a href="#code-samples">Code Samples?</h1></a>
+<p>Highlight test
+<pre class="typescript-code"><span class="tm-kw">function</span> <span class="tm-mth">greet</span>(<span class="tm-vr">person</span>: <span class="highlight"><span class="highlight-content"></span><span class="highlight-description"></span>{ <span class="tm-vr">name</span>: <span class="tm-typ">string</span>, <span class="tm-vr">age</span>: <span class="tm-typ">number</span> }</span>) {
+    <span class="tm-kw">return</span> <span class="tm-str">"Hello "</span> + <span class="tm-vr">person</span>.<span class="tm-vr">age</span>;
+}<a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20greet(person%3A%20%7B%20name%3A%20string%2C%20age%3A%20number%20%7D)%20%7B%0A%20%20%20%20return%20%22Hello%20%22%20%2B%20person.age%3B%0A%7D">Try</a></pre></p>
 <p><pre class="typescript-code"><span class="tm-cmt">// This is a TypeScript code block</span>
 <span class="tm-cmt">// It renders as code</span>
-<span class="tm-kw">function</span><span class="tm-def"> </span><span class="tm-mth">fn</span><span class="tm-def">(</span><span class="tm-vr">s</span><span class="tm-def">: </span><span class="tm-typ">string</span><span class="tm-def">) {</span>
-<span class="tm-def">    </span><span class="tm-kw">const</span><span class="tm-def"> </span><span class="tm-vr">y</span><span class="tm-def"> = </span><span class="tm-str">`Neat </span><span class="tm-kw">${</span><span class="tm-vr">s</span><span class="tm-str">.</span><span class="tm-mth">toLowerCase</span><span class="tm-str">()</span><span class="tm-kw">}</span><span class="tm-str">`</span><span class="tm-def">;</span>
-<span class="tm-def">    </span><span class="tm-kw">return</span><span class="tm-def"> </span><span class="tm-vr">y</span><span class="tm-def">;</span>
-<span class="tm-def">}</span>
-<span class="tm-kw">const</span><span class="tm-def"> </span><span class="tm-vr">m</span><span class="tm-def"> = </span><span class="tm-mth">fn</span><span class="tm-def">(</span><span class="tm-str">"hello, world"</span><span class="tm-def">);</span>
+<span class="tm-kw">function</span> <span class="tm-mth">fn</span>(<span class="tm-vr">s</span>: <span class="tm-typ">string</span>) {
+    <span class="tm-kw">const</span> <span class="tm-vr">y</span> = <span class="tm-str">`Neat </span><span class="tm-kw">${</span><span class="tm-vr">s</span><span class="tm-str">.</span><span class="tm-mth">toLowerCase</span><span class="tm-str">()</span><span class="tm-kw">}</span><span class="tm-str">`</span>;
+    <span class="tm-kw">return</span> <span class="tm-vr">y</span>;
+}
+<span class="tm-kw">const</span> <span class="tm-vr">m</span> = <span class="tm-mth">fn</span>(<span class="tm-str">"hello, world"</span>);
 
-<span class="tm-kw">class</span><span class="tm-def"> </span><span class="tm-typ"><span class="className">MyClass</span></span><span class="tm-def"> {</span>
-<span class="tm-def">    </span><span class="tm-vr">m</span><span class="tm-def"> = </span><span class="tm-num">10</span><span class="tm-def">;</span>
-<span class="tm-def">    </span><span class="tm-kw">constructor</span><span class="tm-def">(</span><span class="tm-kw">public</span><span class="tm-def"> </span><span class="tm-vr">alfalfa</span><span class="tm-def"> = </span><span class="tm-str">"100"</span><span class="tm-def">) {</span>
-<span class="tm-def">        </span><span class="error"><span class="error-highlight"></span><span class="tm-kw">this</span><span class="tm-def">.</span><span class="tm-vr">alfalfa</span></span><span class="tm-def"> = </span><span class="tm-num">10</span><span class="tm-def">;</span>
-<span class="tm-def">    }</span>
-<span class="tm-def">}</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Type '10' is not assignable to type 'string'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20This%20is%20a%20TypeScript%20code%20block%0A%2F%2F%20It%20renders%20as%20code%0Afunction%20fn(s%3A%20string)%20%7B%0A%20%20%20%20const%20y%20%3D%20%60Neat%20%24%7Bs.toLowerCase()%7D%60%3B%0A%20%20%20%20return%20y%3B%0A%7D%0Aconst%20m%20%3D%20fn(%22hello%2C%20world%22)%3B%0A%0Aclass%20MyClass%20%7B%0A%20%20%20%20m%20%3D%2010%3B%0A%20%20%20%20constructor(public%20alfalfa%20%3D%20%22100%22)%20%7B%0A%20%20%20%20%20%20%20%20this.alfalfa%20%3D%2010%3B%0A%20%20%20%20%7D%0A%7D">Try</a></pre></p>
+<span class="tm-kw">class</span> <span class="tm-typ"><span class="className">MyClass</span></span> {
+    <span class="tm-vr">m</span> = <span class="tm-num">10</span>;
+    <span class="tm-kw">constructor</span>(<span class="tm-kw">public</span> <span class="tm-vr">alfalfa</span> = <span class="tm-str">"100"</span>) {
+        <span class="error" tabindex="0" aria-describedby="errLabel-2322-248-12"><span class="error-highlight"></span><span class="tm-kw">this</span>.<span class="tm-vr">alfalfa</span><span id="errLabel-2322-248-12" role="tooltip" class="error-tooltip">Type '10' is not assignable to type 'string'.</span></span> = <span class="tm-num">10</span>;
+    }
+}<hr class="error-divider"><div class="listed-error"><div class="error-line">Type '10' is not assignable to type 'string'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20This%20is%20a%20TypeScript%20code%20block%0A%2F%2F%20It%20renders%20as%20code%0Afunction%20fn(s%3A%20string)%20%7B%0A%20%20%20%20const%20y%20%3D%20%60Neat%20%24%7Bs.toLowerCase()%7D%60%3B%0A%20%20%20%20return%20y%3B%0A%7D%0Aconst%20m%20%3D%20fn(%22hello%2C%20world%22)%3B%0A%0Aclass%20MyClass%20%7B%0A%20%20%20%20m%20%3D%2010%3B%0A%20%20%20%20constructor(public%20alfalfa%20%3D%20%22100%22)%20%7B%0A%20%20%20%20%20%20%20%20this.alfalfa%20%3D%2010%3B%0A%20%20%20%20%7D%0A%7D">Try</a></pre></p>
 <blockquote>
   <p>This is a quote that
   has multiple lines</p>
 </blockquote>
+<p>Neat!</p>
+<aside>
+    <p>Double-bracket</p>
+  </aside>
 <p>We should also have [Chapter Links]</p>
 <h1 id="heading"><a href="#heading">Heading</h1></a>
+<p>Content</p>
 <h2 id="heading-two"><a href="#heading-two">Heading two</h2></a>
+<p>Content</p>
 <h3 id="heading-three"><a href="#heading-three">Heading three</h3></a>
+<p>Content</p>
+<h4 id="heading-four"><a href="#heading-four">Heading four</h4></a>
+<p>Content</p>
 <p><em>Do</em> use italics</p>
 <p><strong>Sometimes</strong> use bold!</p>
     </article>
