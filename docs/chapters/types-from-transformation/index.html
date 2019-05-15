@@ -143,7 +143,7 @@ For example, for simple cases, we can extract the return type out from function 
 
 <span class="tm-kw">type</span> <span class="tm-typ"><span class="typeAliasName">Baz</span></span> = <span class="tm-typ"><span class="typeAliasName">GetReturnType</span></span><(<span class="tm-vr">a</span>: <span class="tm-typ">boolean</span>, <span class="tm-vr">b</span>: <span class="tm-typ">boolean</span>) <span class="tm-kw">=></span> <span class="tm-typ">boolean</span>[]>;
      <span class="quickinfo-result"><span class="quickinfo-arrow">▲</span><span class="keyword">type</span><span class="space"> </span><span class="aliasName">Baz</span><span class="space"> </span><span class="operator">=</span><span class="space"> </span><span class="keyword">boolean</span><span class="punctuation">[</span><span class="punctuation">]</span></span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=type%20GetReturnType%3CT%3E%20%3D%0A%20%20%20%20T%20extends%20(...args%3A%20never%5B%5D)%20%3D%3E%20infer%20U%20%3F%20U%20%3A%20never%3B%0A%0Atype%20Foo%20%3D%20GetReturnType%3C()%20%3D%3E%20number%3E%3B%0A%0Atype%20Bar%20%3D%20GetReturnType%3C(x%3A%20string)%20%3D%3E%20string%3E%3B%0A%0Atype%20Baz%20%3D%20GetReturnType%3C(a%3A%20boolean%2C%20b%3A%20boolean)%20%3D%3E%20boolean%5B%5D%3E%3B">Try</a></pre></p>
-<h3 id="distributive-conditional-types"><a href="#distributive-conditional-types">Distributive Conditional Types</h3></a>
+<h2 id="distributive-conditional-types"><a href="#distributive-conditional-types">Distributive Conditional Types</h2></a>
 <p>When conditional types act on a generic type, they become <em>distributive</em> when given a union type.
 For example, take the following:</p>
 <p><pre class="typescript-code"><span class="tm-kw">type</span> <span class="tm-typ"><span class="typeAliasName">Foo</span></span><<span class="tm-typ"><span class="typeParameterName">T</span></span>> = <span class="tm-typ"><span class="typeParameterName">T</span></span> <span class="tm-typ">extends</span> <span class="tm-typ">any</span> ? <span class="tm-typ"><span class="typeParameterName">T</span></span>[] : <span class="tm-typ">never</span>;</pre></p>
@@ -168,28 +168,6 @@ To avoid that behavior, you can surround each side of the <code>extends</code> k
 <span class="tm-cmt">// 'Bar' is no longer a union.</span>
 <span class="tm-kw">type</span> <span class="tm-typ"><span class="typeAliasName">Bar</span></span> = <span class="tm-typ"><span class="typeAliasName">Foo</span></span><<span class="tm-typ">string</span> | <span class="tm-typ">number</span>>;
      <span class="quickinfo-result"><span class="quickinfo-arrow">▲</span><span class="keyword">type</span><span class="space"> </span><span class="aliasName">Bar</span><span class="space"> </span><span class="operator">=</span><span class="space"> </span><span class="punctuation">(</span><span class="keyword">string</span><span class="space"> </span><span class="punctuation">|</span><span class="space"> </span><span class="keyword">number</span><span class="punctuation">)</span><span class="punctuation">[</span><span class="punctuation">]</span></span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=type%20Foo%3CT%3E%20%3D%20%5BT%5D%20extends%20%5Bany%5D%20%3F%20T%5B%5D%20%3A%20never%3B%0A%0A%2F%2F%20'Bar'%20is%20no%20longer%20a%20union.%0Atype%20Bar%20%3D%20Foo%3Cstring%20%7C%20number%3E%3B">Try</a></pre></p>
-<h2 id="mapped-object-types"><a href="#mapped-object-types">Mapped Object Types</h2></a>
-<p>It's pretty common to start out with a simple type, like <code>Person</code>:</p>
-<p><pre class="typescript-code"><span class="tm-kw">interface</span> <span class="tm-typ"><span class="interfaceName">Person</span></span> {
-    <span class="tm-vr">name</span>: <span class="tm-typ">string</span>;
-    <span class="tm-vr">age</span>: <span class="tm-typ">number</span>;
-    <span class="tm-vr">location</span>: <span class="tm-typ">string</span>;
-}<a class="playground-link" href="https://www.typescriptlang.org/play/#src=interface%20Person%20%7B%0A%20%20%20%20name%3A%20string%3B%0A%20%20%20%20age%3A%20number%3B%0A%20%20%20%20location%3A%20string%3B%0A%7D">Try</a></pre></p>
-<p>and then find yourself needing a type that's almost identical, but with all-optional fields:</p>
-<p><pre class="typescript-code">
-<span class="tm-kw">interface</span> <span class="tm-typ"><span class="interfaceName">PartialPerson</span></span> {
-    <span class="tm-vr">name</span>?: <span class="tm-typ">string</span>;
-    <span class="tm-vr">age</span>?: <span class="tm-typ">number</span>;
-    <span class="tm-vr">location</span>?: <span class="tm-typ">string</span>;
-}
-
-<span class="tm-kw">function</span> <span class="tm-mth">setPersonState</span>(<span class="tm-vr">person</span>: <span class="tm-typ"><span class="interfaceName">Person</span></span>, <span class="tm-vr">updates</span>: <span class="tm-typ"><span class="interfaceName">PartialPerson</span></span>) {
-    <span class="tm-kw">for</span> (<span class="tm-kw">const</span> [<span class="tm-vr">prop</span>, <span class="tm-vr">value</span>] <span class="tm-kw">of</span> <span class="tm-typ">Object</span>.<span class="tm-mth">entries</span>(<span class="tm-vr">updates</span>)) {
-        <span class="tm-cmt">// ...</span>
-    }
-}<a class="playground-link" href="https://www.typescriptlang.org/play/#src=interface%20Person%20%7B%0A%20%20%20%20name%3A%20string%3B%0A%20%20%20%20age%3A%20number%3B%0A%20%20%20%20location%3A%20string%3B%0A%7D%0A%2F%2Fcut%0Ainterface%20PartialPerson%20%7B%0A%20%20%20%20name%3F%3A%20string%3B%0A%20%20%20%20age%3F%3A%20number%3B%0A%20%20%20%20location%3F%3A%20string%3B%0A%7D%0A%0Afunction%20setPersonState(person%3A%20Person%2C%20updates%3A%20PartialPerson)%20%7B%0A%20%20%20%20for%20(const%20%5Bprop%2C%20value%5D%20of%20Object.entries(updates))%20%7B%0A%20%20%20%20%20%20%20%20%2F%2F%20...%0A%20%20%20%20%7D%0A%7D">Try</a></pre></p>
-<h2 id="built-in-type-helpers"><a href="#built-in-type-helpers">Built-in Type Helpers</h2></a>
-<p>TypeScript includes a couple of helper types in <code>lib.d.ts</code> </p>
     </article>
     </body>
     </html>

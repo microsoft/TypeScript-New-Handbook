@@ -21,12 +21,15 @@ div.theme-selector {
   padding-top: 0.25em;
   padding-bottom: 0.25em;
   border-radius: 0px 0px 0px 8px;
-  position: absolute;
   right: 0px;
   top: 0px;
   background: #777;
   width: fit-content;
-  color: white; }
+  color: white;
+  position: absolute; }
+  @media (min-width: 1400px) {
+    div.theme-selector {
+      position: fixed; } }
   div.theme-selector div {
     display: inline-block;
     font-size: 160%;

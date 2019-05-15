@@ -162,11 +162,11 @@ While that's not always so easy, TypeScript indents consistently, is mindful of 
 <p>What about if we <em>did</em> introduce a type-checking error?
 Let's rewrite <code>hello.ts</code>:</p>
 <p><pre class="typescript-code"><span class="tm-cmt">// This is an industrial-grade general-purpose greeter function:</span>
-<span class="tm-kw">function</span> <span class="tm-mth">greet</span>(<span class="error" tabindex="0" aria-describedby="errLabel-7006-80-6"><span class="error-highlight"></span><span class="tm-vr">person</span><span id="errLabel-7006-80-6" role="tooltip" class="error-tooltip">Parameter 'person' implicitly has an 'any' type.</span></span>, <span class="error" tabindex="0" aria-describedby="errLabel-7006-88-4"><span class="error-highlight"></span><span class="tm-vr">date</span><span id="errLabel-7006-88-4" role="tooltip" class="error-tooltip">Parameter 'date' implicitly has an 'any' type.</span></span>) {
+<span class="tm-kw">function</span> <span class="tm-mth">greet</span>(<span class="tm-vr">person</span>, <span class="tm-vr">date</span>) {
     <span class="tm-typ">console</span>.<span class="tm-mth">log</span>(<span class="tm-str">`Hello </span><span class="tm-kw">${</span><span class="tm-vr">person</span><span class="tm-kw">}</span><span class="tm-str">, today is </span><span class="tm-kw">${</span><span class="tm-vr">date</span><span class="tm-kw">}</span><span class="tm-str">!`</span>);
 }
 
-<span class="error" tabindex="0" aria-describedby="errLabel-2554-154-16"><span class="error-highlight"></span><span class="tm-mth">greet</span>(<span class="tm-str">"Brendan"</span>)<span id="errLabel-2554-154-16" role="tooltip" class="error-tooltip">Expected 2 arguments, but got 1.</span></span>;<hr class="error-divider"><div class="listed-error"><div class="error-line">Parameter 'person' implicitly has an 'any' type.</div></div><div class="listed-error"><div class="error-line">Parameter 'date' implicitly has an 'any' type.</div></div><div class="listed-error"><div class="error-line">Expected 2 arguments, but got 1.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20This%20is%20an%20industrial-grade%20general-purpose%20greeter%20function%3A%0Afunction%20greet(person%2C%20date)%20%7B%0A%20%20%20%20console.log(%60Hello%20%24%7Bperson%7D%2C%20today%20is%20%24%7Bdate%7D!%60)%3B%0A%7D%0A%0Agreet(%22Brendan%22)%3B">Try</a></pre></p>
+<span class="error" tabindex="0" aria-describedby="errLabel-2554-154-16"><span class="error-highlight"></span><span class="tm-mth">greet</span>(<span class="tm-str">"Brendan"</span>)<span id="errLabel-2554-154-16" role="tooltip" class="error-tooltip">Expected 2 arguments, but got 1.</span></span>;<hr class="error-divider"><div class="listed-error"><div class="error-line">Expected 2 arguments, but got 1.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20This%20is%20an%20industrial-grade%20general-purpose%20greeter%20function%3A%0Afunction%20greet(person%2C%20date)%20%7B%0A%20%20%20%20console.log(%60Hello%20%24%7Bperson%7D%2C%20today%20is%20%24%7Bdate%7D!%60)%3B%0A%7D%0A%0Agreet(%22Brendan%22)%3B">Try</a></pre></p>
 <p>If we run <code>tsc hello.ts</code> again, notice that we get an error on the command line!</p>
 <pre><code class="txt language-txt">Expected 2 arguments, but got 1.
 </code></pre>
@@ -214,7 +214,13 @@ On the other hand, constructing a <code>Date</code> with <code>new Date()</code>
     <span class="tm-typ">console</span>.<span class="tm-mth">log</span>(<span class="tm-str">`Hello </span><span class="tm-kw">${</span><span class="tm-vr">person</span><span class="tm-kw">}</span><span class="tm-str">, today is </span><span class="tm-kw">${</span><span class="tm-vr">date</span><span class="tm-str">.</span><span class="tm-mth">toDateString</span><span class="tm-str">()</span><span class="tm-kw">}</span><span class="tm-str">!`</span>);
 }
 
-<span class="tm-mth">greet</span>(<span class="tm-str">"Maddison"</span>, <span class="tm-kw">new</span> <span class="tm-typ">Date</span>());<a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20greet(person%3A%20string%2C%20date%3A%20Date)%20%7B%0A%20%20%20%20console.log(%60Hello%20%24%7Bperson%7D%2C%20today%20is%20%24%7Bdate.toDateString()%7D!%60)%3B%0A%7D%0A%0Agreet(%22Maddison%22%2C%20new%20Date())%3B">Try</a></pre></p>
+<span class="tm-mth">greet</span>(<span class="tm-str">"Maddison"</span>, <span class="highlight"><span class="highlight-content"></span><span class="highlight-description"></span><span class="tm-kw">new</span> <span class="tm-typ">Date</span>()</span>);<a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20greet(person%3A%20string%2C%20date%3A%20Date)%20%7B%0A%20%20%20%20console.log(%60Hello%20%24%7Bperson%7D%2C%20today%20is%20%24%7Bdate.toDateString()%7D!%60)%3B%0A%7D%0A%0Agreet(%22Maddison%22%2C%20new%20Date())%3B">Try</a></pre></p>
+<p>Keep in mind, we don't always have to write explicit type annotations.
+In many cases, TypeScript can even just <em>infer</em> (or "figure out") the types for us even if we omit them.</p>
+<p><pre class="typescript-code"><span class="tm-kw">let</span> <span class="tm-vr">foo</span> = <span class="tm-str">"hello there!"</span>
+    <span class="quickinfo-result"><span class="quickinfo-arrow">▲</span><span class="keyword">let</span><span class="space"> </span><span class="localName">foo</span><span class="punctuation">:</span><span class="space"> </span><span class="keyword">string</span></span></pre></p>
+<p>Even though we didn't tell TypeScript that <code>foo</code> had the type <code>string</code> it was able to figure that out.
+That's a feature, and it's best not to add annotations when the type system would end up inferring the same type anyway.</p>
 <h2 id="erased-types"><a href="#erased-types">Erased Types</h2></a>
 <p>Let's take a look at what happens when we compile with <code>tsc</code>:</p>
 <p><pre class="typescript-code"><span class="tm-kw">function</span> <span class="tm-mth">greet</span>(<span class="tm-vr">person</span>, <span class="tm-vr">date</span>) {
@@ -257,14 +263,14 @@ So running <code>tsc --target es2015 input.ts</code> gives us the following outp
 <h2 id="strictness"><a href="#strictness">Strictness</h2></a>
 <p>Users come to TypeScript looking for different things in a type-checker.
 Some people are looking for a more loose opt-in experience which can help validate only some parts of our program and give us decent tooling.
-This is actually the default experience with TypeScript.
-Types are optional, inference takes the most loose options, and there's no checking for potentially <code>null</code>/<code>undefined</code> values.
-Much like how <code>tsc</code> emits in the face of errors, these defaults are put in place to get out of your way.
-If you're starting out with TypeScript or migrating existing JavaScript, that mght be desirable.</p>
-<p>A lot of users prefer to have TypeScript validate as much as it can off the bat, and that's why the language provides strictness settings as well.
+This is the default experience with TypeScript, where types are optional, inference takes the most lenient types, and there's no checking for potentially <code>null</code>/<code>undefined</code> values.
+Much like how <code>tsc</code> emits in the face of errors, these defaults are put in place to stay out of your way.
+If you're migrating existing JavaScript, that might be desirable.</p>
+<p>In contrast, a lot of users prefer to have TypeScript validate as much as it can off the bat, and that's why the language provides strictness settings as well.
 These strictness settings turn static type-checking from a switch (either your code is checked or not) into something closer to a dial.
 The farther you turn this dial up, the more TypeScript will check for you.
-This can require a little extra work, but generally speaking it pays for itself in the long run, and enables more thorough checks and more accurate tooling.</p>
+This can require a little extra work, but generally speaking it pays for itself in the long run, and enables more thorough checks and more accurate tooling.
+If possible, a new codebase should always turn these strictness checks on.</p>
 <p>TypeScript has several type-checking strictness flags that can be turned on or off, and all of our examples will be written with all of them enabled unless otherwise stated.
 The <code>--strict</code> flag toggles them all on simultaneously, but we can opt out of them individually.
 The two biggest ones you should know about are <code>noImplicitAny</code> and <code>strictNullChecks</code>.</p>
@@ -1752,7 +1758,7 @@ For example, for simple cases, we can extract the return type out from function 
 
 <span class="tm-kw">type</span> <span class="tm-typ"><span class="typeAliasName">Baz</span></span> = <span class="tm-typ"><span class="typeAliasName">GetReturnType</span></span><(<span class="tm-vr">a</span>: <span class="tm-typ">boolean</span>, <span class="tm-vr">b</span>: <span class="tm-typ">boolean</span>) <span class="tm-kw">=></span> <span class="tm-typ">boolean</span>[]>;
      <span class="quickinfo-result"><span class="quickinfo-arrow">▲</span><span class="keyword">type</span><span class="space"> </span><span class="aliasName">Baz</span><span class="space"> </span><span class="operator">=</span><span class="space"> </span><span class="keyword">boolean</span><span class="punctuation">[</span><span class="punctuation">]</span></span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=type%20GetReturnType%3CT%3E%20%3D%0A%20%20%20%20T%20extends%20(...args%3A%20never%5B%5D)%20%3D%3E%20infer%20U%20%3F%20U%20%3A%20never%3B%0A%0Atype%20Foo%20%3D%20GetReturnType%3C()%20%3D%3E%20number%3E%3B%0A%0Atype%20Bar%20%3D%20GetReturnType%3C(x%3A%20string)%20%3D%3E%20string%3E%3B%0A%0Atype%20Baz%20%3D%20GetReturnType%3C(a%3A%20boolean%2C%20b%3A%20boolean)%20%3D%3E%20boolean%5B%5D%3E%3B">Try</a></pre></p>
-<h3 id="distributive-conditional-types"><a href="#distributive-conditional-types">Distributive Conditional Types</h3></a>
+<h2 id="distributive-conditional-types"><a href="#distributive-conditional-types">Distributive Conditional Types</h2></a>
 <p>When conditional types act on a generic type, they become <em>distributive</em> when given a union type.
 For example, take the following:</p>
 <p><pre class="typescript-code"><span class="tm-kw">type</span> <span class="tm-typ"><span class="typeAliasName">Foo</span></span><<span class="tm-typ"><span class="typeParameterName">T</span></span>> = <span class="tm-typ"><span class="typeParameterName">T</span></span> <span class="tm-typ">extends</span> <span class="tm-typ">any</span> ? <span class="tm-typ"><span class="typeParameterName">T</span></span>[] : <span class="tm-typ">never</span>;</pre></p>
@@ -1776,29 +1782,7 @@ To avoid that behavior, you can surround each side of the <code>extends</code> k
 
 <span class="tm-cmt">// 'Bar' is no longer a union.</span>
 <span class="tm-kw">type</span> <span class="tm-typ"><span class="typeAliasName">Bar</span></span> = <span class="tm-typ"><span class="typeAliasName">Foo</span></span><<span class="tm-typ">string</span> | <span class="tm-typ">number</span>>;
-     <span class="quickinfo-result"><span class="quickinfo-arrow">▲</span><span class="keyword">type</span><span class="space"> </span><span class="aliasName">Bar</span><span class="space"> </span><span class="operator">=</span><span class="space"> </span><span class="punctuation">(</span><span class="keyword">string</span><span class="space"> </span><span class="punctuation">|</span><span class="space"> </span><span class="keyword">number</span><span class="punctuation">)</span><span class="punctuation">[</span><span class="punctuation">]</span></span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=type%20Foo%3CT%3E%20%3D%20%5BT%5D%20extends%20%5Bany%5D%20%3F%20T%5B%5D%20%3A%20never%3B%0A%0A%2F%2F%20'Bar'%20is%20no%20longer%20a%20union.%0Atype%20Bar%20%3D%20Foo%3Cstring%20%7C%20number%3E%3B">Try</a></pre></p>
-<h2 id="mapped-object-types"><a href="#mapped-object-types">Mapped Object Types</h2></a>
-<p>It's pretty common to start out with a simple type, like <code>Person</code>:</p>
-<p><pre class="typescript-code"><span class="tm-kw">interface</span> <span class="tm-typ"><span class="interfaceName">Person</span></span> {
-    <span class="tm-vr">name</span>: <span class="tm-typ">string</span>;
-    <span class="tm-vr">age</span>: <span class="tm-typ">number</span>;
-    <span class="tm-vr">location</span>: <span class="tm-typ">string</span>;
-}<a class="playground-link" href="https://www.typescriptlang.org/play/#src=interface%20Person%20%7B%0A%20%20%20%20name%3A%20string%3B%0A%20%20%20%20age%3A%20number%3B%0A%20%20%20%20location%3A%20string%3B%0A%7D">Try</a></pre></p>
-<p>and then find yourself needing a type that's almost identical, but with all-optional fields:</p>
-<p><pre class="typescript-code">
-<span class="tm-kw">interface</span> <span class="tm-typ"><span class="interfaceName">PartialPerson</span></span> {
-    <span class="tm-vr">name</span>?: <span class="tm-typ">string</span>;
-    <span class="tm-vr">age</span>?: <span class="tm-typ">number</span>;
-    <span class="tm-vr">location</span>?: <span class="tm-typ">string</span>;
-}
-
-<span class="tm-kw">function</span> <span class="tm-mth">setPersonState</span>(<span class="tm-vr">person</span>: <span class="tm-typ"><span class="interfaceName">Person</span></span>, <span class="tm-vr">updates</span>: <span class="tm-typ"><span class="interfaceName">PartialPerson</span></span>) {
-    <span class="tm-kw">for</span> (<span class="tm-kw">const</span> [<span class="tm-vr">prop</span>, <span class="tm-vr">value</span>] <span class="tm-kw">of</span> <span class="tm-typ">Object</span>.<span class="tm-mth">entries</span>(<span class="tm-vr">updates</span>)) {
-        <span class="tm-cmt">// ...</span>
-    }
-}<a class="playground-link" href="https://www.typescriptlang.org/play/#src=interface%20Person%20%7B%0A%20%20%20%20name%3A%20string%3B%0A%20%20%20%20age%3A%20number%3B%0A%20%20%20%20location%3A%20string%3B%0A%7D%0A%2F%2Fcut%0Ainterface%20PartialPerson%20%7B%0A%20%20%20%20name%3F%3A%20string%3B%0A%20%20%20%20age%3F%3A%20number%3B%0A%20%20%20%20location%3F%3A%20string%3B%0A%7D%0A%0Afunction%20setPersonState(person%3A%20Person%2C%20updates%3A%20PartialPerson)%20%7B%0A%20%20%20%20for%20(const%20%5Bprop%2C%20value%5D%20of%20Object.entries(updates))%20%7B%0A%20%20%20%20%20%20%20%20%2F%2F%20...%0A%20%20%20%20%7D%0A%7D">Try</a></pre></p>
-<h2 id="built-in-type-helpers"><a href="#built-in-type-helpers">Built-in Type Helpers</h2></a>
-<p>TypeScript includes a couple of helper types in <code>lib.d.ts</code> </p><hr><h1 id="classes"><a href="#classes">Classes</h1></a>
+     <span class="quickinfo-result"><span class="quickinfo-arrow">▲</span><span class="keyword">type</span><span class="space"> </span><span class="aliasName">Bar</span><span class="space"> </span><span class="operator">=</span><span class="space"> </span><span class="punctuation">(</span><span class="keyword">string</span><span class="space"> </span><span class="punctuation">|</span><span class="space"> </span><span class="keyword">number</span><span class="punctuation">)</span><span class="punctuation">[</span><span class="punctuation">]</span></span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=type%20Foo%3CT%3E%20%3D%20%5BT%5D%20extends%20%5Bany%5D%20%3F%20T%5B%5D%20%3A%20never%3B%0A%0A%2F%2F%20'Bar'%20is%20no%20longer%20a%20union.%0Atype%20Bar%20%3D%20Foo%3Cstring%20%7C%20number%3E%3B">Try</a></pre></p><hr><h1 id="classes"><a href="#classes">Classes</h1></a>
 <p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes">Background reading: Classes (MDN)</a></p>
 <p>TypeScript offers full support for the <code>class</code> keyword introduced in ES2015.
 As with other JavaScript language features, TypeScript adds type annotations and other syntax to allow you to express relationships between classes and other types.</p>
