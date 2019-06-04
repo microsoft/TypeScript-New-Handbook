@@ -95,6 +95,68 @@ The default value of `false` is generally best unless you have a reason to chang
 
 ### `rootDir`
 
+**Default**: The longest common path of all non-declaration input files
+
+When TypeScript compiles files, it keeps the same directory structure in the output directory as exists in the input directory.
+
+For example, let's say you have some input files:
+
+```
+MyProj
+├── tsconfig.json
+├── core
+│   ├── a.ts
+│   ├── b.ts
+│   ├── sub
+│   │   ├── c.ts
+├── types.d.ts
+```
+
+The inferred value for `rootDir` is the longest common path of all non-declaration input files, which in this case is `core/`.
+
+If your `outDir` was `dist`, TypeScript would write this tree:
+
+```
+MyProj
+├── dist
+│   ├── a.ts
+│   ├── b.ts
+│   ├── sub
+│   │   ├── c.ts
+```
+
+However, you may have intended for `core` to be part of the output directory structure.
+By setting `rootDir: "."` in `tsconfig.json`, TypeScript would write this tree:
+
+```
+MyProj
+├── dist
+|   ├── core
+│   │   ├── a.ts
+│   │   ├── b.ts
+│   │   ├── sub
+│   │   │   ├── c.ts
+```
+
+Importantly, `rootDir` **does not affect which files become part of the compilation**.
+It has no interaction with the `include`, `exclude`, or `files` `tsconfig.json` settings.
+
+Note that TypeScript will never write an output file to a directory outside of `outDir`, and will never skip emitting a file.
+For this reason, `rootDir` also enforces that all files which need to be emitted are underneath the `rootDir` path.
+
+For example, let's say you had this tree:
+
+```
+MyProj
+├── tsconfig.json
+├── core
+│   ├── a.ts
+│   ├── b.ts
+├── helpers.ts
+```
+
+It would be an error to specify `rootDir` as `core` *and* `include` as `*` because it creates a file (`helpers.ts`) that would need to be emitted *outside* the `outDir` (i.e. `../helpers.js`).
+
 ### `outDir`
 
 ### `outFile`
@@ -103,6 +165,11 @@ Note: `--outFile` cannot be used unless `module` is `None`, `System`, or `AMD`
 
 ### `out`
 
+>> ❌ **Deprecated:** Do not use this. Use [outFile] instead
+
+The `out` option computes the final file location in a way that is not predictable or consistent.
+This option is retained for backward compatibility only.
+
 ## Library Options
 
 ### `noLib`
@@ -110,6 +177,10 @@ Note: `--outFile` cannot be used unless `module` is `None`, `System`, or `AMD`
 ### `lib`
 
 ## File Inclusion Options
+
+### `include` (tsconfig.json) {#include}
+
+### `files` (tsconfig.json) {#files}
 
 ### `noResolve`
 
