@@ -119,6 +119,7 @@ export function makePage(content: string, settings?: Partial<PageSettings>) {
     <article>
     ${content}
     </article>
+        <script>loadSavedTheme();</script>
     </body>
     </html>`;
 }

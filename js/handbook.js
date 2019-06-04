@@ -1,11 +1,6 @@
 var themes = ["dark", "dark-light", "light-dark", "light"];
-document.addEventListener("DOMContentLoaded", function() {
-    var savedTheme = window.localStorage.getItem("handbook-theme");
-    var ti = themes.indexOf(savedTheme);
-    if (ti >= 0) {
-        setTheme(savedTheme);
-    }
 
+document.addEventListener("DOMContentLoaded", function() {
     for (var i = 0; i < themes.length; i++) {
         listen(themes[i]);
     }
@@ -16,11 +11,19 @@ document.addEventListener("DOMContentLoaded", function() {
             window.localStorage.setItem("handbook-theme", theme);
         });
     }
-
-    function setTheme(theme) {
-        for (var i = 0; i < themes.length; i++) {
-            document.body.classList.remove(themes[i]);
-        }
-        document.body.classList.add(theme);
-    }
 });
+
+function loadSavedTheme() {
+    var savedTheme = window.localStorage.getItem("handbook-theme");
+    var ti = themes.indexOf(savedTheme);
+    if (ti >= 0) {
+        setTheme(savedTheme);
+    }
+}
+
+function setTheme(theme) {
+    for (var i = 0; i < themes.length; i++) {
+        document.body.classList.remove(themes[i]);
+    }
+    document.body.classList.add(theme);
+}
