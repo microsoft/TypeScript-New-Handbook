@@ -19,7 +19,7 @@
     <article>
     <h1 id="compiler-options"><a href="#compiler-options">Compiler Options</h1></a>
 <p>TypeScript has a wide array of configuration options.</p>
-<div class="toc"><span class="toc-title">Table of Contents</span><ul><li><a href="#code-emit-options">Code Emit Options</a></li><ul><li><a href="#target"><code>target</code></a></li><li><a href="#module"><code>module</code></a></li><li><a href="#jsx"><code>jsx</code></a></li><li><a href="#jsxfactory"><code>jsxFactory</code></a></li><li><a href="#declaration"><code>declaration</code></a></li><li><a href="#declarationdir"><code>declarationDir</code></a></li><li><a href="#declarationmap"><code>declarationMap</code></a></li><li><a href="#emitdeclarationonly"><code>emitDeclarationOnly</code></a></li><li><a href="#downleveliteration"><code>downlevelIteration</code></a></li><li><a href="#esmoduleinterop"><code>esModuleInterop</code></a></li><li><a href="#emitbom"><code>emitBOM</code></a></li><li><a href="#importhelpers"><code>importHelpers</code></a></li><li><a href="#sourcemap"><code>sourceMap</code></a></li><li><a href="#inlinesources"><code>inlineSources</code></a></li><li><a href="#inlinesourcemap"><code>inlineSourceMap</code></a></li></ul><li><a href="#emit-location-options">Emit Location Options</a></li><ul><li><a href="#rootdir"><code>rootDir</code></a></li><li><a href="#outdir"><code>outDir</code></a></li><li><a href="#outfile"><code>outFile</code></a></li><li><a href="#out"><code>out</code></a></li></ul><li><a href="#library-options">Library Options</a></li><ul><li><a href="#nolib"><code>noLib</code></a></li><li><a href="#lib"><code>lib</code></a></li></ul><li><a href="#file-inclusion-options">File Inclusion Options</a></li><ul><li><a href="#noresolve"><code>noResolve</code></a></li><li><a href="#composite"><code>composite</code></a></li><li><a href="#allowjs"><code>allowJs</code></a></li><li><a href="#forceconsistentcasinginfilenames"><code>forceConsistentCasingInFileNames</code></a></li><li><a href="#charset"><code>charset</code></a></li></ul><li><a href="#module-resolution-options">Module Resolution Options</a></li><ul><li><a href="#baseurl"><code>baseUrl</code></a></li><li><a href="#allowsyntheticdefaultimports"><code>allowSyntheticDefaultImports</code></a></li></ul><li><a href="#typechecking-options">Typechecking Options</a></li><ul><li><a href="#--strict"><code>strict</code></a></li><ul><li><a href="#strictpropertyinitialization"><code>strictPropertyInitialization</code></a></li><li><a href="#strictbindcallapply"><code>strictBindCallApply</code></a></li><li><a href="#strictnullchecks"><code>strictNullChecks</code></a></li><li><a href="#strictfunctiontypes"><code>strictFunctionTypes</code></a></li><li><a href="#noimplicitany"><code>noImplicitAny</code></a></li><li><a href="#noimplicitthis"><code>noImplicitThis</code></a></li><li><a href="#alwaysstrict"><code>alwaysStrict</code></a></li></ul><li><a href="#suppressexcesspropertyerrors"><code>suppressExcessPropertyErrors</code></a></li><li><a href="#suppressimplicitanyindexerrors"><code>suppressImplicitAnyIndexErrors</code></a></li><li><a href="#keyofstringsonly"><code>keyofStringsOnly</code></a></li></ul><li><a href="#linting-options">Linting Options</a></li><ul><li><a href="#allowunreachablecode"><code>allowUnreachableCode</code></a></li><li><a href="#allowunusedlabels"><code>allowUnusedLabels</code></a></li></ul><li><a href="#decorators">Decorators</a></li><ul><li><a href="#experimentaldecorators"><code>experimentalDecorators</code></a></li><li><a href="#emitdecoratormetadata"><code>emitDecoratorMetadata</code></a></li></ul><li><a href="#debugging">Debugging</a></li><ul><li><a href="#diagnostics"><code>diagnostics</code></a></li><li><a href="#traceresolution"><code>traceResolution</code></a></li><li><a href="#listfiles"><code>listFiles</code></a></li></ul><li><a href="#miscellaneous">Miscellaneous</a></li><ul><li><a href="#init"><code>init</code></a></li><li><a href="#help"><code>help</code></a></li></ul></ul></ul></div>
+<div class="toc"><span class="toc-title">Table of Contents</span><ul><li><a href="#code-emit-options">Code Emit Options</a></li><ul><li><a href="#target"><code>target</code></a></li><li><a href="#module"><code>module</code></a></li><li><a href="#jsx"><code>jsx</code></a></li><li><a href="#jsxfactory"><code>jsxFactory</code></a></li><li><a href="#declaration"><code>declaration</code></a></li><li><a href="#declarationdir"><code>declarationDir</code></a></li><li><a href="#declarationmap"><code>declarationMap</code></a></li><li><a href="#emitdeclarationonly"><code>emitDeclarationOnly</code></a></li><li><a href="#downleveliteration"><code>downlevelIteration</code></a></li><li><a href="#esmoduleinterop"><code>esModuleInterop</code></a></li><li><a href="#emitbom"><code>emitBOM</code></a></li><li><a href="#importhelpers"><code>importHelpers</code></a></li><li><a href="#sourcemap"><code>sourceMap</code></a></li><li><a href="#inlinesources"><code>inlineSources</code></a></li><li><a href="#inlinesourcemap"><code>inlineSourceMap</code></a></li></ul><li><a href="#emit-location-options">Emit Location Options</a></li><ul><li><a href="#rootdir"><code>rootDir</code></a></li><li><a href="#outdir"><code>outDir</code></a></li><li><a href="#outfile"><code>outFile</code></a></li><li><a href="#out"><code>out</code></a></li></ul><li><a href="#library-options">Library Options</a></li><ul><li><a href="#nolib"><code>noLib</code></a></li><li><a href="#lib"><code>lib</code></a></li></ul><li><a href="#file-inclusion-options">File Inclusion Options</a></li><ul><li><a href="#include"><code>include</code> (tsconfig.json)</a></li><li><a href="#files"><code>files</code> (tsconfig.json)</a></li><li><a href="#noresolve"><code>noResolve</code></a></li><li><a href="#composite"><code>composite</code></a></li><li><a href="#allowjs"><code>allowJs</code></a></li><li><a href="#forceconsistentcasinginfilenames"><code>forceConsistentCasingInFileNames</code></a></li><li><a href="#charset"><code>charset</code></a></li></ul><li><a href="#module-resolution-options">Module Resolution Options</a></li><ul><li><a href="#baseurl"><code>baseUrl</code></a></li><li><a href="#allowsyntheticdefaultimports"><code>allowSyntheticDefaultImports</code></a></li></ul><li><a href="#typechecking-options">Typechecking Options</a></li><ul><li><a href="#--strict"><code>strict</code></a></li><ul><li><a href="#strictpropertyinitialization"><code>strictPropertyInitialization</code></a></li><li><a href="#strictbindcallapply"><code>strictBindCallApply</code></a></li><li><a href="#strictnullchecks"><code>strictNullChecks</code></a></li><li><a href="#strictfunctiontypes"><code>strictFunctionTypes</code></a></li><li><a href="#noimplicitany"><code>noImplicitAny</code></a></li><li><a href="#noimplicitthis"><code>noImplicitThis</code></a></li><li><a href="#alwaysstrict"><code>alwaysStrict</code></a></li></ul><li><a href="#suppressexcesspropertyerrors"><code>suppressExcessPropertyErrors</code></a></li><li><a href="#suppressimplicitanyindexerrors"><code>suppressImplicitAnyIndexErrors</code></a></li><li><a href="#keyofstringsonly"><code>keyofStringsOnly</code></a></li></ul><li><a href="#linting-options">Linting Options</a></li><ul><li><a href="#allowunreachablecode"><code>allowUnreachableCode</code></a></li><li><a href="#allowunusedlabels"><code>allowUnusedLabels</code></a></li></ul><li><a href="#decorators">Decorators</a></li><ul><li><a href="#experimentaldecorators"><code>experimentalDecorators</code></a></li><li><a href="#emitdecoratormetadata"><code>emitDecoratorMetadata</code></a></li></ul><li><a href="#debugging">Debugging</a></li><ul><li><a href="#diagnostics"><code>diagnostics</code></a></li><li><a href="#traceresolution"><code>traceResolution</code></a></li><li><a href="#listfiles"><code>listFiles</code></a></li></ul><li><a href="#miscellaneous">Miscellaneous</a></li><ul><li><a href="#init"><code>init</code></a></li><li><a href="#help"><code>help</code></a></li></ul></ul></ul></div>
 <h2 id="code-emit-options"><a href="#code-emit-options">Code Emit Options</h2></a>
 <h3 id="target"><a href="#target"><code>target</code></h3></a>
 <p><strong>Allowed Values</strong>: <code>ES3</code> (default), <code>ES5</code>, <code>ES6</code>/<code>ES2015</code> (synonomous), <code>ES2016</code>, <code>ES2017</code>, <code>ES2018</code>, <code>ES2019</code>, <code>ESNext</code></p>
@@ -72,14 +72,65 @@ The default value of <code>false</code> is generally best unless you have a reas
 <h3 id="inlinesourcemap"><a href="#inlinesourcemap"><code>inlineSourceMap</code></h3></a>
 <h2 id="emit-location-options"><a href="#emit-location-options">Emit Location Options</h2></a>
 <h3 id="rootdir"><a href="#rootdir"><code>rootDir</code></h3></a>
+<p><strong>Default</strong>: The longest common path of all non-declaration input files</p>
+<p>When TypeScript compiles files, it keeps the same directory structure in the output directory as exists in the input directory.</p>
+<p>For example, let's say you have some input files:</p>
+<pre><code>MyProj
+├── tsconfig.json
+├── core
+│   ├── a.ts
+│   ├── b.ts
+│   ├── sub
+│   │   ├── c.ts
+├── types.d.ts
+</code></pre>
+<p>The inferred value for <code>rootDir</code> is the longest common path of all non-declaration input files, which in this case is <code>core/</code>.</p>
+<p>If your <code>outDir</code> was <code>dist</code>, TypeScript would write this tree:</p>
+<pre><code>MyProj
+├── dist
+│   ├── a.ts
+│   ├── b.ts
+│   ├── sub
+│   │   ├── c.ts
+</code></pre>
+<p>However, you may have intended for <code>core</code> to be part of the output directory structure.
+By setting <code>rootDir: "."</code> in <code>tsconfig.json</code>, TypeScript would write this tree:</p>
+<pre><code>MyProj
+├── dist
+|   ├── core
+│   │   ├── a.ts
+│   │   ├── b.ts
+│   │   ├── sub
+│   │   │   ├── c.ts
+</code></pre>
+<p>Importantly, <code>rootDir</code> <strong>does not affect which files become part of the compilation</strong>.
+It has no interaction with the <code>include</code>, <code>exclude</code>, or <code>files</code> <code>tsconfig.json</code> settings.</p>
+<p>Note that TypeScript will never write an output file to a directory outside of <code>outDir</code>, and will never skip emitting a file.
+For this reason, <code>rootDir</code> also enforces that all files which need to be emitted are underneath the <code>rootDir</code> path.</p>
+<p>For example, let's say you had this tree:</p>
+<pre><code>MyProj
+├── tsconfig.json
+├── core
+│   ├── a.ts
+│   ├── b.ts
+├── helpers.ts
+</code></pre>
+<p>It would be an error to specify <code>rootDir</code> as <code>core</code> <em>and</em> <code>include</code> as <code>*</code> because it creates a file (<code>helpers.ts</code>) that would need to be emitted <em>outside</em> the <code>outDir</code> (i.e. <code>../helpers.js</code>).</p>
 <h3 id="outdir"><a href="#outdir"><code>outDir</code></h3></a>
 <h3 id="outfile"><a href="#outfile"><code>outFile</code></h3></a>
 <p>Note: <code>--outFile</code> cannot be used unless <code>module</code> is <code>None</code>, <code>System</code>, or <code>AMD</code></p>
 <h3 id="out"><a href="#out"><code>out</code></h3></a>
+<aside>
+    <p>❌ <strong>Deprecated:</strong> Do not use this. Use [outFile] instead</p>
+  </aside>
+<p>The <code>out</code> option computes the final file location in a way that is not predictable or consistent.
+This option is retained for backward compatibility only.</p>
 <h2 id="library-options"><a href="#library-options">Library Options</h2></a>
 <h3 id="nolib"><a href="#nolib"><code>noLib</code></h3></a>
 <h3 id="lib"><a href="#lib"><code>lib</code></h3></a>
 <h2 id="file-inclusion-options"><a href="#file-inclusion-options">File Inclusion Options</h2></a>
+<h3 id="include"><a href="#include"><code>include</code> (tsconfig.json)</h3></a>
+<h3 id="files"><a href="#files"><code>files</code> (tsconfig.json)</h3></a>
 <h3 id="noresolve"><a href="#noresolve"><code>noResolve</code></h3></a>
 <h3 id="composite"><a href="#composite"><code>composite</code></h3></a>
 <h3 id="allowjs"><a href="#allowjs"><code>allowJs</code></h3></a>
@@ -124,5 +175,6 @@ Today, TypeScript assumes UTF-8 encoding, but will correctly detect UTF-16 (BE a
 <h3 id="init"><a href="#init"><code>init</code></h3></a>
 <h3 id="help"><a href="#help"><code>help</code></h3></a>
     </article>
+        <script>loadSavedTheme();</script>
     </body>
     </html>

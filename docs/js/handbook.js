@@ -22,12 +22,20 @@ document.addEventListener("DOMContentLoaded", function() {
             window.localStorage.setItem("handbook-theme", theme);
         });
     }
-
-    /** @param {string} theme */
-    function setTheme(theme) {
-        for (var i = 0; i < themes.length; i++) {
-            document.body.classList.remove(themes[i]);
-        }
-        document.body.classList.add(theme);
-    }
 });
+
+function loadSavedTheme() {
+    var savedTheme = window.localStorage.getItem("handbook-theme");
+    var ti = themes.indexOf(savedTheme);
+    if (ti >= 0) {
+        setTheme(savedTheme);
+    }
+}
+
+/** @param {string} theme */
+function setTheme(theme) {
+    for (var i = 0; i < themes.length; i++) {
+        document.body.classList.remove(themes[i]);
+    }
+    document.body.classList.add(theme);
+}

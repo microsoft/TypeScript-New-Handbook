@@ -169,5 +169,6 @@ To avoid that behavior, you can surround each side of the <code>extends</code> k
 <span class="tm-kw">type</span> <span class="tm-typ"><span class="typeAliasName">Bar</span></span> = <span class="tm-typ"><span class="typeAliasName">Foo</span></span><<span class="tm-typ">string</span> | <span class="tm-typ">number</span>>;
      <span class="quickinfo-result"><span class="quickinfo-arrow">▲</span><span class="keyword">type</span><span class="space"> </span><span class="aliasName">Bar</span><span class="space"> </span><span class="operator">=</span><span class="space"> </span><span class="punctuation">(</span><span class="keyword">string</span><span class="space"> </span><span class="punctuation">|</span><span class="space"> </span><span class="keyword">number</span><span class="punctuation">)</span><span class="punctuation">[</span><span class="punctuation">]</span></span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=type%20Foo%3CT%3E%20%3D%20%5BT%5D%20extends%20%5Bany%5D%20%3F%20T%5B%5D%20%3A%20never%3B%0A%0A%2F%2F%20'Bar'%20is%20no%20longer%20a%20union.%0Atype%20Bar%20%3D%20Foo%3Cstring%20%7C%20number%3E%3B">Try</a></pre></p>
     </article>
+        <script>loadSavedTheme();</script>
     </body>
     </html>
