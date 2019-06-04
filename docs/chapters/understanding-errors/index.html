@@ -20,7 +20,7 @@
     <h1 id="understanding-errors"><a href="#understanding-errors">Understanding Errors</h1></a>
 <p>Whenever TypeScript finds an error, it tries to explain what went wrong in as much detail as possible.
 Because its type system is structural, this often means providing somewhat lengthy descriptions of where it found a problem.</p>
-<h2 id="glossary"><a href="#glossary">Glossary</h2></a>
+<h2 id="terminology"><a href="#terminology">Terminology</h2></a>
 <p>There is some terminology you'll frequently see in error messages that is helpful to understand.</p>
 <h4 id="assignable-to"><a href="#assignable-to"><em>assignable to</em></h4></a>
 <p>TypeScript considers a type <em>assignable to</em> another type if one is an acceptable substitute for the other.
@@ -31,14 +31,18 @@ For example, when calling a function, each argument's type must be <em>assignabl
 <p>Informally, if you see <code>T is not assignable to S</code>, you can think of that as TypeScript saying "<em><code>T</code> and <code>S</code> are not compatible"</em>.
 However, note that this is a <em>directional</em> relationship: <code>S</code> being assignable to <code>T</code> does not imply that <code>T</code> is assignable to <code>S</code>.</p>
 <h2 id="examples"><a href="#examples">Examples</h2></a>
+<p>Let's look at some example error messages and understand what's going on.</p>
+<h3 id="error-elaborations"><a href="#error-elaborations">Error Elaborations</h3></a>
 <p>Each error starts with a leading message, sometimes followed by more sub-messages.
 You can think of each sub-message as answering a "why?" question about the message above it.
 Let's work through some examples to see how they work in practice.</p>
-<h3 id="example-1"><a href="#example-1">Example 1</h3></a>
 <p>Here's an example that produces an error message longer than the example itself:</p>
-<p><pre class="typescript-code"><span class="tm-kw">let</span><span class="tm-def"> </span><span class="tm-vr">a</span><span class="tm-def">: { </span><span class="tm-vr">m</span><span class="tm-def">: </span><span class="tm-typ">number</span><span class="tm-def">[] };</span>
-<span class="tm-kw">let</span><span class="tm-def"> </span><span class="tm-vr">b</span><span class="tm-def"> = { </span><span class="tm-vr">m:</span><span class="tm-def"> [</span><span class="tm-str">""</span><span class="tm-def">] };</span>
-<span class="error"><span class="error-highlight"></span><span class="tm-vr">a</span></span><span class="tm-def"> = </span><span class="tm-vr">b</span><span class="tm-def">;</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Type '{ m: string[]; }' is not assignable to type '{ m: number[]; }'.</div><div class="error-line"><div class="indent"></div>Types of property 'm' are incompatible.</div><div class="error-line"><div class="indent"></div><div class="indent"></div>Type 'string[]' is not assignable to type 'number[]'.</div><div class="error-line"><div class="indent"></div><div class="indent"></div><div class="indent"></div>Type 'string' is not assignable to type 'number'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=let%20a%3A%20%7B%20m%3A%20number%5B%5D%20%7D%3B%0Alet%20b%20%3D%20%7B%20m%3A%20%5B%22%22%5D%20%7D%3B%0Aa%20%3D%20b%3B">Try</a></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">let</span> <span class="tm-vr">a</span>: { <span class="tm-vr">m</span>: <span class="tm-typ">number</span>[] };
+<span class="tm-kw">let</span> <span class="tm-vr">b</span> = { <span class="tm-vr">m:</span> [<span class="tm-str">""</span>] };
+<span class="error" tabindex="0" aria-describedby="errLabel-2322-45-1"><span class="error-highlight"></span><span class="tm-vr">a</span><span id="errLabel-2322-45-1" role="tooltip" class="error-tooltip">Type '{ m: string[]; }' is not assignable to type '{ m: number[]; }'.
+  Types of property 'm' are incompatible.
+    Type 'string[]' is not assignable to type 'number[]'.
+      Type 'string' is not assignable to type 'number'.</span></span> = <span class="tm-vr">b</span>;<hr class="error-divider"><div class="listed-error"><div class="error-line">Type '{ m: string[]; }' is not assignable to type '{ m: number[]; }'.</div><div class="error-line"><div class="indent"></div>Types of property 'm' are incompatible.</div><div class="error-line"><div class="indent"></div><div class="indent"></div>Type 'string[]' is not assignable to type 'number[]'.</div><div class="error-line"><div class="indent"></div><div class="indent"></div><div class="indent"></div>Type 'string' is not assignable to type 'number'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=let%20a%3A%20%7B%20m%3A%20number%5B%5D%20%7D%3B%0Alet%20b%20%3D%20%7B%20m%3A%20%5B%22%22%5D%20%7D%3B%0Aa%20%3D%20b%3B">Try</a></pre></p>
 <p>TypeScript found an error when checking the last line.
 Its logic for issuing an error follows from its logic for determining if the assignment is OK:</p>
 <ol>
@@ -47,6 +51,17 @@ Its logic for issuing an error follows from its logic for determining if the ass
 <li>Because <code>b</code>'s <code>m</code> property (<code>string[]</code>) is not assignable to <code>a</code>'s <code>m</code> property (<code>number[]</code>). Why?</li>
 <li>Because one array's element type (<code>string</code>) is not assignable to the other (<code>number</code>)</li>
 </ol>
+<h3 id="extra-properties"><a href="#extra-properties">Extra Properties</h3></a>
+<p><pre class="typescript-code"><span class="tm-kw">type</span> <span class="tm-typ"><span class="typeAliasName">A</span></span> = { <span class="tm-vr">m</span>: <span class="tm-typ">number</span> };
+<span class="tm-kw">const</span> <span class="tm-vr">a</span>: <span class="tm-typ"><span class="typeAliasName">A</span></span> = { <span class="tm-vr">m:</span> <span class="tm-num">10</span>, <span class="error" tabindex="0" aria-describedby="errLabel-2322-46-5"><span class="error-highlight"></span><span class="tm-vr">n:</span> <span class="tm-str">""</span><span id="errLabel-2322-46-5" role="tooltip" class="error-tooltip">Type '{ m: number; n: string; }' is not assignable to type 'A'.
+  Object literal may only specify known properties, and 'n' does not exist in type 'A'.</span></span> };<hr class="error-divider"><div class="listed-error"><div class="error-line">Type '{ m: number; n: string; }' is not assignable to type 'A'.</div><div class="error-line"><div class="indent"></div>Object literal may only specify known properties, and 'n' does not exist in type 'A'.</div></div></pre></p>
+<h3 id="union-assignments"><a href="#union-assignments">Union Assignments</h3></a>
+<p><pre class="typescript-code"><span class="tm-kw">type</span> <span class="tm-typ"><span class="typeAliasName">Thing</span></span> = <span class="tm-str">"none"</span> | { <span class="tm-vr">name</span>: <span class="tm-typ">string</span> };
+
+<span class="tm-kw">const</span> <span class="error" tabindex="0" aria-describedby="errLabel-2322-47-1"><span class="error-highlight"></span><span class="tm-vr">a</span><span id="errLabel-2322-47-1" role="tooltip" class="error-tooltip">Type '{ name: number; }' is not assignable to type 'Thing'.
+  Type '{ name: number; }' is not assignable to type '{ name: string; }'.
+    Types of property 'name' are incompatible.
+      Type 'number' is not assignable to type 'string'.</span></span>: <span class="tm-typ"><span class="typeAliasName">Thing</span></span> = { <span class="tm-vr">name:</span> <span class="tm-num">0</span> };<hr class="error-divider"><div class="listed-error"><div class="error-line">Type '{ name: number; }' is not assignable to type 'Thing'.</div><div class="error-line"><div class="indent"></div>Type '{ name: number; }' is not assignable to type '{ name: string; }'.</div><div class="error-line"><div class="indent"></div><div class="indent"></div>Types of property 'name' are incompatible.</div><div class="error-line"><div class="indent"></div><div class="indent"></div><div class="indent"></div>Type 'number' is not assignable to type 'string'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=type%20Thing%20%3D%20%22none%22%20%7C%20%7B%20name%3A%20string%20%7D%3B%0A%0Aconst%20a%3A%20Thing%20%3D%20%7B%20name%3A%200%20%7D%3B">Try</a></pre></p>
     </article>
     </body>
     </html>

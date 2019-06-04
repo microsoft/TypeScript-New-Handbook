@@ -759,7 +759,7 @@ Well, it allows TypeScript to correspond tuples with parameter lists.
 Tuples types can be used in [rest parameters and arguments](./More-on-Functions.md#rest-parameters-and-arguments), so that the following:
 
 ```ts
-function foo(...args: [string, number, ...boolean]) {
+function foo(...args: [string, number, ...boolean[]]) {
     var [x, y, ...z] = args;
     // ...
 }
@@ -768,7 +768,7 @@ function foo(...args: [string, number, ...boolean]) {
 is basically equivalent to
 
 ```ts
-function foo(x: string, y: number, ...z: boolean) {
+function foo(x: string, y: number, ...z: boolean[]) {
     // ...
 }
 ```

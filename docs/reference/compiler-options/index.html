@@ -22,13 +22,43 @@
 <div class="toc"><span class="toc-title">Table of Contents</span><ul><li><a href="#code-emit-options">Code Emit Options</a></li><ul><li><a href="#target"><code>target</code></a></li><li><a href="#module"><code>module</code></a></li><li><a href="#jsx"><code>jsx</code></a></li><li><a href="#jsxfactory"><code>jsxFactory</code></a></li><li><a href="#declaration"><code>declaration</code></a></li><li><a href="#declarationdir"><code>declarationDir</code></a></li><li><a href="#declarationmap"><code>declarationMap</code></a></li><li><a href="#emitdeclarationonly"><code>emitDeclarationOnly</code></a></li><li><a href="#downleveliteration"><code>downlevelIteration</code></a></li><li><a href="#esmoduleinterop"><code>esModuleInterop</code></a></li><li><a href="#emitbom"><code>emitBOM</code></a></li><li><a href="#importhelpers"><code>importHelpers</code></a></li><li><a href="#sourcemap"><code>sourceMap</code></a></li><li><a href="#inlinesources"><code>inlineSources</code></a></li><li><a href="#inlinesourcemap"><code>inlineSourceMap</code></a></li></ul><li><a href="#emit-location-options">Emit Location Options</a></li><ul><li><a href="#rootdir"><code>rootDir</code></a></li><li><a href="#outdir"><code>outDir</code></a></li><li><a href="#outfile"><code>outFile</code></a></li><li><a href="#out"><code>out</code></a></li></ul><li><a href="#library-options">Library Options</a></li><ul><li><a href="#nolib"><code>noLib</code></a></li><li><a href="#lib"><code>lib</code></a></li></ul><li><a href="#file-inclusion-options">File Inclusion Options</a></li><ul><li><a href="#noresolve"><code>noResolve</code></a></li><li><a href="#composite"><code>composite</code></a></li><li><a href="#allowjs"><code>allowJs</code></a></li><li><a href="#forceconsistentcasinginfilenames"><code>forceConsistentCasingInFileNames</code></a></li><li><a href="#charset"><code>charset</code></a></li></ul><li><a href="#module-resolution-options">Module Resolution Options</a></li><ul><li><a href="#baseurl"><code>baseUrl</code></a></li><li><a href="#allowsyntheticdefaultimports"><code>allowSyntheticDefaultImports</code></a></li></ul><li><a href="#typechecking-options">Typechecking Options</a></li><ul><li><a href="#--strict"><code>strict</code></a></li><ul><li><a href="#strictpropertyinitialization"><code>strictPropertyInitialization</code></a></li><li><a href="#strictbindcallapply"><code>strictBindCallApply</code></a></li><li><a href="#strictnullchecks"><code>strictNullChecks</code></a></li><li><a href="#strictfunctiontypes"><code>strictFunctionTypes</code></a></li><li><a href="#noimplicitany"><code>noImplicitAny</code></a></li><li><a href="#noimplicitthis"><code>noImplicitThis</code></a></li><li><a href="#alwaysstrict"><code>alwaysStrict</code></a></li></ul><li><a href="#suppressexcesspropertyerrors"><code>suppressExcessPropertyErrors</code></a></li><li><a href="#suppressimplicitanyindexerrors"><code>suppressImplicitAnyIndexErrors</code></a></li><li><a href="#keyofstringsonly"><code>keyofStringsOnly</code></a></li></ul><li><a href="#linting-options">Linting Options</a></li><ul><li><a href="#allowunreachablecode"><code>allowUnreachableCode</code></a></li><li><a href="#allowunusedlabels"><code>allowUnusedLabels</code></a></li></ul><li><a href="#decorators">Decorators</a></li><ul><li><a href="#experimentaldecorators"><code>experimentalDecorators</code></a></li><li><a href="#emitdecoratormetadata"><code>emitDecoratorMetadata</code></a></li></ul><li><a href="#debugging">Debugging</a></li><ul><li><a href="#diagnostics"><code>diagnostics</code></a></li><li><a href="#traceresolution"><code>traceResolution</code></a></li><li><a href="#listfiles"><code>listFiles</code></a></li></ul><li><a href="#miscellaneous">Miscellaneous</a></li><ul><li><a href="#init"><code>init</code></a></li><li><a href="#help"><code>help</code></a></li></ul></ul></ul></div>
 <h2 id="code-emit-options"><a href="#code-emit-options">Code Emit Options</h2></a>
 <h3 id="target"><a href="#target"><code>target</code></h3></a>
+<p><strong>Allowed Values</strong>: <code>ES3</code> (default), <code>ES5</code>, <code>ES6</code>/<code>ES2015</code> (synonomous), <code>ES2016</code>, <code>ES2017</code>, <code>ES2018</code>, <code>ES2019</code>, <code>ESNext</code></p>
+<p>All modern browsers support all ES6 features, so <code>ES6</code> is a good choice.
+You might choose to set a lower target if your code is deployed to older environments, or a higher target if your code only runs on newer environments.</p>
+<p>The <code>target</code> setting changes which JS features are downleveled or left intact.
+For example, an arrow function <code>() =&gt; this</code> will be turned into an equivalent <code>function</code> expression if <code>target</code> is ES5 or lower.</p>
+<p><code>target</code> also changes the default value of [lib].
+You may "mix and match" <code>target</code> and <code>lib</code> settings as desired.</p>
 <h3 id="module"><a href="#module"><code>module</code></h3></a>
+<p><strong>Allowed Values</strong>: <code>CommonJS</code> (default if <code>target</code> is <code>ES3</code> or <code>ES5</code>), <code>ES6</code>/<code>ES2015</code> (synonymous, default for <code>target</code> <code>ES6</code> and higher), <code>None</code>, <code>UMD</code>, <code>AMD</code>, <code>System</code>, <code>ESNext</code></p>
+<p>Sets the module system for the program. See the [Modules] chapter for more information.</p>
 <h3 id="jsx"><a href="#jsx"><code>jsx</code></h3></a>
+<p><strong>Allowed Values</strong>: <code>react</code> (default), <code>react-native</code>, <code>preserve</code></p>
+<p>Controls how JSX constructs are emitted in JavaScript files.
+This only affects output of JS files that started in <code>.tsx</code> files.</p>
+<ul>
+<li><code>preserve</code>: Emit <code>.jsx</code> files with the JSX unchanged</li>
+<li><code>react</code>: Emit <code>.js</code> files with JSX changed to the equivalent <code>React.createElement</code> calls</li>
+<li><code>react-native</code>: Emit <code>.js</code> files with the JSX unchanged</li>
+</ul>
 <h3 id="jsxfactory"><a href="#jsxfactory"><code>jsxFactory</code></h3></a>
+<p><strong>Allowed Values</strong>: Any identifier or dotted identifier; default <code>"React.createElement"</code></p>
+<p>Changes the function called in <code>.js</code> files when compiling JSX Elements.
+The most common change is to use <code>"h"</code> or <code>"preact.h"</code> instead of the default <code>"React.createElement"</code> if using <code>preact</code>.</p>
+<p>This is the same as Babel's <code>/** @jsx h */</code> directive.</p>
 <h3 id="declaration"><a href="#declaration"><code>declaration</code></h3></a>
+<p><strong>Default</strong>: <code>false</code></p>
+<p>Enables automation generation of <code>.d.ts</code> files from <code>.ts</code> inputs</p>
 <h3 id="declarationdir"><a href="#declarationdir"><code>declarationDir</code></h3></a>
+<p><strong>Allowed Values</strong>: Directory path. Defaults to the same location as <code>outDir</code></p>
+<p>Emits declaration files to a different directory</p>
 <h3 id="declarationmap"><a href="#declarationmap"><code>declarationMap</code></h3></a>
+<p><strong>Default</strong>: <code>false</code></p>
+<p>Generates a source map for <code>.d.ts</code> files that maps back to the original <code>.ts</code> source file.</p>
 <h3 id="emitdeclarationonly"><a href="#emitdeclarationonly"><code>emitDeclarationOnly</code></h3></a>
+<p><strong>Default</strong>: <code>false</code></p>
+<p><em>Only</em> emit <code>.d.ts</code> files; do not emit <code>.js</code> files.</p>
+<p>This setting is useful if you're using a transpiler other than TypeScript to generate your JavaScript.</p>
 <h3 id="downleveliteration"><a href="#downleveliteration"><code>downlevelIteration</code></h3></a>
 <h3 id="esmoduleinterop"><a href="#esmoduleinterop"><code>esModuleInterop</code></h3></a>
 <h3 id="emitbom"><a href="#emitbom"><code>emitBOM</code></h3></a>
@@ -44,6 +74,7 @@ The default value of <code>false</code> is generally best unless you have a reas
 <h3 id="rootdir"><a href="#rootdir"><code>rootDir</code></h3></a>
 <h3 id="outdir"><a href="#outdir"><code>outDir</code></h3></a>
 <h3 id="outfile"><a href="#outfile"><code>outFile</code></h3></a>
+<p>Note: <code>--outFile</code> cannot be used unless <code>module</code> is <code>None</code>, <code>System</code>, or <code>AMD</code></p>
 <h3 id="out"><a href="#out"><code>out</code></h3></a>
 <h2 id="library-options"><a href="#library-options">Library Options</h2></a>
 <h3 id="nolib"><a href="#nolib"><code>noLib</code></h3></a>

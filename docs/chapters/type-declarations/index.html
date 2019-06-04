@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Acquiring Types</title>
+        <title>Type Declarations</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" media="screen" href="../../css/handbook.css" />
         <script src="../../js/handbook.js"></script>
@@ -17,12 +17,19 @@
             <div id="set-theme-light-dark">■</div>
         </div>
     <article>
-    <h1 id="acquiring-types"><a href="#acquiring-types">Acquiring Types</h1></a>
+    <h1 id="type-declarations"><a href="#type-declarations">Type Declarations</h1></a>
 <p>Throughout the sections you've read so far, we've been demonstrating basic TypeScript concepts using the built-in functions present in all JavaScript runtimes.
 However, almost all JavaScript today includes many libraries to accomplish common tasks.
 Having types for the parts of your application that <em>aren't</em> your code will greatly improve your TypeScript experience.
 Where do these types come from?</p>
-<div class="toc"><span class="toc-title">Table of Contents</span><ul><li><a href="#.d.ts-files"><code>.d.ts</code> files</a></li><li><a href="#built-in-type-definitions">Built-in Type Definitions</a></li><ul><li><a href="#target-setting"><code>target</code> setting</a></li><li><a href="#lib-setting"><code>lib</code> setting</a></li></ul><li><a href="#external-definitions">External Definitions</a></li><ul><li><a href="#bundled-types">Bundled Types</a></li><li><a href="#definitelytyped--@types">DefinitelyTyped / <code>@types</code></a></li><li><a href="#your-own-definitions">Your Own Definitions</a></li></ul></ul></ul></div>
+<div class="toc"><span class="toc-title">Table of Contents</span><ul><li><a href="#what-do-type-declarations-look-like?">What Do Type Declarations Look Like?</a></li><li><a href="#.d.ts-files"><code>.d.ts</code> files</a></li><li><a href="#built-in-type-definitions">Built-in Type Definitions</a></li><ul><li><a href="#target-setting"><code>target</code> setting</a></li><li><a href="#lib-setting"><code>lib</code> setting</a></li></ul><li><a href="#external-definitions">External Definitions</a></li><ul><li><a href="#bundled-types">Bundled Types</a></li><li><a href="#definitelytyped--@types">DefinitelyTyped / <code>@types</code></a></li><li><a href="#your-own-definitions">Your Own Definitions</a></li></ul></ul></ul></div>
+<h2 id="what-do-type-declarations-look-like"><a href="#what-do-type-declarations-look-like">What Do Type Declarations Look Like?</h2></a>
+<p>Let's say you write some code like this:</p>
+<p><pre class="typescript-code"><span class="tm-kw">const</span> <span class="tm-vr">k</span> = <span class="tm-typ">Math</span>.<span class="tm-mth">max</span>(<span class="tm-num">5</span>, <span class="tm-num">6</span>);
+<span class="tm-kw">const</span> <span class="tm-vr">j</span> = <span class="tm-typ">Math</span>.<span class="error" tabindex="0" aria-describedby="errLabel-2339-41-3"><span class="error-highlight"></span><span class="tm-mth">mix</span><span id="errLabel-2339-41-3" role="tooltip" class="error-tooltip">Property 'mix' does not exist on type 'Math'.</span></span>(<span class="tm-num">7</span>, <span class="tm-num">8</span>);<hr class="error-divider"><div class="listed-error"><div class="error-line">Property 'mix' does not exist on type 'Math'.</div></div></pre></p>
+<p>How did TypeScript know that <code>max</code> was present but not <code>mix</code>, even though <code>Math</code>'s implementation wasn't part of your code?</p>
+<p>The answer is that there are <em>declaration files</em> describing these built-in objects.
+A declaration file provides a way to <em>declare</em> the existence of some types or values without actually providing implementations for those values.</p>
 <h2 id="dts-files"><a href="#dts-files"><code>.d.ts</code> files</h2></a>
 <p>TypeScript has two main kinds of files.
 <code>.ts</code> files are <em>implementation</em> files that contain types and executable code.
@@ -67,7 +74,7 @@ For example, if you installed the <code>react</code> npm package, you can instal
 See the appendix Writing Declaration Files for a guide.</p>
 <p>If you want to silence warnings about a particular module without writing a declaration file, you can also quick declare the module as type <code>any</code> by putting an empty declaration for it in a <code>.d.ts</code> file in your project.
 For example, if you wanted to use a module named <code>some-untyped-module</code> without having definitions for it, you would write:</p>
-<p><pre class="typescript-code"><span class="tm-kw">declare</span><span class="tm-def"> </span><span class="tm-kw">module</span><span class="tm-def"> </span><span class="tm-str">"some-untyped-module"</span><span class="tm-def">;</span></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">declare</span> <span class="tm-kw">module</span> <span class="tm-str">"some-untyped-module"</span>;</pre></p>
     </article>
     </body>
     </html>

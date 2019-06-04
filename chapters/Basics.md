@@ -223,6 +223,7 @@ What about if we *did* introduce a type-checking error?
 Let's rewrite `hello.ts`:
 
 ```ts
+// @noImplicitAny: false
 // This is an industrial-grade general-purpose greeter function:
 function greet(person, date) {
     console.log(`Hello ${person}, today is ${date}!`);
@@ -304,7 +305,19 @@ function greet(person: string, date: Date) {
 }
 
 greet("Maddison", new Date());
+                  ^^^^^^^^^^
 ```
+
+Keep in mind, we don't always have to write explicit type annotations.
+In many cases, TypeScript can even just *infer* (or "figure out") the types for us even if we omit them.
+
+```ts
+let foo = "hello there!"
+    ^?
+```
+
+Even though we didn't tell TypeScript that `foo` had the type `string` it was able to figure that out.
+That's a feature, and it's best not to add annotations when the type system would end up inferring the same type anyway.
 
 ## Erased Types
 
@@ -368,15 +381,15 @@ greet("Maddison", new Date());
 
 Users come to TypeScript looking for different things in a type-checker.
 Some people are looking for a more loose opt-in experience which can help validate only some parts of our program and give us decent tooling.
-This is actually the default experience with TypeScript.
-Types are optional, inference takes the most loose options, and there's no checking for potentially `null`/`undefined` values.
-Much like how `tsc` emits in the face of errors, these defaults are put in place to get out of your way.
-If you're starting out with TypeScript or migrating existing JavaScript, that mght be desirable.
+This is the default experience with TypeScript, where types are optional, inference takes the most lenient types, and there's no checking for potentially `null`/`undefined` values.
+Much like how `tsc` emits in the face of errors, these defaults are put in place to stay out of your way.
+If you're migrating existing JavaScript, that might be desirable.
 
-A lot of users prefer to have TypeScript validate as much as it can off the bat, and that's why the language provides strictness settings as well.
+In contrast, a lot of users prefer to have TypeScript validate as much as it can off the bat, and that's why the language provides strictness settings as well.
 These strictness settings turn static type-checking from a switch (either your code is checked or not) into something closer to a dial.
 The farther you turn this dial up, the more TypeScript will check for you.
 This can require a little extra work, but generally speaking it pays for itself in the long run, and enables more thorough checks and more accurate tooling.
+If possible, a new codebase should always turn these strictness checks on.
 
 TypeScript has several type-checking strictness flags that can be turned on or off, and all of our examples will be written with all of them enabled unless otherwise stated.
 The `--strict` flag toggles them all on simultaneously, but we can opt out of them individually.

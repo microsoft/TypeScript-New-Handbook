@@ -37,7 +37,7 @@ internal-only types for <code>null</code> and <code>undefined</code>. But these 
 needed to be converted to <code>any</code> whenever they became external, such as
 when they were displayed in an editor. That's still what happens
 when <code>--strictNullChecks</code> is off. For example:</p>
-<p><pre class="typescript-code"><span class="tm-kw">let</span><span class="tm-def"> </span><span class="tm-vr">x</span><span class="tm-def"> = </span><span class="tm-kw">null</span><span class="tm-def">;</span></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">let</span> <span class="tm-vr">x</span> = <span class="tm-kw">null</span>;</pre></p>
 <p>Here, <code>null</code> has the type <code>null</code>, even with <code>--strictNullChecks</code> off,
 but <code>x</code> has the type <code>any</code>. The compiler widens on assignment.
 <code>undefined</code> works the same way.</p>
@@ -66,8 +66,8 @@ in a type annotation is not a fresh literal type.</p>
 <p>One example of a mutable location is a <code>let</code> variable declaration. In
 contrast, a <code>const</code> variable declaration is not a mutable location.
 Compare the following two statements:</p>
-<p><pre class="typescript-code"><span class="tm-kw">const</span><span class="tm-def"> </span><span class="tm-vr">one</span><span class="tm-def"> = </span><span class="tm-num">1</span><span class="tm-def">; </span><span class="tm-cmt">// 'one' has type: 1</span>
-<span class="tm-kw">let</span><span class="tm-def"> </span><span class="tm-vr">num</span><span class="tm-def"> = </span><span class="tm-num">1</span><span class="tm-def">;   </span><span class="tm-cmt">// 'num' has type: number</span></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">const</span> <span class="tm-vr">one</span> = <span class="tm-num">1</span>; <span class="tm-cmt">// 'one' has type: 1</span>
+<span class="tm-kw">let</span> <span class="tm-vr">num</span> = <span class="tm-num">1</span>;   <span class="tm-cmt">// 'num' has type: number</span></pre></p>
 <p>For the first statement:</p>
 <ol>
 <li><code>1</code> is an expression, so it has the fresh literal type <code>1</code>.</li>
@@ -81,8 +81,8 @@ But the type <code>1</code> is still fresh, which will be important later.</li>
 </ol>
 <p>Mutable locations and fresh literal types interact in confusing ways.
 For example:</p>
-<p><pre class="typescript-code"><span class="tm-kw">const</span><span class="tm-def"> </span><span class="tm-vr">one</span><span class="tm-def"> = </span><span class="tm-num">1</span><span class="tm-def">;</span>
-<span class="tm-kw">let</span><span class="tm-def"> </span><span class="tm-vr">n</span><span class="tm-def"> = </span><span class="tm-vr">one</span><span class="tm-def">; </span><span class="tm-cmt">// 'n' has type: number</span></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">const</span> <span class="tm-vr">one</span> = <span class="tm-num">1</span>;
+<span class="tm-kw">let</span> <span class="tm-vr">n</span> = <span class="tm-vr">one</span>; <span class="tm-cmt">// 'n' has type: number</span></pre></p>
 <p>The first two steps are the same as the first, <code>const</code> example.</p>
 <ol>
 <li><code>1</code> is an expression, so it has the fresh literal type <code>1</code>.</li>
@@ -94,19 +94,19 @@ For example:</p>
 widens to <code>number</code>. This is confusing, but it is the way a real
 program is supposed to work. A program defines constants at the top,
 then uses those constants as the initial values for variables:</p>
-<p><pre class="typescript-code"><span class="tm-kw">const</span><span class="tm-def"> </span><span class="tm-vr">start</span><span class="tm-def"> = </span><span class="tm-num">1001</span><span class="tm-def">;</span>
-<span class="tm-kw">const</span><span class="tm-def"> </span><span class="tm-vr">max</span><span class="tm-def"> = </span><span class="tm-num">100000</span><span class="tm-def">;</span>
+<p><pre class="typescript-code"><span class="tm-kw">const</span> <span class="tm-vr">start</span> = <span class="tm-num">1001</span>;
+<span class="tm-kw">const</span> <span class="tm-vr">max</span> = <span class="tm-num">100000</span>;
 <span class="tm-cmt">// many (thousands?) of lines later ...</span>
-<span class="tm-kw">for</span><span class="tm-def"> (</span><span class="tm-kw">let</span><span class="tm-def"> </span><span class="tm-vr">i</span><span class="tm-def"> = </span><span class="tm-vr">start</span><span class="tm-def">; </span><span class="tm-vr">i</span><span class="tm-def"> < </span><span class="tm-vr">max</span><span class="tm-def">; </span><span class="tm-vr">i</span><span class="tm-def"> = </span><span class="tm-vr">i</span><span class="tm-def"> + </span><span class="tm-num">1</span><span class="tm-def">) {</span>
-<span class="tm-def">  </span><span class="tm-cmt">// did I just write a for loop?</span>
-<span class="tm-def">  </span><span class="tm-cmt">// is this a C program?</span>
-<span class="tm-def">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=const%20start%20%3D%201001%3B%0Aconst%20max%20%3D%20100000%3B%0A%2F%2F%20many%20(thousands%3F)%20of%20lines%20later%20...%0Afor%20(let%20i%20%3D%20start%3B%20i%20%3C%20max%3B%20i%20%3D%20i%20%2B%201)%20%7B%0A%20%20%2F%2F%20did%20I%20just%20write%20a%20for%20loop%3F%0A%20%20%2F%2F%20is%20this%20a%20C%20program%3F%0A%7D">Try</a></pre></p>
+<span class="tm-kw">for</span> (<span class="tm-kw">let</span> <span class="tm-vr">i</span> = <span class="tm-vr">start</span>; <span class="tm-vr">i</span> < <span class="tm-vr">max</span>; <span class="tm-vr">i</span> = <span class="tm-vr">i</span> + <span class="tm-num">1</span>) {
+  <span class="tm-cmt">// did I just write a for loop?</span>
+  <span class="tm-cmt">// is this a C program?</span>
+}<a class="playground-link" href="https://www.typescriptlang.org/play/#src=const%20start%20%3D%201001%3B%0Aconst%20max%20%3D%20100000%3B%0A%2F%2F%20many%20(thousands%3F)%20of%20lines%20later%20...%0Afor%20(let%20i%20%3D%20start%3B%20i%20%3C%20max%3B%20i%20%3D%20i%20%2B%201)%20%7B%0A%20%20%2F%2F%20did%20I%20just%20write%20a%20for%20loop%3F%0A%20%20%2F%2F%20is%20this%20a%20C%20program%3F%0A%7D">Try</a></pre></p>
 <p>The type of <code>i</code> must be number; if it were <code>1001</code> then it could only
 over have the value <code>1001</code> and the statement <code>i = i + 1</code> would be illegal.</p>
 <p>Other mutable locations are elements of array literals and object
 literals:</p>
-<p><pre class="typescript-code"><span class="tm-kw">const</span><span class="tm-def"> </span><span class="tm-vr">nums</span><span class="tm-def"> = [</span><span class="tm-num">1</span><span class="tm-def">, </span><span class="tm-num">2</span><span class="tm-def">, </span><span class="tm-num">3</span><span class="tm-def">]; </span><span class="tm-cmt">// 'nums' has type: number[]</span>
-<span class="tm-vr">nums</span><span class="tm-def">[</span><span class="tm-num">0</span><span class="tm-def">] = </span><span class="tm-num">101</span><span class="tm-def">; </span><span class="tm-cmt">// because Javascript arrays are always mutable</span></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">const</span> <span class="tm-vr">nums</span> = [<span class="tm-num">1</span>, <span class="tm-num">2</span>, <span class="tm-num">3</span>]; <span class="tm-cmt">// 'nums' has type: number[]</span>
+<span class="tm-vr">nums</span>[<span class="tm-num">0</span>] = <span class="tm-num">101</span>; <span class="tm-cmt">// because Javascript arrays are always mutable</span></pre></p>
 <p><code>nums</code> has type <code>number[]</code> because <code>1</code>, <code>2</code>, and <code>3</code> individually have
 the matching literal types <code>1</code>, <code>2</code>, and <code>3</code>, but each array element
 widens the fresh literal type to <code>number</code>.</p>
@@ -128,20 +128,20 @@ doom2.e = 2 // error, '2' is not assignable to '1'
 <li>Enum members widen to their containing enum.</li>
 </ul>
 <p>An example of the last is:</p>
-<p><pre class="typescript-code"><span class="tm-kw">enum</span><span class="tm-def"> </span><span class="tm-typ"><span class="enumName">State</span></span><span class="tm-def"> {</span>
-<span class="tm-def">  </span><span class="tm-vr">Start</span><span class="tm-def">,</span>
-<span class="tm-def">  </span><span class="tm-vr">Expression</span><span class="tm-def">,</span>
-<span class="tm-def">  </span><span class="tm-vr">Term</span><span class="tm-def">,</span>
-<span class="tm-def">  </span><span class="tm-vr">End</span>
-<span class="tm-def">}</span>
-<span class="tm-kw">const</span><span class="tm-def"> </span><span class="tm-vr">start</span><span class="tm-def"> = </span><span class="tm-vr"><span class="enumName">State</span></span><span class="tm-def">.</span><span class="tm-vr">Start</span><span class="tm-def">;</span>
-<span class="tm-kw">let</span><span class="tm-def"> </span><span class="tm-vr">state</span><span class="tm-def"> = </span><span class="tm-vr">start</span><span class="tm-def">;</span>
-<span class="tm-kw">let</span><span class="tm-def"> </span><span class="tm-vr">ch</span><span class="tm-def"> = </span><span class="tm-str">''</span><span class="tm-def">;</span>
-<span class="tm-kw">while</span><span class="tm-def"> (</span><span class="tm-vr">ch</span><span class="tm-def"> = </span><span class="error"><span class="error-highlight"></span><span class="tm-mth">nextChar</span></span><span class="tm-def">()) {</span>
-<span class="tm-def">  </span><span class="tm-kw">switch</span><span class="tm-def"> (</span><span class="tm-vr">state</span><span class="tm-def">) {</span>
-<span class="tm-def">    </span><span class="tm-cmt">// ... imagine your favourite tokeniser here</span>
-<span class="tm-def">  }</span>
-<span class="tm-def">}</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Cannot find name 'nextChar'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=enum%20State%20%7B%0A%20%20Start%2C%0A%20%20Expression%2C%0A%20%20Term%2C%0A%20%20End%0A%7D%0Aconst%20start%20%3D%20State.Start%3B%0Alet%20state%20%3D%20start%3B%0Alet%20ch%20%3D%20''%3B%0Awhile%20(ch%20%3D%20nextChar())%20%7B%0A%20%20switch%20(state)%20%7B%0A%20%20%20%20%2F%2F%20...%20imagine%20your%20favourite%20tokeniser%20here%0A%20%20%7D%0A%7D">Try</a></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">enum</span> <span class="tm-typ"><span class="enumName">State</span></span> {
+  <span class="tm-vr">Start</span>,
+  <span class="tm-vr">Expression</span>,
+  <span class="tm-vr">Term</span>,
+  <span class="tm-vr">End</span>
+}
+<span class="tm-kw">const</span> <span class="tm-vr">start</span> = <span class="tm-vr"><span class="enumName">State</span></span>.<span class="tm-vr">Start</span>;
+<span class="tm-kw">let</span> <span class="tm-vr">state</span> = <span class="tm-vr">start</span>;
+<span class="tm-kw">let</span> <span class="tm-vr">ch</span> = <span class="tm-str">''</span>;
+<span class="tm-kw">while</span> (<span class="tm-vr">ch</span> = <span class="error" tabindex="0" aria-describedby="errLabel-2304-123-8"><span class="error-highlight"></span><span class="tm-mth">nextChar</span><span id="errLabel-2304-123-8" role="tooltip" class="error-tooltip">Cannot find name 'nextChar'.</span></span>()) {
+  <span class="tm-kw">switch</span> (<span class="tm-vr">state</span>) {
+    <span class="tm-cmt">// ... imagine your favourite tokeniser here</span>
+  }
+}<hr class="error-divider"><div class="listed-error"><div class="error-line">Cannot find name 'nextChar'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=enum%20State%20%7B%0A%20%20Start%2C%0A%20%20Expression%2C%0A%20%20Term%2C%0A%20%20End%0A%7D%0Aconst%20start%20%3D%20State.Start%3B%0Alet%20state%20%3D%20start%3B%0Alet%20ch%20%3D%20''%3B%0Awhile%20(ch%20%3D%20nextChar())%20%7B%0A%20%20switch%20(state)%20%7B%0A%20%20%20%20%2F%2F%20...%20imagine%20your%20favourite%20tokeniser%20here%0A%20%20%7D%0A%7D">Try</a></pre></p>
 <h2 id="narrowing"><a href="#narrowing">Narrowing</h2></a>
 <p>Narrowing is the removal of types from a union. Control flow starts
 from the <em>declared type</em> of a variable and maintains a <em>computed type</em>
@@ -151,13 +151,13 @@ prove facts about the type.</p>
 <code>let x: number | undefined</code>, that's <code>number | undefined</code>. The computed
 type of a variable is the type of the variable as it's used in
 context. Here's an example:</p>
-<p><pre class="typescript-code"><span class="tm-kw">type</span><span class="tm-def"> </span><span class="tm-typ"><span class="typeAliasName">Thing</span></span><span class="tm-def"> = { </span><span class="tm-vr">name</span><span class="tm-def">: </span><span class="tm-str">'one'</span><span class="tm-def"> | </span><span class="tm-str">'two'</span><span class="tm-def"> };</span>
-<span class="tm-kw">function</span><span class="tm-def"> </span><span class="tm-mth">process</span><span class="tm-def">(</span><span class="tm-vr">origin</span><span class="tm-def">: </span><span class="tm-typ"><span class="typeAliasName">Thing</span></span><span class="tm-def">, </span><span class="tm-vr">extra</span><span class="tm-def">?: </span><span class="tm-typ"><span class="typeAliasName">Thing</span></span><span class="tm-def"> | </span><span class="tm-typ">undefined</span><span class="tm-def">):</span><span class="tm-typ"> void </span><span class="tm-def">{</span>
-<span class="tm-def">  </span><span class="error"><span class="error-highlight"></span><span class="tm-mth">preprocess</span></span><span class="tm-def">(</span><span class="tm-vr">origin</span><span class="tm-def">, </span><span class="tm-vr">extra</span><span class="tm-def">);</span>
-<span class="tm-def">  </span><span class="tm-kw">if</span><span class="tm-def"> (</span><span class="tm-vr">extra</span><span class="tm-def">) {</span>
-<span class="tm-def">    </span><span class="tm-typ">console</span><span class="tm-def">.</span><span class="tm-mth">log</span><span class="tm-def">(</span><span class="tm-vr">extra</span><span class="tm-def">.</span><span class="tm-vr">name</span><span class="tm-def">);</span>
-<span class="tm-def">    </span><span class="tm-kw">if</span><span class="tm-def"> (</span><span class="tm-vr">extra</span><span class="tm-def">.</span><span class="tm-vr">name</span><span class="tm-def"> === </span><span class="tm-str">'one'</span><span class="tm-def">) {</span>
-<span class="tm-def">      </span><span class="tm-cmt">// ...</span><span class="error"><span class="error-highlight"></span><hr class="error-divider"><div class="listed-error"><div class="error-line">Cannot find name 'preprocess'.</div></div><div class="listed-error"><div class="error-line">'}' expected.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=type%20Thing%20%3D%20%7B%20name%3A%20'one'%20%7C%20'two'%20%7D%3B%0Afunction%20process(origin%3A%20Thing%2C%20extra%3F%3A%20Thing%20%7C%20undefined)%3A%20void%20%7B%0A%20%20preprocess(origin%2C%20extra)%3B%0A%20%20if%20(extra)%20%7B%0A%20%20%20%20console.log(extra.name)%3B%0A%20%20%20%20if%20(extra.name%20%3D%3D%3D%20'one')%20%7B%0A%20%20%20%20%20%20%2F%2F%20...">Try</a></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">type</span> <span class="tm-typ"><span class="typeAliasName">Thing</span></span> = { <span class="tm-vr">name</span>: <span class="tm-str">'one'</span> | <span class="tm-str">'two'</span> };
+<span class="tm-kw">function</span> <span class="tm-mth">process</span>(<span class="tm-vr">origin</span>: <span class="tm-typ"><span class="typeAliasName">Thing</span></span>, <span class="tm-vr">extra</span>?: <span class="tm-typ"><span class="typeAliasName">Thing</span></span> | <span class="tm-typ">undefined</span>):<span class="tm-typ"> void </span>{
+  <span class="error" tabindex="0" aria-describedby="errLabel-2304-107-10"><span class="error-highlight"></span><span class="tm-mth">preprocess</span><span id="errLabel-2304-107-10" role="tooltip" class="error-tooltip">Cannot find name 'preprocess'.</span></span>(<span class="tm-vr">origin</span>, <span class="tm-vr">extra</span>);
+  <span class="tm-kw">if</span> (<span class="tm-vr">extra</span>) {
+    <span class="tm-typ">console</span>.<span class="tm-mth">log</span>(<span class="tm-vr">extra</span>.<span class="tm-vr">name</span>);
+    <span class="tm-kw">if</span> (<span class="tm-vr">extra</span>.<span class="tm-vr">name</span> === <span class="tm-str">'one'</span>) {
+      <span class="tm-cmt">// ...</span><span class="error" tabindex="0" aria-describedby="errLabel-1005-222-0"><span class="error-highlight"></span><hr class="error-divider"><div class="listed-error"><div class="error-line">Cannot find name 'preprocess'.</div></div><div class="listed-error"><div class="error-line">'}' expected.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=type%20Thing%20%3D%20%7B%20name%3A%20'one'%20%7C%20'two'%20%7D%3B%0Afunction%20process(origin%3A%20Thing%2C%20extra%3F%3A%20Thing%20%7C%20undefined)%3A%20void%20%7B%0A%20%20preprocess(origin%2C%20extra)%3B%0A%20%20if%20(extra)%20%7B%0A%20%20%20%20console.log(extra.name)%3B%0A%20%20%20%20if%20(extra.name%20%3D%3D%3D%20'one')%20%7B%0A%20%20%20%20%20%20%2F%2F%20...">Try</a></pre></p>
 <p><code>extra</code>'s declared type is <code>Thing | undefined</code>, since it's an optional
 parameter. However, its computed type varies based on context. On the
 first line, in <code>preprocess(origin, extra)</code>, its computed type is still
@@ -171,18 +171,18 @@ inside the true branch of <code>if (extra.name === 'one')</code>, its computed
 type is just <code>'one'</code>.</p>
 <p>Narrowing mostly commonly removes all but one type from a union, but
 doesn't necessarily need to:</p>
-<p><pre class="typescript-code"><span class="tm-kw">type</span><span class="tm-def"> </span><span class="tm-typ"><span class="typeAliasName">Type</span></span><span class="tm-def"> = </span><span class="error"><span class="error-highlight"></span><span class="tm-typ">Anonymous</span></span><span class="tm-def"> | </span><span class="error"><span class="error-highlight"></span><span class="tm-typ">Class</span></span><span class="tm-def"> | </span><span class="error"><span class="error-highlight"></span><span class="tm-typ">Interface</span></span>
-<span class="tm-kw">function</span><span class="tm-def"> </span><span class="tm-mth">f</span><span class="tm-def">(</span><span class="tm-vr">thing</span><span class="tm-def">: </span><span class="tm-typ">string</span><span class="tm-def"> | </span><span class="tm-typ">number</span><span class="tm-def"> | </span><span class="tm-typ">boolean</span><span class="tm-def"> | </span><span class="tm-typ">object</span><span class="tm-def">) {</span>
-<span class="tm-def">  </span><span class="tm-kw">if</span><span class="tm-def"> (</span><span class="tm-kw">typeof</span><span class="tm-def"> </span><span class="tm-vr">thing</span><span class="tm-def"> === </span><span class="tm-str">'string'</span><span class="tm-def"> || </span><span class="tm-kw">typeof</span><span class="tm-def"> </span><span class="tm-vr">thing</span><span class="tm-def"> === </span><span class="tm-str">'number'</span><span class="tm-def">) {</span>
-<span class="tm-def">    </span><span class="tm-kw">return</span><span class="tm-def"> </span><span class="error"><span class="error-highlight"></span><span class="tm-vr">lookup</span></span><span class="tm-def">[</span><span class="tm-vr">thing</span><span class="tm-def">];</span>
-<span class="tm-def">  }</span>
-<span class="tm-def">  </span><span class="tm-kw">else</span><span class="tm-def"> </span><span class="tm-kw">if</span><span class="tm-def"> (</span><span class="tm-kw">typeof</span><span class="tm-def"> </span><span class="tm-vr">thing</span><span class="tm-def"> === </span><span class="tm-str">'boolean'</span><span class="tm-def"> && </span><span class="tm-vr">thing</span><span class="tm-def">) {</span>
-<span class="tm-def">    </span><span class="tm-kw">return</span><span class="tm-def"> </span><span class="error"><span class="error-highlight"></span><span class="tm-vr">globalCachedThing</span></span><span class="tm-def">;</span>
-<span class="tm-def">  }</span>
-<span class="tm-def">  </span><span class="tm-kw">else</span><span class="tm-def"> {</span>
-<span class="tm-def">    </span><span class="tm-kw">return</span><span class="tm-def"> </span><span class="tm-vr">thing</span><span class="tm-def">;</span>
-<span class="tm-def">  }</span>
-<span class="tm-def">}</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Cannot find name 'Anonymous'.</div></div><div class="listed-error"><div class="error-line">Cannot find name 'Class'.</div></div><div class="listed-error"><div class="error-line">Cannot find name 'Interface'.</div></div><div class="listed-error"><div class="error-line">Cannot find name 'lookup'.</div></div><div class="listed-error"><div class="error-line">Cannot find name 'globalCachedThing'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=type%20Type%20%3D%20Anonymous%20%7C%20Class%20%7C%20Interface%0Afunction%20f(thing%3A%20string%20%7C%20number%20%7C%20boolean%20%7C%20object)%20%7B%0A%20%20if%20(typeof%20thing%20%3D%3D%3D%20'string'%20%7C%7C%20typeof%20thing%20%3D%3D%3D%20'number')%20%7B%0A%20%20%20%20return%20lookup%5Bthing%5D%3B%0A%20%20%7D%0A%20%20else%20if%20(typeof%20thing%20%3D%3D%3D%20'boolean'%20%26%26%20thing)%20%7B%0A%20%20%20%20return%20globalCachedThing%3B%0A%20%20%7D%0A%20%20else%20%7B%0A%20%20%20%20return%20thing%3B%0A%20%20%7D%0A%7D">Try</a></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">type</span> <span class="tm-typ"><span class="typeAliasName">Type</span></span> = <span class="error" tabindex="0" aria-describedby="errLabel-2304-12-9"><span class="error-highlight"></span><span class="tm-typ">Anonymous</span><span id="errLabel-2304-12-9" role="tooltip" class="error-tooltip">Cannot find name 'Anonymous'.</span></span> | <span class="error" tabindex="0" aria-describedby="errLabel-2304-24-5"><span class="error-highlight"></span><span class="tm-typ">Class</span><span id="errLabel-2304-24-5" role="tooltip" class="error-tooltip">Cannot find name 'Class'.</span></span> | <span class="error" tabindex="0" aria-describedby="errLabel-2304-32-9"><span class="error-highlight"></span><span class="tm-typ">Interface</span><span id="errLabel-2304-32-9" role="tooltip" class="error-tooltip">Cannot find name 'Interface'.</span></span>
+<span class="tm-kw">function</span> <span class="tm-mth">f</span>(<span class="tm-vr">thing</span>: <span class="tm-typ">string</span> | <span class="tm-typ">number</span> | <span class="tm-typ">boolean</span> | <span class="tm-typ">object</span>) {
+  <span class="tm-kw">if</span> (<span class="tm-kw">typeof</span> <span class="tm-vr">thing</span> === <span class="tm-str">'string'</span> || <span class="tm-kw">typeof</span> <span class="tm-vr">thing</span> === <span class="tm-str">'number'</span>) {
+    <span class="tm-kw">return</span> <span class="error" tabindex="0" aria-describedby="errLabel-2304-173-6"><span class="error-highlight"></span><span class="tm-vr">lookup</span><span id="errLabel-2304-173-6" role="tooltip" class="error-tooltip">Cannot find name 'lookup'.</span></span>[<span class="tm-vr">thing</span>];
+  }
+  <span class="tm-kw">else</span> <span class="tm-kw">if</span> (<span class="tm-kw">typeof</span> <span class="tm-vr">thing</span> === <span class="tm-str">'boolean'</span> && <span class="tm-vr">thing</span>) {
+    <span class="tm-kw">return</span> <span class="error" tabindex="0" aria-describedby="errLabel-2304-253-17"><span class="error-highlight"></span><span class="tm-vr">globalCachedThing</span><span id="errLabel-2304-253-17" role="tooltip" class="error-tooltip">Cannot find name 'globalCachedThing'.</span></span>;
+  }
+  <span class="tm-kw">else</span> {
+    <span class="tm-kw">return</span> <span class="tm-vr">thing</span>;
+  }
+}<hr class="error-divider"><div class="listed-error"><div class="error-line">Cannot find name 'Anonymous'.</div></div><div class="listed-error"><div class="error-line">Cannot find name 'Class'.</div></div><div class="listed-error"><div class="error-line">Cannot find name 'Interface'.</div></div><div class="listed-error"><div class="error-line">Cannot find name 'lookup'.</div></div><div class="listed-error"><div class="error-line">Cannot find name 'globalCachedThing'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=type%20Type%20%3D%20Anonymous%20%7C%20Class%20%7C%20Interface%0Afunction%20f(thing%3A%20string%20%7C%20number%20%7C%20boolean%20%7C%20object)%20%7B%0A%20%20if%20(typeof%20thing%20%3D%3D%3D%20'string'%20%7C%7C%20typeof%20thing%20%3D%3D%3D%20'number')%20%7B%0A%20%20%20%20return%20lookup%5Bthing%5D%3B%0A%20%20%7D%0A%20%20else%20if%20(typeof%20thing%20%3D%3D%3D%20'boolean'%20%26%26%20thing)%20%7B%0A%20%20%20%20return%20globalCachedThing%3B%0A%20%20%7D%0A%20%20else%20%7B%0A%20%20%20%20return%20thing%3B%0A%20%20%7D%0A%7D">Try</a></pre></p>
 <p>Here, in the first if-block, <code>thing</code> narrows to <code>string | number</code> because
 the check allows it to be either string or number.</p>
 <h2 id="instanceof-narrowing"><a href="#instanceof-narrowing">Instanceof Narrowing</h2></a>
@@ -190,26 +190,26 @@ the check allows it to be either string or number.</p>
 behaves similarly, but its rules are somewhat different. It only
 applies to certain <code>instanceof</code> checks and type predicates.</p>
 <p>Here's a use of <code>instanceof</code> that follows the normal narrowing rules:</p>
-<p><pre class="typescript-code"><span class="tm-kw">class</span><span class="tm-def"> </span><span class="tm-typ"><span class="className">C</span></span><span class="tm-def"> { </span><span class="tm-vr">c</span><span class="tm-def">: </span><span class="tm-typ">any</span><span class="tm-def"> }</span>
-<span class="tm-kw">function</span><span class="tm-def"> </span><span class="tm-mth">f</span><span class="tm-def">(</span><span class="tm-vr">x</span><span class="tm-def">: </span><span class="tm-typ"><span class="className">C</span></span><span class="tm-def"> | </span><span class="tm-typ">string</span><span class="tm-def">) {</span>
-<span class="tm-def">  </span><span class="tm-kw">if</span><span class="tm-def"> (</span><span class="tm-vr">x</span><span class="tm-def"> </span><span class="tm-kw">instanceof</span><span class="tm-def"> <span class="className">C</span>) {</span>
-<span class="tm-def">    </span><span class="tm-cmt">// x is C here</span>
-<span class="tm-def">  }</span>
-<span class="tm-def">  </span><span class="tm-kw">else</span><span class="tm-def"> {</span>
-<span class="tm-def">    </span><span class="tm-cmt">// x is string here</span>
-<span class="tm-def">  }</span>
-<span class="tm-def">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20C%20%7B%20c%3A%20any%20%7D%0Afunction%20f(x%3A%20C%20%7C%20string)%20%7B%0A%20%20if%20(x%20instanceof%20C)%20%7B%0A%20%20%20%20%2F%2F%20x%20is%20C%20here%0A%20%20%7D%0A%20%20else%20%7B%0A%20%20%20%20%2F%2F%20x%20is%20string%20here%0A%20%20%7D%0A%7D">Try</a></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">class</span> <span class="tm-typ"><span class="className">C</span></span> { <span class="tm-vr">c</span>: <span class="tm-typ">any</span> }
+<span class="tm-kw">function</span> <span class="tm-mth">f</span>(<span class="tm-vr">x</span>: <span class="tm-typ"><span class="className">C</span></span> | <span class="tm-typ">string</span>) {
+  <span class="tm-kw">if</span> (<span class="tm-vr">x</span> <span class="tm-kw">instanceof</span> <span class="className">C</span>) {
+    <span class="tm-cmt">// x is C here</span>
+  }
+  <span class="tm-kw">else</span> {
+    <span class="tm-cmt">// x is string here</span>
+  }
+}<a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20C%20%7B%20c%3A%20any%20%7D%0Afunction%20f(x%3A%20C%20%7C%20string)%20%7B%0A%20%20if%20(x%20instanceof%20C)%20%7B%0A%20%20%20%20%2F%2F%20x%20is%20C%20here%0A%20%20%7D%0A%20%20else%20%7B%0A%20%20%20%20%2F%2F%20x%20is%20string%20here%0A%20%20%7D%0A%7D">Try</a></pre></p>
 <p>So far this follows the normal narrowing rules. But <code>instanceof</code>
 applies to subclasses too:</p>
-<p><pre class="typescript-code"><span class="tm-kw">class</span><span class="tm-def"> </span><span class="tm-typ"><span class="className">D</span></span><span class="tm-def"> </span><span class="tm-kw">extends</span><span class="tm-def"> <span class="error"><span class="error-highlight"></span>C</span> { </span><span class="tm-vr">d</span><span class="tm-def">: </span><span class="tm-typ">any</span><span class="tm-def"> }</span>
-<span class="tm-kw">function</span><span class="tm-def"> </span><span class="tm-mth">f</span><span class="tm-def">(</span><span class="tm-vr">x</span><span class="tm-def">: </span><span class="error"><span class="error-highlight"></span><span class="tm-typ">C</span></span><span class="tm-def">) {</span>
-<span class="tm-def">  </span><span class="tm-kw">if</span><span class="tm-def"> (</span><span class="tm-vr">x</span><span class="tm-def"> </span><span class="tm-kw">instanceof</span><span class="tm-def"> <span class="className">D</span>) {</span>
-<span class="tm-def">    </span><span class="tm-cmt">// x is D here</span>
-<span class="tm-def">  }</span>
-<span class="tm-def">  </span><span class="tm-kw">else</span><span class="tm-def"> {</span>
-<span class="tm-def">    </span><span class="tm-cmt">// x is still just C here</span>
-<span class="tm-def">  }</span>
-<span class="tm-def">}</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Cannot find name 'C'.</div></div><div class="listed-error"><div class="error-line">Cannot find name 'C'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20D%20extends%20C%20%7B%20d%3A%20any%20%7D%0Afunction%20f(x%3A%20C)%20%7B%0A%20%20if%20(x%20instanceof%20D)%20%7B%0A%20%20%20%20%2F%2F%20x%20is%20D%20here%0A%20%20%7D%0A%20%20else%20%7B%0A%20%20%20%20%2F%2F%20x%20is%20still%20just%20C%20here%0A%20%20%7D%0A%7D">Try</a></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">class</span> <span class="tm-typ"><span class="className">D</span></span> <span class="tm-kw">extends</span> <span class="error" tabindex="0" aria-describedby="errLabel-2304-16-1"><span class="error-highlight"></span>C<span id="errLabel-2304-16-1" role="tooltip" class="error-tooltip">Cannot find name 'C'.</span></span> { <span class="tm-vr">d</span>: <span class="tm-typ">any</span> }
+<span class="tm-kw">function</span> <span class="tm-mth">f</span>(<span class="tm-vr">x</span>: <span class="error" tabindex="0" aria-describedby="errLabel-2304-43-1"><span class="error-highlight"></span><span class="tm-typ">C</span><span id="errLabel-2304-43-1" role="tooltip" class="error-tooltip">Cannot find name 'C'.</span></span>) {
+  <span class="tm-kw">if</span> (<span class="tm-vr">x</span> <span class="tm-kw">instanceof</span> <span class="className">D</span>) {
+    <span class="tm-cmt">// x is D here</span>
+  }
+  <span class="tm-kw">else</span> {
+    <span class="tm-cmt">// x is still just C here</span>
+  }
+}<hr class="error-divider"><div class="listed-error"><div class="error-line">Cannot find name 'C'.</div></div><div class="listed-error"><div class="error-line">Cannot find name 'C'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20D%20extends%20C%20%7B%20d%3A%20any%20%7D%0Afunction%20f(x%3A%20C)%20%7B%0A%20%20if%20(x%20instanceof%20D)%20%7B%0A%20%20%20%20%2F%2F%20x%20is%20D%20here%0A%20%20%7D%0A%20%20else%20%7B%0A%20%20%20%20%2F%2F%20x%20is%20still%20just%20C%20here%0A%20%20%7D%0A%7D">Try</a></pre></p>
 <p>Unlike normal narrowing, <code>instanceof</code> narrowing doesn't remove any
 types to get <code>x</code>'s computed type. Instead, it and changes the computed
 type to <code>D</code> inside the <code>if (x instanceof D)</code> block when <code>D</code> appears to
@@ -218,15 +218,15 @@ block, <code>x</code> is still <code>C</code>.</p>
 <p><code>instanceof</code> narrowing doesn't produce errors; if the checked class is
 not a subclass of the declared type, the compiler does its best
 to make sense of things:</p>
-<p><pre class="typescript-code"><span class="tm-kw">class</span><span class="tm-def"> </span><span class="tm-typ"><span class="className">E</span></span><span class="tm-def"> { </span><span class="tm-vr">e</span><span class="tm-def">: </span><span class="tm-typ">any</span><span class="tm-def"> } </span><span class="tm-cmt">// doesn't extend C!</span>
-<span class="tm-kw">function</span><span class="tm-def"> </span><span class="tm-mth">f</span><span class="tm-def">(</span><span class="tm-vr">x</span><span class="tm-def">: </span><span class="error"><span class="error-highlight"></span><span class="tm-typ">C</span></span><span class="tm-def">) {</span>
-<span class="tm-def">  </span><span class="tm-kw">if</span><span class="tm-def"> (</span><span class="tm-vr">x</span><span class="tm-def"> </span><span class="tm-kw">instanceof</span><span class="tm-def"> <span class="className">E</span>) {</span>
-<span class="tm-def">    </span><span class="tm-cmt">// x is C & E here</span>
-<span class="tm-def">  }</span>
-<span class="tm-def">  </span><span class="tm-kw">else</span><span class="tm-def"> {</span>
-<span class="tm-def">    </span><span class="tm-cmt">// x is still just C here</span>
-<span class="tm-def">  }</span>
-<span class="tm-def">}</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Cannot find name 'C'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20E%20%7B%20e%3A%20any%20%7D%20%2F%2F%20doesn't%20extend%20C!%0Afunction%20f(x%3A%20C)%20%7B%0A%20%20if%20(x%20instanceof%20E)%20%7B%0A%20%20%20%20%2F%2F%20x%20is%20C%20%26%20E%20here%0A%20%20%7D%0A%20%20else%20%7B%0A%20%20%20%20%2F%2F%20x%20is%20still%20just%20C%20here%0A%20%20%7D%0A%7D">Try</a></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">class</span> <span class="tm-typ"><span class="className">E</span></span> { <span class="tm-vr">e</span>: <span class="tm-typ">any</span> } <span class="tm-cmt">// doesn't extend C!</span>
+<span class="tm-kw">function</span> <span class="tm-mth">f</span>(<span class="tm-vr">x</span>: <span class="error" tabindex="0" aria-describedby="errLabel-2304-54-1"><span class="error-highlight"></span><span class="tm-typ">C</span><span id="errLabel-2304-54-1" role="tooltip" class="error-tooltip">Cannot find name 'C'.</span></span>) {
+  <span class="tm-kw">if</span> (<span class="tm-vr">x</span> <span class="tm-kw">instanceof</span> <span class="className">E</span>) {
+    <span class="tm-cmt">// x is C & E here</span>
+  }
+  <span class="tm-kw">else</span> {
+    <span class="tm-cmt">// x is still just C here</span>
+  }
+}<hr class="error-divider"><div class="listed-error"><div class="error-line">Cannot find name 'C'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20E%20%7B%20e%3A%20any%20%7D%20%2F%2F%20doesn't%20extend%20C!%0Afunction%20f(x%3A%20C)%20%7B%0A%20%20if%20(x%20instanceof%20E)%20%7B%0A%20%20%20%20%2F%2F%20x%20is%20C%20%26%20E%20here%0A%20%20%7D%0A%20%20else%20%7B%0A%20%20%20%20%2F%2F%20x%20is%20still%20just%20C%20here%0A%20%20%7D%0A%7D">Try</a></pre></p>
 <p>The compiler thinks that something of type <code>C</code> can't also be
 <code>instanceof E</code>, but just in case, it sets the computed type of <code>x</code> to
 <code>C &amp; E</code>, so that all the properties of <code>E</code> are at least available.
@@ -236,36 +236,36 @@ expect an error for code that the compiler believes can never execute.</p>
 <p>Type predicates follow the same rules as <code>instanceof</code> when narrowing,
 and are just as subject to misuse. So this example is equivalent to
 the previous incorrect one:</p>
-<p><pre class="typescript-code"><span class="tm-kw">function</span><span class="tm-def"> </span><span class="tm-mth">isE</span><span class="tm-def">(</span><span class="tm-vr">e</span><span class="tm-def">: </span><span class="tm-typ">any</span><span class="tm-def">):</span><span class="tm-typ"> e </span><span class="tm-kw">is</span><span class="tm-typ"> <span class="error"><span class="error-highlight"></span>E</span> </span><span class="tm-def">{</span>
-<span class="tm-def">  </span><span class="tm-kw">return</span><span class="tm-def"> </span><span class="tm-vr">e</span><span class="tm-def">.</span><span class="tm-vr">e</span><span class="tm-def">;</span>
-<span class="tm-def">}</span>
-<span class="tm-kw">function</span><span class="tm-def"> </span><span class="tm-mth">f</span><span class="tm-def">(</span><span class="tm-vr">x</span><span class="tm-def">: </span><span class="error"><span class="error-highlight"></span><span class="tm-typ">C</span></span><span class="tm-def">) {</span>
-<span class="tm-def">  </span><span class="tm-kw">if</span><span class="tm-def"> (</span><span class="tm-mth">isE</span><span class="tm-def">(</span><span class="tm-vr">x</span><span class="tm-def">)) {</span>
-<span class="tm-def">    </span><span class="tm-cmt">// x is C & E here</span>
-<span class="tm-def">  }</span>
-<span class="tm-def">  </span><span class="tm-kw">else</span><span class="tm-def"> {</span>
-<span class="tm-def">    </span><span class="tm-cmt">// x is still just C here</span>
-<span class="tm-def">  }</span>
-<span class="tm-def">}</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Cannot find name 'E'.</div></div><div class="listed-error"><div class="error-line">Cannot find name 'C'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20isE(e%3A%20any)%3A%20e%20is%20E%20%7B%0A%20%20return%20e.e%3B%0A%7D%0Afunction%20f(x%3A%20C)%20%7B%0A%20%20if%20(isE(x))%20%7B%0A%20%20%20%20%2F%2F%20x%20is%20C%20%26%20E%20here%0A%20%20%7D%0A%20%20else%20%7B%0A%20%20%20%20%2F%2F%20x%20is%20still%20just%20C%20here%0A%20%20%7D%0A%7D">Try</a></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">function</span> <span class="tm-mth">isE</span>(<span class="tm-vr">e</span>: <span class="tm-typ">any</span>):<span class="tm-typ"> e </span><span class="tm-kw">is</span><span class="tm-typ"> <span class="error" tabindex="0" aria-describedby="errLabel-2304-27-1"><span class="error-highlight"></span>E<span id="errLabel-2304-27-1" role="tooltip" class="error-tooltip">Cannot find name 'E'.</span></span> </span>{
+  <span class="tm-kw">return</span> <span class="tm-vr">e</span>.<span class="tm-vr">e</span>;
+}
+<span class="tm-kw">function</span> <span class="tm-mth">f</span>(<span class="tm-vr">x</span>: <span class="error" tabindex="0" aria-describedby="errLabel-2304-61-1"><span class="error-highlight"></span><span class="tm-typ">C</span><span id="errLabel-2304-61-1" role="tooltip" class="error-tooltip">Cannot find name 'C'.</span></span>) {
+  <span class="tm-kw">if</span> (<span class="tm-mth">isE</span>(<span class="tm-vr">x</span>)) {
+    <span class="tm-cmt">// x is C & E here</span>
+  }
+  <span class="tm-kw">else</span> {
+    <span class="tm-cmt">// x is still just C here</span>
+  }
+}<hr class="error-divider"><div class="listed-error"><div class="error-line">Cannot find name 'E'.</div></div><div class="listed-error"><div class="error-line">Cannot find name 'C'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20isE(e%3A%20any)%3A%20e%20is%20E%20%7B%0A%20%20return%20e.e%3B%0A%7D%0Afunction%20f(x%3A%20C)%20%7B%0A%20%20if%20(isE(x))%20%7B%0A%20%20%20%20%2F%2F%20x%20is%20C%20%26%20E%20here%0A%20%20%7D%0A%20%20else%20%7B%0A%20%20%20%20%2F%2F%20x%20is%20still%20just%20C%20here%0A%20%20%7D%0A%7D">Try</a></pre></p>
 <h2 id="apparent-type"><a href="#apparent-type">Apparent Type</h2></a>
 <p>An <em>apparent type</em> of a type always has properties, even when the
 original type does not. One example is primitives:</p>
-<p><pre class="typescript-code"><span class="tm-kw">let</span><span class="tm-def"> </span><span class="tm-vr">n</span><span class="tm-def"> = </span><span class="tm-num">12</span>
-<span class="tm-kw">let</span><span class="tm-def"> </span><span class="tm-vr">s</span><span class="tm-def"> = </span><span class="tm-vr">n</span><span class="tm-def">.</span><span class="tm-mth">toFixed</span><span class="tm-def">()</span></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">let</span> <span class="tm-vr">n</span> = <span class="tm-num">12</span>
+<span class="tm-kw">let</span> <span class="tm-vr">s</span> = <span class="tm-vr">n</span>.<span class="tm-mth">toFixed</span>()</pre></p>
 <p>The type <code>number</code> is a primitive in Typescript and has no properties;
 <code>Number</code> does. Apparent types provide the mapping from <code>number</code> to
 <code>Number</code>. Whenever the compiler needs to get properties of some type,
 it asks for the apparent type of that type first.
 The other types that have interesting apparent types are type parameters:</p>
-<p><pre class="typescript-code"><span class="tm-kw">interface</span><span class="tm-def"> </span><span class="tm-typ"><span class="interfaceName">Node</span></span><span class="tm-def"> {</span>
-<span class="tm-def">  </span><span class="tm-vr">parent</span><span class="tm-def">: </span><span class="tm-typ"><span class="interfaceName">Node</span></span><span class="tm-def">;</span>
-<span class="tm-def">  </span><span class="tm-vr">pos</span><span class="tm-def">: </span><span class="tm-typ">number</span><span class="tm-def">;</span>
-<span class="tm-def">  </span><span class="tm-vr">kind</span><span class="tm-def">: </span><span class="tm-typ">number</span><span class="tm-def">;</span>
-<span class="tm-def">}</span>
-<span class="tm-kw">function</span><span class="tm-def"> </span><span class="tm-mth">setParent</span><span class="tm-def"><</span><span class="tm-typ"><span class="typeParameterName">T</span></span><span class="tm-def"> </span><span class="tm-kw">extends</span><span class="tm-def"> </span><span class="tm-typ"><span class="interfaceName">Node</span></span><span class="tm-def">>(</span><span class="tm-vr">node</span><span class="tm-def">: </span><span class="tm-typ"><span class="typeParameterName">T</span></span><span class="tm-def">, </span><span class="tm-vr">parent</span><span class="tm-def">: </span><span class="tm-typ"><span class="interfaceName">Node</span></span><span class="tm-def">):</span><span class="tm-typ"> <span class="typeParameterName">T</span> </span><span class="tm-def">{</span>
-<span class="tm-def">  </span><span class="tm-vr">node</span><span class="tm-def">.</span><span class="tm-vr">parent</span><span class="tm-def"> = </span><span class="tm-vr">parent</span><span class="tm-def">;</span>
-<span class="tm-def">  </span><span class="tm-kw">return</span><span class="tm-def"> </span><span class="tm-vr">node</span><span class="tm-def">;</span>
-<span class="tm-def">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=interface%20Node%20%7B%0A%20%20parent%3A%20Node%3B%0A%20%20pos%3A%20number%3B%0A%20%20kind%3A%20number%3B%0A%7D%0Afunction%20setParent%3CT%20extends%20Node%3E(node%3A%20T%2C%20parent%3A%20Node)%3A%20T%20%7B%0A%20%20node.parent%20%3D%20parent%3B%0A%20%20return%20node%3B%0A%7D">Try</a></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">interface</span> <span class="tm-typ"><span class="interfaceName">Node</span></span> {
+  <span class="tm-vr">parent</span>: <span class="tm-typ"><span class="interfaceName">Node</span></span>;
+  <span class="tm-vr">pos</span>: <span class="tm-typ">number</span>;
+  <span class="tm-vr">kind</span>: <span class="tm-typ">number</span>;
+}
+<span class="tm-kw">function</span> <span class="tm-mth">setParent</span><<span class="tm-typ"><span class="typeParameterName">T</span></span> <span class="tm-kw">extends</span> <span class="tm-typ"><span class="interfaceName">Node</span></span>>(<span class="tm-vr">node</span>: <span class="tm-typ"><span class="typeParameterName">T</span></span>, <span class="tm-vr">parent</span>: <span class="tm-typ"><span class="interfaceName">Node</span></span>):<span class="tm-typ"> <span class="typeParameterName">T</span> </span>{
+  <span class="tm-vr">node</span>.<span class="tm-vr">parent</span> = <span class="tm-vr">parent</span>;
+  <span class="tm-kw">return</span> <span class="tm-vr">node</span>;
+}<a class="playground-link" href="https://www.typescriptlang.org/play/#src=interface%20Node%20%7B%0A%20%20parent%3A%20Node%3B%0A%20%20pos%3A%20number%3B%0A%20%20kind%3A%20number%3B%0A%7D%0Afunction%20setParent%3CT%20extends%20Node%3E(node%3A%20T%2C%20parent%3A%20Node)%3A%20T%20%7B%0A%20%20node.parent%20%3D%20parent%3B%0A%20%20return%20node%3B%0A%7D">Try</a></pre></p>
 <p><code>T</code> is a type parameter, which is just a placeholder. But its
 constraint is <code>Node</code>, so when the compiler checks <code>node.parent</code>, it
 gets the apparent type of <code>T</code>, which is <code>Node</code>. Then it sees that

@@ -48,13 +48,13 @@ We'll learn more about the syntax <code>T&lt;U&gt;</code> when we cover <em>gene
 <h2 id="any"><a href="#any"><code>any</code></h2></a>
 <p>TypeScript also has a special type, <code>any</code>, that you can use whenever you don't want a particular value to cause typechecking errors.</p>
 <p>When a value is of type <code>any</code>, you can access any properties of it (which will in turn be of type <code>any</code>), call it like a function, assign it to (or from) a value of any type, or pretty much anything else that's syntactically legal:</p>
-<p><pre class="typescript-code"><span class="tm-kw">let</span><span class="tm-def"> </span><span class="tm-vr">obj</span><span class="tm-def">: </span><span class="tm-typ">any</span><span class="tm-def"> = { </span><span class="tm-vr">x:</span><span class="tm-def"> </span><span class="tm-num">0</span><span class="tm-def"> };</span>
+<p><pre class="typescript-code"><span class="tm-kw">let</span> <span class="tm-vr">obj</span>: <span class="tm-typ">any</span> = { <span class="tm-vr">x:</span> <span class="tm-num">0</span> };
 <span class="tm-cmt">// None of these lines of code are errors</span>
-<span class="tm-vr">obj</span><span class="tm-def">.</span><span class="tm-mth">foo</span><span class="tm-def">();</span>
-<span class="tm-mth">obj</span><span class="tm-def">();</span>
-<span class="tm-vr">obj</span><span class="tm-def">.</span><span class="tm-vr">bar</span><span class="tm-def"> = </span><span class="tm-num">100</span><span class="tm-def">;</span>
-<span class="tm-vr">obj</span><span class="tm-def"> = </span><span class="tm-str">"hello"</span><span class="tm-def">;</span>
-<span class="tm-kw">const</span><span class="tm-def"> </span><span class="tm-vr">n</span><span class="tm-def">: </span><span class="tm-typ">number</span><span class="tm-def"> = </span><span class="tm-vr">obj</span><span class="tm-def">;</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=let%20obj%3A%20any%20%3D%20%7B%20x%3A%200%20%7D%3B%0A%2F%2F%20None%20of%20these%20lines%20of%20code%20are%20errors%0Aobj.foo()%3B%0Aobj()%3B%0Aobj.bar%20%3D%20100%3B%0Aobj%20%3D%20%22hello%22%3B%0Aconst%20n%3A%20number%20%3D%20obj%3B">Try</a></pre></p>
+<span class="tm-vr">obj</span>.<span class="tm-mth">foo</span>();
+<span class="tm-mth">obj</span>();
+<span class="tm-vr">obj</span>.<span class="tm-vr">bar</span> = <span class="tm-num">100</span>;
+<span class="tm-vr">obj</span> = <span class="tm-str">"hello"</span>;
+<span class="tm-kw">const</span> <span class="tm-vr">n</span>: <span class="tm-typ">number</span> = <span class="tm-vr">obj</span>;<a class="playground-link" href="https://www.typescriptlang.org/play/#src=let%20obj%3A%20any%20%3D%20%7B%20x%3A%200%20%7D%3B%0A%2F%2F%20None%20of%20these%20lines%20of%20code%20are%20errors%0Aobj.foo()%3B%0Aobj()%3B%0Aobj.bar%20%3D%20100%3B%0Aobj%20%3D%20%22hello%22%3B%0Aconst%20n%3A%20number%20%3D%20obj%3B">Try</a></pre></p>
 <p>The <code>any</code> type is useful when you don't want to write out a long type just to convince TypeScript that a particular line of code is okay.</p>
 <h3 id="noimplicitany"><a href="#noimplicitany"><code>noImplicitAny</code></h3></a>
 <p>When a type isn't specified and can't be inferred from context, TypeScript will typically default to <code>any</code>.
@@ -62,7 +62,7 @@ Because <code>any</code> values don't benefit from type-checking, it's usually d
 The compiler flag <code>noImplicitAny</code> will cause any <em>implicit</em> <code>any</code> to be flagged as an error.</p>
 <h2 id="type-annotations-on-variables"><a href="#type-annotations-on-variables">Type Annotations on Variables</h2></a>
 <p>When you declare a variable using <code>const</code>, <code>var</code>, or <code>let</code>, you can optionally add a type annotation to explicitly specify the type of the variable:</p>
-<p><pre class="typescript-code"><span class="tm-kw">let</span><span class="tm-def"> </span><span class="tm-vr">myName</span><span class="highlight"><span class="highlight-content"></span><span class="highlight-description">Type annotation</span><span class="tm-def">: </span><span class="tm-typ">string</span></span><span class="tm-def"> = </span><span class="tm-str">"Alice"</span><span class="tm-def">;</span></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">let</span> <span class="tm-vr">myName</span><span class="highlight"><span class="highlight-content"></span><span class="highlight-description">Type annotation</span>: <span class="tm-typ">string</span></span> = <span class="tm-str">"Alice"</span>;</pre></p>
 <blockquote>
   <p>TypeScript doesn't use "types on the left"-style declarations like <code>int x = 0;</code>
   Type annotations will always go <em>after</em> the thing being typed.</p>
@@ -71,7 +71,7 @@ The compiler flag <code>noImplicitAny</code> will cause any <em>implicit</em> <c
 Wherever possible, TypeScript tries to automatically <em>infer</em> the types in your code.
 For example, the type of a variable is inferred based on the type of its initializer:</p>
 <p><pre class="typescript-code"><span class="tm-cmt">// No type annotation needed -- 'myName' inferred as type 'string'</span>
-<span class="tm-kw">let</span><span class="tm-def"> </span><span class="tm-vr">myName</span><span class="tm-def"> = </span><span class="tm-str">"Alice"</span><span class="tm-def">;</span></pre></p>
+<span class="tm-kw">let</span> <span class="tm-vr">myName</span> = <span class="tm-str">"Alice"</span>;</pre></p>
 <p>For the most part you don't need to explicitly learn the rules of inference.
 If you're starting out, try using fewer type annotations than you think - you might be surprised how few you need for TypeScript to fully understand what's going on.</p>
 <h2 id="functions"><a href="#functions">Functions</h2></a>
@@ -81,19 +81,19 @@ TypeScript allows you to specify the types of both the input and output values o
 <p>When you declare a function, you can add type annotations after each parameter to declare what kinds of parameters the function accepts.
 Parameter type annotations go after the parameter name:</p>
 <p><pre class="typescript-code"><span class="tm-cmt">// Parameter type annotation</span>
-<span class="tm-kw">function</span><span class="tm-def"> </span><span class="tm-mth">greet</span><span class="tm-def">(</span><span class="tm-vr">name</span><span class="highlight"><span class="highlight-content"></span><span class="highlight-description"></span><span class="tm-def">: </span><span class="tm-typ">string</span></span><span class="tm-def">) {</span>
-<span class="tm-def">    </span><span class="tm-typ">console</span><span class="tm-def">.</span><span class="tm-mth">log</span><span class="tm-def">(</span><span class="tm-str">"Hello, "</span><span class="tm-def"> + </span><span class="tm-vr">name</span><span class="tm-def">.</span><span class="tm-mth">toUpperCase</span><span class="tm-def">() + </span><span class="tm-str">"!!"</span><span class="tm-def">);</span>
-<span class="tm-def">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20Parameter%20type%20annotation%0Afunction%20greet(name%3A%20string)%20%7B%0A%20%20%20%20console.log(%22Hello%2C%20%22%20%2B%20name.toUpperCase()%20%2B%20%22!!%22)%3B%0A%7D">Try</a></pre></p>
+<span class="tm-kw">function</span> <span class="tm-mth">greet</span>(<span class="tm-vr">name</span><span class="highlight"><span class="highlight-content"></span><span class="highlight-description"></span>: <span class="tm-typ">string</span></span>) {
+    <span class="tm-typ">console</span>.<span class="tm-mth">log</span>(<span class="tm-str">"Hello, "</span> + <span class="tm-vr">name</span>.<span class="tm-mth">toUpperCase</span>() + <span class="tm-str">"!!"</span>);
+}<a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20Parameter%20type%20annotation%0Afunction%20greet(name%3A%20string)%20%7B%0A%20%20%20%20console.log(%22Hello%2C%20%22%20%2B%20name.toUpperCase()%20%2B%20%22!!%22)%3B%0A%7D">Try</a></pre></p>
 <p>When a parameter has a type annotation, calls to that function will be validated:</p>
 <p><pre class="typescript-code">
 <span class="tm-cmt">// Would be a runtime error if executed!</span>
-<span class="tm-mth">greet</span><span class="tm-def">(</span><span class="error"><span class="error-highlight"></span><span class="tm-num">42</span></span><span class="tm-def">);</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Argument of type '42' is not assignable to parameter of type 'string'.</div></div></pre></p>
+<span class="tm-mth">greet</span>(<span class="error" tabindex="0" aria-describedby="errLabel-2345-97-2"><span class="error-highlight"></span><span class="tm-num">42</span><span id="errLabel-2345-97-2" role="tooltip" class="error-tooltip">Argument of type '42' is not assignable to parameter of type 'string'.</span></span>);<hr class="error-divider"><div class="listed-error"><div class="error-line">Argument of type '42' is not assignable to parameter of type 'string'.</div></div></pre></p>
 <h3 id="return-type-annotations"><a href="#return-type-annotations">Return Type Annotations</h3></a>
 <p>You can also add return type annotations.
 Return type annotations appear after the parameter list:</p>
-<p><pre class="typescript-code"><span class="tm-kw">function</span><span class="tm-def"> </span><span class="tm-mth">getFavoriteNumber</span><span class="tm-def">()<span class="highlight"><span class="highlight-content"></span><span class="highlight-description"></span>:</span><span class="tm-typ"> number</span> </span><span class="tm-def">{</span>
-<span class="tm-def">    </span><span class="tm-kw">return</span><span class="tm-def"> </span><span class="tm-num">26</span><span class="tm-def">;</span>
-<span class="tm-def">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20getFavoriteNumber()%3A%20number%20%7B%0A%20%20%20%20return%2026%3B%0A%7D">Try</a></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">function</span> <span class="tm-mth">getFavoriteNumber</span>()<span class="highlight"><span class="highlight-content"></span><span class="highlight-description"></span>:<span class="tm-typ"> number</span> </span>{
+    <span class="tm-kw">return</span> <span class="tm-num">26</span>;
+}<a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20getFavoriteNumber()%3A%20number%20%7B%0A%20%20%20%20return%2026%3B%0A%7D">Try</a></pre></p>
 <p>Much like variable type annotations, you usually don't need a return type annotation because TypeScript will infer the function's return type based on its <code>return</code> statements.
 The type annotation in the above example doesn't change anything.
 Some codebases will explicitly specify a return type for documentation purposes, to prevent accidental changes, or just for personal preference.</p>
@@ -102,10 +102,10 @@ Some codebases will explicitly specify a return type for documentation purposes,
 When a function expression appears in a place where TypeScript can determine how it's going to be called, the parameters of that function are automatically given types.</p>
 <p>Here's an example:</p>
 <p><pre class="typescript-code"><span class="tm-cmt">// No type annotations here, but TypeScript can spot the bug</span>
-<span class="tm-kw">const</span><span class="tm-def"> </span><span class="tm-vr">names</span><span class="tm-def"> = [</span><span class="tm-str">"Alice"</span><span class="tm-def">, </span><span class="tm-str">"Bob"</span><span class="tm-def">, </span><span class="tm-str">"Eve"</span><span class="tm-def">];</span>
-<span class="tm-vr">names</span><span class="tm-def">.</span><span class="tm-mth">forEach</span><span class="tm-def">(</span><span class="tm-kw">function</span><span class="tm-def"> (</span><span class="tm-vr">s</span><span class="tm-def">) {</span>
-<span class="tm-def">    </span><span class="tm-typ">console</span><span class="tm-def">.</span><span class="tm-mth">log</span><span class="tm-def">(</span><span class="tm-vr">s</span><span class="tm-def">.</span><span class="error"><span class="error-highlight"></span><span class="tm-mth">toUppercase</span></span><span class="tm-def">());</span>
-<span class="tm-def">});</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Property 'toUppercase' does not exist on type 'string'. Did you mean 'toUpperCase'?</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20No%20type%20annotations%20here%2C%20but%20TypeScript%20can%20spot%20the%20bug%0Aconst%20names%20%3D%20%5B%22Alice%22%2C%20%22Bob%22%2C%20%22Eve%22%5D%3B%0Anames.forEach(function%20(s)%20%7B%0A%20%20%20%20console.log(s.toUppercase())%3B%0A%7D)%3B">Try</a></pre></p>
+<span class="tm-kw">const</span> <span class="tm-vr">names</span> = [<span class="tm-str">"Alice"</span>, <span class="tm-str">"Bob"</span>, <span class="tm-str">"Eve"</span>];
+<span class="tm-vr">names</span>.<span class="tm-mth">forEach</span>(<span class="tm-kw">function</span> (<span class="tm-vr">s</span>) {
+    <span class="tm-typ">console</span>.<span class="tm-mth">log</span>(<span class="tm-vr">s</span>.<span class="error" tabindex="0" aria-describedby="errLabel-2551-147-11"><span class="error-highlight"></span><span class="tm-mth">toUppercase</span><span id="errLabel-2551-147-11" role="tooltip" class="error-tooltip">Property 'toUppercase' does not exist on type 'string'. Did you mean 'toUpperCase'?</span></span>());
+});<hr class="error-divider"><div class="listed-error"><div class="error-line">Property 'toUppercase' does not exist on type 'string'. Did you mean 'toUpperCase'?</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20No%20type%20annotations%20here%2C%20but%20TypeScript%20can%20spot%20the%20bug%0Aconst%20names%20%3D%20%5B%22Alice%22%2C%20%22Bob%22%2C%20%22Eve%22%5D%3B%0Anames.forEach(function%20(s)%20%7B%0A%20%20%20%20console.log(s.toUppercase())%3B%0A%7D)%3B">Try</a></pre></p>
 <p>Even though the parameter <code>s</code> didn't have a type annotation, TypeScript used the types of the <code>forEach</code> function, along with the inferred type of the array, to determine the type <code>s</code> will have.</p>
 <p>This process is called <em>contextual typing</em> because the <em>context</em> that the function occurred in informed what type it should have.
 Similar to the inference rules, you don't need to explicitly learn how this happens, but understanding that it <em>does</em> happen can help you notice when type annotations aren't needed.
@@ -116,11 +116,11 @@ This refers to any JavaScript value with properties, which is almost all of them
 To define an object type, we simply list its properties and their types.</p>
 <p>For example, here's a function that takes a point-like object:</p>
 <p><pre class="typescript-code"><span class="tm-cmt">// The parameter's type annotation is an object type</span>
-<span class="tm-kw">function</span><span class="tm-def"> </span><span class="tm-mth">printCoord</span><span class="tm-def">(</span><span class="tm-vr">pt</span><span class="tm-def">: <span class="highlight"><span class="highlight-content"></span><span class="highlight-description"></span>{ </span><span class="tm-vr">x</span><span class="tm-def">: </span><span class="tm-typ">number</span><span class="tm-def">, </span><span class="tm-vr">y</span><span class="tm-def">: </span><span class="tm-typ">number</span><span class="tm-def"> }</span>) {</span>
-<span class="tm-def">  </span><span class="tm-typ">console</span><span class="tm-def">.</span><span class="tm-mth">log</span><span class="tm-def">(</span><span class="tm-str">"The coordinate's x value is "</span><span class="tm-def"> + </span><span class="tm-vr">pt</span><span class="tm-def">.</span><span class="tm-vr">x</span><span class="tm-def">);</span>
-<span class="tm-def">  </span><span class="tm-typ">console</span><span class="tm-def">.</span><span class="tm-mth">log</span><span class="tm-def">(</span><span class="tm-str">"The coordinate's y value is "</span><span class="tm-def"> + </span><span class="tm-vr">pt</span><span class="tm-def">.</span><span class="tm-vr">y</span><span class="tm-def">);</span>
-<span class="tm-def">}</span>
-<span class="tm-mth">printCoord</span><span class="tm-def">({ </span><span class="tm-vr">x:</span><span class="tm-def"> </span><span class="tm-num">3</span><span class="tm-def">, </span><span class="tm-vr">y:</span><span class="tm-def"> </span><span class="tm-num">7</span><span class="tm-def"> });</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20The%20parameter's%20type%20annotation%20is%20an%20object%20type%0Afunction%20printCoord(pt%3A%20%7B%20x%3A%20number%2C%20y%3A%20number%20%7D)%20%7B%0A%20%20console.log(%22The%20coordinate's%20x%20value%20is%20%22%20%2B%20pt.x)%3B%0A%20%20console.log(%22The%20coordinate's%20y%20value%20is%20%22%20%2B%20pt.y)%3B%0A%7D%0AprintCoord(%7B%20x%3A%203%2C%20y%3A%207%20%7D)%3B">Try</a></pre></p>
+<span class="tm-kw">function</span> <span class="tm-mth">printCoord</span>(<span class="tm-vr">pt</span>: <span class="highlight"><span class="highlight-content"></span><span class="highlight-description"></span>{ <span class="tm-vr">x</span>: <span class="tm-typ">number</span>, <span class="tm-vr">y</span>: <span class="tm-typ">number</span> }</span>) {
+  <span class="tm-typ">console</span>.<span class="tm-mth">log</span>(<span class="tm-str">"The coordinate's x value is "</span> + <span class="tm-vr">pt</span>.<span class="tm-vr">x</span>);
+  <span class="tm-typ">console</span>.<span class="tm-mth">log</span>(<span class="tm-str">"The coordinate's y value is "</span> + <span class="tm-vr">pt</span>.<span class="tm-vr">y</span>);
+}
+<span class="tm-mth">printCoord</span>({ <span class="tm-vr">x:</span> <span class="tm-num">3</span>, <span class="tm-vr">y:</span> <span class="tm-num">7</span> });<a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20The%20parameter's%20type%20annotation%20is%20an%20object%20type%0Afunction%20printCoord(pt%3A%20%7B%20x%3A%20number%2C%20y%3A%20number%20%7D)%20%7B%0A%20%20console.log(%22The%20coordinate's%20x%20value%20is%20%22%20%2B%20pt.x)%3B%0A%20%20console.log(%22The%20coordinate's%20y%20value%20is%20%22%20%2B%20pt.y)%3B%0A%7D%0AprintCoord(%7B%20x%3A%203%2C%20y%3A%207%20%7D)%3B">Try</a></pre></p>
 <p>Here, we annotated the parameter with a type with two properties - <code>x</code> and <code>y</code> - which are both of type <code>number</code>.
 You can use <code>,</code> or <code>;</code> to separate the properties, and the last separator is optional either way.</p>
 <p>The type part of each property is also optional.
@@ -128,22 +128,22 @@ If you don't specify a type, it will be assumed to be <code>any</code>.</p>
 <h3 id="optional-properties"><a href="#optional-properties">Optional Properties</h3></a>
 <p>Object types can also specify that some or all of their properties are <em>optional</em>.
 To do this, add a <code>?</code> after the property name:</p>
-<p><pre class="typescript-code"><span class="tm-kw">function</span><span class="tm-def"> </span><span class="tm-mth">printName</span><span class="tm-def">(</span><span class="tm-vr">obj</span><span class="tm-def">: { </span><span class="tm-vr">first</span><span class="tm-def">: </span><span class="tm-typ">string</span><span class="tm-def">, </span><span class="tm-vr">last</span><span class="tm-def">?: </span><span class="tm-typ">string</span><span class="tm-def">}) {</span>
-<span class="tm-def">  </span><span class="tm-cmt">// ...</span>
-<span class="tm-def">}</span>
+<p><pre class="typescript-code"><span class="tm-kw">function</span> <span class="tm-mth">printName</span>(<span class="tm-vr">obj</span>: { <span class="tm-vr">first</span>: <span class="tm-typ">string</span>, <span class="tm-vr">last</span>?: <span class="tm-typ">string</span>}) {
+  <span class="tm-cmt">// ...</span>
+}
 <span class="tm-cmt">// Both OK</span>
-<span class="tm-mth">printName</span><span class="tm-def">({ </span><span class="tm-vr">first:</span><span class="tm-def"> </span><span class="tm-str">"Bob"</span><span class="tm-def"> });</span>
-<span class="tm-mth">printName</span><span class="tm-def">({ </span><span class="tm-vr">first:</span><span class="tm-def"> </span><span class="tm-str">"Alice"</span><span class="tm-def">, </span><span class="tm-vr">last:</span><span class="tm-def"> </span><span class="tm-str">"Alisson"</span><span class="tm-def"> });</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20printName(obj%3A%20%7B%20first%3A%20string%2C%20last%3F%3A%20string%7D)%20%7B%0A%20%20%2F%2F%20...%0A%7D%0A%2F%2F%20Both%20OK%0AprintName(%7B%20first%3A%20%22Bob%22%20%7D)%3B%0AprintName(%7B%20first%3A%20%22Alice%22%2C%20last%3A%20%22Alisson%22%20%7D)%3B">Try</a></pre></p>
+<span class="tm-mth">printName</span>({ <span class="tm-vr">first:</span> <span class="tm-str">"Bob"</span> });
+<span class="tm-mth">printName</span>({ <span class="tm-vr">first:</span> <span class="tm-str">"Alice"</span>, <span class="tm-vr">last:</span> <span class="tm-str">"Alisson"</span> });<a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20printName(obj%3A%20%7B%20first%3A%20string%2C%20last%3F%3A%20string%7D)%20%7B%0A%20%20%2F%2F%20...%0A%7D%0A%2F%2F%20Both%20OK%0AprintName(%7B%20first%3A%20%22Bob%22%20%7D)%3B%0AprintName(%7B%20first%3A%20%22Alice%22%2C%20last%3A%20%22Alisson%22%20%7D)%3B">Try</a></pre></p>
 <p>In JavaScript, if you access a property that doesn't exist, you'll get the value <code>undefined</code> rather than a runtime error.
 Because of this, when you <em>read</em> from an optional property, you'll have to check for <code>undefined</code> before using it.</p>
-<p><pre class="typescript-code"><span class="tm-kw">function</span><span class="tm-def"> </span><span class="tm-mth">printName</span><span class="tm-def">(</span><span class="tm-vr">obj</span><span class="tm-def">: { </span><span class="tm-vr">first</span><span class="tm-def">: </span><span class="tm-typ">string</span><span class="tm-def">, </span><span class="tm-vr">last</span><span class="tm-def">?: </span><span class="tm-typ">string</span><span class="tm-def">}) {</span>
-<span class="tm-def">  </span><span class="tm-cmt">// Error - might crash if 'obj.last' wasn't provided!</span>
-<span class="tm-def">  </span><span class="tm-typ">console</span><span class="tm-def">.</span><span class="tm-mth">log</span><span class="tm-def">(</span><span class="error"><span class="error-highlight"></span><span class="tm-vr">obj</span><span class="tm-def">.</span><span class="tm-vr">last</span></span><span class="tm-def">.</span><span class="tm-mth">toUpperCase</span><span class="tm-def">());</span>
-<span class="tm-def">  </span><span class="tm-kw">if</span><span class="tm-def"> (</span><span class="tm-vr">obj</span><span class="tm-def">.</span><span class="tm-vr">last</span><span class="tm-def"> !== </span><span class="tm-kw">undefined</span><span class="tm-def">) {</span>
-<span class="tm-def">    </span><span class="tm-cmt">// OK</span>
-<span class="tm-def">    </span><span class="tm-typ">console</span><span class="tm-def">.</span><span class="tm-mth">log</span><span class="tm-def">(</span><span class="tm-vr">obj</span><span class="tm-def">.</span><span class="tm-vr">last</span><span class="tm-def">.</span><span class="tm-mth">toUpperCase</span><span class="tm-def">());</span>
-<span class="tm-def">  }</span>
-<span class="tm-def">}</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Object is possibly 'undefined'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20printName(obj%3A%20%7B%20first%3A%20string%2C%20last%3F%3A%20string%7D)%20%7B%0A%20%20%2F%2F%20Error%20-%20might%20crash%20if%20'obj.last'%20wasn't%20provided!%0A%20%20console.log(obj.last.toUpperCase())%3B%0A%20%20if%20(obj.last%20!%3D%3D%20undefined)%20%7B%0A%20%20%20%20%2F%2F%20OK%0A%20%20%20%20console.log(obj.last.toUpperCase())%3B%0A%20%20%7D%0A%7D">Try</a></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">function</span> <span class="tm-mth">printName</span>(<span class="tm-vr">obj</span>: { <span class="tm-vr">first</span>: <span class="tm-typ">string</span>, <span class="tm-vr">last</span>?: <span class="tm-typ">string</span>}) {
+  <span class="tm-cmt">// Error - might crash if 'obj.last' wasn't provided!</span>
+  <span class="tm-typ">console</span>.<span class="tm-mth">log</span>(<span class="error" tabindex="0" aria-describedby="errLabel-2532-129-8"><span class="error-highlight"></span><span class="tm-vr">obj</span>.<span class="tm-vr">last</span><span id="errLabel-2532-129-8" role="tooltip" class="error-tooltip">Object is possibly 'undefined'.</span></span>.<span class="tm-mth">toUpperCase</span>());
+  <span class="tm-kw">if</span> (<span class="tm-vr">obj</span>.<span class="tm-vr">last</span> !== <span class="tm-kw">undefined</span>) {
+    <span class="tm-cmt">// OK</span>
+    <span class="tm-typ">console</span>.<span class="tm-mth">log</span>(<span class="tm-vr">obj</span>.<span class="tm-vr">last</span>.<span class="tm-mth">toUpperCase</span>());
+  }
+}<hr class="error-divider"><div class="listed-error"><div class="error-line">Object is possibly 'undefined'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20printName(obj%3A%20%7B%20first%3A%20string%2C%20last%3F%3A%20string%7D)%20%7B%0A%20%20%2F%2F%20Error%20-%20might%20crash%20if%20'obj.last'%20wasn't%20provided!%0A%20%20console.log(obj.last.toUpperCase())%3B%0A%20%20if%20(obj.last%20!%3D%3D%20undefined)%20%7B%0A%20%20%20%20%2F%2F%20OK%0A%20%20%20%20console.log(obj.last.toUpperCase())%3B%0A%20%20%7D%0A%7D">Try</a></pre></p>
 <h2 id="union-types"><a href="#union-types">Union Types</h2></a>
 <p>TypeScript's type system allows you to build new types out of existing ones using a large variety of operators.
 Now that we know how to write a few types, it's time to start <em>combining</em> them in interesting ways.</p>
@@ -152,53 +152,55 @@ Now that we know how to write a few types, it's time to start <em>combining</em>
 A union type is type formed from two or more other types, representing values that may be <em>any one</em> of those types.
 We refer to each of these types as the union's <em>members</em>.</p>
 <p>Let's write a function that can operate on strings or numbers:</p>
-<p><pre class="typescript-code"><span class="tm-kw">function</span><span class="tm-def"> </span><span class="tm-mth">printId</span><span class="tm-def">(</span><span class="tm-vr">id</span><span class="tm-def">: </span><span class="tm-typ">number</span><span class="tm-def"> | </span><span class="tm-typ">string</span><span class="tm-def">) {</span>
-<span class="tm-def">  </span><span class="tm-typ">console</span><span class="tm-def">.</span><span class="tm-mth">log</span><span class="tm-def">(</span><span class="tm-str">"Your ID is: "</span><span class="tm-def"> + </span><span class="tm-vr">id</span><span class="tm-def">);</span>
-<span class="tm-def">}</span>
+<p><pre class="typescript-code"><span class="tm-kw">function</span> <span class="tm-mth">printId</span>(<span class="tm-vr">id</span>: <span class="tm-typ">number</span> | <span class="tm-typ">string</span>) {
+  <span class="tm-typ">console</span>.<span class="tm-mth">log</span>(<span class="tm-str">"Your ID is: "</span> + <span class="tm-vr">id</span>);
+}
 <span class="tm-cmt">// OK</span>
-<span class="tm-mth">printId</span><span class="tm-def">(</span><span class="tm-num">101</span><span class="tm-def">);</span>
+<span class="tm-mth">printId</span>(<span class="tm-num">101</span>);
 <span class="tm-cmt">// OK</span>
-<span class="tm-mth">printId</span><span class="tm-def">(</span><span class="tm-str">"202"</span><span class="tm-def">);</span>
+<span class="tm-mth">printId</span>(<span class="tm-str">"202"</span>);
 <span class="tm-cmt">// Error</span>
-<span class="tm-mth">printId</span><span class="tm-def">(<span class="error"><span class="error-highlight"></span>[</span><span class="tm-num">1</span><span class="tm-def">, </span><span class="tm-num">2</span><span class="tm-def">]</span>);</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Argument of type 'number[]' is not assignable to parameter of type 'string | number'.</div><div class="error-line"><div class="indent"></div>Type 'number[]' is not assignable to type 'string'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20printId(id%3A%20number%20%7C%20string)%20%7B%0A%20%20console.log(%22Your%20ID%20is%3A%20%22%20%2B%20id)%3B%0A%7D%0A%2F%2F%20OK%0AprintId(101)%3B%0A%2F%2F%20OK%0AprintId(%22202%22)%3B%0A%2F%2F%20Error%0AprintId(%5B1%2C%202%5D)%3B">Try</a></pre></p>
+<span class="tm-mth">printId</span>(<span class="error" tabindex="0" aria-describedby="errLabel-2345-137-6"><span class="error-highlight"></span>[<span class="tm-num">1</span>, <span class="tm-num">2</span>]<span id="errLabel-2345-137-6" role="tooltip" class="error-tooltip">Argument of type 'number[]' is not assignable to parameter of type 'string | number'.
+  Type 'number[]' is not assignable to type 'string'.</span></span>);<hr class="error-divider"><div class="listed-error"><div class="error-line">Argument of type 'number[]' is not assignable to parameter of type 'string | number'.</div><div class="error-line"><div class="indent"></div>Type 'number[]' is not assignable to type 'string'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20printId(id%3A%20number%20%7C%20string)%20%7B%0A%20%20console.log(%22Your%20ID%20is%3A%20%22%20%2B%20id)%3B%0A%7D%0A%2F%2F%20OK%0AprintId(101)%3B%0A%2F%2F%20OK%0AprintId(%22202%22)%3B%0A%2F%2F%20Error%0AprintId(%5B1%2C%202%5D)%3B">Try</a></pre></p>
 <h3 id="working-with-union-types"><a href="#working-with-union-types">Working with Union Types</h3></a>
 <p>It's easy to <em>provide</em> a value matching a union type - simply provide a type matching any of the union's members.
 If you <em>have</em> a value of a union type, how do you work with it?</p>
 <p>TypeScript will only allow you to do things with the union if that thing is valid for <em>every</em> member of the union.
 For example, if you have the union <code>string | number</code>, you can't use methods that are only available on <code>string</code>:</p>
-<p><pre class="typescript-code"><span class="tm-kw">function</span><span class="tm-def"> </span><span class="tm-mth">printId</span><span class="tm-def">(</span><span class="tm-vr">id</span><span class="tm-def">: </span><span class="tm-typ">number</span><span class="tm-def"> | </span><span class="tm-typ">string</span><span class="tm-def">) {</span>
-<span class="tm-def">  </span><span class="tm-typ">console</span><span class="tm-def">.</span><span class="tm-mth">log</span><span class="tm-def">(</span><span class="tm-vr">id</span><span class="tm-def">.</span><span class="error"><span class="error-highlight"></span><span class="tm-mth">toUpperCase</span></span><span class="tm-def">());</span>
-<span class="tm-def">}</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Property 'toUpperCase' does not exist on type 'string | number'.</div><div class="error-line"><div class="indent"></div>Property 'toUpperCase' does not exist on type 'number'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20printId(id%3A%20number%20%7C%20string)%20%7B%0A%20%20console.log(id.toUpperCase())%3B%0A%7D">Try</a></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">function</span> <span class="tm-mth">printId</span>(<span class="tm-vr">id</span>: <span class="tm-typ">number</span> | <span class="tm-typ">string</span>) {
+  <span class="tm-typ">console</span>.<span class="tm-mth">log</span>(<span class="tm-vr">id</span>.<span class="error" tabindex="0" aria-describedby="errLabel-2339-57-11"><span class="error-highlight"></span><span class="tm-mth">toUpperCase</span><span id="errLabel-2339-57-11" role="tooltip" class="error-tooltip">Property 'toUpperCase' does not exist on type 'string | number'.
+  Property 'toUpperCase' does not exist on type 'number'.</span></span>());
+}<hr class="error-divider"><div class="listed-error"><div class="error-line">Property 'toUpperCase' does not exist on type 'string | number'.</div><div class="error-line"><div class="indent"></div>Property 'toUpperCase' does not exist on type 'number'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20printId(id%3A%20number%20%7C%20string)%20%7B%0A%20%20console.log(id.toUpperCase())%3B%0A%7D">Try</a></pre></p>
 <p>The solution is to <em>narrow</em> the union with code, the same as you would in JavaScript without type annotations.
 <em>Narrowing</em> occurs when TypeScript can deduce a more specific type for a value based on the structure of the code.</p>
 <p>For example, TypeScript knows that only a <code>string</code> value will have a <code>typeof</code> value <code>"string"</code>:</p>
-<p><pre class="typescript-code"><span class="tm-kw">function</span><span class="tm-def"> </span><span class="tm-mth">printId</span><span class="tm-def">(</span><span class="tm-vr">id</span><span class="tm-def">: </span><span class="tm-typ">number</span><span class="tm-def"> | </span><span class="tm-typ">string</span><span class="tm-def">) {</span>
-<span class="tm-def">  </span><span class="tm-kw">if</span><span class="tm-def"> (</span><span class="tm-kw">typeof</span><span class="tm-def"> </span><span class="tm-vr">id</span><span class="tm-def"> === </span><span class="tm-str">"string"</span><span class="tm-def">) {</span>
-<span class="tm-def">    </span><span class="tm-cmt">// In this branch, id is of type 'string'</span>
-<span class="tm-def">    </span><span class="tm-typ">console</span><span class="tm-def">.</span><span class="tm-mth">log</span><span class="tm-def">(</span><span class="tm-vr">id</span><span class="tm-def">.</span><span class="tm-mth">toUpperCase</span><span class="tm-def">());</span>
-<span class="tm-def">  } </span><span class="tm-kw">else</span><span class="tm-def"> {</span>
-<span class="tm-def">    </span><span class="tm-cmt">// Here, id is of type 'number'</span>
-<span class="tm-def">    </span><span class="tm-typ">console</span><span class="tm-def">.</span><span class="tm-mth">log</span><span class="tm-def">(</span><span class="tm-vr">id</span><span class="tm-def">);</span>
-<span class="tm-def">  }</span>
-<span class="tm-def">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20printId(id%3A%20number%20%7C%20string)%20%7B%0A%20%20if%20(typeof%20id%20%3D%3D%3D%20%22string%22)%20%7B%0A%20%20%20%20%2F%2F%20In%20this%20branch%2C%20id%20is%20of%20type%20'string'%0A%20%20%20%20console.log(id.toUpperCase())%3B%0A%20%20%7D%20else%20%7B%0A%20%20%20%20%2F%2F%20Here%2C%20id%20is%20of%20type%20'number'%0A%20%20%20%20console.log(id)%3B%0A%20%20%7D%0A%7D">Try</a></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">function</span> <span class="tm-mth">printId</span>(<span class="tm-vr">id</span>: <span class="tm-typ">number</span> | <span class="tm-typ">string</span>) {
+  <span class="tm-kw">if</span> (<span class="tm-kw">typeof</span> <span class="tm-vr">id</span> === <span class="tm-str">"string"</span>) {
+    <span class="tm-cmt">// In this branch, id is of type 'string'</span>
+    <span class="tm-typ">console</span>.<span class="tm-mth">log</span>(<span class="tm-vr">id</span>.<span class="tm-mth">toUpperCase</span>());
+  } <span class="tm-kw">else</span> {
+    <span class="tm-cmt">// Here, id is of type 'number'</span>
+    <span class="tm-typ">console</span>.<span class="tm-mth">log</span>(<span class="tm-vr">id</span>);
+  }
+}<a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20printId(id%3A%20number%20%7C%20string)%20%7B%0A%20%20if%20(typeof%20id%20%3D%3D%3D%20%22string%22)%20%7B%0A%20%20%20%20%2F%2F%20In%20this%20branch%2C%20id%20is%20of%20type%20'string'%0A%20%20%20%20console.log(id.toUpperCase())%3B%0A%20%20%7D%20else%20%7B%0A%20%20%20%20%2F%2F%20Here%2C%20id%20is%20of%20type%20'number'%0A%20%20%20%20console.log(id)%3B%0A%20%20%7D%0A%7D">Try</a></pre></p>
 <p>Another example is to use a function like <code>Array.isArray</code>:</p>
-<p><pre class="typescript-code"><span class="tm-kw">function</span><span class="tm-def"> </span><span class="tm-mth">welcomePeople</span><span class="tm-def">(</span><span class="tm-vr">x</span><span class="tm-def">: </span><span class="tm-typ">string</span><span class="tm-def">[] | </span><span class="tm-typ">string</span><span class="tm-def">) {</span>
-<span class="tm-def">  </span><span class="tm-kw">if</span><span class="tm-def"> (</span><span class="tm-typ">Array</span><span class="tm-def">.</span><span class="tm-mth">isArray</span><span class="tm-def">(</span><span class="tm-vr">x</span><span class="tm-def">)) {</span>
-<span class="tm-def">    </span><span class="tm-cmt">// Here: 'x' is 'string[]'</span>
-<span class="tm-def">    </span><span class="tm-typ">console</span><span class="tm-def">.</span><span class="tm-mth">log</span><span class="tm-def">(</span><span class="tm-str">"Hello, "</span><span class="tm-def"> + </span><span class="tm-vr">x</span><span class="tm-def">.</span><span class="tm-mth">join</span><span class="tm-def">(</span><span class="tm-str">" and "</span><span class="tm-def">));</span>
-<span class="tm-def">  } </span><span class="tm-kw">else</span><span class="tm-def"> {</span>
-<span class="tm-def">    </span><span class="tm-cmt">// Here: 'x' is 'string'</span>
-<span class="tm-def">    </span><span class="tm-typ">console</span><span class="tm-def">.</span><span class="tm-mth">log</span><span class="tm-def">(</span><span class="tm-str">"Welcome lone traveler "</span><span class="tm-def"> + </span><span class="tm-vr">x</span><span class="tm-def">);</span>
-<span class="tm-def">  }</span>
-<span class="tm-def">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20welcomePeople(x%3A%20string%5B%5D%20%7C%20string)%20%7B%0A%20%20if%20(Array.isArray(x))%20%7B%0A%20%20%20%20%2F%2F%20Here%3A%20'x'%20is%20'string%5B%5D'%0A%20%20%20%20console.log(%22Hello%2C%20%22%20%2B%20x.join(%22%20and%20%22))%3B%0A%20%20%7D%20else%20%7B%0A%20%20%20%20%2F%2F%20Here%3A%20'x'%20is%20'string'%0A%20%20%20%20console.log(%22Welcome%20lone%20traveler%20%22%20%2B%20x)%3B%0A%20%20%7D%0A%7D">Try</a></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">function</span> <span class="tm-mth">welcomePeople</span>(<span class="tm-vr">x</span>: <span class="tm-typ">string</span>[] | <span class="tm-typ">string</span>) {
+  <span class="tm-kw">if</span> (<span class="tm-typ">Array</span>.<span class="tm-mth">isArray</span>(<span class="tm-vr">x</span>)) {
+    <span class="tm-cmt">// Here: 'x' is 'string[]'</span>
+    <span class="tm-typ">console</span>.<span class="tm-mth">log</span>(<span class="tm-str">"Hello, "</span> + <span class="tm-vr">x</span>.<span class="tm-mth">join</span>(<span class="tm-str">" and "</span>));
+  } <span class="tm-kw">else</span> {
+    <span class="tm-cmt">// Here: 'x' is 'string'</span>
+    <span class="tm-typ">console</span>.<span class="tm-mth">log</span>(<span class="tm-str">"Welcome lone traveler "</span> + <span class="tm-vr">x</span>);
+  }
+}<a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20welcomePeople(x%3A%20string%5B%5D%20%7C%20string)%20%7B%0A%20%20if%20(Array.isArray(x))%20%7B%0A%20%20%20%20%2F%2F%20Here%3A%20'x'%20is%20'string%5B%5D'%0A%20%20%20%20console.log(%22Hello%2C%20%22%20%2B%20x.join(%22%20and%20%22))%3B%0A%20%20%7D%20else%20%7B%0A%20%20%20%20%2F%2F%20Here%3A%20'x'%20is%20'string'%0A%20%20%20%20console.log(%22Welcome%20lone%20traveler%20%22%20%2B%20x)%3B%0A%20%20%7D%0A%7D">Try</a></pre></p>
 <p>Notice that in the <code>else</code> branch, we don't need to do anything special - if <code>x</code> wasn't a <code>string[]</code>, then it must have been a <code>string</code>.</p>
 <p>Sometimes you'll have a union where all the members have something in common.
 For example, both arrays and strings have a <code>slice</code> method.
 If every member in a union has a property in common, you can use that property without narrowing:</p>
 <p><pre class="typescript-code"><span class="tm-cmt">// Return type is inferred as number[] | string</span>
-<span class="tm-kw">function</span><span class="tm-def"> </span><span class="tm-mth">getFirstThree</span><span class="tm-def">(</span><span class="tm-vr">x</span><span class="tm-def">: </span><span class="tm-typ">number</span><span class="tm-def">[] | </span><span class="tm-typ">string</span><span class="tm-def">) {</span>
-<span class="tm-def">  </span><span class="tm-kw">return</span><span class="tm-def"> </span><span class="tm-vr">x</span><span class="tm-def">.</span><span class="tm-mth">slice</span><span class="tm-def">(</span><span class="tm-num">0</span><span class="tm-def">, </span><span class="tm-num">3</span><span class="tm-def">);</span>
-<span class="tm-def">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20Return%20type%20is%20inferred%20as%20number%5B%5D%20%7C%20string%0Afunction%20getFirstThree(x%3A%20number%5B%5D%20%7C%20string)%20%7B%0A%20%20return%20x.slice(0%2C%203)%3B%0A%7D">Try</a></pre></p>
+<span class="tm-kw">function</span> <span class="tm-mth">getFirstThree</span>(<span class="tm-vr">x</span>: <span class="tm-typ">number</span>[] | <span class="tm-typ">string</span>) {
+  <span class="tm-kw">return</span> <span class="tm-vr">x</span>.<span class="tm-mth">slice</span>(<span class="tm-num">0</span>, <span class="tm-num">3</span>);
+}<a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20Return%20type%20is%20inferred%20as%20number%5B%5D%20%7C%20string%0Afunction%20getFirstThree(x%3A%20number%5B%5D%20%7C%20string)%20%7B%0A%20%20return%20x.slice(0%2C%203)%3B%0A%7D">Try</a></pre></p>
 <blockquote>
   <p>It might be confusing that a <em>union</em> of types appears to have the <em>intersection</em> of those types' properties.
   This is not an accident - the name <em>union</em> comes from type theory.
@@ -211,43 +213,43 @@ If every member in a union has a property in common, you can use that property w
 This is convenient, but it's common to want to use the same type more than once and refer to it by a single name.</p>
 <p>A <em>type alias</em> is exactly that - a <em>name</em> for any <em>type</em>.
 The syntax for a type alias is:</p>
-<p><pre class="typescript-code"><span class="tm-kw">type</span><span class="tm-def"> </span><span class="tm-typ"><span class="typeAliasName">Point</span></span><span class="tm-def"> = {</span>
-<span class="tm-def">  </span><span class="tm-vr">x</span><span class="tm-def">: </span><span class="tm-typ">number</span><span class="tm-def">,</span>
-<span class="tm-def">  </span><span class="tm-vr">y</span><span class="tm-def">: </span><span class="tm-typ">number</span>
-<span class="tm-def">};</span>
+<p><pre class="typescript-code"><span class="tm-kw">type</span> <span class="tm-typ"><span class="typeAliasName">Point</span></span> = {
+  <span class="tm-vr">x</span>: <span class="tm-typ">number</span>,
+  <span class="tm-vr">y</span>: <span class="tm-typ">number</span>
+};
 
 <span class="tm-cmt">// Exactly the same as the earlier example</span>
-<span class="tm-kw">function</span><span class="tm-def"> </span><span class="tm-mth">printCoord</span><span class="tm-def">(</span><span class="tm-vr">pt</span><span class="tm-def">: </span><span class="tm-typ"><span class="typeAliasName">Point</span></span><span class="tm-def">) {</span>
-<span class="tm-def">  </span><span class="tm-typ">console</span><span class="tm-def">.</span><span class="tm-mth">log</span><span class="tm-def">(</span><span class="tm-str">"The coordinate's x value is "</span><span class="tm-def"> + </span><span class="tm-vr">pt</span><span class="tm-def">.</span><span class="tm-vr">x</span><span class="tm-def">);</span>
-<span class="tm-def">  </span><span class="tm-typ">console</span><span class="tm-def">.</span><span class="tm-mth">log</span><span class="tm-def">(</span><span class="tm-str">"The coordinate's y value is "</span><span class="tm-def"> + </span><span class="tm-vr">pt</span><span class="tm-def">.</span><span class="tm-vr">y</span><span class="tm-def">);</span>
-<span class="tm-def">}</span>
+<span class="tm-kw">function</span> <span class="tm-mth">printCoord</span>(<span class="tm-vr">pt</span>: <span class="tm-typ"><span class="typeAliasName">Point</span></span>) {
+  <span class="tm-typ">console</span>.<span class="tm-mth">log</span>(<span class="tm-str">"The coordinate's x value is "</span> + <span class="tm-vr">pt</span>.<span class="tm-vr">x</span>);
+  <span class="tm-typ">console</span>.<span class="tm-mth">log</span>(<span class="tm-str">"The coordinate's y value is "</span> + <span class="tm-vr">pt</span>.<span class="tm-vr">y</span>);
+}
 
-<span class="tm-mth">printCoord</span><span class="tm-def">({ </span><span class="tm-vr">x:</span><span class="tm-def"> </span><span class="tm-num">100</span><span class="tm-def">, </span><span class="tm-vr">y:</span><span class="tm-def"> </span><span class="tm-num">100</span><span class="tm-def"> });</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=type%20Point%20%3D%20%7B%0A%20%20x%3A%20number%2C%0A%20%20y%3A%20number%0A%7D%3B%0A%0A%2F%2F%20Exactly%20the%20same%20as%20the%20earlier%20example%0Afunction%20printCoord(pt%3A%20Point)%20%7B%0A%20%20console.log(%22The%20coordinate's%20x%20value%20is%20%22%20%2B%20pt.x)%3B%0A%20%20console.log(%22The%20coordinate's%20y%20value%20is%20%22%20%2B%20pt.y)%3B%0A%7D%0A%0AprintCoord(%7B%20x%3A%20100%2C%20y%3A%20100%20%7D)%3B">Try</a></pre></p>
+<span class="tm-mth">printCoord</span>({ <span class="tm-vr">x:</span> <span class="tm-num">100</span>, <span class="tm-vr">y:</span> <span class="tm-num">100</span> });<a class="playground-link" href="https://www.typescriptlang.org/play/#src=type%20Point%20%3D%20%7B%0A%20%20x%3A%20number%2C%0A%20%20y%3A%20number%0A%7D%3B%0A%0A%2F%2F%20Exactly%20the%20same%20as%20the%20earlier%20example%0Afunction%20printCoord(pt%3A%20Point)%20%7B%0A%20%20console.log(%22The%20coordinate's%20x%20value%20is%20%22%20%2B%20pt.x)%3B%0A%20%20console.log(%22The%20coordinate's%20y%20value%20is%20%22%20%2B%20pt.y)%3B%0A%7D%0A%0AprintCoord(%7B%20x%3A%20100%2C%20y%3A%20100%20%7D)%3B">Try</a></pre></p>
 <p>You can actually use a type alias to give a name to any type at all, not just an object type.
 For example, a type alias can name a union type:</p>
-<p><pre class="typescript-code"><span class="tm-kw">type</span><span class="tm-def"> </span><span class="tm-typ"><span class="typeAliasName">ID</span></span><span class="tm-def"> = </span><span class="tm-typ">number</span><span class="tm-def"> | </span><span class="tm-typ">string</span><span class="tm-def">;</span></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">type</span> <span class="tm-typ"><span class="typeAliasName">ID</span></span> = <span class="tm-typ">number</span> | <span class="tm-typ">string</span>;</pre></p>
 <p>Note that aliases are <em>only</em> aliases - you cannot use type aliases to create different/distinct "versions" of the same type.
 When you use the alias, it's exactly as if you had written the aliased type.
 In other words, this code might <em>look</em> illegal, but is OK according to TypeScript because both types are aliases for the same type:</p>
-<p><pre class="typescript-code"><span class="tm-kw">type</span><span class="tm-def"> </span><span class="tm-typ"><span class="typeAliasName">Age</span></span><span class="tm-def"> = </span><span class="tm-typ">number</span><span class="tm-def">;</span>
-<span class="tm-kw">type</span><span class="tm-def"> </span><span class="tm-typ"><span class="typeAliasName">Weight</span></span><span class="tm-def"> = </span><span class="tm-typ">number</span><span class="tm-def">;</span>
+<p><pre class="typescript-code"><span class="tm-kw">type</span> <span class="tm-typ"><span class="typeAliasName">Age</span></span> = <span class="tm-typ">number</span>;
+<span class="tm-kw">type</span> <span class="tm-typ"><span class="typeAliasName">Weight</span></span> = <span class="tm-typ">number</span>;
 
-<span class="tm-kw">const</span><span class="tm-def"> </span><span class="tm-vr">myAge</span><span class="tm-def">: </span><span class="tm-typ"><span class="typeAliasName">Age</span></span><span class="tm-def"> = </span><span class="tm-num">73</span><span class="tm-def">;</span>
+<span class="tm-kw">const</span> <span class="tm-vr">myAge</span>: <span class="tm-typ"><span class="typeAliasName">Age</span></span> = <span class="tm-num">73</span>;
 <span class="tm-cmt">// *not* an error</span>
-<span class="tm-kw">const</span><span class="tm-def"> </span><span class="tm-vr">myWeight</span><span class="tm-def">: </span><span class="tm-typ"><span class="typeAliasName">Weight</span></span><span class="tm-def"> = </span><span class="tm-vr">myAge</span><span class="tm-def">;</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=type%20Age%20%3D%20number%3B%0Atype%20Weight%20%3D%20number%3B%0A%0Aconst%20myAge%3A%20Age%20%3D%2073%3B%0A%2F%2F%20*not*%20an%20error%0Aconst%20myWeight%3A%20Weight%20%3D%20myAge%3B">Try</a></pre></p>
+<span class="tm-kw">const</span> <span class="tm-vr">myWeight</span>: <span class="tm-typ"><span class="typeAliasName">Weight</span></span> = <span class="tm-vr">myAge</span>;<a class="playground-link" href="https://www.typescriptlang.org/play/#src=type%20Age%20%3D%20number%3B%0Atype%20Weight%20%3D%20number%3B%0A%0Aconst%20myAge%3A%20Age%20%3D%2073%3B%0A%2F%2F%20*not*%20an%20error%0Aconst%20myWeight%3A%20Weight%20%3D%20myAge%3B">Try</a></pre></p>
 <h2 id="interfaces"><a href="#interfaces">Interfaces</h2></a>
 <p>An <em>interface declaration</em> is another way to name an object type:</p>
-<p><pre class="typescript-code"><span class="tm-kw">interface</span><span class="tm-def"> </span><span class="tm-typ"><span class="interfaceName">Point</span></span><span class="tm-def"> {</span>
-<span class="tm-def">  </span><span class="tm-vr">x</span><span class="tm-def">: </span><span class="tm-typ">number</span><span class="tm-def">;</span>
-<span class="tm-def">  </span><span class="tm-vr">y</span><span class="tm-def">: </span><span class="tm-typ">number</span><span class="tm-def">;</span>
-<span class="tm-def">}</span>
+<p><pre class="typescript-code"><span class="tm-kw">interface</span> <span class="tm-typ"><span class="interfaceName">Point</span></span> {
+  <span class="tm-vr">x</span>: <span class="tm-typ">number</span>;
+  <span class="tm-vr">y</span>: <span class="tm-typ">number</span>;
+}
 
-<span class="tm-kw">function</span><span class="tm-def"> </span><span class="tm-mth">printCoord</span><span class="tm-def">(</span><span class="tm-vr">pt</span><span class="tm-def">: </span><span class="tm-typ"><span class="interfaceName">Point</span></span><span class="tm-def">) {</span>
-<span class="tm-def">  </span><span class="tm-typ">console</span><span class="tm-def">.</span><span class="tm-mth">log</span><span class="tm-def">(</span><span class="tm-str">"The coordinate's x value is "</span><span class="tm-def"> + </span><span class="tm-vr">pt</span><span class="tm-def">.</span><span class="tm-vr">x</span><span class="tm-def">);</span>
-<span class="tm-def">  </span><span class="tm-typ">console</span><span class="tm-def">.</span><span class="tm-mth">log</span><span class="tm-def">(</span><span class="tm-str">"The coordinate's y value is "</span><span class="tm-def"> + </span><span class="tm-vr">pt</span><span class="tm-def">.</span><span class="tm-vr">y</span><span class="tm-def">);</span>
-<span class="tm-def">}</span>
+<span class="tm-kw">function</span> <span class="tm-mth">printCoord</span>(<span class="tm-vr">pt</span>: <span class="tm-typ"><span class="interfaceName">Point</span></span>) {
+  <span class="tm-typ">console</span>.<span class="tm-mth">log</span>(<span class="tm-str">"The coordinate's x value is "</span> + <span class="tm-vr">pt</span>.<span class="tm-vr">x</span>);
+  <span class="tm-typ">console</span>.<span class="tm-mth">log</span>(<span class="tm-str">"The coordinate's y value is "</span> + <span class="tm-vr">pt</span>.<span class="tm-vr">y</span>);
+}
 
-<span class="tm-mth">printCoord</span><span class="tm-def">({ </span><span class="tm-vr">x:</span><span class="tm-def"> </span><span class="tm-num">100</span><span class="tm-def">, </span><span class="tm-vr">y:</span><span class="tm-def"> </span><span class="tm-num">100</span><span class="tm-def"> });</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=interface%20Point%20%7B%0A%20%20x%3A%20number%3B%0A%20%20y%3A%20number%3B%0A%7D%0A%0Afunction%20printCoord(pt%3A%20Point)%20%7B%0A%20%20console.log(%22The%20coordinate's%20x%20value%20is%20%22%20%2B%20pt.x)%3B%0A%20%20console.log(%22The%20coordinate's%20y%20value%20is%20%22%20%2B%20pt.y)%3B%0A%7D%0A%0AprintCoord(%7B%20x%3A%20100%2C%20y%3A%20100%20%7D)%3B">Try</a></pre></p>
+<span class="tm-mth">printCoord</span>({ <span class="tm-vr">x:</span> <span class="tm-num">100</span>, <span class="tm-vr">y:</span> <span class="tm-num">100</span> });<a class="playground-link" href="https://www.typescriptlang.org/play/#src=interface%20Point%20%7B%0A%20%20x%3A%20number%3B%0A%20%20y%3A%20number%3B%0A%7D%0A%0Afunction%20printCoord(pt%3A%20Point)%20%7B%0A%20%20console.log(%22The%20coordinate's%20x%20value%20is%20%22%20%2B%20pt.x)%3B%0A%20%20console.log(%22The%20coordinate's%20y%20value%20is%20%22%20%2B%20pt.y)%3B%0A%7D%0A%0AprintCoord(%7B%20x%3A%20100%2C%20y%3A%20100%20%7D)%3B">Try</a></pre></p>
 <p>Just like when we used a type alias above, the example works just as if we had used an anonymous object type.
 TypeScript is only concerned with the <em>structure</em> of the value we passed to <code>printCoord</code> - it only cares that it has the expected properties.
 Being concerned only with the structure and capabilities of types is why we call TypeScript a <em>structurally typed</em> type system.</p>
@@ -267,52 +269,52 @@ You'll learn more about these concepts in later chapters, so don't worry if you 
 <p>Sometimes you will have information about the type of a value that TypeScript can't know about.</p>
 <p>For example, if you're using <code>document.getElementById</code>, TypeScript only knows that this will return <em>some</em> kind of <code>HTMLElement</code>, but you might know that your page will always have an <code>HTMLCanvasElement</code> with a given ID.</p>
 <p>In this situation, you can use a <em>type assertion</em> to specify a more specific type:</p>
-<p><pre class="typescript-code"><span class="tm-kw">const</span><span class="tm-def"> </span><span class="tm-vr">myCanvas</span><span class="tm-def"> = </span><span class="tm-vr">document</span><span class="tm-def">.</span><span class="tm-mth">getElementById</span><span class="tm-def">(</span><span class="tm-str">"main_canvas"</span><span class="tm-def">) </span><span class="tm-kw">as</span><span class="tm-def"> </span><span class="tm-typ"><span class="interfaceName">HTMLCanvasElement</span></span><span class="tm-def">;</span></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">const</span> <span class="tm-vr">myCanvas</span> = <span class="tm-vr">document</span>.<span class="tm-mth">getElementById</span>(<span class="tm-str">"main_canvas"</span>) <span class="tm-kw">as</span> <span class="tm-typ"><span class="interfaceName">HTMLCanvasElement</span></span>;</pre></p>
 <p>Like a type annotation, type assertions are removed by the compiler and won't affect the runtime behavior of your code.</p>
 <p>You can also use the angle-bracket syntax (except if the code is in a <code>.tsx</code> file), which is equivalent:</p>
-<p><pre class="typescript-code"><span class="tm-kw">const</span><span class="tm-def"> </span><span class="tm-vr">myCanvas</span><span class="tm-def"> = <</span><span class="tm-typ"><span class="interfaceName">HTMLCanvasElement</span></span><span class="tm-def">></span><span class="tm-vr">document</span><span class="tm-def">.</span><span class="tm-mth">getElementById</span><span class="tm-def">(</span><span class="tm-str">"main_canvas"</span><span class="tm-def">);</span></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">const</span> <span class="tm-vr">myCanvas</span> = <<span class="tm-typ"><span class="interfaceName">HTMLCanvasElement</span></span>><span class="tm-vr">document</span>.<span class="tm-mth">getElementById</span>(<span class="tm-str">"main_canvas"</span>);</pre></p>
 <blockquote>
   <p>Reminder: Because they are removed at compile-time, there is no runtime checking associated with a type assertion.
   There won't be an exception or <code>null</code> generated if the type assertion is wrong.</p>
 </blockquote>
 <p>TypeScript only allows type assertions which convert to a <em>more specific</em> or <em>less specific</em> version of a type.
 This rule prevents "impossible" coercions like:</p>
-<p><pre class="typescript-code"><span class="tm-kw">const</span><span class="tm-def"> </span><span class="tm-vr">x</span><span class="tm-def"> = </span><span class="error"><span class="error-highlight"></span><span class="tm-str">"hello"</span><span class="tm-def"> </span><span class="tm-kw">as</span><span class="tm-def"> </span><span class="tm-typ">number</span></span><span class="tm-def">;</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Conversion of type 'string' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.</div></div></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">const</span> <span class="tm-vr">x</span> = <span class="error" tabindex="0" aria-describedby="errLabel-2352-10-17"><span class="error-highlight"></span><span class="tm-str">"hello"</span> <span class="tm-kw">as</span> <span class="tm-typ">number</span><span id="errLabel-2352-10-17" role="tooltip" class="error-tooltip">Conversion of type 'string' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.</span></span>;<hr class="error-divider"><div class="listed-error"><div class="error-line">Conversion of type 'string' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.</div></div></pre></p>
 <p>Sometimes this rule can be too conservative and will disallow more complex coercions that might be valid.
 If this happens, you can use two assertions, first to <code>any</code> (or <code>unknown</code>, which we'll introduce later), then to the desired type:</p>
 <p><pre class="typescript-code">
-<span class="tm-kw">const</span><span class="tm-def"> </span><span class="tm-vr">a</span><span class="tm-def"> = </span><span class="tm-vr">expr</span><span class="tm-def"> </span><span class="tm-kw">as</span><span class="tm-def"> </span><span class="tm-typ">any</span><span class="tm-def"> </span><span class="tm-typ">as</span><span class="tm-def"> </span><span class="tm-typ"><span class="typeAliasName">T</span></span><span class="tm-def">;</span></pre></p>
+<span class="tm-kw">const</span> <span class="tm-vr">a</span> = <span class="tm-vr">expr</span> <span class="tm-kw">as</span> <span class="tm-typ">any</span> <span class="tm-typ">as</span> <span class="tm-typ"><span class="typeAliasName">T</span></span>;</pre></p>
 <h2 id="literal-types"><a href="#literal-types">Literal Types</h2></a>
 <p>In addition to the general types <code>string</code> and <code>number</code>, we can refer to <em>specific</em> strings and numbers in type positions.</p>
 <p>By themselves, literal types aren't very valuable:</p>
-<p><pre class="typescript-code"><span class="tm-kw">let</span><span class="tm-def"> </span><span class="tm-vr">x</span><span class="tm-def">: </span><span class="tm-str">"hello"</span><span class="tm-def"> = </span><span class="tm-str">"hello"</span><span class="tm-def">;</span>
+<p><pre class="typescript-code"><span class="tm-kw">let</span> <span class="tm-vr">x</span>: <span class="tm-str">"hello"</span> = <span class="tm-str">"hello"</span>;
 <span class="tm-cmt">// OK</span>
-<span class="tm-vr">x</span><span class="tm-def"> = </span><span class="tm-str">"hello"</span><span class="tm-def">;</span>
+<span class="tm-vr">x</span> = <span class="tm-str">"hello"</span>;
 <span class="tm-cmt">// OK</span>
-<span class="tm-vr">x</span><span class="tm-def"> = </span><span class="tm-str">"hello"</span><span class="tm-def">;</span>
+<span class="tm-vr">x</span> = <span class="tm-str">"hello"</span>;
 <span class="tm-cmt">// ...</span>
-<span class="error"><span class="error-highlight"></span><span class="tm-vr">x</span></span><span class="tm-def"> = </span><span class="tm-str">"howdy"</span><span class="tm-def">;</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Type '"howdy"' is not assignable to type '"hello"'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=let%20x%3A%20%22hello%22%20%3D%20%22hello%22%3B%0A%2F%2F%20OK%0Ax%20%3D%20%22hello%22%3B%0A%2F%2F%20OK%0Ax%20%3D%20%22hello%22%3B%0A%2F%2F%20...%0Ax%20%3D%20%22howdy%22%3B">Try</a></pre></p>
+<span class="error" tabindex="0" aria-describedby="errLabel-2322-71-1"><span class="error-highlight"></span><span class="tm-vr">x</span><span id="errLabel-2322-71-1" role="tooltip" class="error-tooltip">Type '"howdy"' is not assignable to type '"hello"'.</span></span> = <span class="tm-str">"howdy"</span>;<hr class="error-divider"><div class="listed-error"><div class="error-line">Type '"howdy"' is not assignable to type '"hello"'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=let%20x%3A%20%22hello%22%20%3D%20%22hello%22%3B%0A%2F%2F%20OK%0Ax%20%3D%20%22hello%22%3B%0A%2F%2F%20OK%0Ax%20%3D%20%22hello%22%3B%0A%2F%2F%20...%0Ax%20%3D%20%22howdy%22%3B">Try</a></pre></p>
 <p>It's not much use to have a variable that can only have one value!</p>
 <p>But by <em>combining</em> literals into unions, you can express a much more useful thing - for example, functions that only accept a certain set of known values:</p>
-<p><pre class="typescript-code"><span class="tm-kw">function</span><span class="tm-def"> </span><span class="tm-mth">printText</span><span class="tm-def">(</span><span class="tm-vr">s</span><span class="tm-def">: </span><span class="tm-typ">string</span><span class="tm-def">, </span><span class="tm-vr">alignment</span><span class="tm-def">: </span><span class="tm-str">"left"</span><span class="tm-def"> | </span><span class="tm-str">"right"</span><span class="tm-def"> | </span><span class="tm-str">"center"</span><span class="tm-def">) {</span>
-<span class="tm-def">  </span><span class="tm-cmt">// ...</span>
-<span class="tm-def">}</span>
-<span class="tm-mth">printText</span><span class="tm-def">(</span><span class="tm-str">"Hello, world"</span><span class="tm-def">, </span><span class="tm-str">"left"</span><span class="tm-def">);</span>
-<span class="tm-mth">printText</span><span class="tm-def">(</span><span class="tm-str">"G'day, mate"</span><span class="tm-def">, </span><span class="error"><span class="error-highlight"></span><span class="tm-str">"centre"</span></span><span class="tm-def">);</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Argument of type '"centre"' is not assignable to parameter of type '"left" | "right" | "center"'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20printText(s%3A%20string%2C%20alignment%3A%20%22left%22%20%7C%20%22right%22%20%7C%20%22center%22)%20%7B%0A%20%20%2F%2F%20...%0A%7D%0AprintText(%22Hello%2C%20world%22%2C%20%22left%22)%3B%0AprintText(%22G'day%2C%20mate%22%2C%20%22centre%22)%3B">Try</a></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">function</span> <span class="tm-mth">printText</span>(<span class="tm-vr">s</span>: <span class="tm-typ">string</span>, <span class="tm-vr">alignment</span>: <span class="tm-str">"left"</span> | <span class="tm-str">"right"</span> | <span class="tm-str">"center"</span>) {
+  <span class="tm-cmt">// ...</span>
+}
+<span class="tm-mth">printText</span>(<span class="tm-str">"Hello, world"</span>, <span class="tm-str">"left"</span>);
+<span class="tm-mth">printText</span>(<span class="tm-str">"G'day, mate"</span>, <span class="error" tabindex="0" aria-describedby="errLabel-2345-143-8"><span class="error-highlight"></span><span class="tm-str">"centre"</span><span id="errLabel-2345-143-8" role="tooltip" class="error-tooltip">Argument of type '"centre"' is not assignable to parameter of type '"left" | "right" | "center"'.</span></span>);<hr class="error-divider"><div class="listed-error"><div class="error-line">Argument of type '"centre"' is not assignable to parameter of type '"left" | "right" | "center"'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20printText(s%3A%20string%2C%20alignment%3A%20%22left%22%20%7C%20%22right%22%20%7C%20%22center%22)%20%7B%0A%20%20%2F%2F%20...%0A%7D%0AprintText(%22Hello%2C%20world%22%2C%20%22left%22)%3B%0AprintText(%22G'day%2C%20mate%22%2C%20%22centre%22)%3B">Try</a></pre></p>
 <p>Numeric literal types work the same way:</p>
-<p><pre class="typescript-code"><span class="tm-kw">function</span><span class="tm-def"> </span><span class="tm-mth">compare</span><span class="tm-def">(</span><span class="tm-vr">a</span><span class="tm-def">: </span><span class="tm-typ">string</span><span class="tm-def">, </span><span class="tm-vr">b</span><span class="tm-def">: </span><span class="tm-typ">string</span><span class="tm-def">):</span><span class="tm-typ"> -</span><span class="tm-num">1</span><span class="tm-typ"> </span><span class="tm-def">|</span><span class="tm-typ"> </span><span class="tm-num">0</span><span class="tm-typ"> </span><span class="tm-def">|</span><span class="tm-typ"> </span><span class="tm-num">1</span><span class="tm-typ"> </span><span class="tm-def">{</span>
-<span class="tm-def">  </span><span class="tm-kw">return</span><span class="tm-def"> </span><span class="tm-vr">a</span><span class="tm-def"> === </span><span class="tm-vr">b</span><span class="tm-def"> ? </span><span class="tm-num">0</span><span class="tm-def"> : </span><span class="tm-vr">a</span><span class="tm-def"> > </span><span class="tm-vr">b</span><span class="tm-def"> ? </span><span class="tm-num">1</span><span class="tm-def"> : -</span><span class="tm-num">1</span><span class="tm-def">;</span>
-<span class="tm-def">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20compare(a%3A%20string%2C%20b%3A%20string)%3A%20-1%20%7C%200%20%7C%201%20%7B%0A%20%20return%20a%20%3D%3D%3D%20b%20%3F%200%20%3A%20a%20%3E%20b%20%3F%201%20%3A%20-1%3B%0A%7D">Try</a></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">function</span> <span class="tm-mth">compare</span>(<span class="tm-vr">a</span>: <span class="tm-typ">string</span>, <span class="tm-vr">b</span>: <span class="tm-typ">string</span>):<span class="tm-typ"> -</span><span class="tm-num">1</span><span class="tm-typ"> </span>|<span class="tm-typ"> </span><span class="tm-num">0</span><span class="tm-typ"> </span>|<span class="tm-typ"> </span><span class="tm-num">1</span><span class="tm-typ"> </span>{
+  <span class="tm-kw">return</span> <span class="tm-vr">a</span> === <span class="tm-vr">b</span> ? <span class="tm-num">0</span> : <span class="tm-vr">a</span> > <span class="tm-vr">b</span> ? <span class="tm-num">1</span> : -<span class="tm-num">1</span>;
+}<a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20compare(a%3A%20string%2C%20b%3A%20string)%3A%20-1%20%7C%200%20%7C%201%20%7B%0A%20%20return%20a%20%3D%3D%3D%20b%20%3F%200%20%3A%20a%20%3E%20b%20%3F%201%20%3A%20-1%3B%0A%7D">Try</a></pre></p>
 <p>Of course, you can combine these with non-literal types:</p>
-<p><pre class="typescript-code"><span class="tm-kw">interface</span><span class="tm-def"> </span><span class="tm-typ"><span class="interfaceName">Options</span></span><span class="tm-def"> {</span>
-<span class="tm-def">  </span><span class="tm-vr">width</span><span class="tm-def">: </span><span class="tm-typ">number</span><span class="tm-def">;</span>
-<span class="tm-def">}</span>
-<span class="tm-kw">function</span><span class="tm-def"> </span><span class="tm-mth">configure</span><span class="tm-def">(</span><span class="tm-vr">x</span><span class="tm-def">: </span><span class="tm-typ"><span class="interfaceName">Options</span></span><span class="tm-def"> | </span><span class="tm-str">"auto"</span><span class="tm-def">) {</span>
-<span class="tm-def">  </span><span class="tm-cmt">// ...</span>
-<span class="tm-def">}</span>
-<span class="tm-mth">configure</span><span class="tm-def">({ </span><span class="tm-vr">width:</span><span class="tm-def"> </span><span class="tm-num">100</span><span class="tm-def"> });</span>
-<span class="tm-mth">configure</span><span class="tm-def">(</span><span class="tm-str">"auto"</span><span class="tm-def">);</span>
-<span class="tm-mth">configure</span><span class="tm-def">(</span><span class="error"><span class="error-highlight"></span><span class="tm-str">"automatic"</span></span><span class="tm-def">);</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Argument of type '"automatic"' is not assignable to parameter of type 'Options | "auto"'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=interface%20Options%20%7B%0A%20%20width%3A%20number%3B%0A%7D%0Afunction%20configure(x%3A%20Options%20%7C%20%22auto%22)%20%7B%0A%20%20%2F%2F%20...%0A%7D%0Aconfigure(%7B%20width%3A%20100%20%7D)%3B%0Aconfigure(%22auto%22)%3B%0Aconfigure(%22automatic%22)%3B">Try</a></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">interface</span> <span class="tm-typ"><span class="interfaceName">Options</span></span> {
+  <span class="tm-vr">width</span>: <span class="tm-typ">number</span>;
+}
+<span class="tm-kw">function</span> <span class="tm-mth">configure</span>(<span class="tm-vr">x</span>: <span class="tm-typ"><span class="interfaceName">Options</span></span> | <span class="tm-str">"auto"</span>) {
+  <span class="tm-cmt">// ...</span>
+}
+<span class="tm-mth">configure</span>({ <span class="tm-vr">width:</span> <span class="tm-num">100</span> });
+<span class="tm-mth">configure</span>(<span class="tm-str">"auto"</span>);
+<span class="tm-mth">configure</span>(<span class="error" tabindex="0" aria-describedby="errLabel-2345-148-11"><span class="error-highlight"></span><span class="tm-str">"automatic"</span><span id="errLabel-2345-148-11" role="tooltip" class="error-tooltip">Argument of type '"automatic"' is not assignable to parameter of type 'Options | "auto"'.</span></span>);<hr class="error-divider"><div class="listed-error"><div class="error-line">Argument of type '"automatic"' is not assignable to parameter of type 'Options | "auto"'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=interface%20Options%20%7B%0A%20%20width%3A%20number%3B%0A%7D%0Afunction%20configure(x%3A%20Options%20%7C%20%22auto%22)%20%7B%0A%20%20%2F%2F%20...%0A%7D%0Aconfigure(%7B%20width%3A%20100%20%7D)%3B%0Aconfigure(%22auto%22)%3B%0Aconfigure(%22automatic%22)%3B">Try</a></pre></p>
 <p>There's one more kind of literal type: boolean literals.
 There are only two boolean literal types, and as you might guess, they are the types <code>true</code> and <code>false</code>.
 The type <code>boolean</code> itself is actually just an alias for the union <code>true | false</code>.</p>
@@ -320,23 +322,23 @@ The type <code>boolean</code> itself is actually just an alias for the union <co
 <p>When you initialize a variable with an object, TypeScript assumes that the properties of that object might change values later.
 For example, if you wrote code like this:</p>
 <p><pre class="typescript-code">
-<span class="tm-kw">const</span><span class="tm-def"> </span><span class="tm-vr">obj</span><span class="tm-def"> = { </span><span class="tm-vr">counter:</span><span class="tm-def"> </span><span class="tm-num">0</span><span class="tm-def"> };</span>
-<span class="tm-kw">if</span><span class="tm-def"> (</span><span class="tm-vr">someCondition</span><span class="tm-def">) {</span>
-<span class="tm-def">  </span><span class="tm-vr">obj</span><span class="tm-def">.</span><span class="tm-vr">counter</span><span class="tm-def"> = </span><span class="tm-num">1</span><span class="tm-def">;</span>
-<span class="tm-def">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=declare%20const%20someCondition%3A%20boolean%3B%0A%2F%2Fcut%0Aconst%20obj%20%3D%20%7B%20counter%3A%200%20%7D%3B%0Aif%20(someCondition)%20%7B%0A%20%20obj.counter%20%3D%201%3B%0A%7D">Try</a></pre></p>
+<span class="tm-kw">const</span> <span class="tm-vr">obj</span> = { <span class="tm-vr">counter:</span> <span class="tm-num">0</span> };
+<span class="tm-kw">if</span> (<span class="tm-vr">someCondition</span>) {
+  <span class="tm-vr">obj</span>.<span class="tm-vr">counter</span> = <span class="tm-num">1</span>;
+}<a class="playground-link" href="https://www.typescriptlang.org/play/#src=declare%20const%20someCondition%3A%20boolean%3B%0A%2F%2Fcut%0Aconst%20obj%20%3D%20%7B%20counter%3A%200%20%7D%3B%0Aif%20(someCondition)%20%7B%0A%20%20obj.counter%20%3D%201%3B%0A%7D">Try</a></pre></p>
 <p>TypeScript doesn't assume the assignment of <code>1</code> to a field that previously had <code>0</code> to be an error.
 Another way of saying this is that <code>obj.counter</code> must have the type <code>number</code>, not <code>0</code>, because types are used to determine both <em>reading</em> and <em>writing</em> behavior.</p>
 <p>The same applies to strings:</p>
 <p><pre class="typescript-code">
-<span class="tm-kw">const</span><span class="tm-def"> </span><span class="tm-vr">req</span><span class="tm-def"> = { </span><span class="tm-vr">url:</span><span class="tm-def"> </span><span class="tm-str">"https://example.com"</span><span class="tm-def">, </span><span class="tm-vr">method:</span><span class="tm-def"> </span><span class="tm-str">"GET"</span><span class="tm-def"> };</span>
-<span class="tm-mth">handleRequest</span><span class="tm-def">(</span><span class="tm-vr">req</span><span class="tm-def">.</span><span class="tm-vr">url</span><span class="tm-def">, </span><span class="error"><span class="error-highlight"></span><span class="tm-vr">req</span><span class="tm-def">.</span><span class="tm-vr">method</span></span><span class="tm-def">);</span><hr class="error-divider"><div class="listed-error"><div class="error-line">Argument of type 'string' is not assignable to parameter of type '"GET" | "POST"'.</div></div></pre></p>
+<span class="tm-kw">const</span> <span class="tm-vr">req</span> = { <span class="tm-vr">url:</span> <span class="tm-str">"https://example.com"</span>, <span class="tm-vr">method:</span> <span class="tm-str">"GET"</span> };
+<span class="tm-mth">handleRequest</span>(<span class="tm-vr">req</span>.<span class="tm-vr">url</span>, <span class="error" tabindex="0" aria-describedby="errLabel-2345-163-10"><span class="error-highlight"></span><span class="tm-vr">req</span>.<span class="tm-vr">method</span><span id="errLabel-2345-163-10" role="tooltip" class="error-tooltip">Argument of type 'string' is not assignable to parameter of type '"GET" | "POST"'.</span></span>);<hr class="error-divider"><div class="listed-error"><div class="error-line">Argument of type 'string' is not assignable to parameter of type '"GET" | "POST"'.</div></div></pre></p>
 <!-- TODO: Use and explain const contexts -->
 <p>Because it'd be legal to assign a string like <code>"GUESS"</code> TO <code>req.method</code>, TypeScript considers this code to have an error.
 You can change this inference by adding a type assertion in either location:</p>
 <p><pre class="typescript-code">
-<span class="tm-kw">const</span><span class="tm-def"> </span><span class="tm-vr">req</span><span class="tm-def"> = { </span><span class="tm-vr">url:</span><span class="tm-def"> </span><span class="tm-str">"https://example.com"</span><span class="tm-def">, </span><span class="tm-vr">method:</span><span class="tm-def"> </span><span class="tm-str">"GET"</span><span class="tm-def"> </span><span class="tm-kw">as</span><span class="tm-def"> </span><span class="tm-str">"GET"</span><span class="tm-def"> };</span>
+<span class="tm-kw">const</span> <span class="tm-vr">req</span> = { <span class="tm-vr">url:</span> <span class="tm-str">"https://example.com"</span>, <span class="tm-vr">method:</span> <span class="tm-str">"GET"</span> <span class="tm-kw">as</span> <span class="tm-str">"GET"</span> };
 <span class="tm-cmt">/* or */</span>
-<span class="tm-mth">handleRequest</span><span class="tm-def">(</span><span class="tm-vr">req</span><span class="tm-def">.</span><span class="tm-vr">url</span><span class="tm-def">, </span><span class="tm-vr">req</span><span class="tm-def">.</span><span class="tm-vr">method</span><span class="tm-def"> </span><span class="tm-kw">as</span><span class="tm-def"> </span><span class="tm-str">"GET"</span><span class="tm-def">);</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=declare%20function%20handleRequest(url%3A%20string%2C%20method%3A%20%22GET%22%20%7C%20%22POST%22)%3A%20void%3B%0A%2F%2Fcut%0Aconst%20req%20%3D%20%7B%20url%3A%20%22https%3A%2F%2Fexample.com%22%2C%20method%3A%20%22GET%22%20as%20%22GET%22%20%7D%3B%0A%2F*%20or%20*%2F%0AhandleRequest(req.url%2C%20req.method%20as%20%22GET%22)%3B">Try</a></pre></p>
+<span class="tm-mth">handleRequest</span>(<span class="tm-vr">req</span>.<span class="tm-vr">url</span>, <span class="tm-vr">req</span>.<span class="tm-vr">method</span> <span class="tm-kw">as</span> <span class="tm-str">"GET"</span>);<a class="playground-link" href="https://www.typescriptlang.org/play/#src=declare%20function%20handleRequest(url%3A%20string%2C%20method%3A%20%22GET%22%20%7C%20%22POST%22)%3A%20void%3B%0A%2F%2Fcut%0Aconst%20req%20%3D%20%7B%20url%3A%20%22https%3A%2F%2Fexample.com%22%2C%20method%3A%20%22GET%22%20as%20%22GET%22%20%7D%3B%0A%2F*%20or%20*%2F%0AhandleRequest(req.url%2C%20req.method%20as%20%22GET%22)%3B">Try</a></pre></p>
 <p>The first change means "I intend for <code>req.method</code> to always have the <em>literal type</em> <code>"GET"</code>", preventing the possible assignment of <code>"GUESS"</code> to that field.
 The second change means "I know for other reasons that <code>req.method</code> has the value <code>"GET"</code>".</p>
 <h2 id="null-and-undefined"><a href="#null-and-undefined"><code>null</code> and <code>undefined</code></h2></a>
@@ -349,20 +351,20 @@ The lack of checking for these values tends to be a major source of bugs; we alw
 <h3 id="strictnullchecks-on"><a href="#strictnullchecks-on"><code>strictNullChecks</code> on</h3></a>
 <p>With <code>strictNullChecks</code> <em>on</em>, when a value is <code>null</code> or <code>undefined</code>, you will need to test for those values before using methods or properties on that value.
 Just like checking for <code>undefined</code> before using an optional property, we can use <em>narrowing</em> to check for values that might be <code>null</code>:</p>
-<p><pre class="typescript-code"><span class="tm-kw">function</span><span class="tm-def"> </span><span class="tm-mth">doSomething</span><span class="tm-def">(</span><span class="tm-vr">x</span><span class="tm-def">: </span><span class="tm-typ">string</span><span class="tm-def"> | </span><span class="tm-typ">null</span><span class="tm-def">) {</span>
-<span class="tm-def">  </span><span class="tm-kw">if</span><span class="tm-def"> (</span><span class="tm-vr">x</span><span class="tm-def"> === </span><span class="tm-kw">null</span><span class="tm-def">) {</span>
-<span class="tm-def">    </span><span class="tm-cmt">// do nothing</span>
-<span class="tm-def">  } </span><span class="tm-kw">else</span><span class="tm-def"> {</span>
-<span class="tm-def">    </span><span class="tm-typ">console</span><span class="tm-def">.</span><span class="tm-mth">log</span><span class="tm-def">(</span><span class="tm-str">"Hello, "</span><span class="tm-def"> + </span><span class="tm-vr">x</span><span class="tm-def">.</span><span class="tm-mth">toUpperCase</span><span class="tm-def">());</span>
-<span class="tm-def">  }</span>
-<span class="tm-def">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20doSomething(x%3A%20string%20%7C%20null)%20%7B%0A%20%20if%20(x%20%3D%3D%3D%20null)%20%7B%0A%20%20%20%20%2F%2F%20do%20nothing%0A%20%20%7D%20else%20%7B%0A%20%20%20%20console.log(%22Hello%2C%20%22%20%2B%20x.toUpperCase())%3B%0A%20%20%7D%0A%7D">Try</a></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">function</span> <span class="tm-mth">doSomething</span>(<span class="tm-vr">x</span>: <span class="tm-typ">string</span> | <span class="tm-typ">null</span>) {
+  <span class="tm-kw">if</span> (<span class="tm-vr">x</span> === <span class="tm-kw">null</span>) {
+    <span class="tm-cmt">// do nothing</span>
+  } <span class="tm-kw">else</span> {
+    <span class="tm-typ">console</span>.<span class="tm-mth">log</span>(<span class="tm-str">"Hello, "</span> + <span class="tm-vr">x</span>.<span class="tm-mth">toUpperCase</span>());
+  }
+}<a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20doSomething(x%3A%20string%20%7C%20null)%20%7B%0A%20%20if%20(x%20%3D%3D%3D%20null)%20%7B%0A%20%20%20%20%2F%2F%20do%20nothing%0A%20%20%7D%20else%20%7B%0A%20%20%20%20console.log(%22Hello%2C%20%22%20%2B%20x.toUpperCase())%3B%0A%20%20%7D%0A%7D">Try</a></pre></p>
 <h3 id="non-null-operator"><a href="#non-null-operator">Non-null Assertion Operator (Postfix <code>!</code>)</h3></a>
 <p>TypeScript also has a special syntax for removing <code>null</code> and <code>undefined</code> from a type without doing any explicit checking.
 Writing <code>!</code> after any expression is effectively a type assertion that the value isn't <code>null</code> or <code>undefined</code>:</p>
-<p><pre class="typescript-code"><span class="tm-kw">function</span><span class="tm-def"> </span><span class="tm-mth">liveDangerously</span><span class="tm-def">(</span><span class="tm-vr">x</span><span class="tm-def">?: </span><span class="tm-typ">number</span><span class="tm-def"> | </span><span class="tm-typ">null</span><span class="tm-def">) {</span>
-<span class="tm-def">  </span><span class="tm-cmt">// No error</span>
-<span class="tm-def">  </span><span class="tm-typ">console</span><span class="tm-def">.</span><span class="tm-mth">log</span><span class="tm-def">(</span><span class="tm-vr">x</span><span class="tm-def">!.</span><span class="tm-mth">toFixed</span><span class="tm-def">());</span>
-<span class="tm-def">}</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20liveDangerously(x%3F%3A%20number%20%7C%20null)%20%7B%0A%20%20%2F%2F%20No%20error%0A%20%20console.log(x!.toFixed())%3B%0A%7D">Try</a></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">function</span> <span class="tm-mth">liveDangerously</span>(<span class="tm-vr">x</span>?: <span class="tm-typ">number</span> | <span class="tm-typ">null</span>) {
+  <span class="tm-cmt">// No error</span>
+  <span class="tm-typ">console</span>.<span class="tm-mth">log</span>(<span class="tm-vr">x</span>!.<span class="tm-mth">toFixed</span>());
+}<a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20liveDangerously(x%3F%3A%20number%20%7C%20null)%20%7B%0A%20%20%2F%2F%20No%20error%0A%20%20console.log(x!.toFixed())%3B%0A%7D">Try</a></pre></p>
 <p>Just like other type assertions, this doesn't change the runtime behavior of your code, so it's important to only use <code>!</code> when you know that the value <em>can't</em> be <code>null</code> or <code>undefined</code>.</p>
     </article>
     </body>

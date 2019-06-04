@@ -250,11 +250,13 @@ export async function getCompilerExtension() {
                 const pendingEndTags: Tagging[] = [];
 
                 for (const err of errs.filter(d => d.file && d.file.fileName === sampleFileRef.fileName)) {
+                    const text = escapeHtml(ts.flattenDiagnosticMessageText(err.messageText, "\n"));
+                    const tooltipId = `errLabel-${err.code}-${err.start}-${err.length}`
                     taggings.push({
                         position: err.start!,
                         length: err.length!,
-                        start: `<span class="error"><span class="error-highlight"></span>`,
-                        end: `</span>`
+                        start: `<span class="error" tabindex="0" aria-describedby="${tooltipId}"><span class="error-highlight"></span>`,
+                        end: `<span id="${tooltipId}" role="tooltip" class="error-tooltip">${text}</span></span>`
                     });
                 }
 

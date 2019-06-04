@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Modules</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" media="screen" href="../../css/handbook.css" />
+        <script src="../../js/handbook.js"></script>
+    </head>
+    <body class="dark-light">
+        <div class="theme-selector">
+            Theme:
+            <div id="set-theme-light">■</div>
+            <div id="set-theme-dark">■</div>
+            <div id="set-theme-dark-light">■</div>
+            <div id="set-theme-light-dark">■</div>
+        </div>
+    <article>
+    <h1 id="modules"><a href="#modules">Modules</h1></a>
+<p>Starting with ECMAScript 2015, JavaScript has a concept of modules.
+TypeScript shares this concept.</p>
+<p>Modules are executed within their own scope, not in the global scope.
+This means that variables, functions, classes, etc. declared in a module are not visible outside the module unless they are explicitly exported using one of the export forms.
+Conversely, to consume a variable, function, class, interface, etc. exported from a different module, it has to be imported using one of the import forms.</p>
+<p>Modules are declarative: the relationships between modules are specified in terms of imports and exports at the file level.</p>
+<p>Modules import one another using a module loader.
+At runtime the module loader is responsible for locating and executing all dependencies of a module before executing it.
+Well-known modules loaders used in JavaScript are the CommonJS module loader for Node.js and require.js for Web applications.</p>
+<p>In TypeScript, just as in ECMAScript 2015, any file containing a top-level import or export is considered a module.
+Conversely, a file without any top-level import or export declarations is treated as a script whose contents are available in the global scope (and therefore to modules as well).</p>
+<div class="toc"><span class="toc-title">Table of Contents</span><ul><li><a href="#module-systems">Module Systems</a></li><ul><li><a href="#es-modules">ES Modules</a></li></ul><li><a href="#import-forms">Import Forms</a></li><li><a href="#importing-commonjs-modules-with-es-syntax">Importing CommonJS modules with ES Syntax</a></li></ul></ul></div>
+<h2 id="module-systems"><a href="#module-systems">Module Systems</h2></a>
+<h3 id="es-modules"><a href="#es-modules">ES Modules</h3></a>
+<aside>
+    <p><a href="https://hacks.mozilla.org/2018/03/es-modules-a-cartoon-deep-dive/">Background Reading: ES Modules: A cartoon deep-dive</a></p>
+  </aside>
+<h2 id="import-forms"><a href="#import-forms">Import Forms</h2></a>
+<h2 id="importing-commonjs-modules-with-es-syntax"><a href="#importing-commonjs-modules-with-es-syntax">Importing CommonJS modules with ES Syntax</h2></a>
+<ul>
+<li>Overview of Choices<ul>
+<li>ES6 (read MDN)</li>
+<li>CommonJS</li>
+<li>AMD</li>
+<li>SystemJS</li>
+<li>UMD</li>
+<li>See the appendix because oh my god</li></ul></li>
+<li>Import forms</li>
+<li>Paths and Module resolution</li>
+<li>Synthetic defaults</li>
+<li>Import ellision</li>
+</ul>
+    </article>
+    </body>
+    </html>
