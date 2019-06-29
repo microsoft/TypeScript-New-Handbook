@@ -2,7 +2,7 @@
 
 __toc__
 
-Each and every value in JavaScript has a set of behaviors you can observe from running different operations.
+Every value in JavaScript has a set of behaviors you can observe from running different operations.
 That sounds abstract, but as a quick example, consider some operations we might run on a variable named `foo`.
 
 ```js
@@ -14,10 +14,10 @@ foo.toLowerCase();
 foo();
 ```
 
-If we break this down, the first runnable line of code accesses a property called `toLowerCase` and then calls it.
+The first runnable line of code accesses a property called `toLowerCase` and then calls it.
 The second one tries to call `foo` directly.
 
-But assuming we don't know the value of `foo` - and that's pretty common - we can't reliably say what results we'll get from trying to run any of this code.
+But assuming we don't know the value of `foo` - which is common - we can't reliably say what results we'll get from trying to run any of this code.
 The behavior of each operation depends entirely on what what value we had in the first place.
 Is `foo` callable?
 Does it have a property called `toLowerCase` on it?
@@ -31,7 +31,7 @@ Let's say `foo` was defined in the following way.
 let foo = "Hello World!";
 ```
 
-As you can probably guess, if we try to run `foo.toLowerCase()`, we'll get the same string, but completely in lower-case letters.
+If we try to run `foo.toLowerCase()`, we'll get the same string, but completely in lower-case letters.
 
 What about that second line of code?
 If you're familiar with JavaScript, you'll know this fails with an exception:
@@ -46,7 +46,7 @@ That's part of what that `TypeError` is alluding to - it's saying that there's n
 
 For some values, such as the primitives `string` and `number`, we can identify their type at runtime using the `typeof` operator.
 But for other things like functions, there's no corresponding runtime mechanism to identify their types.
-For example, consider this function:
+Consider this function:
 
 ```js
 function fn(x) {
@@ -66,7 +66,7 @@ The alternative is to use a *static* type system to make predictions about what 
 ## Static type-checking
 
 Think back to that `TypeError` we got earlier from calling a `string`.
-*Most people* don't like to get any sorts of errors when running their code - those are considered bugs!
+*Most people* don't like errors when running their code - those are considered bugs!
 And when we write new code, we try our best to avoid introducing new bugs.
 
 If we add just a bit of code, save our file, refresh our app, and immediately see the error, we might be able to isolate the problem quickly; but that's not always the case.
@@ -84,7 +84,7 @@ let foo = "hello!";
 foo();
 ```
 
-Running that last sample with TypeScript will give us an error message before we run the code in the first place.
+Running that last sample with TypeScript will give us an error message before we run the code.
 
 ## Non-exception Failures
 
@@ -117,7 +117,7 @@ foo.location; // returns undefined
 ```
 
 While sometimes that implies a trade-off in what you can express, the intent is to catch legitimate bugs in our programs.
-And TypeScript catches *a lot* of legitimate bugs.
+And TypeScript catches *many* legitimate bugs.
 For example: typos,
 
 ```ts
@@ -238,7 +238,7 @@ If we run `tsc hello.ts` again, notice that we get an error on the command line!
 Expected 2 arguments, but got 1.
 ```
 
-TypeScript is telling us we forgot to pass an argument to the `greet` function, and rightfully so.
+TypeScript is telling us we forgot to pass an argument to the `greet` function.
 So far we've only written standard JavaScript, and yet type-checking was still able to find problems with our code.
 Thanks TypeScript!
 
@@ -255,7 +255,7 @@ Eventually you'll get around to cleaning things up for the type-checker, but tha
 Why should converting it over to TypeScript stop you from running it?
 
 So TypeScript doesn't get in your way.
-Of course, over time, you may want to be a bit more defensive against mistakes, and make TypeScript act a bit more strictly.
+Over time, you may want to be a bit more defensive against mistakes, and make TypeScript act a bit more strictly.
 In that case, you can use the `--noEmitOnError` compiler option.
 Try changing your `hello.ts` file and running `tsc` with that flag:
 
@@ -297,7 +297,7 @@ TypeScript reported an error on our second argument, but why?
 Perhaps surprisingly, calling `Date()` in JavaScript returns a `string`.
 On the other hand, constructing a `Date` with `new Date()` actually gives us what we were expecting.
 
-Anyway, we can quickly fix up the error:
+We can quickly fix up the error:
 
 ```ts
 function greet(person: string, date: Date) {
@@ -307,9 +307,8 @@ function greet(person: string, date: Date) {
 greet("Maddison", new Date());
                   ^^^^^^^^^^
 ```
-
-Keep in mind, we don't always have to write explicit type annotations.
-In many cases, TypeScript can even just *infer* (or "figure out") the types for us even if we omit them.
+Remember, we don't always have to write explicit type annotations.
+Often TypeScript can even just *infer* (or "figure out") the types for us even if we omit them.
 
 ```ts
 let foo = "hello there!"
@@ -335,7 +334,6 @@ Notice two things here:
 1. Our `person` and `date` parameters no longer have type annotations.
 2. Our "template string" - that string that used backticks (the `` ` `` character - was converted to plain strings with concatenations (`+`).
 
-More on that second point later, but let's now focus on that first point.
 Type annotations aren't part of JavaScript (or ECMAScript to be pedantic), so there really aren't any browsers or other runtimes that can just run TypeScript unmodified.
 That's why TypeScript needs a compiler in the first place - it needs some way to strip out or transform any TypeScript-specific code so that you can run it.
 Most TypeScript-specific code gets erased away, and likewise, here our type annotations were completely erased.
@@ -374,18 +372,18 @@ function greet(person, date) {
 greet("Maddison", new Date());
 ```
 
-> While the default target is ES3, the great majority of running browsers support ES5.
-> Today, most developers can safely specify ES5 or even ES2016 as a target unless compatibility with certain ancient browers is important.
+> While the default target is ES3, nearly all running browsers support ES5.
+> Today, developers can consider ES2015 ("ES6", over 95% of web browsers) as a target, unless compatibility with certain ancient client is important.
+> If the client (browser or server) target is fixed, and you know for certain what level of ECMAScript ahead of time, it is best to that specific version.   E.g. use `--target es2018` for NodeJS v10.
 
 ## Strictness
 
-Users come to TypeScript looking for different things in a type-checker.
-Some people are looking for a more loose opt-in experience which can help validate only some parts of our program and give us decent tooling.
-This is the default experience with TypeScript, where types are optional, inference takes the most lenient types, and there's no checking for potentially `null`/`undefined` values.
+By default, TypeScript is a loose opt-in type-checker which can help validate only some parts of our program and give us decent tooling.
+In this default, types are optional, inference takes the most lenient types, and there's no checking for potentially `null`/`undefined` values.
 Much like how `tsc` emits in the face of errors, these defaults are put in place to stay out of your way.
 If you're migrating existing JavaScript, that might be desirable.
 
-In contrast, a lot of users prefer to have TypeScript validate as much as it can off the bat, and that's why the language provides strictness settings as well.
+In contrast, many other users prefer to have TypeScript validate as much as it can off the bat, and that's why the language provides strictness settings as well.
 These strictness settings turn static type-checking from a switch (either your code is checked or not) into something closer to a dial.
 The farther you turn this dial up, the more TypeScript will check for you.
 This can require a little extra work, but generally speaking it pays for itself in the long run, and enables more thorough checks and more accurate tooling.
