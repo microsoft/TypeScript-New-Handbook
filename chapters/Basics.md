@@ -396,7 +396,7 @@ The two biggest ones you should know about are `noImplicitAny` and `strictNullCh
 
 Recall that in some places, TypeScript doesn't try to infer any types for us and instead falls back to the most lenient type: `any`.
 While `any` is just the JavaScript experience anyway, it defeats the purpose of using TypeScript in the first place.
-To take advantage of our TypeScript tooling, use the `noImplicitAny` flag.  This will issue an error on any variables whose type is implicitly inferred as `any`, helpting to prevent bugs.
+To take advantage of our TypeScript tooling, use the `noImplicitAny` flag.  This will issue an error on any variables whose type is implicitly inferred as `any`, helpting to prevent bugs *as you write code*.
 
 ### `strictNullChecks`
 
