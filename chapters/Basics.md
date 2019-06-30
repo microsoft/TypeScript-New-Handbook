@@ -71,7 +71,7 @@ And when we write new code, we try our best to avoid introducing new bugs.
 
 If we add just a bit of code, save our file, refresh our app, and immediately see the error, we might be able to isolate the problem quickly; but that's not always the case.
 We might not have tested the feature thoroughly enough, so we might never actually run into a potential error that would be thrown!
-Or if we were lucky enough to witness the error, we might have ended up doing large code refactoring.
+Or if we were lucky enough to witness the error, we might have needed to refactor many lines of code to fix it.
 Ideally, we could have a tool that helps us find these bugs *before* our code runs.
 That's what a static type-checker like TypeScript does.
 *Static types systems* describe the shapes and behaviors of what our values will be when we run our programs.
@@ -395,15 +395,12 @@ The two biggest ones you should know about are `noImplicitAny` and `strictNullCh
 ### `noImplicitAny`
 
 Recall that in some places, TypeScript doesn't try to infer any types for us and instead falls back to the most lenient type: `any`.
-This isn't the worst thing that can happen - after all, falling back to `any` is just the JavaScript experience anyway.
-
-However, using `any` often defeats the purpose of using TypeScript in the first place.
-The more typed your program is, the more validation and tooling you'll get, meaning you'll run into fewer bugs as you code.
-Turning on the `noImplicitAny` flag will issue an error on any variables whose type is implicitly inferred as `any`.
+While `any` is just the JavaScript experience anyway, it defeats the purpose of using TypeScript in the first place.
+To take advantage of our TypeScript tooling, use the `noImplicitAny` flag.  This will issue an error on any variables whose type is implicitly inferred as `any`, helpting to prevent bugs.
 
 ### `strictNullChecks`
 
 By default, values like `null` and `undefined` are assignable to any other type.
-This can make writing some code easier, but forgetting to handle `null` and `undefined` is the cause of countless bugs in the world - not even just JavaScript!
+This can make writing some code easier, but forgetting to handle `null` and `undefined` is the cause of countless bugs!
 
 The `strictNullChecks` flag makes handling `null` and `undefined` more explicit to help prevent these bugs.
