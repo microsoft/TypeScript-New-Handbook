@@ -71,8 +71,7 @@ And when we write new code, we try our best to avoid introducing new bugs.
 
 If we add just a bit of code, save our file, refresh our app, and immediately see the error, we might be able to isolate the problem quickly; but that's not always the case.
 We might not have tested the feature thoroughly enough, so we might never actually run into a potential error that would be thrown!
-Or if we were lucky enough to witness the error, we might have ended up doing large refactorings and adding a lot of different code that we're forced to dig through.
-
+Or if we were lucky enough to witness the error, we might have ended up doing large code refactoring.
 Ideally, we could have a tool that helps us find these bugs *before* our code runs.
 That's what a static type-checker like TypeScript does.
 *Static types systems* describe the shapes and behaviors of what our values will be when we run our programs.
@@ -356,7 +355,7 @@ to
 
 Why did this happen?
 
-Template strings are a feature from a version of ECMAScript called ECMAScript 2015 (a.k.a. ECMAScript 6, ES2015, ES6, etc. - don't ask).
+Template strings are a feature from a version of ECMAScript called ECMAScript 2015 (a.k.a. ECMAScript 6, ES2015, ES6).
 TypeScript has the ability to rewrite code from newer versions of ECMAScript to older ones such as ECMAScript 3 or ECMAScript 5 (a.k.a. ES3 and ES5).
 This process from moving from a newer or "higher" version of ECMAScript to an older or "lower" one is sometimes called *downleveling*.
 
@@ -372,8 +371,8 @@ function greet(person, date) {
 greet("Maddison", new Date());
 ```
 
-> While the default target is ES3, nearly all running browsers support ES5.
-> Today, developers can consider ES2015 ("ES6", over 95% of web browsers) as a target, unless compatibility with certain ancient client is important.
+> While the default target is ES3, all modern browsers support ES5.
+> Today, developers should consider ES2015 ("ES6", over 95% of web browsers) as a target, unless compatibility with ancient clients is important.
 > If the client (browser or server) target is fixed, and you know for certain what level of ECMAScript ahead of time, it is best to that specific version.   E.g. use `--target es2018` for NodeJS v10.
 
 ## Strictness
@@ -407,4 +406,4 @@ Turning on the `noImplicitAny` flag will issue an error on any variables whose t
 By default, values like `null` and `undefined` are assignable to any other type.
 This can make writing some code easier, but forgetting to handle `null` and `undefined` is the cause of countless bugs in the world - not even just JavaScript!
 
-The `strictNullChecks` flag makes handling `null` and `undefined` more explicit, and *spares* us from worrying about whether we *forgot* to handle `null` and `undefined`.
+The `strictNullChecks` flag makes handling `null` and `undefined` more explicit to help prevent these bugs.
