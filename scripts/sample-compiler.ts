@@ -156,14 +156,16 @@ function setOption(name: string, value: string, opts: ts.CompilerOptions) {
     console.error(`No compiler setting named ${name} exists!`);
 }
 
+const booleanConfigRegexp = /^\/\/\s?@(\w+)$/;
+const valuedConfigRegexp = /^\/\/\s?@(\w+):\s?(\w+)$/;
 function filterCompilerOptions(codeLines: string[], defaultCompilerOptions: ts.CompilerOptions) {
     const options = { ...defaultCompilerOptions };
     for (let i = 0; i < codeLines.length;) {
         let match;
-        if (match = /^\/\/\s?@(\w+)$/.exec(codeLines[i])) {
+        if (match = booleanConfigRegexp.exec(codeLines[i])) {
             options[match[1]] = true;
             setOption(match[1], "true", options);
-        } else if (match = /^\/\/\s?@(\w+):\s?(\w+)$/.exec(codeLines[i])) {
+        } else if (match = valuedConfigRegexp.exec(codeLines[i])) {
             setOption(match[1], match[2], options);
         } else {
             i++;
@@ -173,6 +175,29 @@ function filterCompilerOptions(codeLines: string[], defaultCompilerOptions: ts.C
     }
     return options;
 }
+
+
+const defaultHandbookOptions = {
+    noErrors: false
+};
+function filterHandbookOptions(codeLines: string[]): typeof defaultHandbookOptions {
+    const options: any = { ...defaultHandbookOptions };
+    for (let i = 0; i < codeLines.length;) {
+        let match;
+        if (match = booleanConfigRegexp.exec(codeLines[i])) {
+            options[match[1]] = true;
+        } else if (match = valuedConfigRegexp.exec(codeLines[i])) {
+            options[match[1]] = match[2];
+        } else {
+            i++;
+            continue;
+        }
+        codeLines.splice(i, 1);
+    }
+    return options;
+}
+
+
 
 function shikiSpans(highlighter: Highlighter, code: string, lang: string) {
     const spans: Tagging[] = [];
@@ -224,8 +249,9 @@ export async function getCompilerExtension() {
 
                 const codeLines = code.split(/\r\n?|\n/g);
 
-                const options = filterCompilerOptions(codeLines, { ...defaultCompilerOptions });
-                lsHost.setOptions(options);
+                const handbookOptions = filterHandbookOptions(codeLines);
+                const compilerOptions = filterCompilerOptions(codeLines, { ...defaultCompilerOptions });
+                lsHost.setOptions(compilerOptions);
 
                 // Remove ^^^^^^ lines from example and store
                 const { highlights, queries } = filterHighlightLines(codeLines);
@@ -237,11 +263,14 @@ export async function getCompilerExtension() {
 
                 const scriptSnapshot = lsHost.getScriptSnapshot(sampleFileRef.fileName);
                 const scriptVersion = "" + sampleFileRef.versionNumber;
-                docRegistry.updateDocument(sampleFileRef.fileName, options, scriptSnapshot!, scriptVersion);
+                docRegistry.updateDocument(sampleFileRef.fileName, compilerOptions, scriptSnapshot!, scriptVersion);
 
                 const semanticSpans = ls.getEncodedSemanticClassifications(sampleFileRef.fileName, ts.createTextSpan(0, code.length)).spans;
-                const errs = ls.getSemanticDiagnostics(sampleFileRef.fileName);
-                errs.push(...ls.getSyntacticDiagnostics(sampleFileRef.fileName));
+                const errs = [];
+                if (!handbookOptions.noErrors) {
+                    errs.push(...ls.getSemanticDiagnostics(sampleFileRef.fileName));
+                    errs.push(...ls.getSyntacticDiagnostics(sampleFileRef.fileName));
+                }
 
                 const parts: string[] = [`<pre class="typescript-code">`];
 
