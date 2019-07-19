@@ -129,6 +129,7 @@ function serverSpansToTaggings(arr: number[]) {
 }
 
 function setOption(name: string, value: string, opts: ts.CompilerOptions) {
+    console.log(`Setting ${name} to ${value}`);
     for (const opt of ts.optionDeclarations) {
         if (opt.name.toLowerCase() === name.toLowerCase()) {
             switch (opt.type) {
@@ -144,6 +145,7 @@ function setOption(name: string, value: string, opts: ts.CompilerOptions) {
 
                 default:
                     opts[opt.name] = opt.type.get(value.toLowerCase());
+                    console.log(`Set ${opt.name} to ${opts[opt.name]}`);
                     if (opts[opt.name] === undefined) {
                         const keys = Array.from(opt.type.keys() as any);
                         console.error(`Invalid value ${value} for ${opt.name}. Allowed values: ${keys.join(",")}`);
@@ -178,21 +180,26 @@ function filterCompilerOptions(codeLines: string[], defaultCompilerOptions: ts.C
 
 
 const defaultHandbookOptions = {
-    noErrors: false
+    noErrors: false,
+    showEmit: false
 };
 function filterHandbookOptions(codeLines: string[]): typeof defaultHandbookOptions {
     const options: any = { ...defaultHandbookOptions };
-    for (let i = 0; i < codeLines.length;) {
+    for (let i = 0; i < codeLines.length; i++) {
         let match;
         if (match = booleanConfigRegexp.exec(codeLines[i])) {
-            options[match[1]] = true;
+            if (match[1] in options) {
+                options[match[1]] = true;
+                codeLines.splice(i, 1);
+                i--;
+            }
         } else if (match = valuedConfigRegexp.exec(codeLines[i])) {
-            options[match[1]] = match[2];
-        } else {
-            i++;
-            continue;
+            if (match[1] in options) {
+                options[match[1]] = match[2];
+                codeLines.splice(i, 1);
+                i--;
+            }
         }
-        codeLines.splice(i, 1);
     }
     return options;
 }
@@ -367,6 +374,13 @@ export async function getCompilerExtension() {
                         }
                         parts.push(`</div>`);
                     }
+                }
+
+                if (handbookOptions.showEmit) {
+                    parts.push(`<hr class="js-divider">`);
+                    parts.push(`<pre class="emitted-js">`);
+                    parts.push(ls.getEmitOutput(sampleFileRef.fileName).outputFiles[0].text);
+                    parts.push(`</pre>`);
                 }
 
                 const url = `https://www.typescriptlang.org/play/#src=${encodeURIComponent(code)}`;
