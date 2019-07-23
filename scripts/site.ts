@@ -5,7 +5,7 @@ import fs = require('fs-extra');
 import * as render from './render';
 import { Outline } from './master-outline-generator';
 import { Everything } from './everything-generator';
-import { fileNameToUrlName } from './utils';
+import { fileNameToUrlName, textToAnchorName } from './utils';
 import { getHeaders } from './header-parser';
 import { sassCompiler } from './sass-compiler';
 
@@ -65,7 +65,7 @@ async function collectTopicTargets() {
                 const headers = getHeaders(content);
                 for (const h of headers) {
                     const shortFileName = fileNameToUrlName(file.replace(/\.md$/, ""));
-                    for (const s of ["#" + h.anchor, h.title, shortFileName + "#" + h.anchor]) {
+                    for (const s of ["#" + h.anchor, h.title, shortFileName + "#" + h.anchor, textToAnchorName(h.title)]) {
                         add(s, h.title, `/${dir}/${shortFileName}#${h.anchor}`);
                     }
                 }

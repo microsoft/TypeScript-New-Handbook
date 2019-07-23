@@ -24,7 +24,7 @@ body article {
 
 @media(min-width: 800px) {
     body article {
-        max-width: 65%
+        max-width: 65em;
     }
 }
 
@@ -249,12 +249,11 @@ span.toc-title {
 }
 
 ul {
-    padding-left: 1em;
-    margin-left: 1em;
+    padding-left: 0em;
 }
 
 ul ul, ul ul ul {
-    margin-left: 0.5em;
+    margin-left: 1.3em;
 }
 
 
