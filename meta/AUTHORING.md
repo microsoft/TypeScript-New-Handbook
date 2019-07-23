@@ -86,6 +86,16 @@ foo();
 Sometimes a code sample should be able to refer to declarations that you don't want to display in a sample.
 Any code above a line containing only `//cut` will not be displayed, but the code will be highlighted and errored as if it were there.
 
+### Code Sample Options
+
+#### `@noErrors`
+
+Disables display of errors in a sample
+
+#### `@showEmit`
+
+Displays the emitted JavaScript for a file
+
 ## Publishing
 
 The site is published at https://microsoft.github.io/TypeScript-New-Handbook/outline/index.html via the `master` branch `docs` folder.

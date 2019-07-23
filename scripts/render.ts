@@ -50,7 +50,7 @@ export function updateTopicTargets(map: typeof topicMap) {
 showdown.extension("topic-link", function () {
     return [{
         type: "lang",
-        regex: /\[\[(.+)\]\]/gm,
+        regex: /\[\[(.+?)\]\]/gm,
         replace(_1: any, topic: string) {
             if (topic in topicMap) {
                 const target = topicMap[topic];

@@ -7,6 +7,17 @@ Understanding these differences will help you write better JavaScript code, and 
 
 __toc__
 
+## Co-learning JavaScript
+
+If you're familiar with JavaScript already but are primarily a Java or C# programmer, this introductory page can help explain some of the common misconceptions and pitfalls you might be susceptible to.
+Some of the ways that TypeScript models types are quite different from Java or C#, and it's important to keep these in mind when learning TypeScript.
+
+If you're a Java or C# programmer that is new to JavaScript in general, we recommend learning a little bit of JavaScript *without* types first to understand JavaScript's runtime behaviors.
+Because TypeScript doesn't change how your code *runs*, you'll still have to learn how JavaScript works in order to write code that actually does something!
+
+It's important to remember that TypeScript uses the same *runtime* as JavaScript, so any resources about how to accomplish specific runtime behavior (converting a string to a number, displaying an alert, writing a file to disk, etc.) will always apply equally well to TypeScript programs.
+Don't limit yourself to TypeScript-specific resources!
+
 ## Rethinking the Class
 
 C# and Java are what we might call *mandatory OOP* languages.
@@ -170,6 +181,3 @@ Because TypeScript's type system is fully erased, information about e.g. the ins
 
 JavaScript does have some limited primitives like `typeof` and `instanceof`, but remember that these operators are still working on the values as they exist in the type-erased output code.
 For example, `typeof (new Car())` will be `"object"`, not `Car` or `"Car"`.
-
-## Co-learning JavaScript
-
