@@ -74,7 +74,8 @@ export async function render(content: string) {
     const conv = new showdown.Converter({
         customizedHeaderId: true,
         ghCompatibleHeaderId: true,
-        ghCodeBlocks: true
+        ghCodeBlocks: true,
+        tables: true
     });
     conv.addExtension(await createCompiler(), "ts");
     conv.useExtension("header-link");

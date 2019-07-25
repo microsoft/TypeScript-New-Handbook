@@ -64,7 +64,7 @@ pt.x = "0";
 
 #### `--strictPropertyInitialization`
 
-The [[strictPropertyInitialization]] setting controls whether class fields need to be initialized in the constructor.
+The `strictPropertyInitialization` setting controls whether class fields need to be initialized in the constructor.
 
 ```ts
 class BadGreeter {

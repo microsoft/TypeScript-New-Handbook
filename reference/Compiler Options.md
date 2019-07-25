@@ -3,13 +3,17 @@
 TypeScript has a wide array of configuration options.
 This page is organized by theme, and within each theme the options are roughly sorted in order of how often they're likely to be used.
 
+All settings in TypeScript are optional.
+
+For brevity, this page uses "is set" as shorthand for "is set to `true`".
+
 __toc__
 
 ## Code Emit Options
 
 ### `target`
 
-**Allowed Values**: `ES3` (default), `ES5`, `ES6`/`ES2015` (synonomous), `ES2016`, `ES2017`, `ES2018`, `ES2019`, `ESNext`
+**Allowed Values**: `ES3` (default), `ES5`, `ES6`/`ES2015` (synonomous), `ES7`/`ES2016`, `ES2017`, `ES2018`, `ES2019`, `ESNext`
 
 All modern browsers support all ES6 features, so `ES6` is a good choice.
 You might choose to set a lower target if your code is deployed to older environments, or a higher target if your code only runs on newer environments.
@@ -19,6 +23,9 @@ For example, an arrow function `() => this` will be turned into an equivalent `f
 
 `target` also changes the default value of [[`lib`]].
 You may "mix and match" `target` and `lib` settings as desired.
+
+The value `ESNext` refers to whatever the highest version TypeScript supports at the time is.
+This setting should be used with caution, since it doesn't mean the same thing between TypeScript versions and can make upgrades less predictable.
 
 ### `module`
 
@@ -208,9 +215,35 @@ export function fn(arr: number[]) {
 
 ### `sourceMap`
 
-### `inlineSources`
+**Default**: `false`
+
+Enables the generation of [sourcemap files](https://developer.mozilla.org/en-US/docs/Tools/Debugger/How_to/Use_a_source_map).
+These files allow debuggers and other tools to display the original TypeScript source code when actually working with the emitted JavaScript files.
+Source map files are emitted as `.js.map` (or `.jsx.map`) files next to the corresponding `.js` output file.
+
+The `.js` files will in turn contain a sourcemap comment to indicate to tools where the files are:
+```js
+//# sourceMappingURL=main.js.map
+```
 
 ### `inlineSourceMap`
+
+**Default**: `false`
+
+When set, instead of writing out a `.js.map` file to provide source maps, TypeScript will embed the source map content in the `.js` files.
+Although this results in larger JS files, it can be convenient in some scenarios.
+For example, you might want to debug JS files on a webserver that doesn't allow `.map` files to be served.
+
+Mutually exclusive with `sourceMap`.
+
+### `inlineSources`
+
+**Default**: `false`
+
+When set, TypeScript will include the original content of the `.ts` file as an embedded string in the source map.
+This is often useful in the same cases as `inlineSourceMap`.
+
+Requires either `sourceMap` or `inlineSourceMap` to be set.
 
 ## Emit Location Options
 
@@ -319,36 +352,141 @@ You may want to change these for a few reasons:
  * Your runtime platform provides certain JavaScript API objects (maybe through polyfills), but doesn't yet support the full syntax of a given ECMAScript version
  * You have polyfills or native implementations for some, but not all, of a higher level ECMAScript version
 
-
+| Name                    | Contents / Notes           |
+|-------------------------|----------------------------|
+| ES5                     | Core definitions for all ES3 and ES5 functionality |
+| ES2015                  | Additional APIs available in ES2015 (also known as ES6) |
+| ES6                     | Alias for "ES2015" |
+| ES2016                  | Additional APIs available in ES2016 |
+| ES7                     | Alias for "ES2016" |
+| ES2017                  | Additional APIs available in ES2017 |
+| ES2018                  | Additional APIs available in ES2017 |
+| ESNext                  | Additional APIs available in ESNext |
+| DOM                     | DOM definitions (`window`, `document`, etc.) |
+| DOM.Iterable            | |
+| WebWorker               | APIs available in WebWorker contexts |
+| ScriptHost              | |
+| ES2015.Core             | |
+| ES2015.Collection       | |
+| ES2015.Generator        | |
+| ES2015.Iterable         | |
+| ES2015.Promise          | |
+| ES2015.Proxy            | |
+| ES2015.Reflect          | |
+| ES2015.Symbol           | |
+| ES2015.Symbol.WellKnown | |
+| ES2016.Array.Include    | |
+| ES2017.object           | |
+| ES2017.Intl             | |
+| ES2017.SharedMemory     | |
+| ES2017.String           | |
+| ES2017.TypedArrays      | |
+| ES2018.Intl             | |
+| ES2018.Promise          | |
+| ES2018.RegExp           | |
+| ESNext.AsyncIterable    | |
+| ESNext.Array            | |
+| ESNext.Intl             | |
+| ESNext.Symbol           | |
 
 ### `noLib`
 
-
+Disables the automatic inclusion of any library files.
+If this option is set, `lib` is ignored.
 
 ## File Inclusion Options
 
 ### `include` (tsconfig.json) {#include}
 
+**Allowed values**: An array of strings
+
+**Default**: `[]` if `files` is specified, otherwise `["**/*"]`
+
+```
+{
+   "include": ["src/**", "tests/**"]
+}
+```
+
+Specifies an array of filenames or patterns to include in the program.
+These filenames are resolved relative to the directory containing the `tsconfig.json` file.
+
+`include` and `exclude` support wildcard characters to make glob patterns:
+ * `*` matches zero or more characters (excluding directory separators)
+ * `?` matches any one character (excluding directory separators)
+ * `**/` recursively matches any subdirectory
+
+If a glob pattern doesn't include a file extension, then only files with supported extensions are included (e.g. `.ts`, `.tsx`, and `.d.ts` by default, with `.js` and `.jsx` if `allowJs` is set to true).
+
+### `exclude` (tsconfig.json) {#exclude}
+
+**Allowed values**: An array of strings
+
+**Default**: `["node_modules", "bower_components", "jspm_packages"]`, plus the value of `outDir` if one is specified.
+
+Specifies an array of filenames or patterns that should be skipped when resolving `include`.
+
+**Important**: `exclude` *only* changes which files are included as a result of the `include` setting.
+A file specified by `exclude` can still become part of your program due to an `import` statement in your code, a `types` inclusion, a `/// <reference` directive, or being specified in the `files` list.
+It is not a mechanism that **prevents** a file from being included in the program - it simply changes what the `include` setting finds.
+
 ### `files` (tsconfig.json) {#files}
 
-### `noResolve`
+**Allowed values**: An array of strings
+
+**Default**: None
+
+Specifies an array of files to include in the program.
+An error occurs if any of the files can't be found.
 
 ### `composite`
+
+**Default**: `false`
+
+The `composite` option enforces certain constraints that make it possible for build tools (including TypeScript itself, under `--build` mode) to quickly determine if a project has been built yet.
+
+When this setting is on:
+ * The `rootDir` setting, if not explicitly set, defaults to the directory containing the `tsconfig.json` file.
+ * All implementation files must be matched by an `include` pattern or listed in the `files` array. If this constraint is violated, `tsc` will inform you which files weren't specified.
+ * `declaration` defaults to `true`
 
 ### `allowJs`
 
 ### `forceConsistentCasingInFileNames`
 
+**Default**: `false`
+
+TypeScript follows the case sensitivity rules of the file system it's running on.
+This can be problematic if some developers are working in a case-sensitive file system and others aren't.
+If a file attempts to import `fileManager.ts` by specifying `./FileManager.ts` the file will be found in a case-insensitive file system, but not on a case-sensitive file system.
+
+When this option is set, TypeScript will issue an error if a program tries to include a file by a casing different from the casing on disk.
+
+We recommend enabling this option in all projects.
+
 ### `charset`
 
->> ❌ **Deprecated:** This option does nothing.
+> ❌ **Deprecated:** This option does nothing.
 
 In prior versions of TypeScript, this controlled what encoding was used when reading text files from disk.
 Today, TypeScript assumes UTF-8 encoding, but will correctly detect UTF-16 (BE and LE) or UTF-8 BOMs.
 
+### `noResolve`
+
+> 🧙 This option is rarely used.
+
+**Default**: `false`
+
+By default, TypeScript will examine the initial set of files for `import` and `<reference` directives and add these resolved files to your program.
+
+If `noResolve` isn't set, this process doesn't happen.
+However, `import` statements are still checked to see if they resolve to a valid module, so you'll need to make sure this is satisfied by some other means.
+
 ## Module Resolution Options
 
 ### `baseUrl`
+
+### `paths`
 
 ### `allowSyntheticDefaultImports`
 
@@ -356,27 +494,161 @@ Today, TypeScript assumes UTF-8 encoding, but will correctly detect UTF-16 (BE a
 
 ### `strict` {#--strict}
 
-#### `strictPropertyInitialization`
+> ✅ We recommend enabling this in all codebases, especially new ones
 
-#### `strictBindCallApply`
+**Default**: `false`
+
+The `strict` flag enables a wide range of type checking behavior that results in stronger guarantees of program correctness.
+Turning this on is equivalent to enabling all of the *strict mode family* options, which are outlined below.
+You can then turn off individual strict mode family checks as needed.
+
+Future versions of TypeScript may introduce additional stricter checking under this flag, so upgrades of TypeScript might result in new type errors in your program.
+When appropriate and possible, a corresponding flag will be added to disable that behavior.
 
 #### `strictNullChecks`
 
+> ✅ We recommend enabling this in all codebases, especially ones
+
+**Default**: `false`, unless `strict` is set
+
+When `strictNullChecks` is `false`, `null` and `undefined` are considered to be valid values of all types.
+This can lead to unexpected errors at runtime.
+
+When `strictNullChecks` is `true`, `null` and `undefined` have their own distinct types and you'll get a type error if you try to use them where a concrete value is expected.
+
+#### `strictPropertyInitialization`
+
+**Default**: `false`, unless `strict` is set
+
+When set, it becomes an error to declare a class property without directly initializing it before the end of the constructor.
+See the corresponding section in [[Classes]].
+
+#### `strictBindCallApply`
+
+**Default**: `false`, unless `strict` is set
+
+When set, TypeScript will check that the built-in methods of functions `call`, `bind`, and `apply` are invoked with correct argument for the underlying function:
+
+```ts
+// With strictBindCallApply on
+function fn(x: string) {
+   return parseInt(x);
+}
+
+const n1 = fn.call(undefined, "10");
+      ^?
+
+const n2 = fn.call(undefined, false);
+```
+
+Otherwise, these functions accept any arguments and will return `any`:
+
+```ts
+// @strictBindCallApply: false
+
+// With strictBindCallApply off
+function fn(x: string) {
+   return parseInt(x);
+}
+
+// Note: No error; return type is 'any'
+const n = fn.call(undefined, false);
+      ^?
+```
+
 #### `strictFunctionTypes`
+
+> ✅ We strongly recommend enabling this in all codebases
+
+**Default**: `false`, unless `strict` is set
+
+When enabled, this flag causes functions parameters to be checked more correctly.
+
+Here's a basic example with `strictFunctionTypes` *off*:
+```ts
+// @strictFunctionTypes: false
+function fn(x: string) {
+   console.log("Hello, " + x.toLowerCase());
+}
+
+type StringOrNumberFunc = (ns: string | number) => void;
+
+// Unsafe assignment
+let func: StringOrNumberFunc = fn;
+// Unsafe call - will crash
+func(10);
+```
+
+With `strictFunctionTypes` *on*, the error is correctly detected:
+```ts
+function fn(x: string) {
+   console.log("Hello, " + x.toLowerCase());
+}
+
+type StringOrNumberFunc = (ns: string | number) => void;
+
+// Unsafe assignment is prevented
+let func: StringOrNumberFunc = fn;
+```
+
+During development of this feature, we discovered a large number of inherently unsafe class hierarchies, including some in the DOM.
+Because of this, the setting only applies to functions written in *function* syntax, not to those in *method* syntax:
+```ts
+type Methodish = {
+   func(x: string| number): void;
+};
+function fn(x: string)  {
+   console.log("Hello, " + x.toLowerCase());
+}
+
+// Ultimately an unsafe assignment, but not detected
+const m: Methodish = {
+   func: fn
+};
+m.func(10);
+```
+
 
 #### `noImplicitAny`
 
+> ✅ We strongly recommend enabling this in all codebases
+
+**Default**: `false`, unless `strict` is set
+
+In some cases where no type annotations are present, TypeScript will fall back to a type of `any` for a variable.
+This can cause some errors to be missed:
+
+```ts
+// @noImplicitAny: false
+function fn(s) {
+   // No error?
+   console.log(s.subtr(3))
+}
+fn(42);
+```
+
+When `noImplicitAny` is set, TypeScript will issue an error whenver it would have inferred `any`:
+```ts
+function fn(s) {
+   console.log(s.subtr(3))
+}
+```
+
 #### `noImplicitThis`
 
-#### `alwaysStrict`
+**Default**: `false`, unless `strict` is set
 
 ### `suppressExcessPropertyErrors`
 
+> ❌ **Discouraged:** Consider using `@ts-ignore` instead
+
 ### `suppressImplicitAnyIndexErrors`
+
+> ❌ **Discouraged:** Consider using `@ts-ignore` instead
 
 ### `keyofStringsOnly`
 
->> ❌ **Discouraged:** This flag was provided for backward compatibility reasons and should not be enabled in new or maintained codebases.
+> ❌ **Discouraged:** This flag was provided for backward compatibility reasons and should not be enabled in new or maintained codebases.
 
 **Default**: `false`
 
@@ -403,6 +675,42 @@ This flag changes the `keyof` type operator to return `string` instead of `strin
 ### `listFiles`
 
 ## Miscellaneous
+
+### `alwaysStrict`
+
+```ts
+// @showEmit
+// @alwaysStrict
+function fn() { }
+```
+
+```ts
+// @showEmit
+function fn() { }
+```
+
+
+### `noImplicitUseStrict`
+
+> 🧙‍ You shouldn't need this
+
+By default, when emitting a module file to a non-ES6 target, TypeScript emits a `"use strict";` prologue at the top of the file.
+This setting disables that.
+
+```ts
+// @showEmit
+// @target: ES3
+// @module: AMD
+// @noImplicitUseStrict
+export function fn() { }
+```
+
+```ts
+// @showEmit
+// @target: ES3
+// @module: AMD
+export function fn() { }
+```
 
 ### `init`
 
