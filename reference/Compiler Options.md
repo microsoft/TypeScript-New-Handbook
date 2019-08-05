@@ -249,7 +249,7 @@ Requires either `sourceMap` or `inlineSourceMap` to be set.
 
 ### `rootDir`
 
-**Default**: The longest common path of all non-declaration input files
+**Default**: The longest common path of all non-declaration input files. If `composite` is set, the default is instead the directory containing the `tsconfig.json` file.
 
 When TypeScript compiles files, it keeps the same directory structure in the output directory as exists in the input directory.
 
@@ -595,7 +595,7 @@ During development of this feature, we discovered a large number of inherently u
 Because of this, the setting only applies to functions written in *function* syntax, not to those in *method* syntax:
 ```ts
 type Methodish = {
-   func(x: string| number): void;
+   func(x: string | number): void;
 };
 function fn(x: string)  {
    console.log("Hello, " + x.toLowerCase());
@@ -640,17 +640,30 @@ function fn(s) {
 
 ### `suppressExcessPropertyErrors`
 
-> ❌ **Discouraged:** Consider using `@ts-ignore` instead
+> ❌ **Discouraged:** This flag is provided for backward compatibility. Consider using `@ts-ignore` instead.
+
+This disables reporting of excess property errors, such as the one shown in the following example
+
+```ts
+type Point = { x: number, y: number };
+const p: Point = { x: 1, y: 3, m: 10 };
+```
+
 
 ### `suppressImplicitAnyIndexErrors`
 
-> ❌ **Discouraged:** Consider using `@ts-ignore` instead
+> ❌ **Discouraged:** This flag is provided for backward compatibility. Consider using `@ts-ignore` instead.
+
+This disables reporting of implicit `any` warnings when indexing into objects, such as shown in the following example
+
+```ts
+const obj = { x: 10 };
+console.log(obj["foo"]);
+```
 
 ### `keyofStringsOnly`
 
 > ❌ **Discouraged:** This flag was provided for backward compatibility reasons and should not be enabled in new or maintained codebases.
-
-**Default**: `false`
 
 This flag changes the `keyof` type operator to return `string` instead of `string | number` when applied to a type with a string index signature.
 
@@ -658,7 +671,38 @@ This flag changes the `keyof` type operator to return `string` instead of `strin
 
 ### `allowUnreachableCode`
 
+Disables warnings about unreachable code.
+These warnings are only about code which is provably unreachable due to syntactic construction, like the example below.
+
+```ts
+// @allowUnreachableCode: false
+function fn(n: number) {
+   if (n > 5) {
+      return true;
+   } else {
+      return false;
+   }
+   return true;
+}
+```
+
+TypeScript doesn't error on the basis of code which *appears* to be unreachable due to type analysis.
+
 ### `allowUnusedLabels`
+
+Disables warnings about unused labels.
+Labels are very rare in JavaScript and typically indicate an attempt to write an object literal:
+
+```ts
+// @allowUnusedLabels: false
+function f(a: number) {
+   // Forgot 'return' statement!
+   if (a > 10)
+   {
+       m: 0
+   }
+}
+```
 
 ## Decorators
 
@@ -680,12 +724,13 @@ This flag changes the `keyof` type operator to return `string` instead of `strin
 
 ```ts
 // @showEmit
-// @alwaysStrict
+// @alwaysStrict: true
 function fn() { }
 ```
 
 ```ts
 // @showEmit
+// @alwaysStrict: false
 function fn() { }
 ```
 

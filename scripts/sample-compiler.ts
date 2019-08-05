@@ -204,8 +204,6 @@ function filterHandbookOptions(codeLines: string[]): typeof defaultHandbookOptio
     return options;
 }
 
-
-
 function shikiSpans(highlighter: Highlighter, code: string, lang: string) {
     const spans: Tagging[] = [];
     const tokens = highlighter.codeToThemedTokens(code, lang);
