@@ -18,6 +18,202 @@
         </div>
     <article>
     <h1 id="modules"><a href="#modules">Modules</h1></a>
+<p>Modules as a concept in JavaScript have a long and complicated history that makes any single definition or description difficult.
+Many competing implementations have been shipped and adopted, and multiple mutually-incompatible interop systems have been built on top of those.
+Ultimately, this chapter requires much more background reading than others.</p>
+<p>We'll focus on key aspects of TypeScript-specific behavior after briefly describing the module landscape.</p>
+<div class="toc"><span class="toc-title">Table of Contents</span><ul><li><a href="#a-brief-history-of-modules">A Brief History of Modules</a></li><ul><li><a href="#no-modules">No Modules</a></li><li><a href="#amd">AMD</a></li><li><a href="#commonjs">CommonJS</a></li><li><a href="#umd">UMD</a></li><li><a href="#es6">ES6</a></li></ul><li><a href="#modules-in-typescript">Modules in TypeScript</a></li><li><a href="#syntax">Syntax</a></li><ul><li><a href="#es6">ES6</a></li><ul><li><a href="#namespace-imports">Namespace Imports</a></li><ul><li><a href="#namespace-imports-of-functions-and-classes">Namespace Imports of Functions and Classes</a></li></ul><li><a href="#destructuring-imports">Destructuring Imports</a></li><li><a href="#default-imports">Default Imports</a></li><li><a href="#synthetic-defaults-and-esmoduleinterop">Synthetic Defaults and <code>esModuleInterop</code></a></li><li><a href="#export-forms">Export Forms</a></li></ul><li><a href="#commonjs-style-import-and-export-=">CommonJS-style <code>import</code> and <code>export =</code></a></li><ul><li><a href="#import-...-=-require(...)"><code>import ... = require(...)</code></a></li><li><a href="#unsupported-syntax">Unsupported Syntax</a></li></ul></ul><li><a href="#unused-and-type-only-imports">Unused and Type-Only Imports</a></li><li><a href="#module-syntax-in-typescript">Module Syntax in TypeScript</a></li><li><a href="#non-modules">Non-modules</a></li><ul><li><a href="#es6">ES6</a></li><li><a href="#amd">AMD</a></li></ul><li><a href="#import-paths-and-module-resolution">Import Paths and Module Resolution</a></li><li><a href="#declaring-modules">Declaring Modules</a></li><ul><li><a href="#es-modules">ES Modules</a></li></ul><li><a href="#import-forms">Import Forms</a></li><li><a href="#importing-commonjs-modules-with-es-syntax">Importing CommonJS modules with ES Syntax</a></li></ul></ul></div>
+<h2 id="a-brief-history-of-modules"><a href="#a-brief-history-of-modules">A Brief History of Modules</h2></a>
+<p>Let's review how we got into this mess by doing a short chronological walkthrough of modules as they've existed throughout JavaScript's history.</p>
+<h3 id="no-modules"><a href="#no-modules">No Modules</h3></a>
+<p>In the beginning, there were just <code>&lt;script&gt;</code> tags in HTML files.
+All JavaScript code was loaded and executed before the page was rendered, and all files worked in the same global scope.
+Different parts of a program could talk to each other through global variables.</p>
+<p>This is represented today by the setting <code>module: "none"</code> - there are no modules.</p>
+<p>This was good for simple programs, but the limitations of this approach are quickly encountered.
+Loading all JavaScript at once is bad for page load times, and different files had to be careful to not interefere with each other' global variables.
+Worse, there was no way for a single JavaScript file to declare its dependencies.
+Programmers had to ensure that any HTML file their file was included in had the proper prerequisites.</p>
+<h3 id="amd"><a href="#amd">AMD</h3></a>
+<p><pre class="typescript-code"><span class="tm-cmt">// An example AMD module</span>
+<span class="tm-mth">define</span>(<span class="tm-str">"my_module"</span>, [<span class="tm-str">"dependency_1"</span>, <span class="tm-str">"dependency_2"</span>], <span class="tm-kw">function</span>(<span class="tm-vr">dep1</span>, <span class="tm-vr">dep2</span>) {
+  <span class="tm-kw">return</span> {
+    <span class="tm-vr">name:</span> <span class="tm-str">"My Awesome Module"</span>,
+    <span class="tm-vr">greet:</span> () <span class="tm-kw">=></span> {
+      <span class="tm-mth">alert</span>(<span class="tm-str">"Hello, world!"</span>);
+    }
+  };
+});<a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20An%20example%20AMD%20module%0Adefine(%22my_module%22%2C%20%5B%22dependency_1%22%2C%20%22dependency_2%22%5D%2C%20function(dep1%2C%20dep2)%20%7B%0A%20%20return%20%7B%0A%20%20%20%20name%3A%20%22My%20Awesome%20Module%22%2C%0A%20%20%20%20greet%3A%20()%20%3D%3E%20%7B%0A%20%20%20%20%20%20alert(%22Hello%2C%20world!%22)%3B%0A%20%20%20%20%7D%0A%20%20%7D%3B%0A%7D)%3B">Try</a></pre></p>
+<p><a href="https://requirejs.org/docs/whyamd.html">AMD, the asynchronous module definition</a> solved many of these problems.
+It allowed for each part of a program to declare its dependencies, and modules could be loaded asynchronously.
+Each module ran in its own explicitly-written function body, avoiding conflicts in the global scope.
+You could also write multiple modules in the same JavaScript file, if desired.</p>
+<p>This is the standard implemented by <a href="https://requirejs.org">RequireJS</a>, and is also recognized by some module bundlers.</p>
+<p>AMD is very configurable in how a module name is resolved to a given file.
+In fact, one file might provide multiple module definitions, and file lookup might not occur at all for some module names.</p>
+<h3 id="commonjs"><a href="#commonjs">CommonJS</h3></a>
+<p><pre class="typescript-code"><span class="tm-cmt">// An example CommonJS module</span>
+<span class="tm-kw">const</span> <span class="tm-vr">fs</span> = <span class="tm-mth">require</span>(<span class="tm-str">"fs"</span>);
+
+<span class="tm-typ">module</span>.<span class="tm-typ">exports</span> = <span class="tm-kw">function</span>() {
+  <span class="tm-kw">return</span> fs.<span class="tm-mth">readFile</span>(<span class="tm-str">"someFile.txt"</span>);
+};<a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20An%20example%20CommonJS%20module%0Aconst%20fs%20%3D%20require(%22fs%22)%3B%0A%0Amodule.exports%20%3D%20function()%20%7B%0A%20%20return%20fs.readFile(%22someFile.txt%22)%3B%0A%7D%3B">Try</a></pre></p>
+<p><a href="https://nodejs.org">Node.js</a> took a different approach and implemented a module system known as <a href="https://nodejs.org/docs/latest/api/modules.html">CommonJS</a>.
+Here, modules are loaded synchronously through a call to the <code>require</code> function, meaning that module dependencies are <em>imperative</em> rather than <em>declarative</em>.
+There's also a more explicit one-to-one relationship between modules and files.</p>
+<p>While the CommonJS specification itself doesn't specify the relationship between module names and file paths, it's commonly understood that NodeJS's resolution algorithm (which involves looking in <code>node_modules</code> for non-relative paths) is implied.</p>
+<h3 id="umd"><a href="#umd">UMD</h3></a>
+<p><pre class="typescript-code"><span class="tm-cmt">// UMD wrapper for either global or AMD environment</span>
+<span class="tm-cmt">// Adapted from https://github.com/umdjs/umd/blob/master/templates/amdWebGlobal.js</span>
+(<span class="tm-kw">function</span> (<span class="tm-vr">root</span>, <span class="tm-vr">factory</span>) {
+    <span class="tm-kw">if</span> (<span class="tm-kw">typeof</span> <span class="tm-vr">define</span> === <span class="tm-str">'function'</span> && <span class="tm-vr">define</span>.<span class="tm-vr">amd</span>) {
+        <span class="tm-mth">define</span>([<span class="tm-str">'b'</span>], <span class="tm-kw">function</span> (<span class="tm-vr">b</span>) {
+            <span class="tm-kw">return</span> (<span class="tm-vr">root</span>.<span class="tm-vr">amdWebGlobal</span> = <span class="tm-mth">factory</span>(<span class="tm-vr">b</span>));
+        });
+    } <span class="tm-kw">else</span> {
+        <span class="tm-vr">root</span>.<span class="tm-vr">amdWebGlobal</span> = <span class="tm-mth">factory</span>(<span class="tm-vr">root</span>.<span class="tm-vr">b</span>);
+    }
+}(<span class="tm-kw">typeof</span> <span class="tm-vr">self</span> !== <span class="tm-str">'undefined'</span> ? <span class="tm-vr">self</span> : <span class="tm-kw">this</span>, <span class="tm-kw">function</span> (<span class="tm-vr">b</span>) {
+    <span class="tm-cmt">// Use b in some fashion.</span>
+    <span class="tm-kw">return</span> {};
+}));<a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20UMD%20wrapper%20for%20either%20global%20or%20AMD%20environment%0A%2F%2F%20Adapted%20from%20https%3A%2F%2Fgithub.com%2Fumdjs%2Fumd%2Fblob%2Fmaster%2Ftemplates%2FamdWebGlobal.js%0A(function%20(root%2C%20factory)%20%7B%0A%20%20%20%20if%20(typeof%20define%20%3D%3D%3D%20'function'%20%26%26%20define.amd)%20%7B%0A%20%20%20%20%20%20%20%20define(%5B'b'%5D%2C%20function%20(b)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20(root.amdWebGlobal%20%3D%20factory(b))%3B%0A%20%20%20%20%20%20%20%20%7D)%3B%0A%20%20%20%20%7D%20else%20%7B%0A%20%20%20%20%20%20%20%20root.amdWebGlobal%20%3D%20factory(root.b)%3B%0A%20%20%20%20%7D%0A%7D(typeof%20self%20!%3D%3D%20'undefined'%20%3F%20self%20%3A%20this%2C%20function%20(b)%20%7B%0A%20%20%20%20%2F%2F%20Use%20b%20in%20some%20fashion.%0A%20%20%20%20return%20%7B%7D%3B%0A%7D))%3B">Try</a></pre></p>
+<p>At this point, many libraries were being used in non-module environments, AMD environments, and CommonJS environments.
+Instead of shipping three versions of the same code, many libraries decided to write a small wrapper around their code that detected which environment they were in.
+When run in a non-module environment, they'd provide a global variable, otherwise they'd expose a module compatible with AMD or CommonJS.
+This is known as the <em>UMD</em> pattern.</p>
+<p>It's somewhat awkward to load dependencies from a UMD library, so this pattern is most commonly seen for libraries which themselves have no dependencies.</p>
+<p>Some UMD libraries will <em>always</em> create a global variable, while others will only do this if no module loader is present.</p>
+<h3 id="es6"><a href="#es6">ES6</h3></a>
+<p><pre class="typescript-code"><span class="tm-cmt">// An example ES6 module</span>
+<span class="tm-kw">import</span> <span class="tm-kw">*</span> <span class="tm-kw">as</span> <span class="tm-vr">NS</span> <span class="tm-kw">from</span> <span class="tm-str">"someModule"</span>;
+<span class="tm-kw">import</span> { <span class="tm-vr">prop1</span>, <span class="tm-vr">prop2</span> } <span class="tm-kw">from</span> <span class="tm-str">"../anotherModule"</span>;
+
+<span class="tm-kw">export</span> <span class="tm-kw">const</span> <span class="tm-vr">A</span> = <span class="tm-vr">prop1</span> + <span class="tm-vr">prop2</span>;
+<span class="tm-kw">export</span> <span class="tm-kw">function</span> <span class="tm-mth">fn</span>() {
+  <span class="tm-kw">return</span> NS.<span class="tm-mth">method</span>();
+}<a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20An%20example%20ES6%20module%0Aimport%20*%20as%20NS%20from%20%22someModule%22%3B%0Aimport%20%7B%20prop1%2C%20prop2%20%7D%20from%20%22..%2FanotherModule%22%3B%0A%0Aexport%20const%20A%20%3D%20prop1%20%2B%20prop2%3B%0Aexport%20function%20fn()%20%7B%0A%20%20return%20NS.method()%3B%0A%7D">Try</a></pre></p>
+<p>The TC39 committee surveyed the module landscape and wrote a standard that combined some aspects of both CommonJS and AMD, as well as introducing some new concepts.
+An ES6 module statically declares its imports and exports, and its dependencies are loaded synchronously.
+Later, dynamic <code>import</code> was added, which allows for asynchronous non-static dependencies to be loaded.</p>
+<p>ES6 modules do not define a relationship between the paths used in <code>import</code> statements and files on disk.
+Generally, bundlers will use an existing tool's definition of how to turn an import path into a file name, allow user configuration, or both.</p>
+<h2 id="modules-in-typescript"><a href="#modules-in-typescript">Modules in TypeScript</h2></a>
+<p>There are three main things to consider when writing module-based code in TypeScript:</p>
+<ul>
+<li><strong>Syntax</strong>: What syntax do I want to use to import and export things?</li>
+<li><strong>Module Resolution</strong>: What is the relationship between module names (or paths) and files on disk?</li>
+<li><strong>Module Target</strong>: What module format should my emitted JavaScript use?</li>
+</ul>
+<p>Let's review each of these in more detail.</p>
+<h2 id="syntax"><a href="#syntax">Syntax</h2></a>
+<h3 id="es6-1"><a href="#es6-1">ES6</h3></a>
+<aside>
+    <p><strong>Background Reading</strong>: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import">import</a> and <a href="https://developer.mozilla.org/en-US/docs/web/javascript/reference/statements/export">export</a> declarations (MDN)</p>
+  </aside>
+<p>TypeScript supports the full variety of <code>import</code> and <code>export</code> syntaxes.
+You can use these forms when using any module target.
+If you're targeting ES6 modules, these will be transpiled as-is (except for unused imports; see <a href="/chapters/modules#unused-and-type-only-imports">Unused and Type-Only Imports</a>).</p>
+<p>If you're targeting CommonJS or AMD but writing ES6 syntax, TypeScript follows the same interop scheme as Babel.
+Here are examples of each ES6 import and export form and the equivalent CommonJS or AMD outputs.</p>
+<blockquote>
+  <p><strong>Warning!</strong> These interop rules are currently in committee and working group discussions between Node, TC39 (the JavaScript language controlling body), and other
+  community members. At time of writing, <em>none</em> of these interop rules are on track to be standardized, and you may be broken in the future if you use ES6 syntax
+  to import CommonJS modules.
+  The safest thing to do is to use CommonJS-style imports when writing CommonJS code.</p>
+</blockquote>
+<h4 id="namespace-imports"><a href="#namespace-imports">Namespace Imports</h4></a>
+<p>Namespace imports are treated as importing the entire module object:</p>
+<p><pre class="typescript-code"><span class="tm-cmt">// Namespace import</span>
+<span class="tm-kw">import</span> <span class="tm-kw">*</span> <span class="tm-kw">as</span> <span class="tm-vr">ns</span> <span class="tm-kw">from</span> <span class="tm-str">"m"</span>;
+
+<span class="tm-cmt">// Becomes (CommonJS)</span>
+<span class="tm-kw">const</span> <span class="tm-vr">ns</span> = <span class="tm-mth">require</span>(<span class="tm-str">"m"</span>);
+
+<span class="tm-cmt">// Becomes (AMD)</span>
+<span class="tm-mth">define</span>([<span class="tm-str">"m"</span>], <span class="tm-kw">function</span> (<span class="tm-vr">ns</span>) {
+})<a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20Namespace%20import%0Aimport%20*%20as%20ns%20from%20%22m%22%3B%0A%0A%2F%2F%20Becomes%20(CommonJS)%0Aconst%20ns%20%3D%20require(%22m%22)%3B%0A%0A%2F%2F%20Becomes%20(AMD)%0Adefine(%5B%22m%22%5D%2C%20function%20(ns)%20%7B%0A%7D)">Try</a></pre></p>
+<h5 id="namespace-imports-of-functions-and-classes">Namespace Imports of Functions and Classes</h5>
+<p>A common error is to try to use ES6 namespace import syntax to import a function:</p>
+<p><pre class="typescript-code"><span class="tm-kw">import</span> <span class="tm-kw">*</span> <span class="tm-kw">as</span> <span class="tm-vr">express</span> <span class="tm-kw">from</span> <span class="tm-str">"express"</span>;
+<span class="tm-cmt">// Error</span>
+<span class="tm-mth">express</span>();<a class="playground-link" href="https://www.typescriptlang.org/play/#src=import%20*%20as%20express%20from%20%22express%22%3B%0A%2F%2F%20Error%0Aexpress()%3B">Try</a></pre></p>
+<p>This code does not run in a true ES6 environment.
+If the thing you're trying to import is a function, you should either use a default import or a CommonJS-style import (see below&gt;)
+See the StackOverflow question <a href="https://stackoverflow.com/questions/39415661/what-does-resolves-to-a-non-module-entity-and-cannot-be-imported-using-this">"What does “… resolves to a non-module entity and cannot be imported using this construct” mean?</a> for more details.</p>
+<h4 id="destructuring-imports"><a href="#destructuring-imports">Destructuring Imports</h4></a>
+<p>Destructuring imports bind to properties of the module:</p>
+<p><pre class="typescript-code"><span class="tm-cmt">// Destructured import</span>
+<span class="tm-kw">import</span> { <span class="tm-vr">prop</span> } <span class="tm-kw">from</span> <span class="tm-str">"m"</span>;
+<span class="tm-vr">prop</span>.<span class="tm-mth">greet</span>();
+
+<span class="tm-cmt">// Becomes (CommonJS; AMD is similar)</span>
+<span class="tm-kw">var</span> <span class="tm-vr">_m</span> = <span class="tm-mth">require</span>(<span class="tm-str">"m"</span>);
+<span class="tm-vr">_m</span>.<span class="tm-vr">prop</span>.<span class="tm-mth">greet</span>();<a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20Destructured%20import%0Aimport%20%7B%20prop%20%7D%20from%20%22m%22%3B%0Aprop.greet()%3B%0A%0A%2F%2F%20Becomes%20(CommonJS%3B%20AMD%20is%20similar)%0Avar%20_m%20%3D%20require(%22m%22)%3B%0A_m.prop.greet()%3B">Try</a></pre></p>
+<p>A common question is why <code>_m</code> is emitted, and why <code>prop</code> doesn't get emitted as a local variable.
+The answer is that ES6 module bindings are <em>live</em>: Whenever they are read, they get the current value of the property from the imported module.
+For example, if you wrote a simple <code>counter</code> module:</p>
+<p><pre class="typescript-code"><span class="tm-kw">export</span> <span class="tm-kw">let</span> <span class="tm-vr">counter</span> = <span class="tm-num">0</span>;
+<span class="tm-kw">export</span> <span class="tm-kw">function</span> <span class="tm-mth">increment</span>() {
+  <span class="tm-vr">counter</span>++;
+}<a class="playground-link" href="https://www.typescriptlang.org/play/#src=export%20let%20counter%20%3D%200%3B%0Aexport%20function%20increment()%20%7B%0A%20%20counter%2B%2B%3B%0A%7D">Try</a></pre></p>
+<p>and used it:</p>
+<p><pre class="typescript-code"><span class="tm-kw">import</span> { <span class="tm-vr">counter</span>, <span class="tm-vr">increment</span> } <span class="tm-kw">from</span> <span class="tm-str">"./counter"</span>;
+<span class="tm-mth">increment</span>();
+<span class="tm-mth">increment</span>();
+<span class="tm-cmt">// Should print '2'</span>
+<span class="tm-typ">console</span>.<span class="tm-mth">log</span>(<span class="tm-vr">counter</span>);<a class="playground-link" href="https://www.typescriptlang.org/play/#src=import%20%7B%20counter%2C%20increment%20%7D%20from%20%22.%2Fcounter%22%3B%0Aincrement()%3B%0Aincrement()%3B%0A%2F%2F%20Should%20print%20'2'%0Aconsole.log(counter)%3B">Try</a></pre></p>
+<p>If TypeScript emitted <code>var counter = _m.counter</code>, this code would incorrectly print <code>0</code> instead of <code>2</code></p>
+<h4 id="default-imports"><a href="#default-imports">Default Imports</h4></a>
+<p>Default imports import the <code>.default</code> member of a module:
+<pre class="typescript-code"><span class="tm-kw">import</span> <span class="tm-vr">df</span> <span class="tm-kw">from</span> <span class="tm-str">"m"</span>;
+<span class="tm-vr">df</span>.<span class="tm-mth">greet</span>();
+
+<span class="tm-cmt">// Becomes (CommonJS; AMD is similar)</span>
+<span class="tm-kw">var</span> <span class="tm-vr">_m</span> = <span class="tm-vr">df</span>;
+<span class="tm-vr">_m</span>.<span class="tm-vr">default</span>.<span class="tm-mth">greet</span>();<a class="playground-link" href="https://www.typescriptlang.org/play/#src=import%20df%20from%20%22m%22%3B%0Adf.greet()%3B%0A%0A%2F%2F%20Becomes%20(CommonJS%3B%20AMD%20is%20similar)%0Avar%20_m%20%3D%20df%3B%0A_m.default.greet()%3B">Try</a></pre></p>
+<h4 id="synthetic-defaults-and-esmoduleinterop"><a href="#synthetic-defaults-and-esmoduleinterop">Synthetic Defaults and <code>esModuleInterop</code></h4></a>
+<p>It's unusual for a CommonJS module to actually export a member named <code>default</code>.
+Usually the intent here is, for example, to bind the entire module presented by <code>"m"</code> to <code>df</code>.</p>
+<p>If your module loader <em>automatically</em> provides a <code>.default</code> property on CommonJS modules that points to the module itself, you can turn on the <code>--allowSyntheticDefaultImports</code> compiler option.
+When this is enabled, TypeScript will treat a default import as if it is importing the module itself instead.
+<strong>This does not change the emitted code!</strong></p>
+<p>If your module loader <em>doesn't</em> automatically provide a <code>.default</code> property on CommonJS modules, but you want to import these modules using default import syntax, you can enable the <code>--esModuleInterop</code> flag.
+This will emit an extra helper that detects non-ES6 modules at runtime and will allow the CommonJS module to be loaded through a default import.</p>
+<h4 id="export-forms"><a href="#export-forms">Export Forms</h4></a>
+<p>Export declarations follow the same pattern as imports -- when targeting AMD or CommonJS, they create corresponding named properties.
+Note that if you're writing a CommonJS module using ES6 syntax, you usually don't want to create a <code>default</code> export, as CommonJS consumers won't be expecting to find a property with this name.</p>
+<h3 id="commonjs-style-import-and-export-"><a href="#commonjs-style-import-and-export-">CommonJS-style <code>import</code> and <code>export =</code></h3></a>
+<p>If you're writing a CommonJS module (i.e. one that runs in Node.js) or an AMD module, we recommend using TypeScript's <code>require</code> syntax instead of ES6 syntax.</p>
+<h4 id="import---require"><a href="#import---require"><code>import ... = require(...)</code></h4></a>
+<p>The CommonJS-style <code>import</code> declaration has exactly one form:</p>
+<p><pre class="typescript-code"><span class="tm-kw">import</span> <span class="tm-vr">fs</span> = <span class="tm-kw">require</span>(<span class="tm-str">"fs"</span>);
+
+<span class="tm-cmt">// Becomes (CommonJS)</span>
+<span class="tm-kw">var</span> <span class="tm-vr">fs</span> = <span class="tm-mth">require</span>(<span class="tm-str">"fs"</span>);
+
+<span class="tm-cmt">// Becomes (AMD)</span>
+<span class="tm-mth">define</span>([<span class="tm-str">"fs"</span>], <span class="tm-kw">function</span> (<span class="tm-vr">fs</span>) {
+
+});<a class="playground-link" href="https://www.typescriptlang.org/play/#src=import%20fs%20%3D%20require(%22fs%22)%3B%0A%0A%2F%2F%20Becomes%20(CommonJS)%0Avar%20fs%20%3D%20require(%22fs%22)%3B%0A%0A%2F%2F%20Becomes%20(AMD)%0Adefine(%5B%22fs%22%5D%2C%20function%20(fs)%20%7B%0A%0A%7D)%3B">Try</a></pre></p>
+<h4 id="unsupported-syntax"><a href="#unsupported-syntax">Unsupported Syntax</h4></a>
+<h2 id="unused-and-type-only-imports"><a href="#unused-and-type-only-imports">Unused and Type-Only Imports</h2></a>
+<p>TypeScript uses the same syntax for importing types and namespaces as it does for values.
+TODO finish</p>
+<h2 id="module-syntax-in-typescript"><a href="#module-syntax-in-typescript">Module Syntax in TypeScript</h2></a>
+<p>TypeScript allows you to write module-based code in a syntax that can be transpiled to the module format of your choice.</p>
+<h2 id="non-modules"><a href="#non-modules">Non-modules</h2></a>
+<p>If a <code>.ts</code> file doesn't have any <code>import</code> or <code>export</code> declarations, the file will automatically be considered a non-module file.
+These files' variables are declared in the global scope, and it's assumed that you'll either use the <code>--outFile</code> compiler option to join multiple input files into one output file, or use multiple <code>&lt;script&gt;</code> tags in your HTML to load these files (in the correct order!).</p>
+<p>If you have a file that doesn't currently have any imports or exports, but you want to be treated as a module, add the line
+<pre class="typescript-code"><span class="tm-kw">export</span> { };</pre>
+to make the file be a module exporting nothing.
+This syntax works regardless of your module target.</p>
+<h3 id="es6-2"><a href="#es6-2">ES6</h3></a>
+<h3 id="amd-1"><a href="#amd-1">AMD</h3></a>
+<h2 id="import-paths-and-module-resolution"><a href="#import-paths-and-module-resolution">Import Paths and Module Resolution</h2></a>
+<h2 id="declaring-modules"><a href="#declaring-modules">Declaring Modules</h2></a>
+<p>A "module" in modern JavaScript parlance </p>
+<p>The word "modules" encompasses a wide variety of </p>
 <p>Starting with ECMAScript 2015, JavaScript has a concept of modules.
 TypeScript shares this concept.</p>
 <p>Modules are executed within their own scope, not in the global scope.
@@ -29,8 +225,6 @@ At runtime the module loader is responsible for locating and executing all depen
 Well-known modules loaders used in JavaScript are the CommonJS module loader for Node.js and require.js for Web applications.</p>
 <p>In TypeScript, just as in ECMAScript 2015, any file containing a top-level import or export is considered a module.
 Conversely, a file without any top-level import or export declarations is treated as a script whose contents are available in the global scope (and therefore to modules as well).</p>
-<div class="toc"><span class="toc-title">Table of Contents</span><ul><li><a href="#module-systems">Module Systems</a></li><ul><li><a href="#es-modules">ES Modules</a></li></ul><li><a href="#import-forms">Import Forms</a></li><li><a href="#importing-commonjs-modules-with-es-syntax">Importing CommonJS modules with ES Syntax</a></li></ul></ul></div>
-<h2 id="module-systems"><a href="#module-systems">Module Systems</h2></a>
 <h3 id="es-modules"><a href="#es-modules">ES Modules</h3></a>
 <aside>
     <p><a href="https://hacks.mozilla.org/2018/03/es-modules-a-cartoon-deep-dive/">Background Reading: ES Modules: A cartoon deep-dive</a></p>

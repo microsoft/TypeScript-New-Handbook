@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Code Samples?</title>
+        <title>Header Levels: 1 through 5</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" media="screen" href="../../css/handbook.css" />
         <script src="../../js/handbook.js"></script>
@@ -17,11 +17,43 @@
             <div id="set-theme-light-dark">■</div>
         </div>
     <article>
-    <h1 id="code-samples"><a href="#code-samples">Code Samples?</h1></a>
-<p>Highlight test
-<pre class="typescript-code"><span class="tm-kw">function</span> <span class="tm-mth">greet</span>(<span class="tm-vr">person</span>: <span class="highlight"><span class="highlight-content"></span><span class="highlight-description"></span>{ <span class="tm-vr">name</span>: <span class="tm-typ">string</span>, <span class="tm-vr">age</span>: <span class="tm-typ">number</span> }</span>) {
+    <div class="toc"><span class="toc-title">Table of Contents</span><ul><li><a href="#header-2">Header 2</a></li><ul><li><a href="#header-3">Header 3</a></li><ul><li><a href="#header-4">Header 4</a></li><ul><li><a href="#header-5">Header 5</a></li></ul></ul></ul><li><a href="#unordered">Unordered</a></li><li><a href="#ordered">Ordered</a></li><li><a href="#highlighting">Highlighting</a></li><li><a href="#typescript-with-errors">TypeScript with Errors</a></li><li><a href="#quickinfo">QuickInfo</a></li><li><a href="#single">Single</a></li><li><a href="#double">Double</a></li></ul></ul></div>
+<h1 id="header-levels-1-through-5"><a href="#header-levels-1-through-5">Header Levels: 1 through 5</h1></a>
+<p>H1 content</p>
+<h2 id="header-2"><a href="#header-2">Header 2</h2></a>
+<p>H2 content</p>
+<h3 id="header-3"><a href="#header-3">Header 3</h3></a>
+<p>H3 content</p>
+<h4 id="header-4"><a href="#header-4">Header 4</h4></a>
+<p>H4 content</p>
+<h5 id="header-5">Header 5</h5>
+<p>H5 content</p>
+<h1 id="lists"><a href="#lists">Lists</h1></a>
+<h2 id="unordered"><a href="#unordered">Unordered</h2></a>
+<ul>
+<li>California</li>
+<li>Washington</li>
+<li>Seattle<ul>
+<li>Belltown</li>
+<li>Greenlake</li></ul></li>
+<li>Oregon</li>
+<li>New York</li>
+<li>New York<ul>
+<li>Manhattan</li></ul></li>
+</ul>
+<h2 id="ordered"><a href="#ordered">Ordered</h2></a>
+<ol>
+<li>One</li>
+<li>Two</li>
+<li>Three</li>
+<li>Four</li>
+</ol>
+<h1 id="code-samples"><a href="#code-samples">Code Samples</h1></a>
+<h2 id="highlighting"><a href="#highlighting">Highlighting</h2></a>
+<p><pre class="typescript-code"><span class="tm-kw">function</span> <span class="tm-mth">greet</span>(<span class="tm-vr">person</span>: <span class="highlight"><span class="highlight-content"></span><span class="highlight-description"></span>{ <span class="tm-vr">name</span>: <span class="tm-typ">string</span>, <span class="tm-vr">age</span>: <span class="tm-typ">number</span> }</span>) {
     <span class="tm-kw">return</span> <span class="tm-str">"Hello "</span> + <span class="tm-vr">person</span>.<span class="tm-vr">age</span>;
 }<a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20greet(person%3A%20%7B%20name%3A%20string%2C%20age%3A%20number%20%7D)%20%7B%0A%20%20%20%20return%20%22Hello%20%22%20%2B%20person.age%3B%0A%7D">Try</a></pre></p>
+<h2 id="typescript-with-errors"><a href="#typescript-with-errors">TypeScript with Errors</h2></a>
 <p><pre class="typescript-code"><span class="tm-cmt">// This is a TypeScript code block</span>
 <span class="tm-cmt">// It renders as code</span>
 <span class="tm-kw">function</span> <span class="tm-mth">fn</span>(<span class="tm-vr">s</span>: <span class="tm-typ">string</span>) {
@@ -36,25 +68,31 @@
         <span class="error" tabindex="0" aria-describedby="errLabel-2322-248-12"><span class="error-highlight"></span><span class="tm-kw">this</span>.<span class="tm-vr">alfalfa</span><span id="errLabel-2322-248-12" role="tooltip" class="error-tooltip">Type '10' is not assignable to type 'string'.</span></span> = <span class="tm-num">10</span>;
     }
 }<hr class="error-divider"><div class="listed-error"><div class="error-line">Type '10' is not assignable to type 'string'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20This%20is%20a%20TypeScript%20code%20block%0A%2F%2F%20It%20renders%20as%20code%0Afunction%20fn(s%3A%20string)%20%7B%0A%20%20%20%20const%20y%20%3D%20%60Neat%20%24%7Bs.toLowerCase()%7D%60%3B%0A%20%20%20%20return%20y%3B%0A%7D%0Aconst%20m%20%3D%20fn(%22hello%2C%20world%22)%3B%0A%0Aclass%20MyClass%20%7B%0A%20%20%20%20m%20%3D%2010%3B%0A%20%20%20%20constructor(public%20alfalfa%20%3D%20%22100%22)%20%7B%0A%20%20%20%20%20%20%20%20this.alfalfa%20%3D%2010%3B%0A%20%20%20%20%7D%0A%7D">Try</a></pre></p>
+<h2 id="quickinfo"><a href="#quickinfo">QuickInfo</h2></a>
+<p><pre class="typescript-code"><span class="tm-kw">class</span> <span class="tm-typ"><span class="className">MyClass</span></span> {
+    <span class="tm-kw">constructor</span>(<span class="tm-kw">public</span> <span class="tm-vr">alfalfa</span> = <span class="tm-str">"100"</span>) {
+        <span class="tm-kw">this</span>.<span class="tm-vr">alfalfa</span> = <span class="tm-str">""</span>;
+                <span class="quickinfo-result"><span class="quickinfo-arrow">▲</span><span class="punctuation">(</span><span class="text">property</span><span class="punctuation">)</span><span class="space"> </span><span class="className">MyClass</span><span class="punctuation">.</span><span class="propertyName">alfalfa</span><span class="punctuation">:</span><span class="space"> </span><span class="keyword">string</span></span>
+    }
+}<a class="playground-link" href="https://www.typescriptlang.org/play/#src=class%20MyClass%20%7B%0A%20%20%20%20constructor(public%20alfalfa%20%3D%20%22100%22)%20%7B%0A%20%20%20%20%20%20%20%20this.alfalfa%20%3D%20%22%22%3B%0A%20%20%20%20%7D%0A%7D">Try</a></pre></p>
+<h1 id="blockquotes"><a href="#blockquotes">Blockquotes</h1></a>
+<h2 id="single"><a href="#single">Single</h2></a>
+<p>Content above the quote</p>
 <blockquote>
   <p>This is a quote that
   has multiple lines</p>
 </blockquote>
-<p>Neat!</p>
+<p>Content below the quote</p>
+<h2 id="double"><a href="#double">Double</h2></a>
+<p>Content above the quote</p>
 <aside>
     <p>Double-bracket</p>
   </aside>
-<p>We should also have [Chapter Links]</p>
-<h1 id="heading"><a href="#heading">Heading</h1></a>
-<p>Content</p>
-<h2 id="heading-two"><a href="#heading-two">Heading two</h2></a>
-<p>Content</p>
-<h3 id="heading-three"><a href="#heading-three">Heading three</h3></a>
-<p>Content</p>
-<h4 id="heading-four"><a href="#heading-four">Heading four</h4></a>
-<p>Content</p>
-<p><em>Do</em> use italics</p>
-<p><strong>Sometimes</strong> use bold!</p>
+<p>Content below the quote</p>
+<h1 id="links"><a href="#links">Links</h1></a>
+<p>Link to Blockquotes</p>
+<h1 id="formatting"><a href="#formatting">Formatting</h1></a>
+<p><em>Single</em> asterisks, <strong>double</strong> asterisks</p>
     </article>
         <script>loadSavedTheme();</script>
     </body>

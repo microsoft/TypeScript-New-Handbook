@@ -18,20 +18,25 @@
         </div>
     <article>
     <h1 id="compiler-options"><a href="#compiler-options">Compiler Options</h1></a>
-<p>TypeScript has a wide array of configuration options.</p>
-<div class="toc"><span class="toc-title">Table of Contents</span><ul><li><a href="#code-emit-options">Code Emit Options</a></li><ul><li><a href="#target"><code>target</code></a></li><li><a href="#module"><code>module</code></a></li><li><a href="#jsx"><code>jsx</code></a></li><li><a href="#jsxfactory"><code>jsxFactory</code></a></li><li><a href="#declaration"><code>declaration</code></a></li><li><a href="#declarationdir"><code>declarationDir</code></a></li><li><a href="#declarationmap"><code>declarationMap</code></a></li><li><a href="#emitdeclarationonly"><code>emitDeclarationOnly</code></a></li><li><a href="#downleveliteration"><code>downlevelIteration</code></a></li><li><a href="#esmoduleinterop"><code>esModuleInterop</code></a></li><li><a href="#emitbom"><code>emitBOM</code></a></li><li><a href="#importhelpers"><code>importHelpers</code></a></li><li><a href="#sourcemap"><code>sourceMap</code></a></li><li><a href="#inlinesources"><code>inlineSources</code></a></li><li><a href="#inlinesourcemap"><code>inlineSourceMap</code></a></li></ul><li><a href="#emit-location-options">Emit Location Options</a></li><ul><li><a href="#rootdir"><code>rootDir</code></a></li><li><a href="#outdir"><code>outDir</code></a></li><li><a href="#outfile"><code>outFile</code></a></li><li><a href="#out"><code>out</code></a></li></ul><li><a href="#library-options">Library Options</a></li><ul><li><a href="#nolib"><code>noLib</code></a></li><li><a href="#lib"><code>lib</code></a></li></ul><li><a href="#file-inclusion-options">File Inclusion Options</a></li><ul><li><a href="#include"><code>include</code> (tsconfig.json)</a></li><li><a href="#files"><code>files</code> (tsconfig.json)</a></li><li><a href="#noresolve"><code>noResolve</code></a></li><li><a href="#composite"><code>composite</code></a></li><li><a href="#allowjs"><code>allowJs</code></a></li><li><a href="#forceconsistentcasinginfilenames"><code>forceConsistentCasingInFileNames</code></a></li><li><a href="#charset"><code>charset</code></a></li></ul><li><a href="#module-resolution-options">Module Resolution Options</a></li><ul><li><a href="#baseurl"><code>baseUrl</code></a></li><li><a href="#allowsyntheticdefaultimports"><code>allowSyntheticDefaultImports</code></a></li></ul><li><a href="#typechecking-options">Typechecking Options</a></li><ul><li><a href="#--strict"><code>strict</code></a></li><ul><li><a href="#strictpropertyinitialization"><code>strictPropertyInitialization</code></a></li><li><a href="#strictbindcallapply"><code>strictBindCallApply</code></a></li><li><a href="#strictnullchecks"><code>strictNullChecks</code></a></li><li><a href="#strictfunctiontypes"><code>strictFunctionTypes</code></a></li><li><a href="#noimplicitany"><code>noImplicitAny</code></a></li><li><a href="#noimplicitthis"><code>noImplicitThis</code></a></li><li><a href="#alwaysstrict"><code>alwaysStrict</code></a></li></ul><li><a href="#suppressexcesspropertyerrors"><code>suppressExcessPropertyErrors</code></a></li><li><a href="#suppressimplicitanyindexerrors"><code>suppressImplicitAnyIndexErrors</code></a></li><li><a href="#keyofstringsonly"><code>keyofStringsOnly</code></a></li></ul><li><a href="#linting-options">Linting Options</a></li><ul><li><a href="#allowunreachablecode"><code>allowUnreachableCode</code></a></li><li><a href="#allowunusedlabels"><code>allowUnusedLabels</code></a></li></ul><li><a href="#decorators">Decorators</a></li><ul><li><a href="#experimentaldecorators"><code>experimentalDecorators</code></a></li><li><a href="#emitdecoratormetadata"><code>emitDecoratorMetadata</code></a></li></ul><li><a href="#debugging">Debugging</a></li><ul><li><a href="#diagnostics"><code>diagnostics</code></a></li><li><a href="#traceresolution"><code>traceResolution</code></a></li><li><a href="#listfiles"><code>listFiles</code></a></li></ul><li><a href="#miscellaneous">Miscellaneous</a></li><ul><li><a href="#init"><code>init</code></a></li><li><a href="#help"><code>help</code></a></li></ul></ul></ul></div>
+<p>TypeScript has a wide array of configuration options.
+This page is organized by theme, and within each theme the options are roughly sorted in order of how often they're likely to be used.</p>
+<p>All settings in TypeScript are optional.</p>
+<p>For brevity, this page uses "is set" as shorthand for "is set to <code>true</code>".</p>
+<div class="toc"><span class="toc-title">Table of Contents</span><ul><li><a href="#code-emit-options">Code Emit Options</a></li><ul><li><a href="#target"><code>target</code></a></li><li><a href="#module"><code>module</code></a></li><li><a href="#jsx"><code>jsx</code></a></li><li><a href="#jsxfactory"><code>jsxFactory</code></a></li><li><a href="#declaration"><code>declaration</code></a></li><li><a href="#declarationdir"><code>declarationDir</code></a></li><li><a href="#declarationmap"><code>declarationMap</code></a></li><li><a href="#emitdeclarationonly"><code>emitDeclarationOnly</code></a></li><li><a href="#downleveliteration"><code>downlevelIteration</code></a></li><ul><li><a href="#example:-effects-on-for--of">Example: Effects on <code>for / of</code></a></li><li><a href="#example:-effects-on-array-spreads">Example: Effects on Array Spreads</a></li></ul><li><a href="#esmoduleinterop"><code>esModuleInterop</code></a></li><li><a href="#emitbom"><code>emitBOM</code></a></li><li><a href="#importhelpers"><code>importHelpers</code></a></li><li><a href="#noemithelpers"><code>noEmitHelpers</code></a></li><li><a href="#sourcemap"><code>sourceMap</code></a></li><li><a href="#inlinesourcemap"><code>inlineSourceMap</code></a></li><li><a href="#inlinesources"><code>inlineSources</code></a></li></ul><li><a href="#emit-location-options">Emit Location Options</a></li><ul><li><a href="#rootdir"><code>rootDir</code></a></li><li><a href="#outdir"><code>outDir</code></a></li><li><a href="#outfile"><code>outFile</code></a></li><li><a href="#out"><code>out</code></a></li></ul><li><a href="#library-options">Library Options</a></li><ul><li><a href="#lib"><code>lib</code></a></li><li><a href="#nolib"><code>noLib</code></a></li></ul><li><a href="#file-inclusion-options">File Inclusion Options</a></li><ul><li><a href="#include"><code>include</code> (tsconfig.json)</a></li><li><a href="#exclude"><code>exclude</code> (tsconfig.json)</a></li><li><a href="#files"><code>files</code> (tsconfig.json)</a></li><li><a href="#composite"><code>composite</code></a></li><li><a href="#allowjs"><code>allowJs</code></a></li><li><a href="#forceconsistentcasinginfilenames"><code>forceConsistentCasingInFileNames</code></a></li><li><a href="#charset"><code>charset</code></a></li><li><a href="#noresolve"><code>noResolve</code></a></li></ul><li><a href="#module-resolution-options">Module Resolution Options</a></li><ul><li><a href="#baseurl"><code>baseUrl</code></a></li><li><a href="#paths"><code>paths</code></a></li><li><a href="#allowsyntheticdefaultimports"><code>allowSyntheticDefaultImports</code></a></li></ul><li><a href="#typechecking-options">Typechecking Options</a></li><ul><li><a href="#--strict"><code>strict</code></a></li><ul><li><a href="#strictnullchecks"><code>strictNullChecks</code></a></li><li><a href="#strictpropertyinitialization"><code>strictPropertyInitialization</code></a></li><li><a href="#strictbindcallapply"><code>strictBindCallApply</code></a></li><li><a href="#strictfunctiontypes"><code>strictFunctionTypes</code></a></li><li><a href="#noimplicitany"><code>noImplicitAny</code></a></li><li><a href="#noimplicitthis"><code>noImplicitThis</code></a></li></ul><li><a href="#isolatedmodules"><code>isolatedModules</code></a></li><ul><li><a href="#exports-of-non-value-identifiers">Exports of Non-Value Identifiers</a></li><li><a href="#non-module-files">Non-Module Files</a></li><li><a href="#references-to-const-enum-members">References to <code>const enum</code> members</a></li></ul><li><a href="#suppressexcesspropertyerrors"><code>suppressExcessPropertyErrors</code></a></li><li><a href="#suppressimplicitanyindexerrors"><code>suppressImplicitAnyIndexErrors</code></a></li><li><a href="#keyofstringsonly"><code>keyofStringsOnly</code></a></li></ul><li><a href="#linting-options">Linting Options</a></li><ul><li><a href="#allowunreachablecode"><code>allowUnreachableCode</code></a></li><li><a href="#allowunusedlabels"><code>allowUnusedLabels</code></a></li></ul><li><a href="#decorators">Decorators</a></li><ul><li><a href="#experimentaldecorators"><code>experimentalDecorators</code></a></li><li><a href="#emitdecoratormetadata"><code>emitDecoratorMetadata</code></a></li></ul><li><a href="#debugging">Debugging</a></li><ul><li><a href="#diagnostics"><code>diagnostics</code></a></li><li><a href="#traceresolution"><code>traceResolution</code></a></li><li><a href="#listfiles"><code>listFiles</code></a></li></ul><li><a href="#miscellaneous">Miscellaneous</a></li><ul><li><a href="#alwaysstrict"><code>alwaysStrict</code></a></li><li><a href="#noimplicitusestrict"><code>noImplicitUseStrict</code></a></li><li><a href="#init"><code>init</code></a></li><li><a href="#help"><code>help</code></a></li></ul></ul></ul></div>
 <h2 id="code-emit-options"><a href="#code-emit-options">Code Emit Options</h2></a>
 <h3 id="target"><a href="#target"><code>target</code></h3></a>
-<p><strong>Allowed Values</strong>: <code>ES3</code> (default), <code>ES5</code>, <code>ES6</code>/<code>ES2015</code> (synonomous), <code>ES2016</code>, <code>ES2017</code>, <code>ES2018</code>, <code>ES2019</code>, <code>ESNext</code></p>
+<p><strong>Allowed Values</strong>: <code>ES3</code> (default), <code>ES5</code>, <code>ES6</code>/<code>ES2015</code> (synonomous), <code>ES7</code>/<code>ES2016</code>, <code>ES2017</code>, <code>ES2018</code>, <code>ES2019</code>, <code>ESNext</code></p>
 <p>All modern browsers support all ES6 features, so <code>ES6</code> is a good choice.
 You might choose to set a lower target if your code is deployed to older environments, or a higher target if your code only runs on newer environments.</p>
 <p>The <code>target</code> setting changes which JS features are downleveled or left intact.
 For example, an arrow function <code>() =&gt; this</code> will be turned into an equivalent <code>function</code> expression if <code>target</code> is ES5 or lower.</p>
-<p><code>target</code> also changes the default value of [lib].
+<p><code>target</code> also changes the default value of <code>lib</code>.
 You may "mix and match" <code>target</code> and <code>lib</code> settings as desired.</p>
+<p>The value <code>ESNext</code> refers to whatever the highest version TypeScript supports at the time is.
+This setting should be used with caution, since it doesn't mean the same thing between TypeScript versions and can make upgrades less predictable.</p>
 <h3 id="module"><a href="#module"><code>module</code></h3></a>
 <p><strong>Allowed Values</strong>: <code>CommonJS</code> (default if <code>target</code> is <code>ES3</code> or <code>ES5</code>), <code>ES6</code>/<code>ES2015</code> (synonymous, default for <code>target</code> <code>ES6</code> and higher), <code>None</code>, <code>UMD</code>, <code>AMD</code>, <code>System</code>, <code>ESNext</code></p>
-<p>Sets the module system for the program. See the [Modules] chapter for more information.</p>
+<p>Sets the module system for the program. See the <a href="/chapters/modules#modules">Modules</a> chapter for more information.</p>
 <h3 id="jsx"><a href="#jsx"><code>jsx</code></h3></a>
 <p><strong>Allowed Values</strong>: <code>react</code> (default), <code>react-native</code>, <code>preserve</code></p>
 <p>Controls how JSX constructs are emitted in JavaScript files.
@@ -51,15 +56,89 @@ The most common change is to use <code>"h"</code> or <code>"preact.h"</code> ins
 <p>Enables automation generation of <code>.d.ts</code> files from <code>.ts</code> inputs</p>
 <h3 id="declarationdir"><a href="#declarationdir"><code>declarationDir</code></h3></a>
 <p><strong>Allowed Values</strong>: Directory path. Defaults to the same location as <code>outDir</code></p>
-<p>Emits declaration files to a different directory</p>
+<p>Emits declaration files to a different directory.</p>
 <h3 id="declarationmap"><a href="#declarationmap"><code>declarationMap</code></h3></a>
 <p><strong>Default</strong>: <code>false</code></p>
-<p>Generates a source map for <code>.d.ts</code> files that maps back to the original <code>.ts</code> source file.</p>
+<p>Generates a source map for <code>.d.ts</code> files that maps back to the original <code>.ts</code> source file.
+This will allow editors such as VS Code to go to the original <code>.ts</code> file when using features like <em>Go to Definition</em>.
+You should strongly consider turning this on if you're using project references.</p>
 <h3 id="emitdeclarationonly"><a href="#emitdeclarationonly"><code>emitDeclarationOnly</code></h3></a>
 <p><strong>Default</strong>: <code>false</code></p>
 <p><em>Only</em> emit <code>.d.ts</code> files; do not emit <code>.js</code> files.</p>
 <p>This setting is useful if you're using a transpiler other than TypeScript to generate your JavaScript.</p>
 <h3 id="downleveliteration"><a href="#downleveliteration"><code>downlevelIteration</code></h3></a>
+<p><strong>Default</strong>: <code>false</code>. Has no effect if <code>target</code> is ES6 or newer.</p>
+<p>ECMAScript 6 added several new iteration primitives: the <code>for / of</code> loop (<code>for (el of arr)</code>), Array spread (<code>[a, ...b]</code>), argument spread (<code>fn(...args)</code>), and <code>Symbol.iterator</code>.
+<code>--downlevelIteration</code> allows for these iteration primitives to be used more accurately in ES5 environments if a <code>Symbol.iterator</code> implementation is present.</p>
+<h4 id="example-effects-on-for--of"><a href="#example-effects-on-for--of">Example: Effects on <code>for / of</code></h4></a>
+<p>Without <code>downlevelIteration</code> on, a <code>for / of</code> loop on any object is downleveled to a traditional <code>for</code> loop:</p>
+<p><pre class="typescript-code"><span class="tm-kw">const</span> <span class="tm-vr">str</span> = <span class="tm-str">"Hello!"</span>;
+<span class="tm-kw">for</span> (<span class="tm-kw">const</span> <span class="tm-vr">s</span> <span class="tm-kw">of</span> <span class="tm-vr">str</span>) {
+    <span class="tm-typ">console</span>.<span class="tm-mth">log</span>(<span class="tm-vr">s</span>);
+}<hr class="js-divider"><pre class="emitted-js">"use strict";
+var str = "Hello!";
+for (var _i = 0, str_1 = str; _i < str_1.length; _i++) {
+    var s = str_1[_i];
+    console.log(s);
+}
+</pre><a class="playground-link" href="https://www.typescriptlang.org/play/#src=const%20str%20%3D%20%22Hello!%22%3B%0Afor%20(const%20s%20of%20str)%20%7B%0A%20%20%20%20console.log(s)%3B%0A%7D">Try</a></pre></p>
+<p>This is often what people expect, but it's not 100% compliant with ECMAScript 6 behavior.
+Certain strings, such as emoji (😜), have a <code>.length</code> of 2 (or even more!), but should iterate as 1 unit in a <code>for-of</code> loop.
+See <a href="https://blog.jonnew.com/posts/poo-dot-length-equals-two">this blog post by Jonathan New</a> for a longer explanation.</p>
+<p>When <code>downlevelIteration</code> is enabled, TypeScript will use a helper function that checks for a <code>Symbol.iterator</code> implementation (either native or polyfill).
+If this implementation is missing, you'll fall back to index-based iteration.</p>
+<p><pre class="typescript-code"><span class="tm-kw">const</span> <span class="tm-vr">str</span> = <span class="tm-str">"Hello!"</span>;
+<span class="tm-kw">for</span> (<span class="tm-kw">const</span> <span class="tm-vr">s</span> <span class="tm-kw">of</span> <span class="tm-vr">str</span>) {
+    <span class="tm-typ">console</span>.<span class="tm-mth">log</span>(<span class="tm-vr">s</span>);
+}<hr class="js-divider"><pre class="emitted-js">"use strict";
+var __values = (this && this.__values) || function (o) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+    if (m) return m.call(o);
+    return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+};
+var e_1, _a;
+var str = "Hello!";
+try {
+    for (var str_1 = __values(str), str_1_1 = str_1.next(); !str_1_1.done; str_1_1 = str_1.next()) {
+        var s = str_1_1.value;
+        console.log(s);
+    }
+}
+catch (e_1_1) { e_1 = { error: e_1_1 }; }
+finally {
+    try {
+        if (str_1_1 && !str_1_1.done && (_a = str_1.return)) _a.call(str_1);
+    }
+    finally { if (e_1) throw e_1.error; }
+}
+</pre><a class="playground-link" href="https://www.typescriptlang.org/play/#src=const%20str%20%3D%20%22Hello!%22%3B%0Afor%20(const%20s%20of%20str)%20%7B%0A%20%20%20%20console.log(s)%3B%0A%7D">Try</a></pre></p>
+<aside>
+    <p><strong>Note:</strong> Remember, <code>downlevelIteration</code> does not improve compliance if <code>Symbol.iterator</code> is not present!</p>
+  </aside>
+<h4 id="example-effects-on-array-spreads"><a href="#example-effects-on-array-spreads">Example: Effects on Array Spreads</h4></a>
+<p>This is an array spread:</p>
+<p><pre class="typescript-code"><span class="tm-cmt">// Make a new array who elements are 1 followed by the elements of arr2</span>
+<span class="tm-kw">const</span> <span class="tm-vr">arr</span> = [<span class="tm-num">1</span>, ...<span class="tm-vr">arr2</span>];</pre></p>
+<p>Based on the description, it sounds easy to downlevel to ES5:</p>
+<p><pre class="typescript-code"><span class="tm-cmt">// The same, right?</span>
+<span class="tm-kw">const</span> <span class="tm-vr">arr</span> = [<span class="tm-num">1</span>].<span class="tm-mth">concat</span>(<span class="tm-vr">arr2</span>);</pre></p>
+<p>However, this is observably different in certain rare cases.
+For example, if an array has a "hole" in it, the missing index will create an <em>own</em> property if spreaded, but will not if built using <code>concat</code>:</p>
+<p><pre class="typescript-code"><span class="tm-cmt">// Make an array where the '1' element is missing</span>
+<span class="tm-kw">let</span> <span class="tm-vr">missing</span> = [<span class="tm-num">0</span>, , <span class="tm-num">1</span>];
+<span class="tm-kw">let</span> <span class="tm-vr">spreaded</span> = [...<span class="tm-vr">missing</span>];
+<span class="tm-kw">let</span> <span class="tm-vr">concated</span> = [].<span class="tm-mth">concat</span>(<span class="tm-vr">missing</span>);
+
+<span class="tm-cmt">// true</span>
+<span class="tm-str">"1"</span> <span class="tm-kw">in</span> <span class="tm-vr">spreaded</span>
+<span class="tm-cmt">// false</span>
+<span class="tm-str">"1"</span> <span class="tm-kw">in</span> <span class="tm-vr">concated</span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20Make%20an%20array%20where%20the%20'1'%20element%20is%20missing%0Alet%20missing%20%3D%20%5B0%2C%20%2C%201%5D%3B%0Alet%20spreaded%20%3D%20%5B...missing%5D%3B%0Alet%20concated%20%3D%20%5B%5D.concat(missing)%3B%0A%0A%2F%2F%20true%0A%221%22%20in%20spreaded%0A%2F%2F%20false%0A%221%22%20in%20concated">Try</a></pre></p>
+<p>Just as with <code>for / of</code>, <code>downlevelIteration</code> will use <code>Symbol.iterator</code> (if present) to more accurately emulate ES 6 behavior.</p>
 <h3 id="esmoduleinterop"><a href="#esmoduleinterop"><code>esModuleInterop</code></h3></a>
 <h3 id="emitbom"><a href="#emitbom"><code>emitBOM</code></h3></a>
 <p><strong>Default</strong>: <code>false</code></p>
@@ -67,12 +146,92 @@ The most common change is to use <code>"h"</code> or <code>"preact.h"</code> ins
 Some runtime environments require a BOM to correctly interpret a JavaScript files; others require that it is not present.
 The default value of <code>false</code> is generally best unless you have a reason to change it.</p>
 <h3 id="importhelpers"><a href="#importhelpers"><code>importHelpers</code></h3></a>
+<p>For certain downleveling operations, TypeScript uses some helper code for operations like extending class, spreading arrays/objects, and async operations.
+By default, these helpers are inserted into files which use them.
+This can result in code duplication if the same helper is used in many different modules.</p>
+<p>If the <code>importHelpers</code> flag is on, these helper functions are instead imported from the <a href="https://www.npmjs.com/package/tslib">tslib</a> module.
+You will need to ensure that the <code>tslib</code> module is able to be imported at runtime.
+This only affects modules; global script files will not attempt to import modules.</p>
+<p><pre class="typescript-code"><span class="tm-cmt">// --importHelpers off: Spread helper is inserted into the file</span>
+<span class="tm-cmt">// Note: This example also uses --downlevelIteration</span>
+<span class="tm-kw">export</span> <span class="tm-kw">function</span> <span class="tm-mth">fn</span>(<span class="tm-vr">arr</span>: <span class="tm-typ">number</span>[]) {
+   <span class="tm-kw">const</span> <span class="tm-vr">arr2</span> = [<span class="tm-num">1</span>, ...<span class="tm-vr">arr</span>];
+}<hr class="js-divider"><pre class="emitted-js">"use strict";
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
+var __spread = (this && this.__spread) || function () {
+    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
+    return ar;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+// --importHelpers off: Spread helper is inserted into the file
+// Note: This example also uses --downlevelIteration
+function fn(arr) {
+    var arr2 = __spread([1], arr);
+}
+exports.fn = fn;
+</pre><a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20--importHelpers%20off%3A%20Spread%20helper%20is%20inserted%20into%20the%20file%0A%2F%2F%20Note%3A%20This%20example%20also%20uses%20--downlevelIteration%0Aexport%20function%20fn(arr%3A%20number%5B%5D)%20%7B%0A%20%20%20const%20arr2%20%3D%20%5B1%2C%20...arr%5D%3B%0A%7D">Try</a></pre></p>
+<p><pre class="typescript-code"><span class="tm-cmt">// --importHelpers on: Spread helper is inserted imported from 'tslib'</span>
+<span class="tm-kw">export</span> <span class="tm-kw">function</span> <span class="tm-mth">fn</span>(<span class="tm-vr">arr</span>: <span class="tm-typ">number</span>[]) {
+   <span class="tm-kw">const</span> <span class="tm-vr">arr2</span> = [<span class="tm-num">1</span>, ...<span class="tm-vr">arr</span>];
+}<hr class="js-divider"><pre class="emitted-js">"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = require("tslib");
+// --importHelpers on: Spread helper is inserted imported from 'tslib'
+function fn(arr) {
+    var arr2 = tslib_1.__spread([1], arr);
+}
+exports.fn = fn;
+</pre><a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20--importHelpers%20on%3A%20Spread%20helper%20is%20inserted%20imported%20from%20'tslib'%0Aexport%20function%20fn(arr%3A%20number%5B%5D)%20%7B%0A%20%20%20const%20arr2%20%3D%20%5B1%2C%20...arr%5D%3B%0A%7D">Try</a></pre></p>
+<h3 id="noemithelpers"><a href="#noemithelpers"><code>noEmitHelpers</code></h3></a>
+<p>Instead of importing helpers with importHelpers, you can provide implementations in the global scope for the helpers you use and completely turn off emitting of helper functions:</p>
+<p><pre class="typescript-code">
+<span class="tm-cmt">// __spread is assumed to be available</span>
+<span class="tm-kw">export</span> <span class="tm-kw">function</span> <span class="tm-mth">fn</span>(<span class="tm-vr">arr</span>: <span class="tm-typ">number</span>[]) {
+   <span class="tm-kw">const</span> <span class="tm-vr">arr2</span> = [<span class="tm-num">1</span>, ...<span class="tm-vr">arr</span>];
+}<hr class="js-divider"><pre class="emitted-js">"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+// __spread is assumed to be available
+function fn(arr) {
+    var arr2 = __spread([1], arr);
+}
+exports.fn = fn;
+</pre><a class="playground-link" href="https://www.typescriptlang.org/play/#src=%0A%2F%2F%20__spread%20is%20assumed%20to%20be%20available%0Aexport%20function%20fn(arr%3A%20number%5B%5D)%20%7B%0A%20%20%20const%20arr2%20%3D%20%5B1%2C%20...arr%5D%3B%0A%7D">Try</a></pre></p>
 <h3 id="sourcemap"><a href="#sourcemap"><code>sourceMap</code></h3></a>
-<h3 id="inlinesources"><a href="#inlinesources"><code>inlineSources</code></h3></a>
+<p><strong>Default</strong>: <code>false</code></p>
+<p>Enables the generation of <a href="https://developer.mozilla.org/en-US/docs/Tools/Debugger/How_to/Use_a_source_map">sourcemap files</a>.
+These files allow debuggers and other tools to display the original TypeScript source code when actually working with the emitted JavaScript files.
+Source map files are emitted as <code>.js.map</code> (or <code>.jsx.map</code>) files next to the corresponding <code>.js</code> output file.</p>
+<p>The <code>.js</code> files will in turn contain a sourcemap comment to indicate to tools where the files are:
+<pre class="typescript-code"><span class="tm-cmt">//# sourceMappingURL=main.js.map</span></pre></p>
 <h3 id="inlinesourcemap"><a href="#inlinesourcemap"><code>inlineSourceMap</code></h3></a>
+<p><strong>Default</strong>: <code>false</code></p>
+<p>When set, instead of writing out a <code>.js.map</code> file to provide source maps, TypeScript will embed the source map content in the <code>.js</code> files.
+Although this results in larger JS files, it can be convenient in some scenarios.
+For example, you might want to debug JS files on a webserver that doesn't allow <code>.map</code> files to be served.</p>
+<p>Mutually exclusive with <code>sourceMap</code>.</p>
+<h3 id="inlinesources"><a href="#inlinesources"><code>inlineSources</code></h3></a>
+<p><strong>Default</strong>: <code>false</code></p>
+<p>When set, TypeScript will include the original content of the <code>.ts</code> file as an embedded string in the source map.
+This is often useful in the same cases as <code>inlineSourceMap</code>.</p>
+<p>Requires either <code>sourceMap</code> or <code>inlineSourceMap</code> to be set.</p>
 <h2 id="emit-location-options"><a href="#emit-location-options">Emit Location Options</h2></a>
 <h3 id="rootdir"><a href="#rootdir"><code>rootDir</code></h3></a>
-<p><strong>Default</strong>: The longest common path of all non-declaration input files</p>
+<p><strong>Default</strong>: The longest common path of all non-declaration input files. If <code>composite</code> is set, the default is instead the directory containing the <code>tsconfig.json</code> file.</p>
 <p>When TypeScript compiles files, it keeps the same directory structure in the output directory as exists in the input directory.</p>
 <p>For example, let's say you have some input files:</p>
 <pre><code>MyProj
@@ -117,53 +276,429 @@ For this reason, <code>rootDir</code> also enforces that all files which need to
 </code></pre>
 <p>It would be an error to specify <code>rootDir</code> as <code>core</code> <em>and</em> <code>include</code> as <code>*</code> because it creates a file (<code>helpers.ts</code>) that would need to be emitted <em>outside</em> the <code>outDir</code> (i.e. <code>../helpers.js</code>).</p>
 <h3 id="outdir"><a href="#outdir"><code>outDir</code></h3></a>
+<p><strong>Default</strong>: Unspecified</p>
+<p>If specified, <code>.js</code> (as well as <code>.d.ts</code>, <code>.js.map</code>, etc.) files will be emitted in the specified directory.
+The directory structure of the original source files is preserved; see rootDir if the computed root is not what you intended.</p>
+<p>If not specified, <code>.js</code> files will be emitted in the same directory as the <code>.ts</code> files they were generated from.</p>
 <h3 id="outfile"><a href="#outfile"><code>outFile</code></h3></a>
-<p>Note: <code>--outFile</code> cannot be used unless <code>module</code> is <code>None</code>, <code>System</code>, or <code>AMD</code></p>
+<p><strong>Default</strong>: Unspecified</p>
+<p>If specified, all <em>global</em> (non-module) files will be concatenated into the single output file specified.</p>
+<p>If <code>module</code> is <code>system</code> or <code>amd</code>, all module files will also be concatenated into this file after all global content.</p>
+<p>Note: <code>--outFile</code> cannot be used unless <code>module</code> is <code>None</code>, <code>System</code>, or <code>AMD</code>.
+This option cannot be used to bundle CommonJS or ES6 modules.</p>
 <h3 id="out"><a href="#out"><code>out</code></h3></a>
 <aside>
-    <p>❌ <strong>Deprecated:</strong> Do not use this. Use [outFile] instead</p>
+    <p>❌ <strong>Deprecated:</strong> Do not use this. Use outFile instead</p>
   </aside>
 <p>The <code>out</code> option computes the final file location in a way that is not predictable or consistent.
 This option is retained for backward compatibility only.</p>
 <h2 id="library-options"><a href="#library-options">Library Options</h2></a>
-<h3 id="nolib"><a href="#nolib"><code>noLib</code></h3></a>
 <h3 id="lib"><a href="#lib"><code>lib</code></h3></a>
+<p><strong>Default</strong>: At a minimum <code>["dom"]</code>, plus more depending on <code>target</code></p>
+<p>TypeScript includes a default set of type definitions for built-in JS APIs (like <code>Math</code>), as well as type definitions for things found in browser environments (like <code>document</code>).
+TypeScript also includes APIs for newer JS features matching the <code>target</code> you specify; for example the definition for <code>Map</code> is available if <code>target</code> is <code>ES6</code> or newer.</p>
+<p>You may want to change these for a few reasons:</p>
+<ul>
+<li>Your program doesn't run in a browser, so you don't want the <code>"dom"</code> type definitions</li>
+<li>Your runtime platform provides certain JavaScript API objects (maybe through polyfills), but doesn't yet support the full syntax of a given ECMAScript version</li>
+<li>You have polyfills or native implementations for some, but not all, of a higher level ECMAScript version</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Contents / Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ES5</td>
+<td>Core definitions for all ES3 and ES5 functionality</td>
+</tr>
+<tr>
+<td>ES2015</td>
+<td>Additional APIs available in ES2015 (also known as ES6)</td>
+</tr>
+<tr>
+<td>ES6</td>
+<td>Alias for "ES2015"</td>
+</tr>
+<tr>
+<td>ES2016</td>
+<td>Additional APIs available in ES2016</td>
+</tr>
+<tr>
+<td>ES7</td>
+<td>Alias for "ES2016"</td>
+</tr>
+<tr>
+<td>ES2017</td>
+<td>Additional APIs available in ES2017</td>
+</tr>
+<tr>
+<td>ES2018</td>
+<td>Additional APIs available in ES2017</td>
+</tr>
+<tr>
+<td>ESNext</td>
+<td>Additional APIs available in ESNext</td>
+</tr>
+<tr>
+<td>DOM</td>
+<td>DOM definitions (<code>window</code>, <code>document</code>, etc.)</td>
+</tr>
+<tr>
+<td>DOM.Iterable</td>
+<td></td>
+</tr>
+<tr>
+<td>WebWorker</td>
+<td>APIs available in WebWorker contexts</td>
+</tr>
+<tr>
+<td>ScriptHost</td>
+<td></td>
+</tr>
+<tr>
+<td>ES2015.Core</td>
+<td></td>
+</tr>
+<tr>
+<td>ES2015.Collection</td>
+<td></td>
+</tr>
+<tr>
+<td>ES2015.Generator</td>
+<td></td>
+</tr>
+<tr>
+<td>ES2015.Iterable</td>
+<td></td>
+</tr>
+<tr>
+<td>ES2015.Promise</td>
+<td></td>
+</tr>
+<tr>
+<td>ES2015.Proxy</td>
+<td></td>
+</tr>
+<tr>
+<td>ES2015.Reflect</td>
+<td></td>
+</tr>
+<tr>
+<td>ES2015.Symbol</td>
+<td></td>
+</tr>
+<tr>
+<td>ES2015.Symbol.WellKnown</td>
+<td></td>
+</tr>
+<tr>
+<td>ES2016.Array.Include</td>
+<td></td>
+</tr>
+<tr>
+<td>ES2017.object</td>
+<td></td>
+</tr>
+<tr>
+<td>ES2017.Intl</td>
+<td></td>
+</tr>
+<tr>
+<td>ES2017.SharedMemory</td>
+<td></td>
+</tr>
+<tr>
+<td>ES2017.String</td>
+<td></td>
+</tr>
+<tr>
+<td>ES2017.TypedArrays</td>
+<td></td>
+</tr>
+<tr>
+<td>ES2018.Intl</td>
+<td></td>
+</tr>
+<tr>
+<td>ES2018.Promise</td>
+<td></td>
+</tr>
+<tr>
+<td>ES2018.RegExp</td>
+<td></td>
+</tr>
+<tr>
+<td>ESNext.AsyncIterable</td>
+<td></td>
+</tr>
+<tr>
+<td>ESNext.Array</td>
+<td></td>
+</tr>
+<tr>
+<td>ESNext.Intl</td>
+<td></td>
+</tr>
+<tr>
+<td>ESNext.Symbol</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="nolib"><a href="#nolib"><code>noLib</code></h3></a>
+<p>Disables the automatic inclusion of any library files.
+If this option is set, <code>lib</code> is ignored.</p>
 <h2 id="file-inclusion-options"><a href="#file-inclusion-options">File Inclusion Options</h2></a>
 <h3 id="include"><a href="#include"><code>include</code> (tsconfig.json)</h3></a>
+<p><strong>Allowed values</strong>: An array of strings</p>
+<p><strong>Default</strong>: <code>[]</code> if <code>files</code> is specified, otherwise <code>["**/*"]</code></p>
+<pre><code>{
+   "include": ["src/**", "tests/**"]
+}
+</code></pre>
+<p>Specifies an array of filenames or patterns to include in the program.
+These filenames are resolved relative to the directory containing the <code>tsconfig.json</code> file.</p>
+<p><code>include</code> and <code>exclude</code> support wildcard characters to make glob patterns:</p>
+<ul>
+<li><code>*</code> matches zero or more characters (excluding directory separators)</li>
+<li><code>?</code> matches any one character (excluding directory separators)</li>
+<li><code>**/</code> recursively matches any subdirectory</li>
+</ul>
+<p>If a glob pattern doesn't include a file extension, then only files with supported extensions are included (e.g. <code>.ts</code>, <code>.tsx</code>, and <code>.d.ts</code> by default, with <code>.js</code> and <code>.jsx</code> if <code>allowJs</code> is set to true).</p>
+<h3 id="exclude"><a href="#exclude"><code>exclude</code> (tsconfig.json)</h3></a>
+<p><strong>Allowed values</strong>: An array of strings</p>
+<p><strong>Default</strong>: <code>["node_modules", "bower_components", "jspm_packages"]</code>, plus the value of <code>outDir</code> if one is specified.</p>
+<p>Specifies an array of filenames or patterns that should be skipped when resolving <code>include</code>.</p>
+<p><strong>Important</strong>: <code>exclude</code> <em>only</em> changes which files are included as a result of the <code>include</code> setting.
+A file specified by <code>exclude</code> can still become part of your program due to an <code>import</code> statement in your code, a <code>types</code> inclusion, a <code>/// &lt;reference</code> directive, or being specified in the <code>files</code> list.
+It is not a mechanism that <strong>prevents</strong> a file from being included in the program - it simply changes what the <code>include</code> setting finds.</p>
 <h3 id="files"><a href="#files"><code>files</code> (tsconfig.json)</h3></a>
-<h3 id="noresolve"><a href="#noresolve"><code>noResolve</code></h3></a>
+<p><strong>Allowed values</strong>: An array of strings</p>
+<p><strong>Default</strong>: None</p>
+<p>Specifies an array of files to include in the program.
+An error occurs if any of the files can't be found.</p>
 <h3 id="composite"><a href="#composite"><code>composite</code></h3></a>
+<p><strong>Default</strong>: <code>false</code></p>
+<p>The <code>composite</code> option enforces certain constraints that make it possible for build tools (including TypeScript itself, under <code>--build</code> mode) to quickly determine if a project has been built yet.</p>
+<p>When this setting is on:</p>
+<ul>
+<li>The <code>rootDir</code> setting, if not explicitly set, defaults to the directory containing the <code>tsconfig.json</code> file.</li>
+<li>All implementation files must be matched by an <code>include</code> pattern or listed in the <code>files</code> array. If this constraint is violated, <code>tsc</code> will inform you which files weren't specified.</li>
+<li><code>declaration</code> defaults to <code>true</code></li>
+</ul>
 <h3 id="allowjs"><a href="#allowjs"><code>allowJs</code></h3></a>
 <h3 id="forceconsistentcasinginfilenames"><a href="#forceconsistentcasinginfilenames"><code>forceConsistentCasingInFileNames</code></h3></a>
+<p><strong>Default</strong>: <code>false</code></p>
+<p>TypeScript follows the case sensitivity rules of the file system it's running on.
+This can be problematic if some developers are working in a case-sensitive file system and others aren't.
+If a file attempts to import <code>fileManager.ts</code> by specifying <code>./FileManager.ts</code> the file will be found in a case-insensitive file system, but not on a case-sensitive file system.</p>
+<p>When this option is set, TypeScript will issue an error if a program tries to include a file by a casing different from the casing on disk.</p>
+<p>We recommend enabling this option in all projects.</p>
 <h3 id="charset"><a href="#charset"><code>charset</code></h3></a>
-<aside>
-    <p>❌ <strong>Deprecated:</strong> This option does nothing.</p>
-  </aside>
+<blockquote>
+  <p>❌ <strong>Deprecated:</strong> This option does nothing.</p>
+</blockquote>
 <p>In prior versions of TypeScript, this controlled what encoding was used when reading text files from disk.
 Today, TypeScript assumes UTF-8 encoding, but will correctly detect UTF-16 (BE and LE) or UTF-8 BOMs.</p>
+<h3 id="noresolve"><a href="#noresolve"><code>noResolve</code></h3></a>
+<blockquote>
+  <p>🧙 This option is rarely used.</p>
+</blockquote>
+<p><strong>Default</strong>: <code>false</code></p>
+<p>By default, TypeScript will examine the initial set of files for <code>import</code> and <code>&lt;reference</code> directives and add these resolved files to your program.</p>
+<p>If <code>noResolve</code> isn't set, this process doesn't happen.
+However, <code>import</code> statements are still checked to see if they resolve to a valid module, so you'll need to make sure this is satisfied by some other means.</p>
 <h2 id="module-resolution-options"><a href="#module-resolution-options">Module Resolution Options</h2></a>
 <h3 id="baseurl"><a href="#baseurl"><code>baseUrl</code></h3></a>
+<h3 id="paths"><a href="#paths"><code>paths</code></h3></a>
 <h3 id="allowsyntheticdefaultimports"><a href="#allowsyntheticdefaultimports"><code>allowSyntheticDefaultImports</code></h3></a>
 <h2 id="typechecking-options"><a href="#typechecking-options">Typechecking Options</h2></a>
 <h3 id="--strict"><a href="#--strict"><code>strict</code></h3></a>
-<h4 id="strictpropertyinitialization"><a href="#strictpropertyinitialization"><code>strictPropertyInitialization</code></h4></a>
-<h4 id="strictbindcallapply"><a href="#strictbindcallapply"><code>strictBindCallApply</code></h4></a>
-<h4 id="strictnullchecks"><a href="#strictnullchecks"><code>strictNullChecks</code></h4></a>
-<h4 id="strictfunctiontypes"><a href="#strictfunctiontypes"><code>strictFunctionTypes</code></h4></a>
-<h4 id="noimplicitany"><a href="#noimplicitany"><code>noImplicitAny</code></h4></a>
-<h4 id="noimplicitthis"><a href="#noimplicitthis"><code>noImplicitThis</code></h4></a>
-<h4 id="alwaysstrict"><a href="#alwaysstrict"><code>alwaysStrict</code></h4></a>
-<h3 id="suppressexcesspropertyerrors"><a href="#suppressexcesspropertyerrors"><code>suppressExcessPropertyErrors</code></h3></a>
-<h3 id="suppressimplicitanyindexerrors"><a href="#suppressimplicitanyindexerrors"><code>suppressImplicitAnyIndexErrors</code></h3></a>
-<h3 id="keyofstringsonly"><a href="#keyofstringsonly"><code>keyofStringsOnly</code></h3></a>
-<aside>
-    <p>❌ <strong>Discouraged:</strong> This flag was provided for backward compatibility reasons and should not be enabled in new or maintained codebases.</p>
-  </aside>
+<blockquote>
+  <p>✅ We recommend enabling this in all codebases, especially new ones</p>
+</blockquote>
 <p><strong>Default</strong>: <code>false</code></p>
+<p>The <code>strict</code> flag enables a wide range of type checking behavior that results in stronger guarantees of program correctness.
+Turning this on is equivalent to enabling all of the <em>strict mode family</em> options, which are outlined below.
+You can then turn off individual strict mode family checks as needed.</p>
+<p>Future versions of TypeScript may introduce additional stricter checking under this flag, so upgrades of TypeScript might result in new type errors in your program.
+When appropriate and possible, a corresponding flag will be added to disable that behavior.</p>
+<h4 id="strictnullchecks"><a href="#strictnullchecks"><code>strictNullChecks</code></h4></a>
+<blockquote>
+  <p>✅ We recommend enabling this in all codebases, especially ones</p>
+</blockquote>
+<p><strong>Default</strong>: <code>false</code>, unless <code>strict</code> is set</p>
+<p>When <code>strictNullChecks</code> is <code>false</code>, <code>null</code> and <code>undefined</code> are considered to be valid values of all types.
+This can lead to unexpected errors at runtime.</p>
+<p>When <code>strictNullChecks</code> is <code>true</code>, <code>null</code> and <code>undefined</code> have their own distinct types and you'll get a type error if you try to use them where a concrete value is expected.</p>
+<h4 id="strictpropertyinitialization"><a href="#strictpropertyinitialization"><code>strictPropertyInitialization</code></h4></a>
+<p><strong>Default</strong>: <code>false</code>, unless <code>strict</code> is set</p>
+<p>When set, it becomes an error to declare a class property without directly initializing it before the end of the constructor.
+See the corresponding section in <a href="/chapters/classes#classes">Classes</a>.</p>
+<h4 id="strictbindcallapply"><a href="#strictbindcallapply"><code>strictBindCallApply</code></h4></a>
+<p><strong>Default</strong>: <code>false</code>, unless <code>strict</code> is set</p>
+<p>When set, TypeScript will check that the built-in methods of functions <code>call</code>, <code>bind</code>, and <code>apply</code> are invoked with correct argument for the underlying function:</p>
+<p><pre class="typescript-code"><span class="tm-cmt">// With strictBindCallApply on</span>
+<span class="tm-kw">function</span> <span class="tm-mth">fn</span>(<span class="tm-vr">x</span>: <span class="tm-typ">string</span>) {
+   <span class="tm-kw">return</span> <span class="tm-mth">parseInt</span>(<span class="tm-vr">x</span>);
+}
+
+<span class="tm-kw">const</span> <span class="tm-vr">n1</span> = <span class="tm-vr">fn</span>.<span class="tm-mth">call</span>(<span class="tm-kw">undefined</span>, <span class="tm-str">"10"</span>);
+      <span class="quickinfo-result"><span class="quickinfo-arrow">▲</span><span class="keyword">const</span><span class="space"> </span><span class="localName">n1</span><span class="punctuation">:</span><span class="space"> </span><span class="keyword">number</span></span>
+
+<span class="tm-kw">const</span> <span class="tm-vr">n2</span> = <span class="tm-vr">fn</span>.<span class="tm-mth">call</span>(<span class="tm-kw">undefined</span>, <span class="error" tabindex="0" aria-describedby="errLabel-2345-150-5"><span class="error-highlight"></span><span class="tm-kw">false</span><span id="errLabel-2345-150-5" role="tooltip" class="error-tooltip">Argument of type 'false' is not assignable to parameter of type 'string'.</span></span>);<hr class="error-divider"><div class="listed-error"><div class="error-line">Argument of type 'false' is not assignable to parameter of type 'string'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=%2F%2F%20With%20strictBindCallApply%20on%0Afunction%20fn(x%3A%20string)%20%7B%0A%20%20%20return%20parseInt(x)%3B%0A%7D%0A%0Aconst%20n1%20%3D%20fn.call(undefined%2C%20%2210%22)%3B%0A%0Aconst%20n2%20%3D%20fn.call(undefined%2C%20false)%3B">Try</a></pre></p>
+<p>Otherwise, these functions accept any arguments and will return <code>any</code>:</p>
+<p><pre class="typescript-code">
+<span class="tm-cmt">// With strictBindCallApply off</span>
+<span class="tm-kw">function</span> <span class="tm-mth">fn</span>(<span class="tm-vr">x</span>: <span class="tm-typ">string</span>) {
+   <span class="tm-kw">return</span> <span class="tm-mth">parseInt</span>(<span class="tm-vr">x</span>);
+}
+
+<span class="tm-cmt">// Note: No error; return type is 'any'</span>
+<span class="tm-kw">const</span> <span class="tm-vr">n</span> = <span class="tm-vr">fn</span>.<span class="tm-mth">call</span>(<span class="tm-kw">undefined</span>, <span class="tm-kw">false</span>);
+      <span class="quickinfo-result"><span class="quickinfo-arrow">▲</span><span class="keyword">const</span><span class="space"> </span><span class="localName">n</span><span class="punctuation">:</span><span class="space"> </span><span class="keyword">any</span></span><a class="playground-link" href="https://www.typescriptlang.org/play/#src=%0A%2F%2F%20With%20strictBindCallApply%20off%0Afunction%20fn(x%3A%20string)%20%7B%0A%20%20%20return%20parseInt(x)%3B%0A%7D%0A%0A%2F%2F%20Note%3A%20No%20error%3B%20return%20type%20is%20'any'%0Aconst%20n%20%3D%20fn.call(undefined%2C%20false)%3B">Try</a></pre></p>
+<h4 id="strictfunctiontypes"><a href="#strictfunctiontypes"><code>strictFunctionTypes</code></h4></a>
+<blockquote>
+  <p>✅ We strongly recommend enabling this in all codebases</p>
+</blockquote>
+<p><strong>Default</strong>: <code>false</code>, unless <code>strict</code> is set</p>
+<p>When enabled, this flag causes functions parameters to be checked more correctly.</p>
+<p>Here's a basic example with <code>strictFunctionTypes</code> <em>off</em>:
+<pre class="typescript-code"><span class="tm-kw">function</span> <span class="tm-mth">fn</span>(<span class="tm-vr">x</span>: <span class="tm-typ">string</span>) {
+   <span class="tm-typ">console</span>.<span class="tm-mth">log</span>(<span class="tm-str">"Hello, "</span> + <span class="tm-vr">x</span>.<span class="tm-mth">toLowerCase</span>());
+}
+
+<span class="tm-kw">type</span> <span class="tm-typ"><span class="typeAliasName">StringOrNumberFunc</span></span> = (<span class="tm-vr">ns</span>: <span class="tm-typ">string</span> | <span class="tm-typ">number</span>) <span class="tm-kw">=></span> <span class="tm-typ">void</span>;
+
+<span class="tm-cmt">// Unsafe assignment</span>
+<span class="tm-kw">let</span> <span class="tm-vr">func</span>: <span class="tm-typ"><span class="typeAliasName">StringOrNumberFunc</span></span> = <span class="tm-vr">fn</span>;
+<span class="tm-cmt">// Unsafe call - will crash</span>
+<span class="tm-mth">func</span>(<span class="tm-num">10</span>);<a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20fn(x%3A%20string)%20%7B%0A%20%20%20console.log(%22Hello%2C%20%22%20%2B%20x.toLowerCase())%3B%0A%7D%0A%0Atype%20StringOrNumberFunc%20%3D%20(ns%3A%20string%20%7C%20number)%20%3D%3E%20void%3B%0A%0A%2F%2F%20Unsafe%20assignment%0Alet%20func%3A%20StringOrNumberFunc%20%3D%20fn%3B%0A%2F%2F%20Unsafe%20call%20-%20will%20crash%0Afunc(10)%3B">Try</a></pre></p>
+<p>With <code>strictFunctionTypes</code> <em>on</em>, the error is correctly detected:
+<pre class="typescript-code"><span class="tm-kw">function</span> <span class="tm-mth">fn</span>(<span class="tm-vr">x</span>: <span class="tm-typ">string</span>) {
+   <span class="tm-typ">console</span>.<span class="tm-mth">log</span>(<span class="tm-str">"Hello, "</span> + <span class="tm-vr">x</span>.<span class="tm-mth">toLowerCase</span>());
+}
+
+<span class="tm-kw">type</span> <span class="tm-typ"><span class="typeAliasName">StringOrNumberFunc</span></span> = (<span class="tm-vr">ns</span>: <span class="tm-typ">string</span> | <span class="tm-typ">number</span>) <span class="tm-kw">=></span> <span class="tm-typ">void</span>;
+
+<span class="tm-cmt">// Unsafe assignment is prevented</span>
+<span class="tm-kw">let</span> <span class="error" tabindex="0" aria-describedby="errLabel-2322-169-4"><span class="error-highlight"></span><span class="tm-vr">func</span><span id="errLabel-2322-169-4" role="tooltip" class="error-tooltip">Type '(x: string) => void' is not assignable to type 'StringOrNumberFunc'.
+  Types of parameters 'x' and 'ns' are incompatible.
+    Type 'string | number' is not assignable to type 'string'.
+      Type 'number' is not assignable to type 'string'.</span></span>: <span class="tm-typ"><span class="typeAliasName">StringOrNumberFunc</span></span> = <span class="tm-vr">fn</span>;<hr class="error-divider"><div class="listed-error"><div class="error-line">Type '(x: string) => void' is not assignable to type 'StringOrNumberFunc'.</div><div class="error-line"><div class="indent"></div>Types of parameters 'x' and 'ns' are incompatible.</div><div class="error-line"><div class="indent"></div><div class="indent"></div>Type 'string | number' is not assignable to type 'string'.</div><div class="error-line"><div class="indent"></div><div class="indent"></div><div class="indent"></div>Type 'number' is not assignable to type 'string'.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20fn(x%3A%20string)%20%7B%0A%20%20%20console.log(%22Hello%2C%20%22%20%2B%20x.toLowerCase())%3B%0A%7D%0A%0Atype%20StringOrNumberFunc%20%3D%20(ns%3A%20string%20%7C%20number)%20%3D%3E%20void%3B%0A%0A%2F%2F%20Unsafe%20assignment%20is%20prevented%0Alet%20func%3A%20StringOrNumberFunc%20%3D%20fn%3B">Try</a></pre></p>
+<p>During development of this feature, we discovered a large number of inherently unsafe class hierarchies, including some in the DOM.
+Because of this, the setting only applies to functions written in <em>function</em> syntax, not to those in <em>method</em> syntax:
+<pre class="typescript-code"><span class="tm-kw">type</span> <span class="tm-typ"><span class="typeAliasName">Methodish</span></span> = {
+   <span class="tm-mth">func</span>(<span class="tm-vr">x</span>: <span class="tm-typ">string</span> | <span class="tm-typ">number</span>):<span class="tm-typ"> void</span>;
+};
+<span class="tm-kw">function</span> <span class="tm-mth">fn</span>(<span class="tm-vr">x</span>: <span class="tm-typ">string</span>)  {
+   <span class="tm-typ">console</span>.<span class="tm-mth">log</span>(<span class="tm-str">"Hello, "</span> + <span class="tm-vr">x</span>.<span class="tm-mth">toLowerCase</span>());
+}
+
+<span class="tm-cmt">// Ultimately an unsafe assignment, but not detected</span>
+<span class="tm-kw">const</span> <span class="tm-vr">m</span>: <span class="tm-typ"><span class="typeAliasName">Methodish</span></span> = {
+   <span class="tm-vr">func:</span> <span class="tm-vr">fn</span>
+};
+<span class="tm-vr">m</span>.<span class="tm-mth">func</span>(<span class="tm-num">10</span>);<a class="playground-link" href="https://www.typescriptlang.org/play/#src=type%20Methodish%20%3D%20%7B%0A%20%20%20func(x%3A%20string%20%7C%20number)%3A%20void%3B%0A%7D%3B%0Afunction%20fn(x%3A%20string)%20%20%7B%0A%20%20%20console.log(%22Hello%2C%20%22%20%2B%20x.toLowerCase())%3B%0A%7D%0A%0A%2F%2F%20Ultimately%20an%20unsafe%20assignment%2C%20but%20not%20detected%0Aconst%20m%3A%20Methodish%20%3D%20%7B%0A%20%20%20func%3A%20fn%0A%7D%3B%0Am.func(10)%3B">Try</a></pre></p>
+<h4 id="noimplicitany"><a href="#noimplicitany"><code>noImplicitAny</code></h4></a>
+<blockquote>
+  <p>✅ We strongly recommend enabling this in all codebases</p>
+</blockquote>
+<p><strong>Default</strong>: <code>false</code>, unless <code>strict</code> is set</p>
+<p>In some cases where no type annotations are present, TypeScript will fall back to a type of <code>any</code> for a variable.
+This can cause some errors to be missed:</p>
+<p><pre class="typescript-code"><span class="tm-kw">function</span> <span class="tm-mth">fn</span>(<span class="tm-vr">s</span>) {
+   <span class="tm-cmt">// No error?</span>
+   <span class="tm-typ">console</span>.<span class="tm-mth">log</span>(<span class="tm-vr">s</span>.<span class="tm-mth">subtr</span>(<span class="tm-num">3</span>))
+}
+<span class="tm-mth">fn</span>(<span class="tm-num">42</span>);<a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20fn(s)%20%7B%0A%20%20%20%2F%2F%20No%20error%3F%0A%20%20%20console.log(s.subtr(3))%0A%7D%0Afn(42)%3B">Try</a></pre></p>
+<p>When <code>noImplicitAny</code> is set, TypeScript will issue an error whenver it would have inferred <code>any</code>:
+<pre class="typescript-code"><span class="tm-kw">function</span> <span class="tm-mth">fn</span>(<span class="error" tabindex="0" aria-describedby="errLabel-7006-12-1"><span class="error-highlight"></span><span class="tm-vr">s</span><span id="errLabel-7006-12-1" role="tooltip" class="error-tooltip">Parameter 's' implicitly has an 'any' type.</span></span>) {
+   <span class="tm-typ">console</span>.<span class="tm-mth">log</span>(<span class="tm-vr">s</span>.<span class="tm-mth">subtr</span>(<span class="tm-num">3</span>))
+}<hr class="error-divider"><div class="listed-error"><div class="error-line">Parameter 's' implicitly has an 'any' type.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20fn(s)%20%7B%0A%20%20%20console.log(s.subtr(3))%0A%7D">Try</a></pre></p>
+<h4 id="noimplicitthis"><a href="#noimplicitthis"><code>noImplicitThis</code></h4></a>
+<p><strong>Default</strong>: <code>false</code>, unless <code>strict</code> is set</p>
+<h3 id="isolatedmodules"><a href="#isolatedmodules"><code>isolatedModules</code></h3></a>
+<p><strong>Default</strong>: <code>false</code></p>
+<p>While you can use TypeScript to produce JavaScript code from TypeScript code, it's also common to use other transpilers such as <a href="https://babeljs.io">Babel</a> to do this.
+However, most other transpilers only operate on a single file at a time, so can't apply code transforms that depend on whole-program analysis.
+This restriction also applies to TypeScript's <code>ts.transpileModule</code> API which is used by some build tools.</p>
+<p>These limitations can cause runtime problems for some TypeScript constructs.
+Setting the <code>isolatedModules</code> flag tells TypeScript to warn you if you write certain code that can't be correctly interpreted by a single-file transpilation process.
+It does not change the behavior of your code, or otherwise change the behavior of TypeScript's checking and emitting process.</p>
+<h4 id="exports-of-non-value-identifiers"><a href="#exports-of-non-value-identifiers">Exports of Non-Value Identifiers</h4></a>
+<p>In TypeScript, you can import a <em>type</em> and then subsequently import it:
+<pre class="typescript-code"><span class="tm-kw">import</span> { <span class="tm-vr">someType</span>, <span class="tm-vr">someFunction</span> } <span class="tm-kw">from</span> <span class="tm-str">"someModule"</span>;
+
+<span class="tm-mth">someFunction</span>();
+
+<span class="tm-kw">export</span> { <span class="tm-vr">someType</span>, <span class="tm-vr">someFunction</span> };<a class="playground-link" href="https://www.typescriptlang.org/play/#src=import%20%7B%20someType%2C%20someFunction%20%7D%20from%20%22someModule%22%3B%0A%0AsomeFunction()%3B%0A%0Aexport%20%7B%20someType%2C%20someFunction%20%7D%3B">Try</a></pre></p>
+<p>Because there's no value for <code>someType</code>, the emitted <code>export</code> will not try to export it (this would be a runtime error):</p>
+<p><pre class="typescript-code"><span class="tm-kw">export</span> { <span class="tm-vr">someFunction</span> };</pre></p>
+<p>Single-file transpilers don't know whether <code>someType</code> produces a value or not, so it's an error to export a name that only refers to a type if <code>isolatedModules</code> is set.</p>
+<h4 id="non-module-files"><a href="#non-module-files">Non-Module Files</h4></a>
+<p>If <code>isolatedModules</code> is set, all implementation files must be <em>modules</em>.
+An error occurs if any file isn't a module:</p>
+<p><pre class="typescript-code"><span class="error" tabindex="0" aria-describedby="errLabel-1208-0-8"><span class="error-highlight"></span><span class="tm-kw">function</span><span id="errLabel-1208-0-8" role="tooltip" class="error-tooltip">Cannot compile namespaces when the '--isolatedModules' flag is provided.</span></span> <span class="tm-mth">fn</span>() { }<hr class="error-divider"><div class="listed-error"><div class="error-line">Cannot compile namespaces when the '--isolatedModules' flag is provided.</div></div></pre></p>
+<p>This restriction doesn't apply to <code>.d.ts</code> files</p>
+<h4 id="references-to-const-enum-members"><a href="#references-to-const-enum-members">References to <code>const enum</code> members</h4></a>
+<p>In TypeScript, when you reference a <code>const enum</code> member, the reference is replaced by its actual value in the emitted JavaScript:</p>
+<p><pre class="typescript-code"><span class="tm-kw">declare</span> <span class="tm-kw">const</span> <span class="tm-kw">enum</span> <span class="tm-typ"><span class="enumName">Numbers</span></span> {
+   <span class="tm-vr">Zero</span> = <span class="tm-num">0</span>,
+   <span class="tm-vr">One</span> = <span class="tm-num">1</span>
+}
+<span class="tm-typ">console</span>.<span class="tm-mth">log</span>(<span class="tm-vr"><span class="enumName">Numbers</span></span>.<span class="tm-vr">Zero</span> + <span class="tm-vr"><span class="enumName">Numbers</span></span>.<span class="tm-vr">One</span>);<hr class="js-divider"><pre class="emitted-js">"use strict";
+console.log(0 + 1);
+</pre><a class="playground-link" href="https://www.typescriptlang.org/play/#src=declare%20const%20enum%20Numbers%20%7B%0A%20%20%20Zero%20%3D%200%2C%0A%20%20%20One%20%3D%201%0A%7D%0Aconsole.log(Numbers.Zero%20%2B%20Numbers.One)%3B">Try</a></pre></p>
+<p>Without knowledge of the values of these members, other transpilers can't replace the references to <code>Number</code>, which would be a runtime error if left alone (since there is no <code>Numbers</code> object at runtime).
+Because of this, when <code>isolatedModules</code> is set, it is an error to reference an ambient <code>const enum</code> member.</p>
+<h3 id="suppressexcesspropertyerrors"><a href="#suppressexcesspropertyerrors"><code>suppressExcessPropertyErrors</code></h3></a>
+<blockquote>
+  <p>❌ <strong>Discouraged:</strong> This flag is provided for backward compatibility. Consider using <code>@ts-ignore</code> instead.</p>
+</blockquote>
+<p>This disables reporting of excess property errors, such as the one shown in the following example</p>
+<p><pre class="typescript-code"><span class="tm-kw">type</span> <span class="tm-typ"><span class="typeAliasName">Point</span></span> = { <span class="tm-vr">x</span>: <span class="tm-typ">number</span>, <span class="tm-vr">y</span>: <span class="tm-typ">number</span> };
+<span class="tm-kw">const</span> <span class="tm-vr">p</span>: <span class="tm-typ"><span class="typeAliasName">Point</span></span> = { <span class="tm-vr">x:</span> <span class="tm-num">1</span>, <span class="tm-vr">y:</span> <span class="tm-num">3</span>, <span class="error" tabindex="0" aria-describedby="errLabel-2322-70-5"><span class="error-highlight"></span><span class="tm-vr">m:</span> <span class="tm-num">10</span><span id="errLabel-2322-70-5" role="tooltip" class="error-tooltip">Type '{ x: number; y: number; m: number; }' is not assignable to type 'Point'.
+  Object literal may only specify known properties, and 'm' does not exist in type 'Point'.</span></span> };<hr class="error-divider"><div class="listed-error"><div class="error-line">Type '{ x: number; y: number; m: number; }' is not assignable to type 'Point'.</div><div class="error-line"><div class="indent"></div>Object literal may only specify known properties, and 'm' does not exist in type 'Point'.</div></div></pre></p>
+<h3 id="suppressimplicitanyindexerrors"><a href="#suppressimplicitanyindexerrors"><code>suppressImplicitAnyIndexErrors</code></h3></a>
+<blockquote>
+  <p>❌ <strong>Discouraged:</strong> This flag is provided for backward compatibility. Consider using <code>@ts-ignore</code> instead.</p>
+</blockquote>
+<p>This disables reporting of implicit <code>any</code> warnings when indexing into objects, such as shown in the following example</p>
+<p><pre class="typescript-code"><span class="tm-kw">const</span> <span class="tm-vr">obj</span> = { <span class="tm-vr">x:</span> <span class="tm-num">10</span> };
+<span class="tm-typ">console</span>.<span class="tm-mth">log</span>(<span class="error" tabindex="0" aria-describedby="errLabel-7017-35-10"><span class="error-highlight"></span><span class="tm-vr">obj</span>[<span class="tm-str">"foo"</span>]<span id="errLabel-7017-35-10" role="tooltip" class="error-tooltip">Element implicitly has an 'any' type because type '{ x: number; }' has no index signature.</span></span>);<hr class="error-divider"><div class="listed-error"><div class="error-line">Element implicitly has an 'any' type because type '{ x: number; }' has no index signature.</div></div></pre></p>
+<h3 id="keyofstringsonly"><a href="#keyofstringsonly"><code>keyofStringsOnly</code></h3></a>
+<blockquote>
+  <p>❌ <strong>Discouraged:</strong> This flag was provided for backward compatibility reasons and should not be enabled in new or maintained codebases.</p>
+</blockquote>
 <p>This flag changes the <code>keyof</code> type operator to return <code>string</code> instead of <code>string | number</code> when applied to a type with a string index signature.</p>
 <h2 id="linting-options"><a href="#linting-options">Linting Options</h2></a>
 <h3 id="allowunreachablecode"><a href="#allowunreachablecode"><code>allowUnreachableCode</code></h3></a>
+<p>Disables warnings about unreachable code.
+These warnings are only about code which is provably unreachable due to syntactic construction, like the example below.</p>
+<p><pre class="typescript-code"><span class="tm-kw">function</span> <span class="tm-mth">fn</span>(<span class="tm-vr">n</span>: <span class="tm-typ">number</span>) {
+   <span class="tm-kw">if</span> (<span class="tm-vr">n</span> > <span class="tm-num">5</span>) {
+      <span class="tm-kw">return</span> <span class="tm-kw">true</span>;
+   } <span class="tm-kw">else</span> {
+      <span class="tm-kw">return</span> <span class="tm-kw">false</span>;
+   }
+   <span class="error" tabindex="0" aria-describedby="errLabel-7027-100-12"><span class="error-highlight"></span><span class="tm-kw">return</span> <span class="tm-kw">true</span>;<span id="errLabel-7027-100-12" role="tooltip" class="error-tooltip">Unreachable code detected.</span></span>
+}<hr class="error-divider"><div class="listed-error"><div class="error-line">Unreachable code detected.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20fn(n%3A%20number)%20%7B%0A%20%20%20if%20(n%20%3E%205)%20%7B%0A%20%20%20%20%20%20return%20true%3B%0A%20%20%20%7D%20else%20%7B%0A%20%20%20%20%20%20return%20false%3B%0A%20%20%20%7D%0A%20%20%20return%20true%3B%0A%7D">Try</a></pre></p>
+<p>TypeScript doesn't error on the basis of code which <em>appears</em> to be unreachable due to type analysis.</p>
 <h3 id="allowunusedlabels"><a href="#allowunusedlabels"><code>allowUnusedLabels</code></h3></a>
+<p>Disables warnings about unused labels.
+Labels are very rare in JavaScript and typically indicate an attempt to write an object literal:</p>
+<p><pre class="typescript-code"><span class="tm-kw">function</span> <span class="tm-mth">f</span>(<span class="tm-vr">a</span>: <span class="tm-typ">number</span>) {
+   <span class="tm-cmt">// Forgot 'return' statement!</span>
+   <span class="tm-kw">if</span> (<span class="tm-vr">a</span> > <span class="tm-num">10</span>)
+   {
+       <span class="error" tabindex="0" aria-describedby="errLabel-7028-84-1"><span class="error-highlight"></span><span class="tm-vr">m</span><span id="errLabel-7028-84-1" role="tooltip" class="error-tooltip">Unused label.</span></span>: <span class="tm-num">0</span>
+   }
+}<hr class="error-divider"><div class="listed-error"><div class="error-line">Unused label.</div></div><a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20f(a%3A%20number)%20%7B%0A%20%20%20%2F%2F%20Forgot%20'return'%20statement!%0A%20%20%20if%20(a%20%3E%2010)%0A%20%20%20%7B%0A%20%20%20%20%20%20%20m%3A%200%0A%20%20%20%7D%0A%7D">Try</a></pre></p>
 <h2 id="decorators"><a href="#decorators">Decorators</h2></a>
 <h3 id="experimentaldecorators"><a href="#experimentaldecorators"><code>experimentalDecorators</code></h3></a>
 <h3 id="emitdecoratormetadata"><a href="#emitdecoratormetadata"><code>emitDecoratorMetadata</code></h3></a>
@@ -172,6 +707,32 @@ Today, TypeScript assumes UTF-8 encoding, but will correctly detect UTF-16 (BE a
 <h3 id="traceresolution"><a href="#traceresolution"><code>traceResolution</code></h3></a>
 <h3 id="listfiles"><a href="#listfiles"><code>listFiles</code></h3></a>
 <h2 id="miscellaneous"><a href="#miscellaneous">Miscellaneous</h2></a>
+<h3 id="alwaysstrict"><a href="#alwaysstrict"><code>alwaysStrict</code></h3></a>
+<p><pre class="typescript-code"><span class="tm-kw">function</span> <span class="tm-mth">fn</span>() { }<hr class="js-divider"><pre class="emitted-js">"use strict";
+function fn() { }
+</pre></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">function</span> <span class="tm-mth">fn</span>() { }<hr class="js-divider"><pre class="emitted-js">function fn() { }
+</pre></pre></p>
+<h3 id="noimplicitusestrict"><a href="#noimplicitusestrict"><code>noImplicitUseStrict</code></h3></a>
+<blockquote>
+  <p>🧙‍ You shouldn't need this</p>
+</blockquote>
+<p>By default, when emitting a module file to a non-ES6 target, TypeScript emits a <code>"use strict";</code> prologue at the top of the file.
+This setting disables that.</p>
+<p><pre class="typescript-code"><span class="tm-kw">export</span> <span class="tm-kw">function</span> <span class="tm-mth">fn</span>() { }<hr class="js-divider"><pre class="emitted-js">define(["require", "exports"], function (require, exports) {
+    "use strict";
+    exports.__esModule = true;
+    function fn() { }
+    exports.fn = fn;
+});
+</pre></pre></p>
+<p><pre class="typescript-code"><span class="tm-kw">export</span> <span class="tm-kw">function</span> <span class="tm-mth">fn</span>() { }<hr class="js-divider"><pre class="emitted-js">define(["require", "exports"], function (require, exports) {
+    "use strict";
+    exports.__esModule = true;
+    function fn() { }
+    exports.fn = fn;
+});
+</pre></pre></p>
 <h3 id="init"><a href="#init"><code>init</code></h3></a>
 <h3 id="help"><a href="#help"><code>help</code></h3></a>
     </article>

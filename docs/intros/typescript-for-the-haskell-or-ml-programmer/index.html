@@ -50,15 +50,44 @@ x</code>.</p>
 <h1 id="concepts-not-in-haskell"><a href="#concepts-not-in-haskell">Concepts not in Haskell</h1></a>
 <h2 id="built-in-types"><a href="#built-in-types">Built-in types</h2></a>
 <p>JavaScript defines 7 built-in types:</p>
-<p>Type        | Explanation
-------------|-----------
-<code>Number</code>    | a double-precision IEEE 754 floating point.
-<code>String</code>    | an immutable UTF-16 string.
-<code>Boolean</code>   | <code>true</code> and <code>false</code>.
-<code>Symbol</code>    | a unique value usually used as a key.
-<code>Null</code>      | equivalent to the unit type.
-<code>Undefined</code> | also equivalent to the unit type.
-<code>Object</code>    | similar to records.</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Number</code></td>
+<td>a double-precision IEEE 754 floating point.</td>
+</tr>
+<tr>
+<td><code>String</code></td>
+<td>an immutable UTF-16 string.</td>
+</tr>
+<tr>
+<td><code>Boolean</code></td>
+<td><code>true</code> and <code>false</code>.</td>
+</tr>
+<tr>
+<td><code>Symbol</code></td>
+<td>a unique value usually used as a key.</td>
+</tr>
+<tr>
+<td><code>Null</code></td>
+<td>equivalent to the unit type.</td>
+</tr>
+<tr>
+<td><code>Undefined</code></td>
+<td>also equivalent to the unit type.</td>
+</tr>
+<tr>
+<td><code>Object</code></td>
+<td>similar to records.</td>
+</tr>
+</tbody>
+</table>
 <p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures">See the MDN page for more detail</a>.</p>
 <p>TypeScript has corresponding primitive types for the built-in types:</p>
 <ul>
@@ -71,15 +100,44 @@ x</code>.</p>
 <li><code>object</code></li>
 </ul>
 <h3 id="other-important-typescript-types"><a href="#other-important-typescript-types">Other important Typescript types</h3></a>
-<p>Type        | Explanation
-------------|-----------
-<code>unknown</code> | the top type.
-<code>never</code> | the bottom type.
-object literal | eg <code>{ property: Type }</code>
-<code>void</code> | a subtype of <code>undefined</code> intended for use as a return type.
-<code>T[]</code> | mutable arrays, also written <code>Array&lt;T&gt;</code>
-<code>[T,T]</code> | tuples, which are fixed-length but mutable
-<code>(t: T) =&gt; U</code> | functions</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>unknown</code></td>
+<td>the top type.</td>
+</tr>
+<tr>
+<td><code>never</code></td>
+<td>the bottom type.</td>
+</tr>
+<tr>
+<td>object literal</td>
+<td>eg <code>{ property: Type }</code></td>
+</tr>
+<tr>
+<td><code>void</code></td>
+<td>a subtype of <code>undefined</code> intended for use as a return type.</td>
+</tr>
+<tr>
+<td><code>T[]</code></td>
+<td>mutable arrays, also written <code>Array&lt;T&gt;</code></td>
+</tr>
+<tr>
+<td><code>[T,T]</code></td>
+<td>tuples, which are fixed-length but mutable</td>
+</tr>
+<tr>
+<td><code>(t: T) =&gt; U</code></td>
+<td>functions</td>
+</tr>
+</tbody>
+</table>
 <p>Notes:</p>
 <ol>
 <li><p>Function syntax includes parameter names. This is pretty hard to get used to!</p>
@@ -183,17 +241,52 @@ possible, however, to generate unions that are difficult to
 differentiate at runtime. For new code, it's best to build only
 discriminated unions.</p>
 <p>The following types have built-in predicates:</p>
-<p>Type      | Predicate
-----------|-----------
-string    | <code>typeof s === "string"</code>
-number    | <code>typeof n === "number"</code>
-bigint    | <code>typeof m === "bigint"</code>
-boolean   | <code>typeof b === "boolean"</code>
-symbol    | <code>typeof g === "symbol"</code>
-undefined | <code>typeof undefined === "undefined"</code>
-function  | <code>typeof f === "function"</code>
-array     | <code>Array.isArray(a)</code>
-object    | <code>typeof o === "object"</code></p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Predicate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>string</td>
+<td><code>typeof s === "string"</code></td>
+</tr>
+<tr>
+<td>number</td>
+<td><code>typeof n === "number"</code></td>
+</tr>
+<tr>
+<td>bigint</td>
+<td><code>typeof m === "bigint"</code></td>
+</tr>
+<tr>
+<td>boolean</td>
+<td><code>typeof b === "boolean"</code></td>
+</tr>
+<tr>
+<td>symbol</td>
+<td><code>typeof g === "symbol"</code></td>
+</tr>
+<tr>
+<td>undefined</td>
+<td><code>typeof undefined === "undefined"</code></td>
+</tr>
+<tr>
+<td>function</td>
+<td><code>typeof f === "function"</code></td>
+</tr>
+<tr>
+<td>array</td>
+<td><code>Array.isArray(a)</code></td>
+</tr>
+<tr>
+<td>object</td>
+<td><code>typeof o === "object"</code></td>
+</tr>
+</tbody>
+</table>
 <p>Note that functions and arrays are objects at runtime, but have their
 own predicates.</p>
 <h3 id="intersections"><a href="#intersections">Intersections</h3></a>
@@ -408,7 +501,7 @@ consistently used in TypeScript code.</p>
 <h1 id="further-reading"><a href="#further-reading">Further reading</h1></a>
 <ul>
 <li>Mapped types</li>
-<li>Index types]] and [[keyof types</li>
+<li>Index types and keyof types</li>
 <li>Conditional types</li>
 </ul>
     </article>

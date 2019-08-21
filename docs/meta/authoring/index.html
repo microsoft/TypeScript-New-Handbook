@@ -18,7 +18,7 @@
         </div>
     <article>
     <h1 id="authoring-guide"><a href="#authoring-guide">Authoring Guide</h1></a>
-<div class="toc"><span class="toc-title">Table of Contents</span><ul><li><a href="#testing">Testing</a></li><li><a href="#encouraged-lesser-known-syntax">Encouraged Lesser-Known Syntax</a></li><ul><li><a href="#anchor-links">Anchor Links</a></li></ul><li><a href="#special-syntax">Special Syntax</a></li><ul><li><a href="#inter-page-links">Inter-page Links</a></li><li><a href="#table-of-contents:-__toc__">Table of Contents: <code>__toc__</code></a></li><li><a href="#code-highlights:-^^^^^">Code Highlights: <code>^^^^^</code></a></li><li><a href="#code-quickinfo-queries:-^?">Code QuickInfo Queries: <code>^?</code></a></li><li><a href="#cut-comments"><code>//cut</code> comments</a></li></ul><li><a href="#publishing">Publishing</a></li><li><a href="#walkthrough">Walkthrough</a></li><ul><li><a href="#key-concepts!">Key Concepts!</a></li><li><a href="#reading-level-&-vocabulary">Reading Level &amp; Vocabulary</a></li><li><a href="#voice-(walkthrough)">Voice (Walkthrough)</a></li></ul><li><a href="#reference">Reference</a></li><ul><li><a href="#voice-(reference)">Voice (Reference)</a></li></ul></ul></ul></div>
+<div class="toc"><span class="toc-title">Table of Contents</span><ul><li><a href="#testing">Testing</a></li><li><a href="#encouraged-lesser-known-syntax">Encouraged Lesser-Known Syntax</a></li><ul><li><a href="#anchor-links">Anchor Links</a></li></ul><li><a href="#special-syntax">Special Syntax</a></li><ul><li><a href="#inter-page-links">Inter-page Links</a></li><li><a href="#table-of-contents:-__toc__">Table of Contents: <code>__toc__</code></a></li><li><a href="#code-highlights:-^^^^^">Code Highlights: <code>^^^^^</code></a></li><li><a href="#code-quickinfo-queries:-^?">Code QuickInfo Queries: <code>^?</code></a></li><li><a href="#cut-comments"><code>//cut</code> comments</a></li><li><a href="#code-sample-options">Code Sample Options</a></li><ul><li><a href="#@noerrors"><code>@noErrors</code></a></li><li><a href="#@showemit"><code>@showEmit</code></a></li></ul></ul><li><a href="#publishing">Publishing</a></li><li><a href="#walkthrough">Walkthrough</a></li><ul><li><a href="#key-concepts!">Key Concepts!</a></li><li><a href="#reading-level-&-vocabulary">Reading Level &amp; Vocabulary</a></li><li><a href="#voice-(walkthrough)">Voice (Walkthrough)</a></li></ul><li><a href="#reference">Reference</a></li><ul><li><a href="#voice-(reference)">Voice (Reference)</a></li></ul></ul></ul></div>
 <h2 id="testing"><a href="#testing">Testing</h2></a>
 <p>To work on the Handbook:</p>
 <pre><code> &gt; npm run start
@@ -75,6 +75,11 @@ foo();
 <h3 id="cut-comments"><a href="#cut-comments"><code>//cut</code> comments</h3></a>
 <p>Sometimes a code sample should be able to refer to declarations that you don't want to display in a sample.
 Any code above a line containing only <code>//cut</code> will not be displayed, but the code will be highlighted and errored as if it were there.</p>
+<h3 id="code-sample-options"><a href="#code-sample-options">Code Sample Options</h3></a>
+<h4 id="noerrors"><a href="#noerrors"><code>@noErrors</code></h4></a>
+<p>Disables display of errors in a sample</p>
+<h4 id="showemit"><a href="#showemit"><code>@showEmit</code></h4></a>
+<p>Displays the emitted JavaScript for a file</p>
 <h2 id="publishing"><a href="#publishing">Publishing</h2></a>
 <p>The site is published at https://microsoft.github.io/TypeScript-New-Handbook/outline/index.html via the <code>master</code> branch <code>docs</code> folder.
 To update this copy, run <code>npm run publish</code>, review the diff, and commit and push the result.</p>

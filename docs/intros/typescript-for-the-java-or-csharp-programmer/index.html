@@ -22,7 +22,14 @@
 Its type system offers many of the same benefits, such as better code completion, earlier detection of errors, and clearer communication between parts of your program.
 While TypeScript provides many familiar features for these developers, it's worth stepping back to see how JavaScript (and therefore TypeScript) differ from traditional OOP languages.
 Understanding these differences will help you write better JavaScript code, and avoid common pitfalls that programmers who go straight from C#/Java to TypeScript may fall in to.</p>
-<div class="toc"><span class="toc-title">Table of Contents</span><ul><li><a href="#rethinking-the-class">Rethinking the Class</a></li><ul><li><a href="#free-functions-and-data">Free Functions and Data</a></li><li><a href="#static-classes">Static Classes</a></li></ul><li><a href="#oop-in-typescript">OOP in TypeScript</a></li><li><a href="#rethinking-types">Rethinking Types</a></li><ul><li><a href="#nominal-reified-type-systems">Nominal Reified Type Systems</a></li><li><a href="#types-as-sets">Types as Sets</a></li><li><a href="#erased-structrual-types">Erased Structrual Types</a></li><li><a href="#consequences-of-structural-typing">Consequences of Structural Typing</a></li><ul><li><a href="#empty-types">Empty Types</a></li><li><a href="#identical-types">Identical Types</a></li></ul><li><a href="#reflection">Reflection</a></li></ul><li><a href="#co-learning-javascript">Co-learning JavaScript</a></li></ul></ul></div>
+<div class="toc"><span class="toc-title">Table of Contents</span><ul><li><a href="#co-learning-javascript">Co-learning JavaScript</a></li><li><a href="#rethinking-the-class">Rethinking the Class</a></li><ul><li><a href="#free-functions-and-data">Free Functions and Data</a></li><li><a href="#static-classes">Static Classes</a></li></ul><li><a href="#oop-in-typescript">OOP in TypeScript</a></li><li><a href="#rethinking-types">Rethinking Types</a></li><ul><li><a href="#nominal-reified-type-systems">Nominal Reified Type Systems</a></li><li><a href="#types-as-sets">Types as Sets</a></li><li><a href="#erased-structrual-types">Erased Structrual Types</a></li><li><a href="#consequences-of-structural-typing">Consequences of Structural Typing</a></li><ul><li><a href="#empty-types">Empty Types</a></li><li><a href="#identical-types">Identical Types</a></li></ul><li><a href="#reflection">Reflection</a></li></ul></ul></ul></div>
+<h2 id="co-learning-javascript"><a href="#co-learning-javascript">Co-learning JavaScript</h2></a>
+<p>If you're familiar with JavaScript already but are primarily a Java or C# programmer, this introductory page can help explain some of the common misconceptions and pitfalls you might be susceptible to.
+Some of the ways that TypeScript models types are quite different from Java or C#, and it's important to keep these in mind when learning TypeScript.</p>
+<p>If you're a Java or C# programmer that is new to JavaScript in general, we recommend learning a little bit of JavaScript <em>without</em> types first to understand JavaScript's runtime behaviors.
+Because TypeScript doesn't change how your code <em>runs</em>, you'll still have to learn how JavaScript works in order to write code that actually does something!</p>
+<p>It's important to remember that TypeScript uses the same <em>runtime</em> as JavaScript, so any resources about how to accomplish specific runtime behavior (converting a string to a number, displaying an alert, writing a file to disk, etc.) will always apply equally well to TypeScript programs.
+Don't limit yourself to TypeScript-specific resources!</p>
 <h2 id="rethinking-the-class"><a href="#rethinking-the-class">Rethinking the Class</h2></a>
 <p>C# and Java are what we might call <em>mandatory OOP</em> languages.
 In these languages, the <em>class</em> is the basic unit of code organization, and also the basic container of all data <em>and</em> behavior at runtime.
@@ -136,7 +143,6 @@ static void PrintType&lt;T&gt;() {
 <p>Because TypeScript's type system is fully erased, information about e.g. the instantiation of a generic type parameter is not available at runtime.</p>
 <p>JavaScript does have some limited primitives like <code>typeof</code> and <code>instanceof</code>, but remember that these operators are still working on the values as they exist in the type-erased output code.
 For example, <code>typeof (new Car())</code> will be <code>"object"</code>, not <code>Car</code> or <code>"Car"</code>.</p>
-<h2 id="co-learning-javascript"><a href="#co-learning-javascript">Co-learning JavaScript</h2></a>
     </article>
         <script>loadSavedTheme();</script>
     </body>

@@ -12,7 +12,7 @@ body article {
 
 @media (min-width: 800px) {
   body article {
-    max-width: 65%; } }
+    max-width: 65em; } }
 
 div.theme-selector {
   font-family: 'Segoe UI Semilight', Tahoma, Geneva, Verdana, sans-serif;
@@ -57,7 +57,7 @@ article :not(pre) code {
 article {
   padding-top: 1em; }
   article h1, article h2, article h3, article h4, article h5, article h6 {
-    margin-top: 0px;
+    margin-top: 1.2em;
     margin-bottom: 0.6em;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
   article h1 {
@@ -187,11 +187,10 @@ span.toc-title {
   border-bottom: solid 1px gray; }
 
 ul {
-  padding-left: 1em;
-  margin-left: 1em; }
+  padding-left: 0em; }
 
 ul ul, ul ul ul {
-  margin-left: 0.5em; }
+  margin-left: 1.3em; }
 
 h1 a, h2 a, h3 a, h4 a {
   text-decoration: none;
@@ -304,8 +303,8 @@ body.dark, body.dark-light {
     background: #444;
     border: solid #999 3px; }
   body.dark blockquote, body.dark-light blockquote {
-    background: #005;
-    border-left: solid #44F 4px; }
+    background: #224;
+    border-left: solid #446 4px; }
   body.dark article :not(pre) code, body.dark-light article :not(pre) code {
     color: #F37575; }
 

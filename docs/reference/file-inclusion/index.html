@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>File Inclusion</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" media="screen" href="../../css/handbook.css" />
+        <script src="../../js/handbook.js"></script>
+    </head>
+    <body class="dark-light">
+        <div class="theme-selector">
+            Theme:
+            <div id="set-theme-light">■</div>
+            <div id="set-theme-dark">■</div>
+            <div id="set-theme-dark-light">■</div>
+            <div id="set-theme-light-dark">■</div>
+        </div>
+    <article>
+    <p>TypeScript determines what files belong to your program by a combination of reading your <code>tsconfig.json</code> or commandline, enumerating files on disk, and following references in source files to find additional source files.
+This process is complex by nature and it can be confusing to understand how all these options interact.</p>
+<div class="toc"><span class="toc-title">Table of Contents</span><ul><li><a href="#overview">Overview</a></li><li><a href="#step-by-step">Step-by-Step</a></li><ul><li><a href="#add-default-libs">Add default libs</a></li><li><a href="#apply-includes-and-excludes">Apply <code>includes</code> and <code>excludes</code></a></li><li><a href="#apply-files-list">Apply <code>files</code> list</a></li><li><a href="#determine-automatic-type-directives">Determine automatic type directives</a></li><li><a href="#process-root-files">Process root files</a></li><li><a href="#process-type-directives">Process type directives</a></li></ul></ul></ul></div>
+<h2 id="overview"><a href="#overview">Overview</h2></a>
+<p>The core process used to construct the list of files in your program consists of two steps:</p>
+<ol>
+<li>Determine a list of <em>root files</em></li>
+<li>Resolve any references or imports in these root files, doing so recursively until no new additional files are found.</li>
+</ol>
+<p>As this process occurs, an <em>ordering</em> of files is also created.
+File ordering affects emit when using <code>--outFile</code>, and affects type checking in a few ways (see declaration merging).
+If a particular step doesn't specify an impact on file ordering, you should assume that the ordering is arbitrary and may change for any reason.</p>
+<h2 id="step-by-step"><a href="#step-by-step">Step-by-Step</h2></a>
+<p>More precisely, the following steps occur, which are described in order below.</p>
+<h3 id="add-default-libs"><a href="#add-default-libs">Add default libs</h3></a>
+<p>Based on the compiler settings lib, noLib, and target, some of the built-in <code>.d.ts</code> files (such as <code>es5.d.ts</code>) are included in the program.
+These files are always first in the file ordering.</p>
+<h3 id="apply-includes-and-excludes"><a href="#apply-includes-and-excludes">Apply <code>includes</code> and <code>excludes</code></h3></a>
+<p>First, any <code>include</code> and <code>exclude</code> patterns from <code>tsconfig.json</code> are resolved.
+Patterns from <code>exclude</code> take priority here; a file that is matched by both <code>include</code> and <code>exclude</code> is <em>not</em> considered a root file.</p>
+<p><strong>From this point forward, <code>exclude</code> patterns have no effect</strong>.
+<code>exclude</code> <em>only</em> masks files from being included due to <code>include</code>.
+Files matching <code>exclude</code> might still be added to the program as a result of being in the <code>files</code> list, reference resolution, type directive resolution, or module resolution.</p>
+<p>The ordering of files from <code>include</code> is not specified.</p>
+<h3 id="apply-files-list"><a href="#apply-files-list">Apply <code>files</code> list</h3></a>
+<p>Files from the <code>files</code> list are added to the root files list in the order they appear.</p>
+<p>At this point, a complete list of <em>root filenames</em> has been constructed.</p>
+<h3 id="determine-automatic-type-directives"><a href="#determine-automatic-type-directives">Determine automatic type directives</h3></a>
+<p>If the <code>types</code> option is not specified, a list of <em>automatic</em> type directives is computed instead.
+This is computed by taking the directory name of each direct subfolder of each of the <code>typeRoots</code>; any <code>typeRoots</code> entry that doesn't exist is skipped.
+These directives are resolved later.</p>
+<h3 id="process-root-files"><a href="#process-root-files">Process root files</h3></a>
+<p>Each <em>root file</em> is <em>processed</em>.</p>
+<p>When a file is <em>processed</em>, TypeScript resolves any dependencies found in the text of the source file:</p>
+<ul>
+<li>Module imports such as <code>import * from "./other"</code></li>
+<li>Reference directives such as <code>/// &lt;reference path="other.ts" /&gt;</code></li>
+<li>Library directives such as <code>/// &lt;reference lib="es6" /&gt;</code></li>
+<li>Type directives such as <code>/// &lt;reference types="node" /&gt;</code> </li>
+</ul>
+<p>Any file found as a result of these is immediately itself processed (unless it was already processed).
+Files are always placed <em>after</em> their dependencies in the file ordering list, unless a circularity exists, in which case the order is not specified.
+This process may cause <em>re-ordering</em> - a set of root names from <code>files</code> end up with a different ordering due to <code>reference</code> comments, for example.</p>
+<!-- TODO finish -->
+<h3 id="process-type-directives"><a href="#process-type-directives">Process type directives</h3></a>
+<p>The type directives from <code>types</code> (or the automatic type directive list) are resolved.</p>
+    </article>
+        <script>loadSavedTheme();</script>
+    </body>
+    </html>
