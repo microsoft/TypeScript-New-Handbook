@@ -525,7 +525,7 @@ function noop() {
 
 In JavaScript, a function that doesn't return any value will implicitly return the value `undefined`.
 However, `void` and `undefined` are not the same thing in TypeScript.
-See the reference page [[Why void is a special type]] for a longer discussion about this.
+See the reference page [[Why Void Is A Special Type]] for a longer discussion about this.
 
 > `void` is not the same as `undefined`.
 
@@ -533,7 +533,7 @@ See the reference page [[Why void is a special type]] for a longer discussion ab
 
 The special type `object` refers to any value that isn't a primitive (`string`, `number`, `boolean`, `symbol`, `null`, or `undefined`).
 This is different from the *empty object type* `{ }`, and also different from the global type `Object`.
-You can read the reference page about [[The global types]] for information on what `Object` is for - long story short, don't ever use `Object`.
+You can read the reference page about [[The Global Types]] for information on what `Object` is for - long story short, don't ever use `Object`.
 
 > `object` is not `Object`. **Always** use `object`!
 
