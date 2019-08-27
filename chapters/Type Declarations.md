@@ -85,7 +85,7 @@ TypeScript automatically finds type definitions under `node_modules/@types`, so 
 
 ### Your Own Definitions
 
-In the uncommon event that a library didn't bundle its own types and didn't have a definition on DefinitelyTyped, you can write a declaration file yourself.
+In the uncommon event that a library didn't bundle its own types and does not have a definition in the DefinitelyTyped repo, you can write a declaration file yourself.
 See the appendix [[Writing Declaration Files]] for a guide.
 
 If you want to silence warnings about a particular module without writing a declaration file, you can also quick declare the module as type `any` by putting an empty declaration for it in a `.d.ts` file in your project.
