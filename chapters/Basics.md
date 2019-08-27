@@ -185,7 +185,7 @@ npm install -g typescript
 > This installs the TypeScript Compiler `tsc` globally.
 > You can use `npx` or similar tools if you'd prefer to run `tsc` from a local `node_modules` package instead.
 
-Now create an empty directory named ts-example and create a new folder called: `hello.ts`:
+Now create an empty directory named ts-example and create a new file called: `hello.ts` and input the following code:
 
 ```ts
 // Greets the world.
