@@ -278,6 +278,7 @@ hr.error-divider {
 div.listed-error, div.error-line {
     word-wrap: normal;
     overflow-wrap: normal;
+    white-space: pre-wrap;
 }
 
 blockquote {
