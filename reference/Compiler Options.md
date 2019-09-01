@@ -651,7 +651,7 @@ It does not change the behavior of your code, or otherwise change the behavior o
 
 #### Exports of Non-Value Identifiers
 
-In TypeScript, you can import a *type* and then subsequently import it:
+In TypeScript, you can import a *type* and then subsequently export it:
 ```ts
 // @noErrors
 import { someType, someFunction } from "someModule";
