@@ -172,7 +172,7 @@ type Flatten<T> = T extends Array<infer U> ? U : T;
 ```
 
 Here, using the `infer` keyword declaratively introduced a new generic type variable named `U` instead of specifying how to retrieve the element type of `T`.
-Within the true branch this frees us from having to think about how to dig through and probe apart the structure of the types we're interested.
+This frees us from having to think about how to dig through and probe apart the structure of the types we're interested.
 
 We can write some useful helper type aliases using the `infer` keyword.
 For example, for simple cases, we can extract the return type out from function types:
