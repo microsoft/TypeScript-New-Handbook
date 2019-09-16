@@ -92,7 +92,7 @@ So far we've been discussing certain things like runtime errors - cases where th
 Those cases come up because [the ECMAScript specification](https://tc39.github.io/ecma262/) has explicit instructions on how the language should behave when it runs into something unexpected.
 
 For example, the specification says that trying to call something that isn't callable should throw an error.
-Maybe that sounds like "obvious behavior", but you could imagine that accessing a property that doesn't exist on an object should throw an error too.
+Maybe that sounds like “obvious behavior”, but you could imagine that accessing a property that doesn't exist on an object should throw an error too.
 Instead, JavaScript gives us different behavior and returns the value `undefined`:
 
 ```js
@@ -104,7 +104,7 @@ let foo = {
 foo.location; // returns undefined
 ```
 
-Ultimately, a static type system has to make the call over what code should be flagged as an error in its system, even if it's "valid" JavaScript that won't immediately throw an error.
+Ultimately, a static type system has to make the call over what code should be flagged as an error in its system, even if it's “valid” JavaScript that won't immediately throw an error.
 In TypeScript, the following code produces an error about `location` not being defined:
 
 ```ts
@@ -167,7 +167,7 @@ That's part of what people often refer to when they talk about tooling in TypeSc
 <!-- TODO: insert GIF of completions here -->
 
 TypeScript takes tooling seriously, and that goes beyond completions and errors as you type.
-An editor that supports TypeScript can deliver "quick fixes" to automatically fix errors, refactorings to easily re-organize code, and useful navigation features for jumping to definitions of a variable, or finding all references to a given variable.
+An editor that supports TypeScript can deliver “quick fixes” to automatically fix errors, refactorings to easily re-organize code, and useful navigation features for jumping to definitions of a variable, or finding all references to a given variable.
 All of this is built on top of the type-checker and fully cross-platform, so it's likely that [your favorite editor has TypeScript support available](https://github.com/Microsoft/TypeScript/wiki/TypeScript-Editor-Support).
 
 <!-- TODO: validate that link -->
@@ -192,7 +192,7 @@ Now let's move to an empty folder and try writing our first TypeScript program: 
 console.log("Hello world!");
 ```
 
-Notice there are no frills here; this "hello world" program looks identical to what you'd write for a "hello world" program in JavaScript.
+Notice there are no frills here; this “hello world” program looks identical to what you'd write for a “hello world” program in JavaScript.
 And now let's type-check it by running the command `tsc` which was installed for us by the `typescript` package.
 
 ```sh
@@ -201,7 +201,7 @@ tsc hello.ts
 
 Tada!
 
-Wait, "tada" *what* exactly?
+Wait, “tada” *what* exactly?
 We ran `tsc` and nothing happened!
 Well, there were no type errors, so we didn't get any output in our console since there was nothing to report.
 
@@ -278,7 +278,7 @@ function greet(person: string, date: Date) {
 ```
 
 What we did was add *type annotations* on `person` and `date` to describe what types of values `greet` can be called with.
-You can read that signature as "`greet` takes a `person` of type `string`, and a `date` of type `Date`".
+You can read that signature as “`greet` takes a `person` of type `string`, and a `date` of type `Date`”.
 
 With this, TypeScript can tell us about other cases where we might have been called incorrectly.
 For example...
@@ -309,7 +309,7 @@ greet("Maddison", new Date());
 ```
 
 Keep in mind, we don't always have to write explicit type annotations.
-In many cases, TypeScript can even just *infer* (or "figure out") the types for us even if we omit them.
+In many cases, TypeScript can even just *infer* (or “figure out”) the types for us even if we omit them.
 
 ```ts
 let foo = "hello there!"
@@ -333,7 +333,7 @@ greet("Maddison", new Date());
 Notice two things here:
 
 1. Our `person` and `date` parameters no longer have type annotations.
-2. Our "template string" - that string that used backticks (the `` ` `` character - was converted to plain strings with concatenations (`+`).
+2. Our “template string” - that string that used backticks (the `` ` `` character - was converted to plain strings with concatenations (`+`).
 
 More on that second point later, but let's now focus on that first point.
 Type annotations aren't part of JavaScript (or ECMAScript to be pedantic), so there really aren't any browsers or other runtimes that can just run TypeScript unmodified.
@@ -360,7 +360,7 @@ Why did this happen?
 
 Template strings are a feature from a version of ECMAScript called ECMAScript 2015 (a.k.a. ECMAScript 6, ES2015, ES6, etc. - don't ask).
 TypeScript has the ability to rewrite code from newer versions of ECMAScript to older ones such as ECMAScript 3 or ECMAScript 5 (a.k.a. ES3 and ES5).
-This process from moving from a newer or "higher" version of ECMAScript to an older or "lower" one is sometimes called *downleveling*.
+This process from moving from a newer or “higher” version of ECMAScript to an older or “lower” one is sometimes called *downleveling*.
 
 By default TypeScript targets ES3, an extremely old version of ECMAScript.
 We could have chosen something a little bit more recent by using the `--target` flag.

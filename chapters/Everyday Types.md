@@ -9,7 +9,7 @@ Types can also appear in many more *places* than just type annotations.
 As we learn about the types themselves, we'll also learn about the places where we can refer to these types to form new constructs.
 
 We'll start by reviewing the most basic and common types you might encounter when writing JavaScript or TypeScript code.
-These will later form the core "building blocks" of more complex types.
+These will later form the core “building blocks” of more complex types.
 
 __toc__
 
@@ -66,7 +66,7 @@ let myName: string = "Alice";
           ^^^^^^^^ Type annotation
 ```
 
-> TypeScript doesn't use "types on the left"-style declarations like `int x = 0;`
+> TypeScript doesn't use “types on the left”-style declarations like `int x = 0;`
 > Type annotations will always go *after* the thing being typed.
 
 In most cases, though, this isn't needed.
@@ -316,7 +316,7 @@ For example, a type alias can name a union type:
 type ID = number | string;
 ```
 
-Note that aliases are *only* aliases - you cannot use type aliases to create different/distinct "versions" of the same type.
+Note that aliases are *only* aliases - you cannot use type aliases to create different/distinct “versions” of the same type.
 When you use the alias, it's exactly as if you had written the aliased type.
 In other words, this code might *look* illegal, but is OK according to TypeScript because both types are aliases for the same type:
 
@@ -389,7 +389,7 @@ const myCanvas = <HTMLCanvasElement>document.getElementById("main_canvas");
 > There won't be an exception or `null` generated if the type assertion is wrong.
 
 TypeScript only allows type assertions which convert to a *more specific* or *less specific* version of a type.
-This rule prevents "impossible" coercions like:
+This rule prevents “impossible” coercions like:
 
 ```ts
 const x = "hello" as number;
@@ -498,8 +498,8 @@ const req = { url: "https://example.com", method: "GET" as "GET" };
 handleRequest(req.url, req.method as "GET");
 ```
 
-The first change means "I intend for `req.method` to always have the *literal type* `"GET"`", preventing the possible assignment of `"GUESS"` to that field.
-The second change means "I know for other reasons that `req.method` has the value `"GET"`".
+The first change means “I intend for `req.method` to always have the *literal type* `"GET"`”, preventing the possible assignment of `"GUESS"` to that field.
+The second change means “I know for other reasons that `req.method` has the value `"GET"`”.
 
 ## `null` and `undefined`
 
