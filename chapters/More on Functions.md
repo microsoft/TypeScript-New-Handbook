@@ -8,7 +8,7 @@ __toc__
 
 ## Function Type Expressions
 
-The simplest way to describe a function is with a a *function type expression*.
+The simplest way to describe a function is with a *function type expression*.
 These types are syntactically similar to arrow functions:
 
 ```ts
