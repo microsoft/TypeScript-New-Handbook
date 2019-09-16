@@ -20,7 +20,7 @@ Each has a corresponding type in TypeScript.
 As you might expect, these are the same names you'd see if you used the JavaScript `typeof` operator on a value of those types:
 
 * `string` represents string values like `"Hello, world"`
-* `number` is for numbers like `42`. JavaScript does not have a special runtime value for integers, so there's no equivalent to `int` or `float` - everything is simply `number`
+* `number` is for numbers like `42`. JavaScript does not have a special runtime value for integers, so there's no equivalent to `int` or `float` — everything is simply `number`
 * `boolean` is for the two values `true` and `false`
 
 > The type names `String`, `Number`, and `Boolean` (starting with capital letters) are legal, but refer to some special built-in types that shouldn't appear in your code. *Always* use `string`, `number`, or `boolean`.
@@ -79,7 +79,7 @@ let myName = "Alice";
 ```
 
 For the most part you don't need to explicitly learn the rules of inference.
-If you're starting out, try using fewer type annotations than you think - you might be surprised how few you need for TypeScript to fully understand what's going on.
+If you're starting out, try using fewer type annotations than you think — you might be surprised how few you need for TypeScript to fully understand what's going on.
 
 ## Functions
 
@@ -163,7 +163,7 @@ function printCoord(pt: { x: number, y: number }) {
 printCoord({ x: 3, y: 7 });
 ```
 
-Here, we annotated the parameter with a type with two properties - `x` and `y` - which are both of type `number`.
+Here, we annotated the parameter with a type with two properties — `x` and `y` — which are both of type `number`.
 You can use `,` or `;` to separate the properties, and the last separator is optional either way.
 
 The type part of each property is also optional.
@@ -224,7 +224,7 @@ printId([1, 2]);
 
 ### Working with Union Types
 
-It's easy to *provide* a value matching a union type - simply provide a type matching any of the union's members.
+It's easy to *provide* a value matching a union type — simply provide a type matching any of the union's members.
 If you *have* a value of a union type, how do you work with it?
 
 TypeScript will only allow you to do things with the union if that thing is valid for *every* member of the union.
@@ -267,7 +267,7 @@ function welcomePeople(x: string[] | string) {
 }
 ```
 
-Notice that in the `else` branch, we don't need to do anything special - if `x` wasn't a `string[]`, then it must have been a `string`.
+Notice that in the `else` branch, we don't need to do anything special — if `x` wasn't a `string[]`, then it must have been a `string`.
 
 Sometimes you'll have a union where all the members have something in common.
 For example, both arrays and strings have a `slice` method.
@@ -281,7 +281,7 @@ function getFirstThree(x: number[] | string) {
 ```
 
 > It might be confusing that a *union* of types appears to have the *intersection* of those types' properties.
-> This is not an accident - the name *union* comes from type theory.
+> This is not an accident — the name *union* comes from type theory.
 > The *union* `number | string` is composed by taking the union *of the values* from each type.
 > Notice that given two sets with corresponding facts about each set, only the *intersection* of those facts applies to the *union* of the sets themselves.
 > For example, if we had a room of tall people wearing hats, and another room of Spanish speakers wearings hats, after combining those rooms, the only thing we know about *every* person is that they must be wearing a hat.
@@ -291,7 +291,7 @@ function getFirstThree(x: number[] | string) {
 We've been using object types and union types by writing them directly in type annotations.
 This is convenient, but it's common to want to use the same type more than once and refer to it by a single name.
 
-A *type alias* is exactly that - a *name* for any *type*.
+A *type alias* is exactly that — a *name* for any *type*.
 The syntax for a type alias is:
 
 ```ts
@@ -316,7 +316,7 @@ For example, a type alias can name a union type:
 type ID = number | string;
 ```
 
-Note that aliases are *only* aliases - you cannot use type aliases to create different/distinct "versions" of the same type.
+Note that aliases are *only* aliases — you cannot use type aliases to create different/distinct "versions" of the same type.
 When you use the alias, it's exactly as if you had written the aliased type.
 In other words, this code might *look* illegal, but is OK according to TypeScript because both types are aliases for the same type:
 
@@ -348,7 +348,7 @@ printCoord({ x: 100, y: 100 });
 ```
 
 Just like when we used a type alias above, the example works just as if we had used an anonymous object type.
-TypeScript is only concerned with the *structure* of the value we passed to `printCoord` - it only cares that it has the expected properties.
+TypeScript is only concerned with the *structure* of the value we passed to `printCoord` — it only cares that it has the expected properties.
 Being concerned only with the structure and capabilities of types is why we call TypeScript a *structurally typed* type system.
 
 ### Differences Between Type Aliases and Interfaces {#interface-vs-alias}
@@ -423,7 +423,7 @@ x = "howdy";
 
 It's not much use to have a variable that can only have one value!
 
-But by *combining* literals into unions, you can express a much more useful thing - for example, functions that only accept a certain set of known values:
+But by *combining* literals into unions, you can express a much more useful thing — for example, functions that only accept a certain set of known values:
 
 ```ts
 function printText(s: string, alignment: "left" | "right" | "center") {

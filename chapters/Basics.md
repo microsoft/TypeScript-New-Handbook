@@ -17,7 +17,7 @@ foo();
 If we break this down, the first runnable line of code accesses a property called `toLowerCase` and then calls it.
 The second one tries to call `foo` directly.
 
-But assuming we don't know the value of `foo` - and that's pretty common - we can't reliably say what results we'll get from trying to run any of this code.
+But assuming we don't know the value of `foo` — and that's pretty common — we can't reliably say what results we'll get from trying to run any of this code.
 The behavior of each operation depends entirely on what what value we had in the first place.
 Is `foo` callable?
 Does it have a property called `toLowerCase` on it?
@@ -41,8 +41,8 @@ TypeError: foo is not a function
 ```
 
 It'd be great if we could avoid mistakes like this.
-When we run our code, the way that our JavaScript runtime chooses what to do is by figuring out the *type* of the value - what sorts of behaviors and capabilities it has.
-That's part of what that `TypeError` is alluding to - it's saying that there's nothing to call on the string `"Hello World"`.
+When we run our code, the way that our JavaScript runtime chooses what to do is by figuring out the *type* of the value — what sorts of behaviors and capabilities it has.
+That's part of what that `TypeError` is alluding to — it's saying that there's nothing to call on the string `"Hello World"`.
 
 For some values, such as the primitives `string` and `number`, we can identify their type at runtime using the `typeof` operator.
 But for other things like functions, there's no corresponding runtime mechanism to identify their types.
@@ -59,14 +59,14 @@ The only way in pure JavaScript to tell what `fn` does with a particular value i
 This kind of behavior makes it hard to predict what code will do before it runs, which means it's harder to know what your code is going to do while you're writing it.
 
 Seen in this way, a *type* is the concept of describing which values are legal to pass to `fn` and which aren't legal.
-JavaScript only truly provides *dynamic* typing - running the code to see what happens.
+JavaScript only truly provides *dynamic* typing — running the code to see what happens.
 
 The alternative is to use a *static* type system to make predictions about what code is legal *before* it runs.
 
 ## Static type-checking
 
 Think back to that `TypeError` we got earlier from calling a `string`.
-*Most people* don't like to get any sorts of errors when running their code - those are considered bugs!
+*Most people* don't like to get any sorts of errors when running their code — those are considered bugs!
 And when we write new code, we try our best to avoid introducing new bugs.
 
 If we add just a bit of code, save our file, refresh our app, and immediately see the error, we might be able to isolate the problem quickly; but that's not always the case.
@@ -88,7 +88,7 @@ Running that last sample with TypeScript will give us an error message before we
 
 ## Non-exception Failures
 
-So far we've been discussing certain things like runtime errors - cases where the JavaScript runtime throws its hands up and tells us that it thinks something is nonsensical.
+So far we've been discussing certain things like runtime errors — cases where the JavaScript runtime throws its hands up and tells us that it thinks something is nonsensical.
 Those cases come up because [the ECMAScript specification](https://tc39.github.io/ecma262/) has explicit instructions on how the language should behave when it runs into something unexpected.
 
 For example, the specification says that trying to call something that isn't callable should throw an error.
@@ -205,7 +205,7 @@ Wait, "tada" *what* exactly?
 We ran `tsc` and nothing happened!
 Well, there were no type errors, so we didn't get any output in our console since there was nothing to report.
 
-But check again - we got some *file* output instead.
+But check again — we got some *file* output instead.
 If we look in our current directory, we'll see a `hello.js` file next to `hello.ts`.
 That's the output from our `hello.ts` file after `tsc` *compiles* or *transforms* it into a JavaScript file.
 And if we check the contents, we'll see what TypeScript spits out after it processes a `.ts` file:
@@ -333,11 +333,11 @@ greet("Maddison", new Date());
 Notice two things here:
 
 1. Our `person` and `date` parameters no longer have type annotations.
-2. Our "template string" - that string that used backticks (the `` ` `` character - was converted to plain strings with concatenations (`+`).
+2. Our "template string" — that string that used backticks (the `` ` `` character — was converted to plain strings with concatenations (`+`).
 
 More on that second point later, but let's now focus on that first point.
 Type annotations aren't part of JavaScript (or ECMAScript to be pedantic), so there really aren't any browsers or other runtimes that can just run TypeScript unmodified.
-That's why TypeScript needs a compiler in the first place - it needs some way to strip out or transform any TypeScript-specific code so that you can run it.
+That's why TypeScript needs a compiler in the first place — it needs some way to strip out or transform any TypeScript-specific code so that you can run it.
 Most TypeScript-specific code gets erased away, and likewise, here our type annotations were completely erased.
 
 > **Remember**: Type annotations never change the runtime behavior of your program.
@@ -358,7 +358,7 @@ to
 
 Why did this happen?
 
-Template strings are a feature from a version of ECMAScript called ECMAScript 2015 (a.k.a. ECMAScript 6, ES2015, ES6, etc. - don't ask).
+Template strings are a feature from a version of ECMAScript called ECMAScript 2015 (a.k.a. ECMAScript 6, ES2015, ES6, etc. — don't ask).
 TypeScript has the ability to rewrite code from newer versions of ECMAScript to older ones such as ECMAScript 3 or ECMAScript 5 (a.k.a. ES3 and ES5).
 This process from moving from a newer or "higher" version of ECMAScript to an older or "lower" one is sometimes called *downleveling*.
 
@@ -398,7 +398,7 @@ The two biggest ones you should know about are `noImplicitAny` and `strictNullCh
 ### `noImplicitAny`
 
 Recall that in some places, TypeScript doesn't try to infer any types for us and instead falls back to the most lenient type: `any`.
-This isn't the worst thing that can happen - after all, falling back to `any` is just the JavaScript experience anyway.
+This isn't the worst thing that can happen — after all, falling back to `any` is just the JavaScript experience anyway.
 
 However, using `any` often defeats the purpose of using TypeScript in the first place.
 The more typed your program is, the more validation and tooling you'll get, meaning you'll run into fewer bugs as you code.
@@ -407,6 +407,6 @@ Turning on the `noImplicitAny` flag will issue an error on any variables whose t
 ### `strictNullChecks`
 
 By default, values like `null` and `undefined` are assignable to any other type.
-This can make writing some code easier, but forgetting to handle `null` and `undefined` is the cause of countless bugs in the world - not even just JavaScript!
+This can make writing some code easier, but forgetting to handle `null` and `undefined` is the cause of countless bugs in the world — not even just JavaScript!
 
 The `strictNullChecks` flag makes handling `null` and `undefined` more explicit, and *spares* us from worrying about whether we *forgot* to handle `null` and `undefined`.
