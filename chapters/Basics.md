@@ -18,7 +18,7 @@ If we break this down, the first runnable line of code accesses a property calle
 The second one tries to call `foo` directly.
 
 But assuming we don't know the value of `foo` - and that's pretty common - we can't reliably say what results we'll get from trying to run any of this code.
-The behavior of each operation depends entirely on what what value we had in the first place.
+The behavior of each operation depends entirely on what value we had in the first place.
 Is `foo` callable?
 Does it have a property called `toLowerCase` on it?
 And if it does, is `toLowerCase` callable?
@@ -144,10 +144,10 @@ or basic logic errors.
 ```ts
 const value = Math.random() < 0.5 ? "a" : "b";
 if (value !== "a") {
-  // ...
+    // ...
 }
 else if (value === "b") {
-  // Oops, unreachable
+    // Oops, unreachable
 }
 ```
 
@@ -312,7 +312,7 @@ Keep in mind, we don't always have to write explicit type annotations.
 In many cases, TypeScript can even just *infer* (or "figure out") the types for us even if we omit them.
 
 ```ts
-let foo = "hello there!"
+let foo = "hello there!";
     ^?
 ```
 
@@ -333,7 +333,7 @@ greet("Maddison", new Date());
 Notice two things here:
 
 1. Our `person` and `date` parameters no longer have type annotations.
-2. Our "template string" - that string that used backticks (the `` ` `` character - was converted to plain strings with concatenations (`+`).
+2. Our "template string" - that string that used backticks (the `` ` `` character) - was converted to plain strings with concatenations (`+`).
 
 More on that second point later, but let's now focus on that first point.
 Type annotations aren't part of JavaScript (or ECMAScript to be pedantic), so there really aren't any browsers or other runtimes that can just run TypeScript unmodified.
@@ -360,7 +360,7 @@ Why did this happen?
 
 Template strings are a feature from a version of ECMAScript called ECMAScript 2015 (a.k.a. ECMAScript 6, ES2015, ES6, etc. - don't ask).
 TypeScript has the ability to rewrite code from newer versions of ECMAScript to older ones such as ECMAScript 3 or ECMAScript 5 (a.k.a. ES3 and ES5).
-This process from moving from a newer or "higher" version of ECMAScript to an older or "lower" one is sometimes called *downleveling*.
+This process of moving from a newer or "higher" version of ECMAScript to an older or "lower" one is sometimes called *downleveling*.
 
 By default TypeScript targets ES3, an extremely old version of ECMAScript.
 We could have chosen something a little bit more recent by using the `--target` flag.
@@ -374,7 +374,7 @@ function greet(person, date) {
 greet("Maddison", new Date());
 ```
 
-> While the default target is ES3, the great majority of running browsers support ES5.
+> While the default target is ES3, the great majority of current browsers support ES5.
 > Today, most developers can safely specify ES5 or even ES2016 as a target unless compatibility with certain ancient browers is important.
 
 ## Strictness
