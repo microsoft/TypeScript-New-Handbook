@@ -317,7 +317,12 @@ let foo = "hello there!";
 ```
 
 Even though we didn't tell TypeScript that `foo` had the type `string` it was able to figure that out.
-That's a feature, and it's best not to add annotations when the type system would end up inferring the same type anyway.
+That's a feature, and it's often preferred not to add annotations when the type system would end up inferring the same type anyway.
+For example, using `Date()` without `new` could be a typo as above, but here we are explicitly saying that we expect a string:
+
+```ts
+let now: string = Date();
+```
 
 ## Erased Types
 
