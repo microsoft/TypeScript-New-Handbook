@@ -104,6 +104,8 @@ let foo = {
 foo.location; // returns undefined
 ```
 
+See also [the WAT talk](https://www.destroyallsoftware.com/talks/wat) for several other questionable non-error behaviors.
+
 Ultimately, a static type system has to make the call over what code should be flagged as an error in its system, even if it's "valid" JavaScript that won't immediately throw an error.
 In TypeScript, the following code produces an error about `location` not being defined:
 
