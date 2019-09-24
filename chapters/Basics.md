@@ -45,7 +45,7 @@ When we run our code, the way that our JavaScript runtime chooses what to do is 
 That's part of what that `TypeError` is alluding to - it's saying that there's nothing to call on the string `"Hello World"`.
 
 For some values, such as the primitives `string` and `number`, we can identify their type at runtime using the `typeof` operator.
-But for other things like functions, there's no corresponding runtime mechanism to identify their types.
+But for other things like functions, we want to know what types of arguments the consume and what type they return.
 For example, consider this function:
 
 ```js
@@ -55,10 +55,10 @@ function fn(x) {
 ```
 
 We can *observe* by reading the code that this function will only work if given an object with a callable `flip` property, but JavaScript doesn't surface this information in a way that we can check while the code is running.
-The only way in pure JavaScript to tell what `fn` does with a particular value is to call it and see what happens.
+The only way in pure JavaScript to tell what `fn` does with a particular value is to *run* code that calls it and see what happens.
 This kind of behavior makes it hard to predict what code will do before it runs, which means it's harder to know what your code is going to do while you're writing it.
 
-Seen in this way, a *type* is the concept of describing which values are legal to pass to `fn` and which aren't legal.
+Seen in this way, a *function type* is the concept of describing which values are legal to pass to `fn`, and which value it returns.
 JavaScript only truly provides *dynamic* typing - running the code to see what happens.
 
 The alternative is to use a *static* type system to make predictions about what code is legal *before* it runs.
