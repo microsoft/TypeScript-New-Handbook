@@ -185,7 +185,7 @@ npm install -g typescript
 > This installs the TypeScript Compiler `tsc` globally.
 > You can use `npx` or similar tools if you'd prefer to run `tsc` from a local `node_modules` package instead.
 
-Now let's move to an empty folder and try writing our first TypeScript program: `hello.ts`:
+Now create an empty directory named ts-example and create a new file called: `hello.ts` and input the following code:
 
 ```ts
 // Greets the world.
@@ -208,7 +208,7 @@ Well, there were no type errors, so we didn't get any output in our console sinc
 But check again - we got some *file* output instead.
 If we look in our current directory, we'll see a `hello.js` file next to `hello.ts`.
 That's the output from our `hello.ts` file after `tsc` *compiles* or *transforms* it into a JavaScript file.
-And if we check the contents, we'll see what TypeScript spits out after it processes a `.ts` file:
+And if we check the contents of the .js file, we'll see what TypeScript spits out after it processes a `.ts` file:
 
 ```js
 // Greets the world.
@@ -217,7 +217,10 @@ console.log("Hello world!");
 
 In this case, there was very little for TypeScript to transform, so it looks identical to what we wrote.
 The compiler tries to emit clean readable code that looks like something a person would write.
-While that's not always so easy, TypeScript indents consistently, is mindful of when our code spans across different lines of code, and tries to keep comments around.
+While that's not always so easy, TypeScript:
+* Indents consistently 
+* Is mindful of when our code spans across different lines of code
+* And tries to keep comments around
 
 What about if we *did* introduce a type-checking error?
 Let's rewrite `hello.ts`:
@@ -246,7 +249,7 @@ Thanks TypeScript!
 
 One thing you might not have noticed from the last example was that our `hello.js` file changed again.
 If we open that file up then we'll see that the contents still basically look the same as our input file.
-That might be a bit surprising given the fact that `tsc` reported an error about our code, but this based on one of TypeScript's core values: much of the time, *you* will know better than TypeScript.
+That might be a bit surprising given the fact that `tsc` reported an error about our code, but this is based on one of TypeScript's core values: much of the time, *you* will know better than TypeScript.
 
 To reiterate from earlier, type-checking code limits the sorts of programs you can run, and so there's a tradeoff on what sorts of things a type-checker finds acceptable.
 Most of the time that's okay, but there are scenarios where those checks get in the way.
@@ -321,7 +324,7 @@ That's a feature, and it's best not to add annotations when the type system woul
 
 ## Erased Types
 
-Let's take a look at what happens when we compile with `tsc`:
+Let's take a look at the differences in the JavaScript code created from `tsc`:
 
 ```js
 function greet(person, date) {
