@@ -631,7 +631,7 @@ This restriction also applies to TypeScript's <code>ts.transpileModule</code> AP
 Setting the <code>isolatedModules</code> flag tells TypeScript to warn you if you write certain code that can't be correctly interpreted by a single-file transpilation process.
 It does not change the behavior of your code, or otherwise change the behavior of TypeScript's checking and emitting process.</p>
 <h4 id="exports-of-non-value-identifiers"><a href="#exports-of-non-value-identifiers">Exports of Non-Value Identifiers</h4></a>
-<p>In TypeScript, you can import a <em>type</em> and then subsequently import it:
+<p>In TypeScript, you can import a <em>type</em> and then subsequently export it:
 <pre class="typescript-code"><span class="tm-kw">import</span> { <span class="tm-vr">someType</span>, <span class="tm-vr">someFunction</span> } <span class="tm-kw">from</span> <span class="tm-str">"someModule"</span>;
 
 <span class="tm-mth">someFunction</span>();
