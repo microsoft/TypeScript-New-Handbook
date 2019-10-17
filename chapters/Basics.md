@@ -31,7 +31,7 @@ Let's say `foo` was defined in the following way.
 let foo = "Hello World!";
 ```
 
-As you can probably guess, if we try to run `foo.toLowerCase()`, we'll get the same string, but completely in lower-case letters.
+As you can probably guess, if we try to run `foo.toLowerCase()`, we'll get the same string only in lower-case.
 
 What about that second line of code?
 If you're familiar with JavaScript, you'll know this fails with an exception:
@@ -42,7 +42,7 @@ TypeError: foo is not a function
 
 It'd be great if we could avoid mistakes like this.
 When we run our code, the way that our JavaScript runtime chooses what to do is by figuring out the *type* of the value - what sorts of behaviors and capabilities it has.
-That's part of what that `TypeError` is alluding to - it's saying that there's nothing to call on the string `"Hello World"`.
+That's part of what that `TypeError` is alluding to - it's saying that the string `"Hello World"` cannot be called as a function.
 
 For some values, such as the primitives `string` and `number`, we can identify their type at runtime using the `typeof` operator.
 But for other things like functions, there's no corresponding runtime mechanism to identify their types.
@@ -207,7 +207,7 @@ Well, there were no type errors, so we didn't get any output in our console sinc
 
 But check again - we got some *file* output instead.
 If we look in our current directory, we'll see a `hello.js` file next to `hello.ts`.
-That's the output from our `hello.ts` file after `tsc` *compiles* or *transforms* it into a JavaScript file.
+That's the output from our `hello.ts` file after `tsc` *compiles* or *transforms* it into a plain JavaScript file.
 And if we check the contents, we'll see what TypeScript spits out after it processes a `.ts` file:
 
 ```js
@@ -358,9 +358,9 @@ to
 
 Why did this happen?
 
-Template strings are a feature from a version of ECMAScript called ECMAScript 2015 (a.k.a. ECMAScript 6, ES2015, ES6, etc. - don't ask).
+Template strings are a feature from a version of ECMAScript called ECMAScript 2015 (a.k.a. ECMAScript 6, ES2015, ES6, etc. - *don't ask*).
 TypeScript has the ability to rewrite code from newer versions of ECMAScript to older ones such as ECMAScript 3 or ECMAScript 5 (a.k.a. ES3 and ES5).
-This process of moving from a newer or "higher" version of ECMAScript to an older or "lower" one is sometimes called *downleveling*.
+This process of moving from a newer or "higher" version of ECMAScript down to an older or "lower" one is sometimes called *downleveling*.
 
 By default TypeScript targets ES3, an extremely old version of ECMAScript.
 We could have chosen something a little bit more recent by using the `--target` flag.
@@ -375,21 +375,21 @@ greet("Maddison", new Date());
 ```
 
 > While the default target is ES3, the great majority of current browsers support ES5.
-> Today, most developers can safely specify ES5 or even ES2016 as a target unless compatibility with certain ancient browers is important.
+> Most developers can therefore safely specify ES5 or even ES2016 as a target, unless compatibility with certain ancient browers is important.
 
 ## Strictness
 
-Users come to TypeScript looking for different things in a type-checker.
-Some people are looking for a more loose opt-in experience which can help validate only some parts of our program and give us decent tooling.
+Different users come to TypeScript looking for different things in a type-checker.
+Some people are looking for a more loose opt-in experience which can help validate only some parts of our program and get decent tooling.
 This is the default experience with TypeScript, where types are optional, inference takes the most lenient types, and there's no checking for potentially `null`/`undefined` values.
 Much like how `tsc` emits in the face of errors, these defaults are put in place to stay out of your way.
-If you're migrating existing JavaScript, that might be desirable.
+If you're migrating existing JavaScript, that might be a desirable first step.
 
 In contrast, a lot of users prefer to have TypeScript validate as much as it can off the bat, and that's why the language provides strictness settings as well.
 These strictness settings turn static type-checking from a switch (either your code is checked or not) into something closer to a dial.
 The farther you turn this dial up, the more TypeScript will check for you.
 This can require a little extra work, but generally speaking it pays for itself in the long run, and enables more thorough checks and more accurate tooling.
-If possible, a new codebase should always turn these strictness checks on.
+When possible, a new codebase should always turn these strictness checks on.
 
 TypeScript has several type-checking strictness flags that can be turned on or off, and all of our examples will be written with all of them enabled unless otherwise stated.
 The `--strict` flag toggles them all on simultaneously, but we can opt out of them individually.
@@ -398,7 +398,7 @@ The two biggest ones you should know about are `noImplicitAny` and `strictNullCh
 ### `noImplicitAny`
 
 Recall that in some places, TypeScript doesn't try to infer any types for us and instead falls back to the most lenient type: `any`.
-This isn't the worst thing that can happen - after all, falling back to `any` is just the JavaScript experience anyway.
+This isn't the worst thing that can happen - after all, falling back to `any` is just the plain JavaScript experience anyway.
 
 However, using `any` often defeats the purpose of using TypeScript in the first place.
 The more typed your program is, the more validation and tooling you'll get, meaning you'll run into fewer bugs as you code.
@@ -407,6 +407,5 @@ Turning on the `noImplicitAny` flag will issue an error on any variables whose t
 ### `strictNullChecks`
 
 By default, values like `null` and `undefined` are assignable to any other type.
-This can make writing some code easier, but forgetting to handle `null` and `undefined` is the cause of countless bugs in the world - not even just JavaScript!
-
+This can make writing some code easier, but forgetting to handle `null` and `undefined` is the cause of countless bugs in the world - even in other languages!
 The `strictNullChecks` flag makes handling `null` and `undefined` more explicit, and *spares* us from worrying about whether we *forgot* to handle `null` and `undefined`.
