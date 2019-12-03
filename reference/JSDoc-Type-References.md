@@ -55,6 +55,10 @@ Type        | Resolved Type
 This is standard for all type references in JSDoc, so I don't think
 it's needed anymore. It only applies when `"noImplicitAny": false`.
 
+### Where To Find The Code ###
+
+`getIntendedJSDocTypeReference` in src/compiler/checker.ts.
+
 ## Values as Types ##
 
 The compiler maintains three namespaces: one each for values, types and
@@ -117,7 +121,11 @@ var j
 ```
 
 The compiler just reuses the type of the value declaration: `number`.
-The effect is to make types more Javascripty, which can be useful:
+This is equivalent to inserting the `typeof` type operator to get
+`typeof i`.
+The effect is to make types more Javascripty, allowing you to specify
+objects as example types without having to learn about the difference
+between type and value:
 
 ``` js
 /**
@@ -148,14 +156,13 @@ function setup(options) {
 }
 ```
 
-The fallbacks can become especially confusing when they let you skip a
-the `typeof` operator that is required to reference values in
-Typescript:
+Relying on this fallback for complex types does produce a simpler
+type, but makes the equivalent Typescript really confusing to produce:
 
 ``` js
 import { options } from './initial'
 /**
- * @param {keyof typeof options} k
+ * @param {keyof options} k
  * @param {options[keyof options]} v
  */
 function demo(k, v) {
@@ -171,25 +178,42 @@ function demo(k: keyof typeof options, v: typeof options[keyof typeof options]) 
 }
 ```
 
-## Expandoooooooooooo ##
+Knowing where to insert the missing `typeof` operators requires more
+experience with complex type than most people can be expected to have.
+
+### Where To Find The Code ###
+
+In src/compiler/checker.ts, `getTypeFromTypeReference` is a good
+starting point. The two fallbacks are in `resolveEntityName` and
+`getTypeReferenceType`, respectively.
+
+## Expando ##
 
 Expando declarations are those that start with an initial declaration
-and add properties to it. There is some local special-casing that
-works with noImplicitAny in Typescript, but Javascript has similar
-support that starts from the opposite end: top-level assignments in
-Javascript code. The intent of this support is to understand the names
-used in top-level construction of objects.
+and add properties to it, like so:
 
-Semantically, expando objects are of 3 kinds:
+``` js
+const ns = {}
+ns.x = 1
+ns.f = function () {
+}
+ns.s = 'otra'
+```
+
+In Javascript code, the compiler supports this pattern for
+construction of objects. It also supports it for functions and classes.
+
+Syntactically, expando objects are of 3 kinds:
 
 1. Functions
 2. Classes
-3. Empty objects (or non-empty prototype objects)
+3. Empty objects
 
 Each expando assignment is treated as a separate namespace
 declaration, which then merges with all the other declarations of the
 object. That is, the following code declares one variable with three
 declarations; one value declaration and two namespace declarations.
+The last two lines also each declare one property with a value declaration.
 
 ```js
 function ichthyosaur() { }
@@ -197,13 +221,22 @@ ichthyosaur.shonisaurus = function() { }
 ichthyosaur.shastasaurus = function() { }
 ```
 
-TODO: Find the entry points for expandos.
+TODO: Explain aliasing.
+
+### Where To Find The Code ###
+
+Object and class expandos are checked just like Typescript. Only their
+binding differs: in src/compiler/binder.ts,
+`bindSpecialPropertyAssignment` delegates to `bindPropertyAssignment`.
 
 ## CommonJS ##
 
 Like expando, except that you are often directly making entries in the
 module's symbol table instead.
 
+TODO: Explain aliasing.
+
+<!--
 ## Weird Stuff ##
 
 - `@enum`
@@ -211,15 +244,4 @@ module's symbol table instead.
   of A in place.
 - Actually there is a lot of weirdness all over from classes and
   commonjs, and the combination of the two.
-
-
-TODO: Find a good way to catalogue these locations.
-
-1. getTypeFromTypeReference
-1. getIntendedJSDocTypeReference
-2. getTypeFromJSDocValueReference
-3. getTypeOfSymbol
-  - getTypeOfFunctionModuleEnumClass
-  - getTypeOfVariablePropertyParameter
-5. commonjs support -- resolveTypeReferenceName and other places
-6. resolveEntityName
+-->
