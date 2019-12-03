@@ -86,7 +86,7 @@ Now there is a problem: the value `FOO` has no type declaration, only
 a value declaration. So we now get the type of the value declaration
 instead of the type of the type declaration.
 
-I think it would help to work through an example
+I think it would help to look at an example
 that has both a value declaration and a type declaration:
 
 ```ts
@@ -114,19 +114,59 @@ var j
 ```
 
 The compiler just reuses the type of the value declaration: `number`.
-This is useful, but confusing, in a number of cases:
+The effect is to make types more Javascripty, which can be useful:
 
-(functions are the best example).
+``` js
+/**
+ * @param {number} n
+ * @param {number} m
+ * @returns {-1 | 0 | 1}
+ */
+function exampleCompare(n, m) {
+}
 
+/** @param {exampleCompare} f */
+function sort(f, l) {
+  // ...
+}
+```
 
-Since both stages rely on a JSDoc fallback, you can get confusing
-semantics when the second fallback gets skipped. Specifically, you may
-resolve a symbol that has no type meaning in the first stage. Then you
-may be able generate a type without using the JSDoc fallback when
-finding the type.
+This also works with objects, whether anonymous or an instance of a class:
 
-TODO: Make an example of this; I think it only happens for complex
-merges, so it may not be suitable for a short-ish document.
+``` js
+const initial = {
+  frabjous: true,
+  beamish: true,
+  callooh: "callay",
+}
+
+/** @param {initial} options */
+function setup(options) {
+}
+```
+
+The fallbacks can become especially confusing when they let you skip a
+the `typeof` operator that is required to reference values in
+Typescript:
+
+``` js
+import { options } from './initial'
+/**
+ * @param {keyof typeof options} k
+ * @param {options[keyof options]} v
+ */
+function demo(k, v) {
+    options[k] = v
+}
+```
+
+is equivalent to the Typescript:
+
+```ts
+import { options } from './initial'
+function demo(k: keyof typeof options, v: typeof options[keyof typeof options]) {
+}
+```
 
 ## Expandoooooooooooo ##
 
