@@ -202,7 +202,6 @@ Narrowing mostly commonly removes all but one type from a union, but
 doesn't necessarily need to:
 
 ```ts
-type Type = Anonymous | Class | Interface
 function f(thing: string | number | boolean | object) {
   if (typeof thing === 'string' || typeof thing === 'number') {
     return lookup[thing];
