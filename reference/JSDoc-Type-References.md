@@ -187,7 +187,17 @@ Semantically, expando objects are of 3 kinds:
 3. Empty objects (or non-empty prototype objects)
 
 Each expando assignment is treated as a separate namespace
-declaration, which then merges with all the other declarations of the object.
+declaration, which then merges with all the other declarations of the
+object. That is, the following code declares one variable with three
+declarations; one value declaration and two namespace declarations.
+
+```js
+function ichthyosaur() { }
+ichthyosaur.shonisaurus = function() { }
+ichthyosaur.shastasaurus = function() { }
+```
+
+TODO: Find the entry points for expandos.
 
 ## CommonJS ##
 
@@ -202,6 +212,8 @@ module's symbol table instead.
 - Actually there is a lot of weirdness all over from classes and
   commonjs, and the combination of the two.
 
+
+TODO: Find a good way to catalogue these locations.
 
 1. getTypeFromTypeReference
 1. getIntendedJSDocTypeReference
