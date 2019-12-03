@@ -9,11 +9,6 @@ code is being written with Typescript in mind.
 This document first describes the way Javascript type resolution is
 different, because those differences are bigger and more surprising.
 Then it covers differences in name resolution.
-spends most of its time on type checking, although the
-way that Typescript binds Javascript comes up in a few places.
-
-Later: Actually I think we'll stay in the checker the whole time, but
-cover both type resolution and value resolution.
 
 ## Simple Rewrites ##
 
