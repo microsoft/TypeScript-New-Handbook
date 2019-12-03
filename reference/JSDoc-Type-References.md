@@ -6,7 +6,10 @@ in JSDoc in Javascript files, and some can be disabled by setting
 `"noImplicitAny": true`, which the compiler takes as a signal that the
 code is being written with Typescript in mind.
 
-This document spends most of its time on type checking, although the
+This document first describes the way Javascript type resolution is
+different, because those differences are bigger and more surprising.
+Then it covers differences in name resolution.
+spends most of its time on type checking, although the
 way that Typescript binds Javascript comes up in a few places.
 
 Later: Actually I think we'll stay in the checker the whole time, but
@@ -170,15 +173,34 @@ function demo(k: keyof typeof options, v: typeof options[keyof typeof options]) 
 
 ## Expandoooooooooooo ##
 
-(functions especially)
+Expando declarations are those that start with an initial declaration
+and add properties to it. There is some local special-casing that
+works with noImplicitAny in Typescript, but Javascript has similar
+support that starts from the opposite end: top-level assignments in
+Javascript code. The intent of this support is to understand the names
+used in top-level construction of objects.
+
+Semantically, expando objects are of 3 kinds:
+
+1. Functions
+2. Classes
+3. Empty objects (or non-empty prototype objects)
+
+Each expando assignment is treated as a separate namespace
+declaration, which then merges with all the other declarations of the object.
 
 ## CommonJS ##
+
+Like expando, except that you are often directly making entries in the
+module's symbol table instead.
 
 ## Weird Stuff ##
 
 - `@enum`
 - `A.prototype.m = function() { ... }` needs to put names in the scope
   of A in place.
+- Actually there is a lot of weirdness all over from classes and
+  commonjs, and the combination of the two.
 
 
 1. getTypeFromTypeReference
