@@ -13,7 +13,8 @@ Then it covers differences in name resolution.
 ## Simple Rewrites ##
 
 The simplest Javascript-only rule is to rewrite the primitive object
-types to real primitives.
+types to the usual primitive types, plus `Object` to `any`. These are
+commonly used interchangeably in JSDoc:
 
 Type        | Resolved Type
 ------------|--------------
@@ -22,10 +23,19 @@ Type        | Resolved Type
 `Boolean`   | `boolean`
 `Object`    | `any`
 
-The rewrite `Object -> any` is disabled when `"noImplicitAny": true`,
+In Typescript, the primitive type `number` is nearly always the right
+type; whenever methods from the object type `Number` are needed, the
+compiler asks for the apparent type anyway, and the apparent type of
+`number` is `Number`.
+
+Neither `object` nor `Object` have defined properties or string index
+signatures, which means that they give too many errors to be useful in
+Javascript. Until Typescript 3.7, both were rewritten to `any`, but we
+found that few people used `object` in JSDoc, and that more and more
+JSDoc authors wanted to use `object` with its Typescript meaning. The
+rewrite `Object -> any` is disabled when `"noImplicitAny": true`,
 which the compiler takes as a signal that the code is being written
-with Typescript in mind. Old versions of Typescript also rewrote
-`object -> any`, but stopped in Typescript 3.7.
+with Typescript in mind.
 
 There are also rewrites of other JSDoc types that are equivalent to
 built-in Typescript types:
@@ -39,20 +49,24 @@ Type                  | Resolved Type
 `Object<string,Type>` | `{ [x: string]: Type }`
 `Object<number,Type>` | `{ [x: number]: Type }`
 
-Finally, `Array` and `Promise` both default their type parameters to
-`any` when no type parameters are provided:
+The first three of this list are commonly used in unchecked
+Javascript, while the last three are commonly used in Javascript that
+is checked by the Closure compiler.
+
+Finally, `array` and `promise` rewrite to `Array<any>` and `Promise<any>`
+respectively, since they, too, are used interchangeably:
 
 Type        | Resolved Type
 ------------|--------------
-`Array`     | `any[]`
-`Promise`   | `Promise<any>`
+`array`     | `any[]`
+`promise`   | `Promise<any>`
 
-This is standard for all type references in JSDoc, so I don't think
-it's needed anymore. It only applies when `"noImplicitAny": false`.
+Note that `array<number>` does *not* rewrite to `number[]`; it's just
+an error. Same for `promise<number>`.
 
 ### Where To Find The Code ###
 
-`getIntendedJSDocTypeReference` in src/compiler/checker.ts.
+`getIntendedJSDocTypeReference` in `checker.ts`.
 
 ## Values as Types ##
 
@@ -75,11 +89,46 @@ function f(type) {
 ```
 
 In the compiler, this is resolved in two stages. Both stages use a
-JSDoc fallback. First the compiler resolves the name; then it finds
-the type for the name. Normally type resolution only looks in the type
+JSDoc fallback. First, in `getTypeFromTypeReference`, after first
+checking the simple rewrites above, the compiler
+resolves the name. Here's a simplified version of the code:
+
+``` ts
+let symbol: Symbol | undefined;
+let type: Type | undefined;
+type = getIntendedTypeFromJSDocTypeReference(node);
+if (!type) {
+  symbol = resolveTypeReferenceName(node, SymbolFlags.Type);
+  if (symbol === unknownSymbol) {
+    symbol = resolveTypeReferenceName(node, SymbolFlags.Value);
+  }
+  type = getTypeReferenceType(node, symbol);
+}
+```
+
+If `resolveTypeReferenceName` fails to find a type, then the code
+calls it again looking for a value. Then it passes the resulting symbol
+to `getTypeReferenceType`:
+
+``` ts
+if (symbol === unknownSymbol) {
+  return errorType;
+}
+const t = getDeclaredTypeOfSymbol(symbol);
+if (t) {
+  return t;
+}
+if (symbol.flags & SymbolFlags.Value && isJSDocTypeReference(node)) {
+  return getTypeOfSymbol(symbol);
+}
+return errorType;
+```
+
+Normally type resolution only looks in the type
 namespace, but when it finds nothing there, a fallback looks in the
 value namespace.
 
+TODO: Repeat example since there is a lot of text in the way.
 In the example above, `FOO` is a value, a block-scoped `const`. During
 type resolution, there is no type named `FOO`. So instead the compiler
 uses the value named `FOO`.
@@ -178,9 +227,8 @@ experience with complex type than most people can be expected to have.
 
 ### Where To Find The Code ###
 
-In src/compiler/checker.ts, `getTypeFromTypeReference` is a good
-starting point. The two fallbacks are in `resolveEntityName` and
-`getTypeReferenceType`, respectively.
+In `checker.ts`, `getTypeFromTypeReference` contains the symbol fallback.
+Then it calls `getTypeReferenceType`, which contains the type fallback.
 
 ## Expando ##
 
