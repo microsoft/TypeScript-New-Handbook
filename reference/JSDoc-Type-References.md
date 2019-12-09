@@ -80,8 +80,8 @@ tries to resolve type references as values if it can't find a type.
 Here's an example:
 
 ```ts
-const FOO = "foo"
-const BAR = "bar"
+const FOO = "foo";
+const BAR = "bar";
 
 /** @param {FOO | BAR} type */
 function f(type) {
@@ -91,9 +91,9 @@ function f(type) {
 In the compiler, this is resolved in two stages. Both stages use a
 JSDoc fallback. First, in `getTypeFromTypeReference`, after first
 checking the simple rewrites above, the compiler
-resolves the name. Here's a simplified version of the code:
+resolves the name `FOO`. Here's a simplified version of the name resolution code:
 
-``` ts
+```ts
 let symbol: Symbol | undefined;
 let type: Type | undefined;
 type = getIntendedTypeFromJSDocTypeReference(node);
@@ -106,9 +106,10 @@ if (!type) {
 }
 ```
 
-If `resolveTypeReferenceName` fails to find a type, then the code
-calls it again looking for a value. Then it passes the resulting symbol
-to `getTypeReferenceType`:
+Because `resolveTypeReferenceName` fails to find a type named `FOO`,
+the code makes a second calls looking for a value named `FOO`, which
+is found. Then it passes the `FOO` symbol to
+`getTypeReferenceType`, whose code looks a bit like this:
 
 ``` ts
 if (symbol === unknownSymbol) {
@@ -124,21 +125,14 @@ if (symbol.flags & SymbolFlags.Value && isJSDocTypeReference(node)) {
 return errorType;
 ```
 
-Normally type resolution only looks in the type
-namespace, but when it finds nothing there, a fallback looks in the
-value namespace.
+In the same way as name resolution, type resolution first looks for
+the type of the type declaration of a symbol with `getDeclaredTypeOfSymbol`.
+But there *is* no type declaration for `FOO`, so it returns
+`undefined`. Then the fallback code looks for the type of the value
+declaration for `FOO`, which it finds to be `"foo"`.
 
-TODO: Repeat example since there is a lot of text in the way.
-In the example above, `FOO` is a value, a block-scoped `const`. During
-type resolution, there is no type named `FOO`. So instead the compiler
-uses the value named `FOO`.
-
-Now there is a problem: the value `FOO` has no type declaration, only
-a value declaration. So we now get the type of the value declaration
-instead of the type of the type declaration.
-
-I think it would help to look at an example
-that has both a value declaration and a type declaration:
+For comparison, here is an example that has both a value declaration
+and a type declaration:
 
 ```ts
 var i = 0
@@ -148,28 +142,24 @@ interface i {
 }
 ```
 
-If you ask for the type of the value declaration of `i`, you'll get
-`number`. If you ask for the type of type declaration of `i`, you'll
-get `{ e: 1, m: 1 }`. In Javascript, you can't *write* `interface`, so
-it would just be
+If you ask for the type of the value declaration of `i` &mdash; say, with
+`/** @type {typeof i} */` &mdash; you'll get `number` from `var i = 0`. If
+you ask for the type of `i`'s type declaration (with `/** @type {i} */`
+this time), you'll get `{ e: 1, m: 1 }` from the `interface`
+declaration.
+
+But in Javascript, you can't even write `interface`, so what should
+`/** @type {i} */` mean if your program is just:
 
 ```js
 var i = 0
 ```
 
-But what if you treat `i` as a type?
-
-```js
-/** @type {i} */
-var j
-```
-
-The compiler just reuses the type of the value declaration: `number`.
-This is equivalent to inserting the `typeof` type operator to get
-`typeof i`.
-The effect is to make types more Javascripty, allowing you to specify
-objects as example types without having to learn about the difference
-between type and value:
+With no type declaration, the compiler just reuses the type of the value
+declaration: `number`. This is equivalent to inserting the `typeof`
+type operator to get `typeof i`. The effect is to make types more
+Javascripty, allowing you to specify objects as example types without
+having to learn about the difference between type and value:
 
 ``` js
 /**
