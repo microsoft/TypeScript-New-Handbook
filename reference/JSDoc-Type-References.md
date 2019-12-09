@@ -217,64 +217,47 @@ experience with complex type than most people can be expected to have.
 
 ### Where To Find The Code ###
 
-In `checker.ts`, `getTypeFromTypeReference` contains the symbol fallback.
-Then it calls `getTypeReferenceType`, which contains the type fallback.
+In `checker.ts`, `getTypeFromTypeReference` contains the symbol
+resolution fallback. Then it calls `getTypeReferenceType`, which
+contains the type resolution fallback.
 
-## Expando ##
+## Bonus: `@enum` tag ##
 
-Expando declarations are those that start with an initial declaration
-and add properties to it, like so:
+The `@enum` tag is quite unlike Typescript's `enum`. Instead, it's
+basically a `@typedef` with some additional checking. Here's an
+example:
+
 
 ``` js
-const ns = {}
-ns.x = 1
-ns.f = function () {
-}
-ns.s = 'otra'
+/** @enum {string} */
+const ProblemSleuth = {
+    mode: "hard-boiled",
+    compensation: "adequate",
+};
 ```
 
-In Javascript code, the compiler supports this pattern for
-construction of objects. It also supports it for functions and classes.
+The name of the type comes from the subsequent declaration
+`ProblemSleuth`, which also works for `@typedef`. In fact, the
+meaning is almost equivalent to a `@typedef` followed by a
+`@type`:
 
-Syntactically, expando objects are of 3 kinds:
-
-1. Functions
-2. Classes
-3. Empty objects
-
-Each expando assignment is treated as a separate namespace
-declaration, which then merges with all the other declarations of the
-object. That is, the following code declares one variable with three
-declarations; one value declaration and two namespace declarations.
-The last two lines also each declare one property with a value declaration.
-
-```js
-function ichthyosaur() { }
-ichthyosaur.shonisaurus = function() { }
-ichthyosaur.shastasaurus = function() { }
+``` js
+/** @typedef {string} ProblemSleuth */
+/** @type {{ [s: string]: ProblemSleuth }} */
+const ProblemSleuth = {
+    mode: "hard-boiled",
+    compensation: "adequate",
+};
 ```
 
-TODO: Explain aliasing.
+The difference is that, although `ProblemSleuth`'s initializer is
+checked for assignability to the index signature type, the type of the
+value `const ProblemSleuth` is not the index signature type. It's
+still the type of the initializer. It has exactly two properties, both
+of type `string`. Because of that type, assignment of new properties
+is not allowed, so the following is an error:
 
-### Where To Find The Code ###
+``` js
+ProblemSleuth.solicitations = "numerous"
+```
 
-Object and class expandos are checked just like Typescript. Only their
-binding differs: in src/compiler/binder.ts,
-`bindSpecialPropertyAssignment` delegates to `bindPropertyAssignment`.
-
-## CommonJS ##
-
-Like expando, except that you are often directly making entries in the
-module's symbol table instead.
-
-TODO: Explain aliasing.
-
-<!--
-## Weird Stuff ##
-
-- `@enum`
-- `A.prototype.m = function() { ... }` needs to put names in the scope
-  of A in place.
-- Actually there is a lot of weirdness all over from classes and
-  commonjs, and the combination of the two.
--->
