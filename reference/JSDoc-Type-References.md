@@ -54,7 +54,7 @@ Javascript, while the last three are commonly used in Javascript that
 is checked by the Closure compiler.
 
 Finally, `array` and `promise` rewrite to `Array<any>` and `Promise<any>`
-respectively, since they, too, are used interchangeably:
+respectively, since they, too, are used without regard to case:
 
 Type        | Resolved Type
 ------------|--------------
@@ -62,7 +62,9 @@ Type        | Resolved Type
 `promise`   | `Promise<any>`
 
 Note that `array<number>` does *not* rewrite to `number[]`; it's just
-an error. Same for `promise<number>`.
+an error. Same for `promise<number>`. On the flip side, `Array` and
+`Promise` result in `Array<any>` and `Promise<any>` because of another
+rule that defaults missing type arguments to `any` in Javascript.
 
 ### Where To Find The Code ###
 
@@ -135,10 +137,10 @@ For comparison, here is an example that has both a value declaration
 and a type declaration:
 
 ```ts
-var i = 0
+var i = 0;
 interface i {
-  e: 1
-  m: 1
+  e: 1;
+  m: 1;
 }
 ```
 
@@ -200,7 +202,7 @@ import { options } from './initial'
  * @param {options[keyof options]} v
  */
 function demo(k, v) {
-    options[k] = v
+    options[k] = v;
 }
 ```
 
