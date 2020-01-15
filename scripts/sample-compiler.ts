@@ -383,7 +383,7 @@ export async function getCompilerExtension() {
 
                 const url = `https://www.typescriptlang.org/play/#src=${encodeURIComponent(code)}`;
                 if (codeLines.length >= 4 + codeLines.indexOf("//cut")) {
-                    parts.push(`<a class="playground-link" href="${url}">Try</a>`)
+                    parts.push(`<a class="playground-link" href="${url}" target="_blank">Try</a>`)
                 }
 
                 parts.push("</pre>");
