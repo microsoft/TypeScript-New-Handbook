@@ -1177,8 +1177,8 @@ For example, a standalone version of <code>map</code> would look like this:</p>
   <span class="tm-kw">return</span> <span class="tm-vr">arr</span>.<span class="tm-mth">map</span>(<span class="tm-vr">func</span>);
 }
 
-<span class="tm-cmt">// Parameter 'n' is of type 'number'</span>
-<span class="tm-cmt">// 'parsed' is of type 'string[]'</span>
+<span class="tm-cmt">// Parameter 'n' is of type 'string'</span>
+<span class="tm-cmt">// 'parsed' is of type 'number[]'</span>
 <span class="tm-kw">const</span> <span class="tm-vr">parsed</span> = <span class="tm-mth">map</span>([<span class="tm-str">"1"</span>, <span class="tm-str">"2"</span>, <span class="tm-str">"3"</span>], <span class="tm-vr">n</span> <span class="tm-kw">=></span> <span class="tm-mth">parseInt</span>(<span class="tm-vr">n</span>));<a class="playground-link" href="https://www.typescriptlang.org/play/#src=function%20map%3CE%2C%20O%3E(arr%3A%20E%5B%5D%2C%20func%3A%20(arg%3A%20E)%20%3D%3E%20O)%3A%20O%5B%5D%20%7B%0A%20%20return%20arr.map(func)%3B%0A%7D%0A%0A%2F%2F%20Parameter%20'n'%20is%20of%20type%20'number'%0A%2F%2F%20'parsed'%20is%20of%20type%20'string%5B%5D'%0Aconst%20parsed%20%3D%20map(%5B%221%22%2C%20%222%22%2C%20%223%22%5D%2C%20n%20%3D%3E%20parseInt(n))%3B">Try</a></pre></p>
 <p>Note that in this example, TypeScript could infer both the type of the <code>E</code> type parameter (from the given <code>string</code> array), as well as the type <code>O</code> based on the return value of the function expression.</p>
 <h3 id="constraints"><a href="#constraints">Constraints</h3></a>
