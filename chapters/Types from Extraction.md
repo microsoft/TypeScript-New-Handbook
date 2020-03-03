@@ -72,7 +72,7 @@ let x : msgbox("Are you sure you want to continue?");
 
 ## The `keyof` type operator {#keyof}
 
-The `keyof` operator takes a type and produces a string or numeric literal union of its keys:
+The `keyof` operator takes an object type and produces a string or numeric literal union of its keys:
 
 ```ts
 type Point = { x: number, y: number };
