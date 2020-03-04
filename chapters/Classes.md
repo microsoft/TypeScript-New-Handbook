@@ -439,7 +439,7 @@ Let's consider this code:
 class Base {
   name = "base";
   constructor() {
-    console.log("My name is " + name);
+    console.log("My name is " + this.name);
   }
 }
 
