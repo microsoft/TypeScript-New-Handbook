@@ -1,3 +1,5 @@
+Archived, because this now lives in [the TypeScript website](https://github.com/microsoft/TypeScript-Website/tree/v2/packages/documentation/copy/en/handbook-v2).
+
 # The New TypeScript Handbook
 
 ## 👶
