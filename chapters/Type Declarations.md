@@ -81,6 +81,13 @@ For example, if you installed the `react` npm package, you can install its corre
 npm install --save-dev @types/react
 ```
 
+If the underlying package is already scoped, the name of the types package will have no @ and the / will be replaced with underscores.
+For example, you can install the types for the `@babel/traverse` package by running
+
+```sh
+npm install --save-dev @types/babel__traverse
+```
+
 TypeScript automatically finds type definitions under `node_modules/@types`, so there's no other step needed to get these types available in your program.
 
 ### Your Own Definitions
