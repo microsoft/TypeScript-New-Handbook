@@ -388,7 +388,7 @@ function area(s: Shape) {
 }
 ```
 
-Note that the return type is `area` is inferred to be `number` because
+Note that the return type of `area` is inferred to be `number` because
 TypeScript knows the function is total. If some variant is not
 covered, the return type of `area` will be `number | undefined` instead.
 
